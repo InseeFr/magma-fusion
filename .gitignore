@@ -40,6 +40,9 @@ out/
 ### environement variables ##
 *.env
 
+### Maven Flatten Plugin ###
+.flattened-pom.xml
+
 .claude/
 CLAUDE.md
 SKILL.md
