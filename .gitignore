@@ -41,7 +41,7 @@ out/
 *.env
 
 ### Maven Flatten Plugin ###
-#.flattened-pom.xml
+.flattened-pom.xml
 
 .claude/
 CLAUDE.md
