@@ -21,13 +21,14 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public record QueryExecutor(RestClient restClient, String urlTemplate) {
+public record QueryExecutor(RestClient restClient, String urlTemplate, JsonMapper jsonMapper) {
 
     @Autowired
     public QueryExecutor(@Value("${fr.insee.rmes.magma.api.sparqlEndpoint}") String sparqlEndpoint) {
         this(RestClient.builder()
                 .defaultHeader(HttpHeaders.ACCEPT, "text/csv")
-                .build(), sparqlEndpoint
+                .build(), sparqlEndpoint,
+                JsonMapper.builder().build()
         );
     }
 
@@ -117,8 +118,7 @@ public Boolean executeAskQuery(@NonNull Query query) {
         try {
             // Example of a Json response for an ASK request :
             // {"head":{},"boolean":true}
-            JsonMapper mapper = JsonMapper.builder().build();
-            JsonNode rootNode = mapper.readTree(jsonResponse);
+            JsonNode rootNode = jsonMapper.readTree(jsonResponse);
             return rootNode.path("boolean").asBoolean();
         } catch (Exception e) {
             log.error("Failed to parse SPARQL ASK response: {}", jsonResponse, e);
