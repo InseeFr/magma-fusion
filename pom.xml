@@ -60,18 +60,18 @@
             <!-- Modules de Magma -->
             <dependency>
                 <groupId>fr.insee.rmes</groupId>
-                <artifactId>magma-impl</artifactId>
+                <artifactId>magma-fusion-impl</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>fr.insee.rmes</groupId>
-                <artifactId>magma-interface</artifactId>
+                <artifactId>magma-fusion-interface</artifactId>
                 <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>fr.insee.rmes</groupId>
-                <artifactId>magma-oas</artifactId>
+                <artifactId>magma-fusion-oas</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -343,10 +343,10 @@
         </repository>
     </repositories>
     <modules>
-        <module>magma-oas</module>
-        <module>magma-interface</module>
-        <module>magma-impl</module>
-        <module>magma-app</module>
+        <module>magma-fusion-oas</module>
+        <module>magma-fusion-interface</module>
+        <module>magma-fusion-impl</module>
+        <module>magma-fusion-app</module>
 
     </modules>
 </project>
