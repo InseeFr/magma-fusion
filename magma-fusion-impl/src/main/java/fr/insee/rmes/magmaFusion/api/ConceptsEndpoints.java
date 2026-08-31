@@ -78,7 +78,7 @@ public class ConceptsEndpoints implements ConceptsApi {
                 })
                 .toList();
         List<ConceptForList> concepts = listConceptDTOsWithLinks.stream()
-                .map(conceptService::transformDTOenDefinition)
+                .map(conceptService::convertConceptDTOToDefinition)
                 .toList();
 
         return EndpointsUtils.toResponseEntity(concepts);
