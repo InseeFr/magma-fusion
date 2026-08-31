@@ -29,12 +29,12 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformDTOenRapportQualite_shouldMapBasicFields() {
+    void convertDTOToRapportQualite_shouldMapBasicFields() {
         // Given
         RapportQualiteDTO dto = new RapportQualiteDTO("rubrique-001","http://example.com/rubrique-001","Rapport qualité","Quality report", null,null,null,null,null);
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getId()).isEqualTo("rubrique-001");
@@ -50,12 +50,12 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformDTOenRapportQualite_shouldHandleOnlyFrenchLabel() {
+    void convertDTOToRapportQualite_shouldHandleOnlyFrenchLabel() {
         // Given
         RapportQualiteDTO dto = new RapportQualiteDTO("rubrique-002","http://example.com/rubrique-002","Rapport qualité",null,null,null,null,null,null);
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getLabel()).hasSize(2);
@@ -64,13 +64,13 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformDTOenRapportQualite_shouldHandleNullRubriqueList() {
+    void convertDTOToRapportQualite_shouldHandleNullRubriqueList() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         dto.withRubriqueDTOList(null);
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getId()).isEqualTo("rubrique-test");
@@ -78,7 +78,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformDateType() {
+    void convertRubrique_shouldConvertDateType() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-date", "DATE");
@@ -88,7 +88,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(1);
@@ -102,7 +102,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformTextType() {
+    void convertRubrique_shouldConvertTextType() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-text", "TEXT");
@@ -111,7 +111,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(1);
@@ -123,7 +123,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformGeographyType() {
+    void convertRubrique_shouldConvertGeographyType() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-geo", "GEOGRAPHY");
@@ -134,7 +134,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(1);
@@ -149,7 +149,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformGeographyType_withOnlyFrenchLabel() {
+    void convertRubrique_shouldConvertGeographyType_withOnlyFrenchLabel() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-geo", "GEOGRAPHY");
@@ -160,7 +160,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         Rubrique rubrique = result.getRubriques().getFirst();
@@ -171,7 +171,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformOrganizationType() {
+    void convertRubrique_shouldConvertOrganizationType() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-org", "ORGANIZATION");
@@ -182,7 +182,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(1);
@@ -195,7 +195,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformCodeListType_singleCode() {
+    void convertRubrique_shouldConvertCodeListType_singleCode() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-code", "CODE_LIST");
@@ -207,7 +207,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(1);
@@ -220,7 +220,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformCodeListType_multipleCodesInSameRubrique() {
+    void convertRubrique_shouldConvertCodeListType_multipleCodesInSameRubrique() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
 
@@ -247,7 +247,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubrique1, rubrique2, rubrique3));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques())
@@ -263,7 +263,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformRichTextType_withoutDocuments() {
+    void convertRubrique_shouldConvertRichTextType_withoutDocuments() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-rich", "RICH_TEXT");
@@ -274,7 +274,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(1);
@@ -289,7 +289,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformRichTextType_withMultipleDocuments() {
+    void convertRubrique_shouldConvertRichTextType_withMultipleDocuments() {
         // Given
         DocumentDTO doc1Fr = new DocumentDTO("http://doc1.fr", "Label doc 1 FR", "Label doc 1 EN", "2024-01-01", "fr");
         DocumentDTO doc2Fr = new DocumentDTO("http://doc2.fr", "Label doc 2 FR", null, "2024-02-01", "fr");
@@ -316,7 +316,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = serviceWithDocs.transformDTOintoRapportQualite(dto);
+        RapportQualite result = serviceWithDocs.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(1);
@@ -343,7 +343,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldTransformRichTextType_onlyFrenchContent() {
+    void convertRubrique_shouldConvertRichTextType_onlyFrenchContent() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-rich", "RICH_TEXT");
@@ -354,7 +354,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         Rubrique rubrique = result.getRubriques().getFirst();
@@ -363,7 +363,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldHandleMixedRubriqueTypes() {
+    void convertRubrique_shouldHandleMixedRubriqueTypes() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
 
@@ -382,7 +382,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(dateRubrique, textRubrique, geoRubrique));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques()).hasSize(3);
@@ -392,7 +392,7 @@ class RapportQualiteServiceImplTest {
     }
 
     @Test
-    void transformRubrique_shouldPreserveRubriqueOrder() {
+    void convertRubrique_shouldPreserveRubriqueOrder() {
         // Given
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rub1 = createRubriqueDTO("rubrique-1", "TEXT");
@@ -401,7 +401,7 @@ class RapportQualiteServiceImplTest {
         dto = dto.withRubriqueDTOList(List.of(rub1, rub2, rub3));
 
         // When
-        RapportQualite result = service.transformDTOintoRapportQualite(dto);
+        RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
         assertThat(result.getRubriques())

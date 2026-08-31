@@ -4,5 +4,5 @@ import fr.insee.rmes.magmaFusion.model.RapportQualite;
 import fr.insee.rmes.magmaFusion.utils.RapportQualiteDTO;
 
 public interface RapportQualiteService {
-    RapportQualite transformDTOintoRapportQualite(RapportQualiteDTO rapportQualiteDTO);
+    RapportQualite convertDTOToRapportQualite(RapportQualiteDTO rapportQualiteDTO);
 }

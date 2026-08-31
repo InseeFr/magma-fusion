@@ -26,7 +26,7 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
     }
 
     @Override
-    public RapportQualite transformDTOintoRapportQualite(RapportQualiteDTO rapportQualiteDTO) {
+    public RapportQualite convertDTOToRapportQualite(RapportQualiteDTO rapportQualiteDTO) {
         RapportQualite rapportQualite = new RapportQualite();
         rapportQualite.setId(rapportQualiteDTO.id());
         rapportQualite.setUri(URI.create(rapportQualiteDTO.uri()));
@@ -43,7 +43,7 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
         if (rapportQualiteDTO.rubriqueDTOList() != null) {
 
             for (RubriqueDTO rubDTO : rapportQualiteDTO.rubriqueDTOList()) {
-                Rubrique rubrique = transformRubrique(rubDTO, rapportQualite);
+                Rubrique rubrique = convertRubrique(rubDTO, rapportQualite);
                 if (rubrique != null) { //rubric can be null : case of a CODE_LIST rubric with several codes and return null for addCodeList when rubric has been yet added with another code (it's the case when maxOccurs not null and rubricExist is true)
                     rapportQualite.addRubriquesItem(rubrique);
                 }
@@ -53,7 +53,7 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
             return rapportQualite;
     }
 
-    private Rubrique transformRubrique(RubriqueDTO rubriqueDTO, RapportQualite rapportQualite) {
+    private Rubrique convertRubrique(RubriqueDTO rubriqueDTO, RapportQualite rapportQualite) {
 
         Rubrique rubrique = createRubrique(rubriqueDTO);
 
