@@ -17,8 +17,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangueContenu;
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangueContenu;
+import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
 
 @Service
 @Slf4j
@@ -53,7 +53,7 @@ public class ConceptServiceImpl implements ConceptService{
 
         private static List<LocalisedContenu> buildLocalisedLabels(String frField, String enField) {
             if (frField == null && enField == null) return null;
-            return createListLangueContenu(createLangueContenu(frField, "fr"), createLangueContenu(enField, "en"));
+            return createListLangField(createLangField(frField, "fr"), createLangField(enField, "en"));
         }
 
 
@@ -135,7 +135,7 @@ public class ConceptServiceImpl implements ConceptService{
 
         private void addIntitulesAlternatifs(ConceptDTO conceptDTO, Concept concept) {
             for (LocalisedContenu item : conceptDTO.intitulesAlternatifs()) {
-                LocalisedContenu newIntitule = createLangueContenu(item.getContenu(), item.getLangue());
+                LocalisedContenu newIntitule = createLangField(item.getContenu(), item.getLangue());
                 concept.addIntitulesAlternatifsItem(newIntitule);
             }
         }

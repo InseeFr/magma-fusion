@@ -12,8 +12,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangueContenu;
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangueContenu;
+import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
 
 @Service
 public class SeriesOperationsServiceImpl implements SeriesOperationsService {
@@ -34,29 +34,29 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         serieById.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
         serieById.setStatutValidation(dto.validationState());
 
-        serieById.setLabel(createListLangueContenu(
-                createLangueContenu(dto.seriesLabelLg1(), lg1),
-                createLangueContenu(dto.seriesLabelLg2(), lg2)));
+        serieById.setLabel(createListLangField(
+                createLangField(dto.seriesLabelLg1(), lg1),
+                createLangField(dto.seriesLabelLg2(), lg2)));
 
-        serieById.setAltLabel(createListLangueContenu(
-                createLangueContenu(dto.seriesAltLabelLg1(), lg1),
-                createLangueContenu(dto.seriesAltLabelLg2(), lg2)));
+        serieById.setAltLabel(createListLangField(
+                createLangField(dto.seriesAltLabelLg1(), lg1),
+                createLangField(dto.seriesAltLabelLg2(), lg2)));
 
-        serieById.setResume(createListLangueContenu(
-                createLangueContenu(dto.seriesAbstractLg1(), lg1),
-                createLangueContenu(dto.seriesAbstractLg2(), lg2)));
+        serieById.setResume(createListLangField(
+                createLangField(dto.seriesAbstractLg1(), lg1),
+                createLangField(dto.seriesAbstractLg2(), lg2)));
 
-        serieById.setNoteHistorique(createListLangueContenu(
-                createLangueContenu(dto.seriesHistoryNoteLg1(), lg1),
-                createLangueContenu(dto.seriesHistoryNoteLg2(), lg2)));
+        serieById.setNoteHistorique(createListLangField(
+                createLangField(dto.seriesHistoryNoteLg1(), lg1),
+                createLangField(dto.seriesHistoryNoteLg2(), lg2)));
 
         if (StringUtils.hasText(dto.type()) ) {
             IdUriLabel type = new IdUriLabel();
             type.setId(dto.typeID());
             type.setUri(URI.create(dto.type()));
-            type.setLabel(createListLangueContenu(
-                    createLangueContenu(dto.typeLabelLg1(), lg1),
-                    createLangueContenu(dto.typeLabelLg2(), lg2)));
+            type.setLabel(createListLangField(
+                    createLangField(dto.typeLabelLg1(), lg1),
+                    createLangField(dto.typeLabelLg2(), lg2)));
             serieById.setType(type);
         }
 
@@ -64,9 +64,9 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
             IdUriLabel frequence = new IdUriLabel();
             frequence.setId(dto.periodicityId());
             frequence.setUri(URI.create(dto.periodicity()));
-            frequence.setLabel(createListLangueContenu(
-                    createLangueContenu(dto.periodicityLabelLg1(), lg1),
-                    createLangueContenu(dto.periodicityLabelLg2(), lg2)));
+            frequence.setLabel(createListLangField(
+                    createLangField(dto.periodicityLabelLg1(), lg1),
+                    createLangField(dto.periodicityLabelLg2(), lg2)));
             serieById.setFrequenceCollecte(frequence);
         }
 
@@ -105,21 +105,21 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         operation.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
         operation.setStatutValidation(dto.validationState());
 
-        operation.setLabel(createListLangueContenu(
-                createLangueContenu(dto.operationLabelLg1(), lg1),
-                createLangueContenu(dto.operationLabelLg2(), lg2)));
+        operation.setLabel(createListLangField(
+                createLangField(dto.operationLabelLg1(), lg1),
+                createLangField(dto.operationLabelLg2(), lg2)));
 
-        operation.setAltLabel(createListLangueContenu(
-                createLangueContenu(dto.operationAltLabelLg1(), lg1),
-                createLangueContenu(dto.operationAltLabelLg2(), lg2)));
+        operation.setAltLabel(createListLangField(
+                createLangField(dto.operationAltLabelLg1(), lg1),
+                createLangField(dto.operationAltLabelLg2(), lg2)));
 
         if (StringUtils.hasText(dto.series()) ) {
             SerieRef serie = new SerieRef();
             serie.setId(dto.seriesId());
             serie.setUri(dto.series());
-            serie.setLabel(createListLangueContenu(
-                    createLangueContenu(dto.seriesLabelLg1(), lg1),
-                    createLangueContenu(dto.seriesLabelLg2(), lg2)));
+            serie.setLabel(createListLangField(
+                    createLangField(dto.seriesLabelLg1(), lg1),
+                    createLangField(dto.seriesLabelLg2(), lg2)));
             operation.setSerie(serie);
         }
 
@@ -155,9 +155,9 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         serieById.setServicesCollecteurs(null);
         serieById.setSeriesId(dto.seriesId());
         serieById.setUri(dto.series());
-        serieById.setLabel(createListLangueContenu(
-                createLangueContenu(dto.seriesLabelLg1(), lg1),
-                createLangueContenu(dto.seriesLabelLg2(), lg2)));
+        serieById.setLabel(createListLangField(
+                createLangField(dto.seriesLabelLg1(), lg1),
+                createLangField(dto.seriesLabelLg2(), lg2)));
         return serieById;
     }
 
@@ -170,9 +170,9 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         famille.setId(parts.length > 0 ? parts[0] : null);
         String uriStr = parts.length > 1 ? parts[1] : null;
         famille.setUri(StringUtils.hasText(uriStr) ? URI.create(uriStr) : null);
-        famille.setLabel(createListLangueContenu(
-                createLangueContenu(parts.length > 2 ? parts[2] : null, lg1),
-                createLangueContenu(parts.length > 3 ? parts[3] : null, lg2)));
+        famille.setLabel(createListLangField(
+                createLangField(parts.length > 2 ? parts[2] : null, lg1),
+                createLangField(parts.length > 3 ? parts[3] : null, lg2)));
         return famille;
     }
 
@@ -185,9 +185,9 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         ref.setId(parts.length > 0 ? parts[0] : null);
         String uriStr = parts.length > 1 ? parts[1] : null;
         ref.setUri(StringUtils.hasText(uriStr) ? URI.create(uriStr) : null);
-        ref.setLabel(createListLangueContenu(
-                createLangueContenu(parts.length > 2 ? parts[2] : null, lg1),
-                createLangueContenu(parts.length > 3 ? parts[3] : null, lg2)));
+        ref.setLabel(createListLangField(
+                createLangField(parts.length > 2 ? parts[2] : null, lg1),
+                createLangField(parts.length > 3 ? parts[3] : null, lg2)));
         return ref;
     }
 
@@ -231,28 +231,28 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         indicateur.setDateMiseAJour(dto.modified() != null ? dto.modified().toString() : null);
         indicateur.setStatuValidation(dto.validationState());
 
-        indicateur.setLabel(createListLangueContenu(
-                createLangueContenu(dto.indicatorLabelLg1(), lg1),
-                createLangueContenu(dto.indicatorLabelLg2(), lg2)));
+        indicateur.setLabel(createListLangField(
+                createLangField(dto.indicatorLabelLg1(), lg1),
+                createLangField(dto.indicatorLabelLg2(), lg2)));
 
-        indicateur.setAltLabel(createListLangueContenu(
-                createLangueContenu(dto.indicatorAltLabelLg1(), lg1),
-                createLangueContenu(dto.indicatorAltLabelLg2(), lg2)));
+        indicateur.setAltLabel(createListLangField(
+                createLangField(dto.indicatorAltLabelLg1(), lg1),
+                createLangField(dto.indicatorAltLabelLg2(), lg2)));
 
-        indicateur.setResume(createListLangueContenu(
-                createLangueContenu(dto.indicatorAbstractLg1(), lg1),
-                createLangueContenu(dto.indicatorAbstractLg2(), lg2)));
+        indicateur.setResume(createListLangField(
+                createLangField(dto.indicatorAbstractLg1(), lg1),
+                createLangField(dto.indicatorAbstractLg2(), lg2)));
 
-        indicateur.setNoteHistorique(createListLangueContenu(
-                createLangueContenu(dto.indicatorHistoryNoteLg1(), lg1),
-                createLangueContenu(dto.indicatorHistoryNoteLg2(), lg2)));
+        indicateur.setNoteHistorique(createListLangField(
+                createLangField(dto.indicatorHistoryNoteLg1(), lg1),
+                createLangField(dto.indicatorHistoryNoteLg2(), lg2)));
 
         if (dto.periodicity() != null && !dto.periodicity().isBlank()) {
             IdUriLabel frequence = new IdUriLabel(dto.periodicityId());
             frequence.setUri(toUri(dto.periodicity()));
-            frequence.setLabel(createListLangueContenu(
-                    createLangueContenu(dto.periodicityLabelLg1(), lg1),
-                    createLangueContenu(dto.periodicityLabelLg2(), lg2)));
+            frequence.setLabel(createListLangField(
+                    createLangField(dto.periodicityLabelLg1(), lg1),
+                    createLangField(dto.periodicityLabelLg2(), lg2)));
             indicateur.setFrequenceCollecte(frequence);
         }
 
@@ -288,9 +288,9 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
             if (parts.length > 1 && !parts[1].isBlank()) {
                 ref.setUri(toUri(parts[1]));
             }
-            ref.setLabel(createListLangueContenu(
-                    createLangueContenu(parts.length > 2 ? parts[2] : null, lg1),
-                    createLangueContenu(parts.length > 3 ? parts[3] : null, lg2)));
+            ref.setLabel(createListLangField(
+                    createLangField(parts.length > 2 ? parts[2] : null, lg1),
+                    createLangField(parts.length > 3 ? parts[3] : null, lg2)));
             list.add(ref);
         }
         return list;

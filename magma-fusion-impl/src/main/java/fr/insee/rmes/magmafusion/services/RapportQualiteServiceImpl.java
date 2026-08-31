@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangueContenu;
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangueContenu;
+import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
 
 @Service
 public class RapportQualiteServiceImpl implements RapportQualiteService {
@@ -31,11 +31,11 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
         rapportQualite.setId(rapportQualiteDTO.id());
         rapportQualite.setUri(URI.create(rapportQualiteDTO.uri()));
         if (rapportQualiteDTO.labelLg1() != null && rapportQualiteDTO.labelLg2() != null) {
-            List<LocalisedContenu> label = createListLangueContenu(createLangueContenu(rapportQualiteDTO.labelLg1(), "fr"), createLangueContenu(rapportQualiteDTO.labelLg2(), "en"));
+            List<LocalisedContenu> label = createListLangField(createLangField(rapportQualiteDTO.labelLg1(), "fr"), createLangField(rapportQualiteDTO.labelLg2(), "en"));
             rapportQualite.setLabel(label);
         }
         if (rapportQualiteDTO.labelLg1() != null && rapportQualiteDTO.labelLg2() == null) {
-            List<LocalisedContenu> label = createListLangueContenu(createLangueContenu(rapportQualiteDTO.labelLg1(), "fr"), createLangueContenu("", "en"));
+            List<LocalisedContenu> label = createListLangField(createLangField(rapportQualiteDTO.labelLg1(), "fr"), createLangField("", "en"));
             rapportQualite.setLabel(label);
         }
         rapportQualite.setRubriques(null);
@@ -58,7 +58,7 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
         Rubrique rubrique = createRubrique(rubriqueDTO);
 
         if (rubriqueDTO.titreLg1() != null && rubriqueDTO.titreLg2() != null) {
-            List<LocalisedContenu> titre = createListLangueContenu(createLangueContenu(rubriqueDTO.titreLg1(), "fr"), createLangueContenu(rubriqueDTO.titreLg2(), "en"));
+            List<LocalisedContenu> titre = createListLangField(createLangField(rubriqueDTO.titreLg1(), "fr"), createLangField(rubriqueDTO.titreLg2(), "en"));
             rubrique.setTitre(titre);
         }
 
@@ -73,7 +73,7 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
                 addRichText(rubriqueDTO, rubrique, rapportQualite);
                 break;
             case "TEXT":
-                List<LocalisedContenu> label = createListLangueContenu(createLangueContenu(rubriqueDTO.labelLg1(), "fr"), createLangueContenu(rubriqueDTO.labelLg2(), "en"));
+                List<LocalisedContenu> label = createListLangField(createLangField(rubriqueDTO.labelLg1(), "fr"), createLangField(rubriqueDTO.labelLg2(), "en"));
                 rubrique.setLabel(label);
                 break;
             case "GEOGRAPHY":
@@ -109,11 +109,11 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
         rubriqueWithIdUriLabel.setUri(URI.create(uri));
 
         if (rubriqueDTO.labelObjLg1() != null && rubriqueDTO.labelObjLg2() != null) {
-            List<LocalisedContenu> label = createListLangueContenu(createLangueContenu(rubriqueDTO.labelObjLg1(), "fr"), createLangueContenu(rubriqueDTO.labelObjLg2(), "en"));
+            List<LocalisedContenu> label = createListLangField(createLangField(rubriqueDTO.labelObjLg1(), "fr"), createLangField(rubriqueDTO.labelObjLg2(), "en"));
             rubriqueWithIdUriLabel.setLabel(label);
         }
         if (rubriqueDTO.labelObjLg1() != null && rubriqueDTO.labelObjLg2() == null) {
-            LocalisedContenu labelLg1 = createLangueContenu(rubriqueDTO.labelObjLg1(), "fr");
+            LocalisedContenu labelLg1 = createLangField(rubriqueDTO.labelObjLg1(), "fr");
             List<LocalisedContenu> label = new ArrayList<>();
             label.add(labelLg1);
             rubriqueWithIdUriLabel.setLabel(label);
@@ -167,12 +167,12 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
         for (DocumentDTO documentDTO : documentsDTO) {
             Document document = new Document();
             if (documentDTO.labelLg1() != null && documentDTO.labelLg2() != null) {
-                List<LocalisedContenu> label = createListLangueContenu(createLangueContenu(documentDTO.labelLg1(), "fr"), createLangueContenu(documentDTO.labelLg2(), "en"));
+                List<LocalisedContenu> label = createListLangField(createLangField(documentDTO.labelLg1(), "fr"), createLangField(documentDTO.labelLg2(), "en"));
                 document.label(label);
             }
             if (documentDTO.labelLg1() != null && documentDTO.labelLg2() == null) {
-                LocalisedContenu labelsLg1 = createLangueContenu(documentDTO.labelLg1(), "fr");
-                List<LocalisedContenu> label = createListLangueContenu(labelsLg1, null);
+                LocalisedContenu labelsLg1 = createLangField(documentDTO.labelLg1(), "fr");
+                List<LocalisedContenu> label = createListLangField(labelsLg1, null);
                 document.label(label);
             }
             document.setDateMiseAJour(documentDTO.dateMiseAJour());
@@ -188,10 +188,10 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
         rubriqueCodeList.setId(rubriqueDTO.valeurSimple());
         rubriqueCodeList.setUri(URI.create(rubriqueDTO.codeUri()));
         if (rubriqueDTO.labelObjLg1() != null) {
-            LocalisedContenu labelLg1 = createLangueContenu(rubriqueDTO.labelObjLg1(), "fr");
-            LocalisedContenu labelLg2 = rubriqueDTO.labelObjLg2() != null ? createLangueContenu(rubriqueDTO.labelObjLg2(), "en") : null;
+            LocalisedContenu labelLg1 = createLangField(rubriqueDTO.labelObjLg1(), "fr");
+            LocalisedContenu labelLg2 = rubriqueDTO.labelObjLg2() != null ? createLangField(rubriqueDTO.labelObjLg2(), "en") : null;
 
-            rubriqueCodeList.setLabel(createListLangueContenu(labelLg1, labelLg2));
+            rubriqueCodeList.setLabel(createListLangField(labelLg1, labelLg2));
         }
 
         if (rapportQualite.getRubriques() != null) {//is null if the first rubric is a CODE_LIST type rubric
