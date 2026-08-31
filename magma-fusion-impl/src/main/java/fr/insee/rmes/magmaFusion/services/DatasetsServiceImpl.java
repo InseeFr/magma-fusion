@@ -15,11 +15,11 @@ import static fr.insee.rmes.magmaFusion.utils.LocalisedLabelUtils.*;
 public class DatasetsServiceImpl implements DatasetsService {
 
     @Override
-    public List<Dataset> transformDatasetDTOsToDataSets(List<DatasetDTO> dtos) {
-        return dtos.stream().map(this::transformDatasetDTOToDataSet).toList();
+    public List<Dataset> convertDatasetDTOsToDataSets(List<DatasetDTO> dtos) {
+        return dtos.stream().map(this::convertDatasetDTOToDataSet).toList();
     }
 
-    private Dataset transformDatasetDTOToDataSet(DatasetDTO dto) {
+    private Dataset convertDatasetDTOToDataSet(DatasetDTO dto) {
         Dataset dataSet = new Dataset();
 
         dataSet.setLandingPage(null);
@@ -71,7 +71,7 @@ public class DatasetsServiceImpl implements DatasetsService {
     }
 
     @Override
-    public Dataset transformDatasetByIdDTOToDataSet(DatasetByIdDTO dto) {
+    public Dataset convertDatasetByIdDTOToDataSet(DatasetByIdDTO dto) {
         Dataset dataSet = new Dataset();
 
         dataSet.setLandingPage(null);
@@ -276,7 +276,7 @@ public class DatasetsServiceImpl implements DatasetsService {
     }
 
     @Override
-    public List<Distribution> transformDistributionDTOsToDistributions(List<DistributionDTO> dtos) {
+    public List<Distribution> convertDistributionDTOsToDistributions(List<DistributionDTO> dtos) {
         Map<String, List<DistributionDTO>> grouped = new LinkedHashMap<>();
         for (DistributionDTO dto : dtos) {
             grouped.computeIfAbsent(dto.identifier(), k -> new ArrayList<>()).add(dto);

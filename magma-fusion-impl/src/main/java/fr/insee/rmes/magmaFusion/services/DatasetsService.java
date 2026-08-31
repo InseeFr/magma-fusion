@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface DatasetsService {
 
-    List<Dataset> transformDatasetDTOsToDataSets(List<DatasetDTO> dtos);
+    List<Dataset> convertDatasetDTOsToDataSets(List<DatasetDTO> dtos);
 
-    Dataset transformDatasetByIdDTOToDataSet(DatasetByIdDTO dto);
+    Dataset convertDatasetByIdDTOToDataSet(DatasetByIdDTO dto);
 
-    List<Distribution> transformDistributionDTOsToDistributions(List<DistributionDTO> dtos);
+    List<Distribution> convertDistributionDTOsToDistributions(List<DistributionDTO> dtos);
 
 }

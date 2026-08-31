@@ -33,7 +33,7 @@ public class DatasetsEndpoints implements DatasetsApi {
                 .listResult(DatasetDTO.class)
                 .result();
 
-        List<Dataset> dataSets = datasetsService.transformDatasetDTOsToDataSets(dtos);
+        List<Dataset> dataSets = datasetsService.convertDatasetDTOsToDataSets(dtos);
         return ResponseEntity.ok(dataSets);
     }
 
@@ -47,7 +47,7 @@ public class DatasetsEndpoints implements DatasetsApi {
         if (dto == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(datasetsService.transformDatasetByIdDTOToDataSet(dto));
+        return ResponseEntity.ok(datasetsService.convertDatasetByIdDTOToDataSet(dto));
     }
 
     @Override
@@ -57,6 +57,6 @@ public class DatasetsEndpoints implements DatasetsApi {
                 .executeQuery()
                 .listResult(DistributionDTO.class)
                 .result();
-        return ResponseEntity.ok(datasetsService.transformDistributionDTOsToDistributions(dtos));
+        return ResponseEntity.ok(datasetsService.convertDistributionDTOsToDistributions(dtos));
     }
 }

@@ -32,7 +32,7 @@ class DatasetsServiceImplTest {
                         null, "Provisoire, jamais publiée", null)
         );
 
-        var result = service.transformDatasetDTOsToDataSets(dtos);
+        var result = service.convertDatasetDTOsToDataSets(dtos);
 
         assertAll(
                 () -> assertEquals(2, result.size()),
@@ -58,7 +58,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_map_basic_fields() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals("25baaf1f", result.getId()),
@@ -77,7 +77,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_map_multilingual_labels() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getTitle().size()),
@@ -102,7 +102,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_map_landingPage_when_present() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertNotNull(result.getLandingPage()),
@@ -116,12 +116,12 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_landingPage_when_null() {
-        assertNull(service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getLandingPage());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getLandingPage());
     }
 
     @Test
     void should_map_publisher_when_idPublisher_present() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertNotNull(result.getPublisher()),
@@ -134,12 +134,12 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_publisher_when_idPublisher_is_null() {
-        assertNull(service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getPublisher());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getPublisher());
     }
 
     @Test
     void should_map_spatial_when_spatialId_present() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertNotNull(result.getSpatial()),
@@ -151,12 +151,12 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_spatial_when_spatialId_is_null() {
-        assertNull(service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getSpatial());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getSpatial());
     }
 
     @Test
     void should_map_temporal_when_startPeriod_present() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertNotNull(result.getTemporal()),
@@ -167,12 +167,12 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_temporal_when_startPeriod_is_null() {
-        assertNull(service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getTemporal());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getTemporal());
     }
 
     @Test
     void should_map_structure_when_structureUri_present() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertNotNull(result.getStructure()),
@@ -184,12 +184,12 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_structure_when_structureUri_is_null() {
-        assertNull(service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getStructure());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getStructure());
     }
 
     @Test
     void should_parse_numObservations_and_numSeries_as_integers() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(42000, result.getNumObservations()),
@@ -199,14 +199,14 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_numObservations_when_null() {
-        var result = service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO());
         assertNull(result.getNumObservations());
         assertNull(result.getNumSeries());
     }
 
     @Test
     void should_parse_single_creator_from_pipe_dollar_format() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(1, result.getCreator().size()),
@@ -222,7 +222,7 @@ class DatasetsServiceImplTest {
     @Test
     void should_parse_multiple_creators_separated_by_pipe() {
         var dto = datasetByIdDTOWithCreators("DG75-A$Label A FR$Label A EN|DG75-B$Label B FR$Label B EN");
-        var result = service.transformDatasetByIdDTOToDataSet(dto);
+        var result = service.convertDatasetByIdDTOToDataSet(dto);
 
         assertAll(
                 () -> assertEquals(2, result.getCreator().size()),
@@ -237,13 +237,13 @@ class DatasetsServiceImplTest {
     @Test
     void should_not_set_creator_when_creators_is_null() {
         // le service ne setCreator que si dto.creators() est non-null et non-blank
-        var result = service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO());
         assertNull(result.getCreator());
     }
 
     @Test
     void should_parse_operationStat_as_uri_list() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(1, result.getWasGeneratedBy().size()),
@@ -253,12 +253,12 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_return_null_wasGeneratedBy_when_operationStat_is_null() {
-        assertNull(service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getWasGeneratedBy());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getWasGeneratedBy());
     }
 
     @Test
     void should_parse_theme_as_uri_list() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getTheme().size()),
@@ -269,7 +269,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_parse_keywords_lg1_and_lg2() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(3, result.getKeyword().size()),
@@ -284,7 +284,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_parse_relations() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getRelations().size()),
@@ -295,7 +295,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_parse_archiveUnits() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertEquals(1, result.getArchiveUnit().size()),
@@ -305,7 +305,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_map_wasDerivedFrom_with_description_when_present() {
-        var result = service.transformDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
                 () -> assertNotNull(result.getWasDerivedFrom()),
@@ -319,7 +319,7 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_wasDerivedFrom_when_null() {
-        assertNull(service.transformDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getWasDerivedFrom());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getWasDerivedFrom());
     }
 
 
