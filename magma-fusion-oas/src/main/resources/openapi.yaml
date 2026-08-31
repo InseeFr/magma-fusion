@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Magma API
+  title: MagmaFusion API
   version: ${version}
   description: API sur les métadonnées de l'Insee
   contact:
@@ -9,7 +9,7 @@ info:
     email: dr59-sinl-equipe-maintenance-rmes@insee.fr
 externalDocs:
   description: This API is open source, the sources can be found here
-  url: https://github.com/InseeFr/Magma
+  url: https://github.com/InseeFr/magma-fusion
 servers:
   - url: http://localhost:8080
 
@@ -98,7 +98,7 @@ tags:
   - name: Series-Operations
     description: Consultation des Séries et Opérations
   - name: Datasets
-    description: Consultation Magma API - datasets
+    description: Consultation MagmaFusion API - datasets
 
 ### PATHS SPECIFICATION ###
 
@@ -7589,7 +7589,7 @@ components:
         - id
         - uri
 
-    Definition:
+    ConceptForList:
       type: object
       xml:
         name: Definition
@@ -7665,7 +7665,7 @@ components:
         wrapped: true
         name: Definition
       items:
-        $ref: '#/components/schemas/Definition'
+        $ref: '#/components/schemas/ConceptForList'
 
     AireDAttractionDesVilles2020:
       allOf:
@@ -8957,7 +8957,7 @@ components:
         themeTaxonomy:
           type: string
 
-    LandingPage:
+    LocalisedUrl:
       type: object
       properties:
         lang:
@@ -9121,7 +9121,7 @@ components:
         landingPage:
           type: array
           items:
-            $ref: '#/components/schemas/LandingPage'
+            $ref: '#/components/schemas/LocalisedUrl'
         processStep:
           $ref: '#/components/schemas/ProcessStep'
         accrualPeriodicity:
