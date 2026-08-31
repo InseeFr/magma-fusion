@@ -49,7 +49,7 @@ public class ConceptsEndpoints implements ConceptsApi {
 
             }
 
-            Concept concept = conceptService.transformDTOenConcept(conceptDTO);
+            Concept concept = conceptService.convertConceptDTOToConcept(conceptDTO);
 
             return EndpointsUtils.toResponseEntity(concept);
 

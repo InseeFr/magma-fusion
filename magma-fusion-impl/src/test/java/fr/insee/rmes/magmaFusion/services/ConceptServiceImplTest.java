@@ -47,12 +47,12 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////
 
     @Test
-    void transformDTOenConcept_shouldMapIdAndUri() {
+    void convertConceptDTOToConcept_shouldMapIdAndUri() {
         // Given
         ConceptDTO dto = createBasicDTO();
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getId()).isEqualTo("c001");
@@ -64,7 +64,7 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////
 
     @Test
-    void transformDTOenConcept_shouldMapIntituleFrAndEn() {
+    void convertConceptDTOToConcept_shouldMapIntituleFrAndEn() {
         // Given
         ConceptDTO dto = new ConceptDTO(
                 "c001", "http://id.insee.fr/concepts/c001",
@@ -73,7 +73,7 @@ class ConceptServiceImplTest {
                 null, null, null, false, false, null, null);
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getIntitule()).hasSize(2);
@@ -84,7 +84,7 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldMapIntituleFrOnly() {
+    void convertConceptDTOToConcept_shouldMapIntituleFrOnly() {
         // Given
         ConceptDTO dto = new ConceptDTO(
                 "c001", "http://id.insee.fr/concepts/c001",
@@ -93,7 +93,7 @@ class ConceptServiceImplTest {
                 null, null, null, false, false, null, null);
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getIntitule().getFirst().getContenu()).isEqualTo("Population");
@@ -101,12 +101,12 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldNotSetIntituleWhenBothNull() {
+    void convertConceptDTOToConcept_shouldNotSetIntituleWhenBothNull() {
         // Given
         ConceptDTO dto = createBasicDTO();
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then — setIntitule n'est pas appelé, la liste reste vide (valeur par défaut du modèle)
         assertThat(result.getIntitule()).isNull();
@@ -117,7 +117,7 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////-
 
     @Test
-    void transformDTOenConcept_shouldMapDefinitionFrAndEn() {
+    void convertConceptDTOToConcept_shouldMapDefinitionFrAndEn() {
         // Given
         ConceptDTO dto = new ConceptDTO(
                 "c001", "http://id.insee.fr/concepts/c001",
@@ -127,7 +127,7 @@ class ConceptServiceImplTest {
                 null, null, null, false, false, null, null);
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getDefinition()).hasSize(2);
@@ -138,12 +138,12 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldSetDefinitionNullWhenBothNull() {
+    void convertConceptDTOToConcept_shouldSetDefinitionNullWhenBothNull() {
         // Given
         ConceptDTO dto = createBasicDTO();
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getDefinition()).isNull();
@@ -154,7 +154,7 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////
 
     @Test
-    void transformDTOenConcept_shouldMapScopeNoteFrAndEn() {
+    void convertConceptDTOToConcept_shouldMapScopeNoteFrAndEn() {
         // Given
         ConceptDTO dto = new ConceptDTO(
                 "c001", "http://id.insee.fr/concepts/c001",
@@ -164,7 +164,7 @@ class ConceptServiceImplTest {
                 null, null, null, false, false, null, null);
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getDefinitionCourte()).hasSize(2);
@@ -173,12 +173,12 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldSetDefinitionCourteNullWhenBothNull() {
+    void convertConceptDTOToConcept_shouldSetDefinitionCourteNullWhenBothNull() {
         // Given
         ConceptDTO dto = createBasicDTO();
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getDefinitionCourte()).isNull();
@@ -189,7 +189,7 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////
 
     @Test
-    void transformDTOenConcept_shouldMapNoteEditorialeFrAndEn() {
+    void convertConceptDTOToConcept_shouldMapNoteEditorialeFrAndEn() {
         // Given
         ConceptDTO dto = new ConceptDTO(
                 "c001", "http://id.insee.fr/concepts/c001",
@@ -198,7 +198,7 @@ class ConceptServiceImplTest {
                 null, null, null, false, false, null, null);
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getNoteEditoriale()).hasSize(2);
@@ -207,12 +207,12 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldSetNoteEditorialeNullWhenBothNull() {
+    void convertConceptDTOToConcept_shouldSetNoteEditorialeNullWhenBothNull() {
         // Given
         ConceptDTO dto = createBasicDTO();
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getNoteEditoriale()).isNull();
@@ -223,24 +223,24 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////
 
     @Test
-    void transformDTOenConcept_shouldParseDateCreationAsInstant() {
+    void convertConceptDTOToConcept_shouldParseDateCreationAsInstant() {
         // Given
         ConceptDTO dto = createBasicDTO().withDateCreation("2020-01-15T00:00:00Z");
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getDateCreation()).isEqualTo(LocalDate.of(2020, 1, 15));
     }
 
     @Test
-    void transformDTOenConcept_shouldSetNullDatesWhenNull() {
+    void convertConceptDTOToConcept_shouldSetNullDatesWhenNull() {
         // Given
         ConceptDTO dto = createBasicDTO();
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getDateCreation()).isNull();
@@ -249,12 +249,12 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldSetNullDateWhenDateIsUnparseable() {
+    void convertConceptDTOToConcept_shouldSetNullDateWhenDateIsUnparseable() {
         // Given
         ConceptDTO dto = createBasicDTO().withDateCreation("not-a-date");
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getDateCreation()).isNull();
@@ -265,13 +265,13 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////
 
     @Test
-    void transformDTOenConcept_shouldMapIsReplacedByToConceptsSuivants() {
+    void convertConceptDTOToConcept_shouldMapIsReplacedByToConceptsSuivants() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("isReplacedBy");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsSuivants()).hasSize(1).contains(nc);
@@ -279,13 +279,13 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldMapReplacesToConceptsPrecedents() {
+    void convertConceptDTOToConcept_shouldMapReplacesToConceptsPrecedents() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("replaces");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsPrecedents()).hasSize(1).contains(nc);
@@ -293,92 +293,92 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldMapRelatedToConceptsLies() {
+    void convertConceptDTOToConcept_shouldMapRelatedToConceptsLies() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("related");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsLies()).hasSize(1).contains(nc);
     }
 
     @Test
-    void transformDTOenConcept_shouldMapCloseMatchToConceptsProches() {
+    void tconvertConceptDTOToConcept_shouldMapCloseMatchToConceptsProches() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("closeMatch");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsProches()).hasSize(1).contains(nc);
     }
 
     @Test
-    void transformDTOenConcept_shouldMapBroaderToConceptsPlusGeneriques() {
+    void convertConceptDTOToConcept_shouldMapBroaderToConceptsPlusGeneriques() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("broader");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsPlusGeneriques()).hasSize(1).contains(nc);
     }
 
     @Test
-    void transformDTOenConcept_shouldMapNarrowerToConceptsPlusSpecifiques() {
+    void convertConceptDTOToConcept_shouldMapNarrowerToConceptsPlusSpecifiques() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("narrower");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsPlusSpecifiques()).hasSize(1).contains(nc);
     }
 
     @Test
-    void transformDTOenConcept_shouldMapReferencesToConceptsReferences() {
+    void convertConceptDTOToConcept_shouldMapReferencesToConceptsReferences() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("references");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsReferences()).hasSize(1).contains(nc);
     }
 
     @Test
-    void transformDTOenConcept_shouldGroupMultipleNearbyConceptsOfSameType() {
+    void convertConceptDTOToConcept_shouldGroupMultipleNearbyConceptsOfSameType() {
         // Given
         NearbyConcept nc1 = nearbyConceptWithLink("isReplacedBy");
         NearbyConcept nc2 = nearbyConceptWithLink("isReplacedBy");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc1, nc2));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsSuivants()).hasSize(2).containsExactly(nc1, nc2);
     }
 
     @Test
-    void transformDTOenConcept_shouldIgnoreNearbyConceptWithUnknownTypeOfLink() {
+    void convertConceptDTOToConcept_shouldIgnoreNearbyConceptWithUnknownTypeOfLink() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink("unknownType");
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then — aucune liste ne doit être alimentée
         assertThat(result.getConceptsSuivants()).isNull();
@@ -391,13 +391,13 @@ class ConceptServiceImplTest {
     }
 
     @Test
-    void transformDTOenConcept_shouldIgnoreNearbyConceptWithNullTypeOfLink() {
+    void convertConceptDTOToConcept_shouldIgnoreNearbyConceptWithNullTypeOfLink() {
         // Given
         NearbyConcept nc = nearbyConceptWithLink(null);
         ConceptDTO dto = createBasicDTO().withNearbyConcepts(List.of(nc));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getConceptsSuivants()).isNull();
@@ -409,19 +409,19 @@ class ConceptServiceImplTest {
     // ////////////////////////////////////////////////////////////////////////
 
     @Test
-    void transformDTOenConcept_shouldSetIntitulesAlternatifsNullWhenFalse() {
+    void convertConceptDTOToConcept_shouldSetIntitulesAlternatifsNullWhenFalse() {
         // Given
         ConceptDTO dto = createBasicDTO(); // hasIntitulesAlternatifs = false
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getIntitulesAlternatifs()).isNull();
     }
 
     @Test
-    void transformDTOenConcept_shouldMapIntitulesAlternatifs() {
+    void convertConceptDTOToConcept_shouldMapIntitulesAlternatifs() {
         // Given
         LocalisedContenu labelFr = new LocalisedContenu().contenu("Pop.").langue("fr");
         LocalisedContenu labelEn = new LocalisedContenu().contenu("Pop.").langue("en");
@@ -434,7 +434,7 @@ class ConceptServiceImplTest {
                 null, List.of(labelFr, labelEn));
 
         // When
-        Concept result = service.transformDTOenConcept(dto);
+        Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
         assertThat(result.getIntitulesAlternatifs()).hasSize(2);

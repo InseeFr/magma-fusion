@@ -6,6 +6,6 @@ import fr.insee.rmes.magmaFusion.model.ConceptForList;
 import fr.insee.rmes.magmaFusion.utils.ConceptDTO;
 
 public interface ConceptService {
-    Concept transformDTOenConcept(ConceptDTO conceptDTO);
-    ConceptForList transformDTOenDefinition(ConceptDTO conceptDTO);
+    Concept convertConceptDTOToConcept(ConceptDTO conceptDTO);
+    ConceptForList convertConceptDTOToDefinition(ConceptDTO conceptDTO);
 }

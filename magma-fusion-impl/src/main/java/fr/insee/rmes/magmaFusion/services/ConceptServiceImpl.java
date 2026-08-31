@@ -24,7 +24,7 @@ import static fr.insee.rmes.magmaFusion.utils.LocalisedLabelUtils.createListLang
 @Slf4j
 public class ConceptServiceImpl implements ConceptService{
 
-        public Concept transformDTOenConcept(ConceptDTO conceptDTO) {
+        public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
             Concept concept = new Concept();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
@@ -141,7 +141,7 @@ public class ConceptServiceImpl implements ConceptService{
         }
 
 
-        public ConceptForList transformDTOenDefinition(ConceptDTO conceptDTO) {
+        public ConceptForList convertConceptDTOToDefinition(ConceptDTO conceptDTO) {
             ConceptForList concept = new ConceptForList();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
