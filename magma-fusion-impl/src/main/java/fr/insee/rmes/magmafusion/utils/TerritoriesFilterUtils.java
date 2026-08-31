@@ -1,0 +1,25 @@
+package fr.insee.rmes.magmafusion.utils;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+@Component
+public class TerritoriesFilterUtils {
+
+    private final String typesAutorises;
+
+    public TerritoriesFilterUtils(@Value("${fr.insee.rmes.magmafusion.api.geographie.types-autorises}") String typesAutorises) {
+        this.typesAutorises = typesAutorises;
+    }
+
+    public String defineTerritoriesFilter(Enum<?> typeValue) {
+        return typeValue == null
+                ? Arrays.stream(this.typesAutorises.split(","))
+                .map(t -> "\"" + t.trim() + "\"")
+                .collect(Collectors.joining(", "))
+                : "\"" + typeValue + "\"";
+    }
+}

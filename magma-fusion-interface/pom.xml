@@ -83,8 +83,8 @@
                         <configuration>
                             <inputSpec>${project.basedir}/target/openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <modelPackage>fr.insee.rmes.magmaFusion.model</modelPackage>
-                            <apiPackage>fr.insee.rmes.magmaFusion.api</apiPackage>
+                            <modelPackage>fr.insee.rmes.magmafusion.model</modelPackage>
+                            <apiPackage>fr.insee.rmes.magmafusion.api</apiPackage>
                             <generateApis>true</generateApis>
                             <generateModels>true</generateModels>
                             <supportingFilesToGenerate></supportingFilesToGenerate>
