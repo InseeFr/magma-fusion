@@ -1,10 +1,10 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.QuartierPrioritaireDeLaPolitiqueDeLaVille2024;
-import fr.insee.rmes.magma.model.TerritoireBaseRelation;
-import fr.insee.rmes.magma.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.api.GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.QuartierPrioritaireDeLaPolitiqueDeLaVille2024;
+import fr.insee.rmes.magmaFusion.model.TerritoireBaseRelation;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestcontainerTe
         assertAll(
                 () -> assertEquals("QN06255M", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/23498c07-2891-41e9-b3d5-d8846188ba0c", result.getUri()),
-                () -> assertEquals(QuartierPrioritaireDeLaPolitiqueDeLaVille2024.TypeEnum.QUARTIER_PRIORITAIRE_DE_LA_POLITIQUE_DE_LA_VILLE2024, result.getType()),
+                () -> assertEquals(TypeEnum.QUARTIER_PRIORITAIRE_DE_LA_POLITIQUE_DE_LA_VILLE2024, result.getType()),
                 () -> assertEquals(LocalDate.of(2024, 1, 1), result.getDateCreation()),
                 () -> assertEquals("Ville Centre", result.getIntituleSansArticle()),
                 () -> assertEquals(QuartierPrioritaireDeLaPolitiqueDeLaVille2024.TypeArticleEnum.X, result.getTypeArticle()),
@@ -85,7 +85,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestcontainerTe
                 () -> assertEquals(1609, result.size()),
                 () -> assertEquals("QN00101M", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/40526c49-2c78-4856-a4ed-21714bf70cb9", resultItem1.getUri()),
-                () -> assertEquals(QuartierPrioritaireDeLaPolitiqueDeLaVille2024.TypeEnum.QUARTIER_PRIORITAIRE_DE_LA_POLITIQUE_DE_LA_VILLE2024, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.QUARTIER_PRIORITAIRE_DE_LA_POLITIQUE_DE_LA_VILLE2024, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2024,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Grande Reyssouze Terre Des Fleurs", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(QuartierPrioritaireDeLaPolitiqueDeLaVille2024.TypeArticleEnum.X, resultItem1.getTypeArticle()),
@@ -109,7 +109,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestcontainerTe
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("62516", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/2d740bbc-9c75-4fd5-b3f4-63fbab6f2713", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBaseRelation.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Lillers", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireBaseRelation.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -130,7 +130,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestcontainerTe
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("62516", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/2d740bbc-9c75-4fd5-b3f4-63fbab6f2713", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBaseRelation.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Lillers", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireBaseRelation.TypeArticleEnum._0, resultItem1.getTypeArticle()),

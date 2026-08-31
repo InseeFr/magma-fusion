@@ -1,10 +1,11 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoIntercommunaliteEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.Intercommunalite;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
-import fr.insee.rmes.magma.model.TypeEnumDescendantsIntercommunalite;
+import fr.insee.rmes.magmaFusion.api.GeoIntercommunaliteEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.Intercommunalite;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.model.TypeEnumDescendantsIntercommunalite;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("246900245", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/intercommunalite/831d6a01-3f71-47a0-940b-04df167053c1", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2014,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2015,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Lyon (Grand Lyon)", resultItem1.getIntituleSansArticle()),
@@ -72,7 +73,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("240100883", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/intercommunalite/5a238840-5cbd-469f-80c8-43713bf8e4a8", result.getUri()),
-                () -> assertEquals(Intercommunalite.TypeEnum.INTERCOMMUNALITE, result.getType()),
+                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, result.getType()),
                 () -> assertEquals(LocalDate.of(2017,1,1), result.getDateCreation()),
                 () -> assertEquals("Plaine de l'Ain", result.getIntituleSansArticle()),
                 () -> assertEquals(Intercommunalite.TypeArticleEnum._3, result.getTypeArticle()),
@@ -98,7 +99,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("44050", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/b1b6ffdd-2493-485f-9da2-ff640677adc3", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Crossac", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -118,7 +119,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("441290101", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/iris/3394e3ae-bce6-44c4-ac19-190acdaa6a2d", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.IRIS, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.IRIS, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2008,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("H", resultItem1.getTypeDIris()),
                 () -> assertEquals("Agglomération", resultItem1.getIntituleSansArticle()),
@@ -145,7 +146,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("240100883", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/intercommunalite/5a238840-5cbd-469f-80c8-43713bf8e4a8", resultItem1.getUri()),
-                () -> assertEquals(Intercommunalite.TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Plaine de l'Ain", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(Intercommunalite.TypeArticleEnum._3, resultItem1.getTypeArticle()),
@@ -167,7 +168,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2, result.size()),
                 () -> assertEquals("240100883", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/intercommunalite/da6087eb-5061-4d99-82c4-03ae9ef5334f", resultItem1.getUri()),
-                () -> assertEquals(Intercommunalite.TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2008,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Plaine de l'Ain", resultItem1.getIntituleSansArticle()),
@@ -194,7 +195,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("246900245", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/intercommunalite/3e9c401d-ba60-4640-97d4-a3c2f024c59d", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2011,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2014,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Lyon (Grand Lyon)", resultItem1.getIntituleSansArticle()),
@@ -239,7 +240,7 @@ public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("200046977", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/intercommunalite/66a4c53d-5215-4258-b828-490773264671", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2015,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Métropole de Lyon", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum.Y, resultItem1.getTypeArticle()),

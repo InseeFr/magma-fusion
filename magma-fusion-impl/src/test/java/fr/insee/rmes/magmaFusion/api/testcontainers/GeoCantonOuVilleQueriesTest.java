@@ -1,8 +1,8 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoCantonOuVilleEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.*;
+import fr.insee.rmes.magmaFusion.api.GeoCantonOuVilleEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class GeoCantonOuVilleQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(2, result.size());
         assertEquals("01", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/departement/84680e6f-2e99-44c9-a9ba-2e96a2ae48b7", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.DEPARTEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.DEPARTEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(1967,12,31), resultItem1.getDateCreation());
         assertEquals("Ain", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._5, resultItem1.getTypeArticle());
@@ -60,7 +60,7 @@ public class GeoCantonOuVilleQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(1, result.size());
         assertEquals("84", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/region/c12b23e7-d2e7-4443-ac4b-de8de5ce22f2", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.REGION, resultItem1.getType());
+        assertEquals(TypeEnum.REGION, resultItem1.getType());
         assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
         assertEquals("Auvergne-Rhône-Alpes", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._1, resultItem1.getTypeArticle());
@@ -80,7 +80,7 @@ public class GeoCantonOuVilleQueriesTest extends TestcontainerTestDiffusion {
         assertNotNull(result);
         assertEquals("0101", result.getCode());
         assertEquals("http://id.insee.fr/geo/cantonOuVille/5e75ead7-7564-4480-83b0-7e16a7d8acf7", result.getUri());
-        assertEquals(CantonOuVille.TypeEnum.CANTON_OU_VILLE, result.getType());
+        assertEquals(TypeEnum.CANTON_OU_VILLE, result.getType());
         assertEquals(LocalDate.of(2016, 1, 1), result.getDateCreation());
         assertEquals("Ambérieu-en-Bugey", result.getIntituleSansArticle());
         assertEquals(CantonOuVille.TypeArticleEnum._1, result.getTypeArticle());
@@ -95,7 +95,7 @@ public class GeoCantonOuVilleQueriesTest extends TestcontainerTestDiffusion {
         assertNotNull(result);
         assertEquals("2B05", result.getCode());
         assertEquals("http://id.insee.fr/geo/cantonOuVille/3a6d53ee-51bb-41d7-91e9-44557fa11791", result.getUri());
-        assertEquals(CantonOuVille.TypeEnum.CANTON_OU_VILLE, result.getType());
+        assertEquals(TypeEnum.CANTON_OU_VILLE, result.getType());
         assertEquals(LocalDate.of(2016, 1, 1), result.getDateCreation());
         assertEquals("Biguglia-Nebbio", result.getIntituleSansArticle());
         assertEquals(CantonOuVille.TypeArticleEnum._0, result.getTypeArticle());
@@ -123,7 +123,7 @@ void should_return_404_when_CantonOuVilleCode_code0100_date20250904() throws Exc
         assertEquals(1, result.size());
         assertEquals("010040101", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/iris/b8c772de-9551-4f13-81c5-eca5bb0f2f7d", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.IRIS, resultItem1.getType());
+        assertEquals(TypeEnum.IRIS, resultItem1.getType());
         assertEquals(LocalDate.of(2008,1,1), resultItem1.getDateCreation());
         assertEquals("Pérouses-Triangle d'Activités", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._4, resultItem1.getTypeArticle());
@@ -147,7 +147,7 @@ void should_return_404_when_CantonOuVilleCode_code0100_date20250904() throws Exc
         assertEquals(23, result.size());
         assertEquals("01002", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/commune/43018c68-c278-433a-b285-3531e8d5347e", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType());
+        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
         assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation());
         assertEquals("Abergement-de-Varey", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._5, resultItem1.getTypeArticle());
@@ -168,7 +168,7 @@ void should_return_404_when_CantonOuVilleCode_code0100_date20250904() throws Exc
         assertEquals(2042, result.size());
         assertEquals("0101", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/cantonOuVille/5e75ead7-7564-4480-83b0-7e16a7d8acf7", resultItem1.getUri());
-        assertEquals(CantonOuVille.TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
+        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
         assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
         assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
         assertEquals(CantonOuVille.TypeArticleEnum._1, resultItem1.getTypeArticle());
@@ -185,7 +185,7 @@ void should_return_2042_cantonsEtVilles_when_cantonsEtVilles_dateEtoile(){
     assertEquals(2042, result.size());
     assertEquals("0101", resultItem1.getCode());
     assertEquals("http://id.insee.fr/geo/cantonOuVille/5e75ead7-7564-4480-83b0-7e16a7d8acf7", resultItem1.getUri());
-    assertEquals(CantonOuVille.TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
+    assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
     assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
     assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
     assertEquals(CantonOuVille.TypeArticleEnum._1, resultItem1.getTypeArticle());
@@ -206,7 +206,7 @@ void should_return_2042_cantonsEtVilles_when_cantonsEtVilles_dateEtoile(){
         assertEquals(3, result.size());
         assertEquals("0104", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/cantonOuVille/383181fb-59ba-425c-81c1-dfdf1b51cf8c", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
+        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
         assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
         assertEquals(LocalDate.of(2020,3,7), resultItem1.getDateSuppression());
         assertEquals("Belley", resultItem1.getIntituleSansArticle());
@@ -244,7 +244,7 @@ void should_return_2042_cantonsEtVilles_when_cantonsEtVilles_dateEtoile(){
         assertEquals(3, result.size());
         assertEquals("0104", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/cantonOuVille/383181fb-59ba-425c-81c1-dfdf1b51cf8c", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
+        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
         assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
         assertEquals(LocalDate.of(2020,3,7), resultItem1.getDateSuppression());
         assertEquals("Belley", resultItem1.getIntituleSansArticle());
@@ -263,7 +263,7 @@ void should_return_2042_cantonsEtVilles_when_cantonsEtVilles_dateEtoile(){
         assertEquals(1, result.size());
         assertEquals("2B05", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/cantonOuVille/3a6d53ee-51bb-41d7-91e9-44557fa11791", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
+        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
         assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
         assertEquals("Biguglia-Nebbio", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -301,7 +301,7 @@ void should_return_2042_cantonsEtVilles_when_cantonsEtVilles_dateEtoile(){
         assertEquals(1, result.size());
         assertEquals("0103", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/cantonOuVille/cb4d9856-a39d-4283-a9ab-d91396ebd705", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
+        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
         assertEquals(LocalDate.of(2020,3,7), resultItem1.getDateCreation());
         assertEquals("Valserhône", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());

@@ -1,8 +1,8 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoCommuneDelegueeEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.*;
+import fr.insee.rmes.magmaFusion.api.GeoCommuneDelegueeEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ public class GeoCommuneDelegueeQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(10, result.size()),
                 () -> assertEquals("153", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/51453875-c332-4dc8-907d-ad950b5b7a7e", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Cahors", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -64,7 +64,7 @@ public class GeoCommuneDelegueeQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("461", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/arrondissement/35fe4c0f-c974-483e-b204-7b266bb7876a", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Cahors", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -93,7 +93,7 @@ public class GeoCommuneDelegueeQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("46248", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/communeDeleguee/c333331f-b09b-4253-b012-dc0d0a65a290", result.getUri()),
-                () -> assertEquals(CommuneDeleguee.TypeEnum.COMMUNE_DELEGUEE, result.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE_DELEGUEE, result.getType()),
                 () -> assertEquals(LocalDate.of(2017,1,1), result.getDateCreation()),
                 () -> assertEquals("Sainte-Alauzie", result.getIntituleSansArticle()),
                 () -> assertEquals(CommuneDeleguee.TypeArticleEnum._0, result.getTypeArticle()),
@@ -126,7 +126,7 @@ public class GeoCommuneDelegueeQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2135, result.size()),
                 () -> assertEquals("01015", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/communeDeleguee/3c07001c-7efe-40f9-90fc-6a892af20238", resultItem1.getUri()),
-                () -> assertEquals(CommuneDeleguee.TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Arbignieu", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(CommuneDeleguee.TypeArticleEnum._1, resultItem1.getTypeArticle()),
@@ -146,7 +146,7 @@ public class GeoCommuneDelegueeQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2601, result.size()),
                 () -> assertEquals("01015", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/communeDeleguee/3c07001c-7efe-40f9-90fc-6a892af20238", resultItem1.getUri()),
-                () -> assertEquals(CommuneDeleguee.TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Arbignieu", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(CommuneDeleguee.TypeArticleEnum._1, resultItem1.getTypeArticle()),

@@ -1,9 +1,10 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoPaysEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.Pays;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.api.GeoPaysEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.Pays;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class GeoPaysQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("99132", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/pays/7c3380f3-897b-4470-a12f-2ae3b61fe4d0", result.getUri()),
-                () -> assertEquals(Pays.TypeEnum.PAYS, result.getType()),
+                () -> assertEquals(TypeEnum.PAYS, result.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), result.getDateCreation()),
                 () -> assertEquals("Royaume-Uni", result.getIntitule()),
                 () -> assertEquals("Royaume-Uni de Grande-Bretagne et d’Irlande du Nord", result.getIntituleComplet()),
@@ -74,7 +75,7 @@ public class GeoPaysQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("99133", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/territoire/1af281f6-f58a-4197-a40c-3c1514ebd9c5", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.TERRITOIRE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.TERRITOIRE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1964,9,21), resultItem1.getDateCreation()),
                 () -> assertEquals("Territoires britanniques en Méditerranée", resultItem1.getIntitule()),
                 () -> assertEquals("Gibraltar, Akrotiri et Dhekelia", resultItem1.getIntituleComplet())
@@ -106,7 +107,7 @@ public class GeoPaysQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("99100", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/pays/b7e3f0c9-b653-4a3e-904a-de63b80e108b", resultItem1.getUri()),
-                () -> assertEquals(Pays.TypeEnum.PAYS, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("France", resultItem1.getIntitule()),
                 () -> assertEquals("République française", resultItem1.getIntituleComplet()),
@@ -129,7 +130,7 @@ public class GeoPaysQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(343, result.size()),
                 () -> assertEquals("99100", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/pays/b7e3f0c9-b653-4a3e-904a-de63b80e108b", resultItem1.getUri()),
-                () -> assertEquals(Pays.TypeEnum.PAYS, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("France", resultItem1.getIntitule()),
                 () -> assertEquals("République française", resultItem1.getIntituleComplet()),
@@ -154,7 +155,7 @@ public class GeoPaysQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("99309", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/pays/aed778dc-3f9e-467d-a7c2-c875a12cb44d", resultItem1.getUri()),
-                () -> assertEquals(Pays.TypeEnum.PAYS, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1962,12,9), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(1964,4,26), resultItem1.getDateSuppression()),
                 () -> assertEquals("Tanganyika", resultItem1.getIntitule()),
@@ -178,7 +179,7 @@ public class GeoPaysQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("99119", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/pays/0b0d2b49-54a2-4d6c-be48-8900c905eaaa", resultItem1.getUri()),
-                () -> assertEquals(Pays.TypeEnum.PAYS, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1991,6,25), resultItem1.getDateCreation()),
                 () -> assertEquals("Croatie", resultItem1.getIntitule()),
                 () -> assertEquals("République de Croatie", resultItem1.getIntituleComplet()),

@@ -1,10 +1,11 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoRegionEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.Region;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
-import fr.insee.rmes.magma.model.TypeEnumDescendantsRegion;
+import fr.insee.rmes.magmaFusion.api.GeoRegionEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.Region;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.model.TypeEnumDescendantsRegion;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("06", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/region/0e9f9adc-742d-4ab7-90bd-30e5aaf7b2ab", result.getUri()),
-                () -> assertEquals(Region.TypeEnum.REGION, result.getType()),
+                () -> assertEquals(TypeEnum.REGION, result.getType()),
                 () -> assertEquals(LocalDate.of(2011,3,31), result.getDateCreation()),
                 () -> assertEquals("Mayotte", result.getIntituleSansArticle()),
                 () -> assertEquals(Region.TypeArticleEnum._0, result.getTypeArticle()),
@@ -68,7 +69,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(209, result.size()),
                 () -> assertEquals("97601", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/canton/03e01e65-f723-4998-b9e7-2068df3b053a", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.CANTON, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.CANTON, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Bandraboua", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -88,7 +89,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("97603", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/cantonOuVille/ba7925cb-e000-499c-948c-9c7ef47d5f9e", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.CANTON_OU_VILLE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Dembeni", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -111,7 +112,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(18, result.size()),
                 () -> assertEquals("01", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/region/598b3ed6-a7ea-44f8-a130-7a42e3630a8a", resultItem1.getUri()),
-                () -> assertEquals(Region.TypeEnum.REGION, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateCreation()),
                 () -> assertEquals("Guadeloupe", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(Region.TypeArticleEnum._3, resultItem1.getTypeArticle()),
@@ -131,7 +132,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(45, result.size()),
                 () -> assertEquals("01", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/region/c5e2a8e5-2a3b-4ff1-8f01-b6fc5710ceb9", resultItem1.getUri()),
-                () -> assertEquals(Region.TypeEnum.REGION, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1982,3,2), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateSuppression()),
                 () -> assertEquals("Guadeloupe", resultItem1.getIntituleSansArticle()),
@@ -156,7 +157,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2, result.size()),
                 () -> assertEquals("32", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/region/70086d81-9af2-4aeb-8734-502658d6a93f", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.REGION, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2016,9,29), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2016,12,31), resultItem1.getDateSuppression()),
                 () -> assertEquals("Hauts-de-France", resultItem1.getIntituleSansArticle()),
@@ -207,7 +208,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(5, result.size()),
                 () -> assertEquals("21", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/region/15916a60-04eb-4951-abd4-1bfd0b54f2e9", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.REGION, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1982,3,2), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Champagne-Ardenne", resultItem1.getIntituleSansArticle()),
@@ -239,7 +240,7 @@ public class GeoRegionQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(1, result.size());
         assertEquals("44", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/region/5295742f-1bd8-4062-b9d2-3a32ab1d8fbe", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.REGION, resultItem1.getType());
+        assertEquals(TypeEnum.REGION, resultItem1.getType());
         assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
         assertEquals(LocalDate.of(2016,9,29), resultItem1.getDateSuppression());
         assertEquals("Alsace-Champagne-Ardenne-Lorraine", resultItem1.getIntituleSansArticle());

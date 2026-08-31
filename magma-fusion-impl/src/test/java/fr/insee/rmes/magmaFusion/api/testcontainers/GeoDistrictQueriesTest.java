@@ -1,10 +1,11 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoDistrictEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.District;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
-import fr.insee.rmes.magma.model.TypeEnumAscendantsDistrict;
+import fr.insee.rmes.magmaFusion.api.GeoDistrictEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.District;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.model.TypeEnumAscendantsDistrict;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class GeoDistrictQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("984", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/f6496613-8f78-4184-80ab-81a077db6b37", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateCreation()),
                 () -> assertEquals("Terres australes et antarctiques françaises", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._4, resultItem1.getTypeArticle()),
@@ -63,7 +64,7 @@ public class GeoDistrictQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("984", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/f6496613-8f78-4184-80ab-81a077db6b37", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateCreation()),
                 () -> assertEquals("Terres australes et antarctiques françaises", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._4, resultItem1.getTypeArticle()),
@@ -84,7 +85,7 @@ public class GeoDistrictQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("98411", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/district/d028b78a-9c4d-4e22-9b60-efffd7085eb0", result.getUri()),
-                () -> assertEquals(District.TypeEnum.DISTRICT, result.getType()),
+                () -> assertEquals(TypeEnum.DISTRICT, result.getType()),
                 () -> assertEquals(LocalDate.of(2007,2,23), result.getDateCreation()),
                 () -> assertEquals("Îles Saint-Paul et Amsterdam", result.getIntituleSansArticle()),
                 () -> assertEquals(District.TypeArticleEnum._4, result.getTypeArticle()),

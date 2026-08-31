@@ -1,10 +1,11 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoUniteUrbaineEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
-import fr.insee.rmes.magma.model.TypeEnumDescendantsUniteUrbaine;
-import fr.insee.rmes.magma.model.UniteUrbaine2020;
+import fr.insee.rmes.magmaFusion.api.GeoUniteUrbaineEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.model.TypeEnumDescendantsUniteUrbaine;
+import fr.insee.rmes.magmaFusion.model.UniteUrbaine2020;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class GeoUniteUrbaineQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("01121", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/uniteUrbaine2020/57a37c9b-e426-430e-b8c1-ac0fd640e345", result.getUri()),
-                () -> assertEquals(UniteUrbaine2020.TypeEnum.UNITE_URBAINE2020, result.getType()),
+                () -> assertEquals(TypeEnum.UNITE_URBAINE2020, result.getType()),
                 () -> assertEquals(LocalDate.of(2020,1,1), result.getDateCreation()),
                 () -> assertEquals("Jujurieux", result.getIntituleSansArticle()),
                 () -> assertEquals(UniteUrbaine2020.TypeArticleEnum._0, result.getTypeArticle()),
@@ -67,7 +68,7 @@ public class GeoUniteUrbaineQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2, result.size()),
                 () -> assertEquals("01199", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/0d69a92e-70d3-4ebf-aa3b-db76e6bedf7e", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Jujurieux", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -86,7 +87,7 @@ public class GeoUniteUrbaineQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2, result.size()),
                 () -> assertEquals("01199", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/0d69a92e-70d3-4ebf-aa3b-db76e6bedf7e", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Jujurieux", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -120,7 +121,7 @@ public class GeoUniteUrbaineQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2472, result.size()),
                 () -> assertEquals("00151", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/uniteUrbaine2020/a7355a50-7516-4f7b-8919-a03bc28cd12b", resultItem1.getUri()),
-                () -> assertEquals(UniteUrbaine2020.TypeEnum.UNITE_URBAINE2020, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.UNITE_URBAINE2020, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Lécluse", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(UniteUrbaine2020.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -138,7 +139,7 @@ public class GeoUniteUrbaineQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(2500, result.size()),
                 () -> assertEquals("00151", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/uniteUrbaine2020/a7355a50-7516-4f7b-8919-a03bc28cd12b", resultItem1.getUri()),
-                () -> assertEquals(UniteUrbaine2020.TypeEnum.UNITE_URBAINE2020, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.UNITE_URBAINE2020, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Lécluse", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(UniteUrbaine2020.TypeArticleEnum._0, resultItem1.getTypeArticle()),

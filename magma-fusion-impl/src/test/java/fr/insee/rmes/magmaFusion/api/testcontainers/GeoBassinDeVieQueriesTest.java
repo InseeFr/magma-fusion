@@ -1,10 +1,11 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoBassinDeVieEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.BassinDeVie2022;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
-import fr.insee.rmes.magma.model.TypeEnumDescendantsBassinDeVie;
+import fr.insee.rmes.magmaFusion.api.GeoBassinDeVieEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.BassinDeVie2022;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.TypeEnumDescendantsBassinDeVie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class GeoBassinDeVieQueriesTest extends TestcontainerTestDiffusion {
             () ->  assertNotNull(result),
             () ->   assertEquals("01004", result.getCode()),
             () -> assertEquals("http://id.insee.fr/geo/bassinDeVie2022/0e5bcc78-f043-404d-92af-d3d660772675", result.getUri()),
-            () -> assertEquals(BassinDeVie2022.TypeEnum.BASSIN_DE_VIE2022, result.getType()),
+            () -> assertEquals(TypeEnum.BASSIN_DE_VIE2022, result.getType()),
             () -> assertEquals(LocalDate.of(2022, 1, 1), result.getDateCreation()),
             () ->assertEquals("Ambérieu-en-Bugey", result.getIntituleSansArticle()),
             () ->assertEquals(BassinDeVie2022.TypeArticleEnum._1, result.getTypeArticle()),
@@ -77,7 +78,7 @@ public class GeoBassinDeVieQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(2, result.size());
         assertEquals("35155", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/commune/4df5a6eb-4ced-4e81-9953-42ff31f073f9", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType());
+        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
         assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation());
         assertEquals("Lohéac", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -94,7 +95,7 @@ public class GeoBassinDeVieQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(2, result.size());
         assertEquals("35155", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/commune/4df5a6eb-4ced-4e81-9953-42ff31f073f9", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType());
+        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
         assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation());
         assertEquals("Lohéac", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -118,7 +119,7 @@ public class GeoBassinDeVieQueriesTest extends TestcontainerTestDiffusion {
 
         Assertions.assertEquals("01004", resultItem1.getCode());
         Assertions.assertEquals("http://id.insee.fr/geo/bassinDeVie2022/0e5bcc78-f043-404d-92af-d3d660772675", resultItem1.getUri());
-        Assertions.assertEquals(BassinDeVie2022.TypeEnum.BASSIN_DE_VIE2022, resultItem1.getType());
+        Assertions.assertEquals(TypeEnum.BASSIN_DE_VIE2022, resultItem1.getType());
         Assertions.assertEquals(LocalDate.of(2022, 1, 1), resultItem1.getDateCreation());
         Assertions.assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
         Assertions.assertEquals(BassinDeVie2022.TypeArticleEnum._1, resultItem1.getTypeArticle());
@@ -138,7 +139,7 @@ public class GeoBassinDeVieQueriesTest extends TestcontainerTestDiffusion {
 
         assertEquals("01004", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/bassinDeVie2022/0e5bcc78-f043-404d-92af-d3d660772675", resultItem1.getUri());
-        assertEquals(BassinDeVie2022.TypeEnum.BASSIN_DE_VIE2022, resultItem1.getType());
+        assertEquals(TypeEnum.BASSIN_DE_VIE2022, resultItem1.getType());
         assertEquals(LocalDate.of(2022, 1, 1), resultItem1.getDateCreation());
         assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
         assertEquals(BassinDeVie2022.TypeArticleEnum._1, resultItem1.getTypeArticle());

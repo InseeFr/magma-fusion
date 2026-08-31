@@ -1,11 +1,8 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoArrondissementEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.Arrondissement;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
-import fr.insee.rmes.magma.model.TypeEnumAscendantsArrondissement;
-import fr.insee.rmes.magma.model.TypeEnumDescendantsArrondissement;
+import fr.insee.rmes.magmaFusion.api.GeoArrondissementEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -50,7 +47,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         var resultItem1 = result.getFirst();
         assertEquals("67", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/departement/e62b35df-f168-4dfa-b60f-ef6cdb3279a0", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.DEPARTEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.DEPARTEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(1943, 1, 1), resultItem1.getDateCreation());
         assertEquals("Bas-Rhin", resultItem1.getIntituleSansArticle());
         assertEquals("Bas-Rhin", resultItem1.getIntitule());
@@ -60,7 +57,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         var resultItem2 = result.get(1);
         assertEquals("44", resultItem2.getCode());
         assertEquals("http://id.insee.fr/geo/region/8957f2ad-765c-4083-87f9-8d34fb702cf5", resultItem2.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.REGION, resultItem2.getType());
+        assertEquals(TypeEnum.REGION, resultItem2.getType());
         assertEquals(LocalDate.of(2016, 12, 31), resultItem2.getDateCreation());
         assertEquals("Grand Est", resultItem2.getIntituleSansArticle());
         assertEquals("Grand Est", resultItem2.getIntitule());
@@ -77,7 +74,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(1, result.size());
         assertEquals("44", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/region/8957f2ad-765c-4083-87f9-8d34fb702cf5", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.REGION, resultItem1.getType());
+        assertEquals(TypeEnum.REGION, resultItem1.getType());
         assertEquals(LocalDate.of(2016, 12, 31), resultItem1.getDateCreation());
         assertEquals("Grand Est", resultItem1.getIntituleSansArticle());
         assertEquals("Grand Est", resultItem1.getIntitule());
@@ -97,7 +94,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertNotNull(result);
         assertEquals("674", result.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/7f59df93-132b-400f-9aa6-b3c6be1018eb", result.getUri());
-        assertEquals(Arrondissement.TypeEnum.ARRONDISSEMENT, result.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, result.getType());
         assertEquals(LocalDate.of(2018, 12, 31), result.getDateCreation());
         assertEquals("Saverne", result.getIntituleSansArticle());
         assertEquals("Saverne", result.getIntitule());
@@ -117,7 +114,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(14, result.size());
         assertEquals("67004", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/communeDeleguee/ec8ebfef-57c2-4e97-9d5c-f07b2e46fa36", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType());
+        assertEquals(TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType());
         assertEquals(LocalDate.of(2016, 1, 1), resultItem1.getDateCreation());
         assertEquals("Allenwiller", resultItem1.getIntituleSansArticle());
         assertEquals("Allenwiller", resultItem1.getIntitule());
@@ -133,7 +130,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(196, result.size());
         assertEquals("67002", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/commune/83e823b1-a485-4441-b003-5ad23e47de5f", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType());
+        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
         assertEquals(LocalDate.of(1943, 1, 1), resultItem1.getDateCreation());
         assertEquals("Adamswiller", resultItem1.getIntituleSansArticle());
         assertEquals("Adamswiller", resultItem1.getIntitule());
@@ -152,7 +149,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(333, result.size()); // À adapter selon le nombre réel attendu
         assertEquals("011", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/cc3aee67-96dc-4e9a-ae4e-26860a90e0d5", resultItem1.getUri());
-        assertEquals(Arrondissement.TypeEnum.ARRONDISSEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(2017, 1, 1), resultItem1.getDateCreation());
         assertEquals("Belley", resultItem1.getIntituleSansArticle());
         assertEquals("01034", resultItem1.getChefLieu());
@@ -170,7 +167,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(748, result.size());
         assertEquals("011", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/d693d3ca-5851-4c40-a19e-dba1d750bfcf", resultItem1.getUri());
-        assertEquals(Arrondissement.TypeEnum.ARRONDISSEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(2016, 1, 1), resultItem1.getDateCreation());
         assertEquals(LocalDate.of(2017, 1, 1), resultItem1.getDateSuppression());
         assertEquals("Belley", resultItem1.getIntituleSansArticle());
@@ -191,7 +188,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(2, result.size());
         assertEquals("672", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/f1b88b67-f15d-49ad-9bb2-ce221f249f04", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(2015, 1, 1), resultItem1.getDateCreation());
         assertEquals(LocalDate.of(2018, 12, 31), resultItem1.getDateSuppression());
         assertEquals("Haguenau-Wissembourg", resultItem1.getIntituleSansArticle());
@@ -202,7 +199,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         var resultItem2 = result.get(1);
         assertEquals("674", resultItem2.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/f2cc4091-b4f0-485b-bf31-eb4afe8055a4", resultItem2.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem2.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem2.getType());
         assertEquals(LocalDate.of(2015, 1, 1), resultItem2.getDateCreation());
         assertEquals(LocalDate.of(2018, 12, 31), resultItem2.getDateSuppression());
         assertEquals("Saverne", resultItem2.getIntituleSansArticle());
@@ -251,7 +248,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(6, result.size());
         assertEquals("672", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/3e815542-7173-4d26-9e94-ac663bba89f7", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(1993, 1, 1), resultItem1.getDateCreation());
         assertEquals(LocalDate.of(2015, 1, 1), resultItem1.getDateSuppression());
         assertEquals("Haguenau", resultItem1.getIntituleSansArticle());
@@ -262,7 +259,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         var resultItem2 = result.get(1);
         assertEquals("673", resultItem2.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/0e34aa15-b3c7-4574-ad89-e1d6d9bd9812", resultItem2.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem2.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem2.getType());
         assertEquals(LocalDate.of(1993, 1, 1), resultItem2.getDateCreation());
         assertEquals(LocalDate.of(2015, 1, 1), resultItem2.getDateSuppression());
         assertEquals("Molsheim", resultItem2.getIntituleSansArticle());
@@ -297,7 +294,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         var resultItem1 = result.getFirst();
         assertEquals("042", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/1825eafe-2204-4849-b543-715f87615bb8", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(2017, 1, 1), resultItem1.getDateCreation());
         assertEquals("Castellane", resultItem1.getIntituleSansArticle());
         assertEquals("Castellane", resultItem1.getIntitule());
@@ -307,7 +304,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         var resultItem2 = result.get(1);
         assertEquals("043", resultItem2.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/904dae47-ccda-4877-9b6c-9c0566178db6", resultItem2.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem2.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem2.getType());
         assertEquals(LocalDate.of(2017, 1, 1), resultItem2.getDateCreation());
         assertEquals("Digne-les-Bains", resultItem2.getIntituleSansArticle());
         assertEquals("Digne-les-Bains", resultItem2.getIntitule());
@@ -317,7 +314,7 @@ public class GeoArrondissementQueriesTest extends TestcontainerTestDiffusion {
         var resultItem3 = result.get(2);
         assertEquals("044", resultItem3.getCode());
         assertEquals("http://id.insee.fr/geo/arrondissement/51dcbc6e-5c97-4472-b597-68aee9904dc9", resultItem3.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT, resultItem3.getType());
+        assertEquals(TypeEnum.ARRONDISSEMENT, resultItem3.getType());
         assertEquals(LocalDate.of(2017, 1, 1), resultItem3.getDateCreation());
         assertEquals("Forcalquier", resultItem3.getIntituleSansArticle());
         assertEquals("Forcalquier", resultItem3.getIntitule());

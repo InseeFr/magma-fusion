@@ -1,10 +1,11 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoZoneDEmploiEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
-import fr.insee.rmes.magma.model.TypeEnumDescendantsZoneDEmploi;
-import fr.insee.rmes.magma.model.ZoneDEmploi2020;
+import fr.insee.rmes.magmaFusion.api.GeoZoneDEmploiEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.model.TypeEnumDescendantsZoneDEmploi;
+import fr.insee.rmes.magmaFusion.model.ZoneDEmploi2020;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class GeoZoneDEmploiQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("2415", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/zoneDEmploi2020/dbab03e7-3d8d-4797-8ab1-0ed36a4db9c1", result.getUri()),
-                () -> assertEquals(ZoneDEmploi2020.TypeEnum.ZONE_D_EMPLOI2020, result.getType()),
+                () -> assertEquals(TypeEnum.ZONE_D_EMPLOI2020, result.getType()),
                 () -> assertEquals(LocalDate.of(2020,1,1), result.getDateCreation()),
                 () -> assertEquals("Vierzon", result.getIntituleSansArticle()),
                 () -> assertEquals(ZoneDEmploi2020.TypeArticleEnum._0, result.getTypeArticle()),
@@ -66,7 +67,7 @@ public class GeoZoneDEmploiQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(42, result.size()),
                 () -> assertEquals("18036", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/9d090028-9065-4c75-bb2b-6ea30d430af7", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Brinay", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -85,7 +86,7 @@ public class GeoZoneDEmploiQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(28, result.size()),
                 () -> assertEquals("18036", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/9d090028-9065-4c75-bb2b-6ea30d430af7", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Brinay", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -119,7 +120,7 @@ public class GeoZoneDEmploiQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(306, result.size()),
                 () -> assertEquals("0051", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/zoneDEmploi2020/e6911283-05f4-4997-916a-cc2b58c1e013", resultItem1.getUri()),
-                () -> assertEquals(ZoneDEmploi2020.TypeEnum.ZONE_D_EMPLOI2020, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.ZONE_D_EMPLOI2020, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2025,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Alençon", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(ZoneDEmploi2020.TypeArticleEnum._1, resultItem1.getTypeArticle()),
@@ -137,7 +138,7 @@ public class GeoZoneDEmploiQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(332, result.size()),
                 () -> assertEquals("0051", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/zoneDEmploi2020/1d5754fc-cb01-47cf-a9a8-f16f30110d9a", resultItem1.getUri()),
-                () -> assertEquals(ZoneDEmploi2020.TypeEnum.ZONE_D_EMPLOI2020, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.ZONE_D_EMPLOI2020, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2025,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Alençon", resultItem1.getIntituleSansArticle()),

@@ -1,8 +1,8 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoCommuneAssocieeEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.*;
+import fr.insee.rmes.magmaFusion.api.GeoCommuneAssocieeEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ public class GeoCommuneAssocieeQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(10, result.size()),
                 () -> assertEquals("004", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/83109274-b915-41be-a7b6-0e09a0a625c1", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Lille (partie française)", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -65,7 +65,7 @@ void should_return_1_departement_when_CommuneAssocieesCodeAscendants_code59355_d
             () -> assertEquals(1, result.size()),
             () -> assertEquals("59", resultItem1.getCode()),
             () -> assertEquals("http://id.insee.fr/geo/departement/1cabcdea-d4dc-4df1-96c2-ed1db0fa594c", resultItem1.getUri()),
-            () -> assertEquals(TerritoireTousAttributs.TypeEnum.DEPARTEMENT, resultItem1.getType()),
+            () -> assertEquals(TypeEnum.DEPARTEMENT, resultItem1.getType()),
             () -> assertEquals(LocalDate.of(1973,9,1), resultItem1.getDateCreation()),
             () -> assertEquals("Nord", resultItem1.getIntituleSansArticle()),
             () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._2, resultItem1.getTypeArticle()),
@@ -88,7 +88,7 @@ void should_return_1_departement_when_CommuneAssocieesCodeAscendants_code59355_d
             assertAll(
                 () -> assertEquals("59355", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/communeAssociee/84564ad2-a211-4744-9e01-1bb1900e2e68", result.getUri()),
-                () -> assertEquals(CommuneAssociee.TypeEnum.COMMUNE_ASSOCIEE, result.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE_ASSOCIEE, result.getType()),
                 () -> assertEquals(LocalDate.of(2000,2,27), result.getDateCreation()),
                 () -> assertEquals("Lomme", result.getIntituleSansArticle()),
                 () -> assertEquals(CommuneAssociee.TypeArticleEnum._0, result.getTypeArticle()),
@@ -123,7 +123,7 @@ void should_return_1_departement_when_CommuneAssocieesCodeAscendants_code59355_d
                     () -> assertEquals(475, result.size()),
                     () -> assertEquals("01120", resultItem1.getCode()),
                     () -> assertEquals("http://id.insee.fr/geo/communeAssociee/2c8fa8e3-dc3b-4b8a-907a-82e4d07bce2c", resultItem1.getUri()),
-                    () -> assertEquals(CommuneAssociee.TypeEnum.COMMUNE_ASSOCIEE, resultItem1.getType()),
+                    () -> assertEquals(TypeEnum.COMMUNE_ASSOCIEE, resultItem1.getType()),
                     () -> assertEquals(LocalDate.of(1973,1,1), resultItem1.getDateCreation()),
                     () -> assertEquals("Cordieux", resultItem1.getIntituleSansArticle()),
                     () -> assertEquals(CommuneAssociee.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -143,7 +143,7 @@ void should_return_1_departement_when_CommuneAssocieesCodeAscendants_code59355_d
         assertAll(
                 () -> assertEquals("01003", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/communeAssociee/b86253e9-d7b0-46cf-81ae-e940ad457a85", resultItem1.getUri()),
-                () -> assertEquals(CommuneAssociee.TypeEnum.COMMUNE_ASSOCIEE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE_ASSOCIEE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1974,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(1983,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Amareins", resultItem1.getIntituleSansArticle()),

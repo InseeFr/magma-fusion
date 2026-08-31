@@ -1,9 +1,10 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoCirconscriptionTerritorialeEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.CirconscriptionTerritoriale;
-import fr.insee.rmes.magma.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmaFusion.api.GeoCirconscriptionTerritorialeEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.TypeEnum;
+import fr.insee.rmes.magmaFusion.model.CirconscriptionTerritoriale;
+import fr.insee.rmes.magmaFusion.model.TerritoireTousAttributs;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class GeoCirconscriptionTerritorialeQueriesTest extends TestcontainerTest
         assertEquals(1, result.size());
         assertEquals("986", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/ecfac5cd-a301-4dff-bed9-dfc54421bf6c", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
+        assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
         assertEquals(LocalDate.of(1985,1,1), resultItem1.getDateCreation());
         assertEquals("Wallis-et-Futuna", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -74,7 +75,7 @@ public class GeoCirconscriptionTerritorialeQueriesTest extends TestcontainerTest
         Assertions.assertNotNull(result);
         assertEquals("98611", result.getCode());
         assertEquals("http://id.insee.fr/geo/circonscriptionTerritoriale/31f556e9-55e5-4e48-9dac-2d8113fa609e", result.getUri());
-        assertEquals(CirconscriptionTerritoriale.TypeEnum.CIRCONSCRIPTION_TERRITORIALE, result.getType());
+        assertEquals(TypeEnum.CIRCONSCRIPTION_TERRITORIALE, result.getType());
         assertEquals(LocalDate.of(1985,1,1), result.getDateCreation());
         assertEquals("Alo", result.getIntituleSansArticle());
         assertEquals(CirconscriptionTerritoriale.TypeArticleEnum._1, result.getTypeArticle());

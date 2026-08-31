@@ -1,9 +1,9 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
 
-import fr.insee.rmes.magma.api.GeoCollectiviteDOutreMerEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.*;
+import fr.insee.rmes.magmaFusion.api.GeoCollectiviteDOutreMerEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class GeoCollectiviteDOutreMerQueriesTest extends TestcontainerTestDiffus
         assertAll(
                 () -> assertEquals("988", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/bc93b612-59f5-463a-a05f-e5ed9013dc8d", result.getUri()),
-                () -> assertEquals(CollectiviteDOutreMer.TypeEnum.COLLECTIVITE_D_OUTRE_MER, result.getType()),
+                () -> assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, result.getType()),
                 () -> assertEquals(LocalDate.of(1969,3,30), result.getDateCreation()),
                 () -> assertEquals("Nouvelle-Calédonie", result.getIntituleSansArticle()),
                 () -> assertEquals(CollectiviteDOutreMer.TypeArticleEnum._0, result.getTypeArticle()),
@@ -66,7 +66,7 @@ public class GeoCollectiviteDOutreMerQueriesTest extends TestcontainerTestDiffus
         assertEquals(4, result.size());
         assertEquals("97501", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/commune/8655edf3-9550-4486-8efa-03d97ebe6561", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType());
+        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
         assertEquals(LocalDate.of(1976,7,21), resultItem1.getDateCreation());
         assertEquals("Miquelon-Langlade", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -83,7 +83,7 @@ public class GeoCollectiviteDOutreMerQueriesTest extends TestcontainerTestDiffus
         assertEquals(1, result.size());
         assertEquals("97501", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/commune/8655edf3-9550-4486-8efa-03d97ebe6561", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE, resultItem1.getType());
+        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
         assertEquals(LocalDate.of(1976,7,21), resultItem1.getDateCreation());
         assertEquals("Miquelon-Langlade", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -104,7 +104,7 @@ public class GeoCollectiviteDOutreMerQueriesTest extends TestcontainerTestDiffus
         assertEquals(9, result.size());
         assertEquals("975", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/352968dd-fcc7-4950-8b71-8c94053cb126", resultItem1.getUri());
-        assertEquals(CollectiviteDOutreMer.TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
+        assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
         assertEquals(LocalDate.of(1985,6,15), resultItem1.getDateCreation());
         assertEquals("Saint-Pierre-et-Miquelon", resultItem1.getIntituleSansArticle());
         assertEquals(CollectiviteDOutreMer.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -121,7 +121,7 @@ void should_return_67_COM_when_CollectivitesDOutreMer_dateEtoile(){
     assertEquals(67, result.size());
     assertEquals("90bis", resultItem1.getCode());
     assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/163502e0-72fb-4dab-99d8-996a858733c9", resultItem1.getUri());
-    assertEquals(CollectiviteDOutreMer.TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
+    assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
     assertEquals(LocalDate.of(1947,12,17), resultItem1.getDateCreation());
     assertEquals(LocalDate.of(1957,1,1), resultItem1.getDateSuppression());
     assertEquals("Sarre", resultItem1.getIntituleSansArticle());

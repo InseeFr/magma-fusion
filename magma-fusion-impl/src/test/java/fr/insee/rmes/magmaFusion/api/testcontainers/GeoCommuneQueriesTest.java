@@ -1,8 +1,8 @@
-package fr.insee.rmes.magma.api.testcontainers;
+package fr.insee.rmes.magmaFusion.api.testcontainers;
 
-import fr.insee.rmes.magma.api.GeoCommuneEndpoints;
-import fr.insee.rmes.magma.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magma.model.*;
+import fr.insee.rmes.magmaFusion.api.GeoCommuneEndpoints;
+import fr.insee.rmes.magmaFusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmaFusion.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(9, result.size());
         assertEquals("024", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/9d05148e-a733-4bc4-9223-e8a27618c7c0", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType());
+        assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType());
         assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation());
         assertEquals("Caen", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
@@ -61,7 +61,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertEquals(1, result.size());
         assertEquals("14", resultItem1.getCode());
         assertEquals("http://id.insee.fr/geo/departement/b01dce92-b91f-4648-80e7-536bd1823c2c", resultItem1.getUri());
-        assertEquals(TerritoireTousAttributs.TypeEnum.DEPARTEMENT, resultItem1.getType());
+        assertEquals(TypeEnum.DEPARTEMENT, resultItem1.getType());
         assertEquals(LocalDate.of(2018,1,1), resultItem1.getDateCreation());
         assertEquals("Calvados", resultItem1.getIntituleSansArticle());
         assertEquals(TerritoireTousAttributs.TypeArticleEnum._2, resultItem1.getTypeArticle());
@@ -94,7 +94,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("14475", result.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/4b88116a-9ede-42f5-aef5-a70304de593b", result.getUri()),
-                () -> assertEquals(Commune.TypeEnum.COMMUNE, result.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, result.getType()),
                 () -> assertEquals(LocalDate.of(2017,1,1), result.getDateCreation()),
                 () -> assertEquals("Val d'Arry", result.getIntituleSansArticle()),
                 () -> assertEquals(Commune.TypeArticleEnum._0, result.getTypeArticle()),
@@ -126,7 +126,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("1401", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/canton/25982682-5635-40ad-8040-09110edb43e1", resultItem1.getUri()),
-                () -> assertEquals(Canton.TypeEnum.CANTON, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.CANTON, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2021,2,26), resultItem1.getDateCreation()),
                 () -> assertEquals("Monts d’Aunay", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(Canton.TypeArticleEnum._4, resultItem1.getTypeArticle()),
@@ -151,7 +151,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("14373", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/communeDeleguee/33afe07c-f132-4cdd-a188-4500c6928e62", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Locheur", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._2, resultItem1.getTypeArticle()),
@@ -170,7 +170,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("13201", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/d2ae811d-f0b8-4bac-972d-01dabe292665", resultItem1.getUri()),
-                () -> assertEquals(TerritoireTousAttributs.TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1946,10,18), resultItem1.getDateCreation()),
                 () -> assertEquals("Marseille 1er Arrondissement", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -202,7 +202,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("25073", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/2ac33139-2a97-4b09-87b3-263cbf14c0b6", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBase.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Bonnay", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireBase.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -221,7 +221,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
         assertAll(
                 () -> assertEquals("01001", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/166857ef-114f-4067-9d3d-f712562850c5", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBase.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Abergement-Clémenciat", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireBase.TypeArticleEnum._5, resultItem1.getTypeArticle()),
@@ -246,7 +246,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(3, result.size()),
                 () -> assertEquals("14373", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/9b9298ba-d31f-4570-82f1-ad821704a413", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBase.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Locheur", resultItem1.getIntituleSansArticle()),
@@ -279,7 +279,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(4, result.size()),
                 () -> assertEquals("14373", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/9b9298ba-d31f-4570-82f1-ad821704a413", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBase.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Locheur", resultItem1.getIntituleSansArticle()),
@@ -321,7 +321,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(1, result.size()),
                 () -> assertEquals("14475", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/commune/c2e2d19d-1ace-4cdc-b80d-c37a1aa59d1e", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBase.TypeEnum.COMMUNE, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1958,10,13), resultItem1.getDateCreation()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateSuppression()),
                 () -> assertEquals("Noyers-Bocage", resultItem1.getIntituleSansArticle()),
@@ -347,7 +347,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
                 () -> assertEquals(30, result.size()),
                 () -> assertEquals("01", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/departement/84680e6f-2e99-44c9-a9ba-2e96a2ae48b7", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBaseRelation.TypeEnum.DEPARTEMENT, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.DEPARTEMENT, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(1967,12,31), resultItem1.getDateCreation()),
                 () -> assertEquals("Ain", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireBaseRelation.TypeArticleEnum._5, resultItem1.getTypeArticle()),
@@ -371,7 +371,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
 
                 () -> assertEquals("0105", resultItem1.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/canton/622ce50c-2ff4-470d-a0f3-f85baa8813a7", resultItem1.getUri()),
-                () -> assertEquals(TerritoireBaseRelation.TypeEnum.CANTON, resultItem1.getType()),
+                () -> assertEquals(TypeEnum.CANTON, resultItem1.getType()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Bourg-en-Bresse-1", resultItem1.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireBaseRelation.TypeArticleEnum._0, resultItem1.getTypeArticle()),
@@ -380,7 +380,7 @@ public class GeoCommuneQueriesTest extends TestcontainerTestDiffusion {
 
                 () -> assertEquals("0106", resultItem2.getCode()),
                 () -> assertEquals("http://id.insee.fr/geo/canton/888731da-1820-4662-9cc1-17be3544a01c", resultItem2.getUri()),
-                () -> assertEquals(TerritoireBaseRelation.TypeEnum.CANTON, resultItem2.getType()),
+                () -> assertEquals(TypeEnum.CANTON, resultItem2.getType()),
                 () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
                 () -> assertEquals("Bourg-en-Bresse-2", resultItem2.getIntituleSansArticle()),
                 () -> assertEquals(TerritoireBaseRelation.TypeArticleEnum._0, resultItem2.getTypeArticle()),
