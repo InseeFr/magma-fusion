@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://magma.insee/document.schema.json",
+  "title": "Document",
+  "description": "Document associé à un contenu",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "array",
+      "items": {
+        "$ref": "langue-contenu.schema.json"
+      }
+    },
+    "dateMiseAJour": {
+      "type": "string"
+    },
+    "langue": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}
