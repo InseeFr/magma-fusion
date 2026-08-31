@@ -20,7 +20,7 @@ class DatasetsServiceImplTest {
     }
 
     // =========================================================
-    //   transformDatasetDTOsToDataSets
+    //   convertDatasetDTOsToDataSets
     // =========================================================
 
     @Test
@@ -53,7 +53,7 @@ class DatasetsServiceImplTest {
     }
 
     // =========================================================
-    //   transformDatasetByIdDTOToDataSet
+    //   convertDatasetByIdDTOToDataSet
     // =========================================================
 
     @Test

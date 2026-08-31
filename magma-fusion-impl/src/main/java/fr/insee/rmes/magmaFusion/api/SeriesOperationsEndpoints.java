@@ -35,7 +35,7 @@ public class SeriesOperationsEndpoints implements SeriesOperationsApi {
                 .executeQuery()
                 .listResult(SeriesDTO.class)
                 .result();
-        List<Serie> series = seriesOperationsService.transformSeriesDTOsToSeries(dtos);
+        List<Serie> series = seriesOperationsService.convertSeriesDTOsToSeries(dtos);
         return ResponseEntity.ok(series);
     }
 
@@ -49,7 +49,7 @@ public class SeriesOperationsEndpoints implements SeriesOperationsApi {
         if (seriesDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        Serie serieById = seriesOperationsService.transformSeriesDTOToSerieById(seriesDTO);
+        Serie serieById = seriesOperationsService.convertSeriesDTOToSerieById(seriesDTO);
         return EndpointsUtils.toResponseEntity(serieById);
     }
 
@@ -63,7 +63,7 @@ public class SeriesOperationsEndpoints implements SeriesOperationsApi {
         if (operationDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        Operation operation = seriesOperationsService.transformOperationDTOToOperation(operationDTO);
+        Operation operation = seriesOperationsService.convertOperationDTOToOperation(operationDTO);
         return EndpointsUtils.toResponseEntity(operation);
     }
 
@@ -77,7 +77,7 @@ public class SeriesOperationsEndpoints implements SeriesOperationsApi {
         if (indicateurDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        Indicateur indicateur = seriesOperationsService.transformIndicateurDTOToIndicateur(indicateurDTO);
+        Indicateur indicateur = seriesOperationsService.convertIndicateurDTOToIndicateur(indicateurDTO);
         return EndpointsUtils.toResponseEntity(indicateur);
     }
 

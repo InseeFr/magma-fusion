@@ -25,7 +25,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
     private String lg2;
 
     @Override
-    public Serie transformSeriesDTOToSerieById(SeriesDTO dto) {
+    public Serie convertSeriesDTOToSerieById(SeriesDTO dto) {
         Serie serieById = new Serie();
 
         serieById.setSeriesId(dto.seriesId());
@@ -95,7 +95,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
     }
 
     @Override
-    public Operation transformOperationDTOToOperation(OperationDTO dto) {
+    public Operation convertOperationDTOToOperation(OperationDTO dto) {
         Operation operation = new Operation();
 
         operation.setId(dto.operationId());
@@ -134,11 +134,11 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
     }
 
     @Override
-    public List<Serie> transformSeriesDTOsToSeries(List<SeriesDTO> dtos) {
-        return dtos.stream().map(this::transformSeriesDTOToSeriesItem).toList();
+    public List<Serie> convertSeriesDTOsToSeries(List<SeriesDTO> dtos) {
+        return dtos.stream().map(this::convertSeriesDTOToSeriesItem).toList();
     }
 
-    private Serie transformSeriesDTOToSeriesItem(SeriesDTO dto) {
+    private Serie convertSeriesDTOToSeriesItem(SeriesDTO dto) {
         Serie serieById = new Serie();
         serieById.setOperations(null);
         serieById.setAltLabel(null);
@@ -206,7 +206,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
     }
 
     @Override
-    public Indicateur transformIndicateurDTOToIndicateur(IndicateurDTO dto) {
+    public Indicateur convertIndicateurDTOToIndicateur(IndicateurDTO dto) {
         Indicateur indicateur = new Indicateur();
 
         indicateur.setAltLabel(null);

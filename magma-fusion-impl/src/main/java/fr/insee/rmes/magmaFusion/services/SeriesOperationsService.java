@@ -10,8 +10,8 @@ import fr.insee.rmes.magmaFusion.utils.SeriesDTO;
 import java.util.List;
 
 public interface SeriesOperationsService {
-    Serie transformSeriesDTOToSerieById(SeriesDTO seriesDTO);
-    Operation transformOperationDTOToOperation(OperationDTO dto);
-    List<Serie> transformSeriesDTOsToSeries(List<SeriesDTO> dtos);
-    Indicateur transformIndicateurDTOToIndicateur(IndicateurDTO indicateurDTO);
+    Serie convertSeriesDTOToSerieById(SeriesDTO seriesDTO);
+    Operation convertOperationDTOToOperation(OperationDTO dto);
+    List<Serie> convertSeriesDTOsToSeries(List<SeriesDTO> dtos);
+    Indicateur convertIndicateurDTOToIndicateur(IndicateurDTO indicateurDTO);
 }

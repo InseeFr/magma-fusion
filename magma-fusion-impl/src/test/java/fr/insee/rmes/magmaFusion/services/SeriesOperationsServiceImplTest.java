@@ -25,12 +25,12 @@ class SeriesOperationsServiceImplTest {
     }
 
     // =========================================================
-    //   transformSeriesDTOToSerieById
+    //   convertSeriesDTOToSerieById
     // =========================================================
 
     @Test
-    void should_map_identifiers_and_dates_when_transformSeriesDTO() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+    void should_map_identifiers_and_dates_when_convertSeriesDTO() {
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertEquals("s1001", result.getSeriesId()),
@@ -42,16 +42,16 @@ class SeriesOperationsServiceImplTest {
     }
 
     @Test
-    void should_map_null_dates_as_null_when_transformSeriesDTO() {
-        var result = service.transformSeriesDTOToSerieById(minimalSeriesDTO());
+    void should_map_null_dates_as_null_when_convertSeriesDTO() {
+        var result = service.convertSeriesDTOToSerieById(minimalSeriesDTO());
 
         assertNull(result.getDateCreation());
         assertNull(result.getDateMiseAJour());
     }
 
     @Test
-    void should_map_multilingual_labels_when_transformSeriesDTO() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+    void should_map_multilingual_labels_when_convertSeriesDTO() {
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getLabel().size()),
@@ -73,7 +73,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_map_type_when_type_uri_is_present() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertNotNull(result.getType()),
@@ -86,7 +86,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_not_set_type_when_type_is_null() {
-        var result = service.transformSeriesDTOToSerieById(minimalSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(minimalSeriesDTO());
         assertNull(result.getType());
     }
 
@@ -100,12 +100,12 @@ class SeriesOperationsServiceImplTest {
                 null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null
         );
-        assertNull(service.transformSeriesDTOToSerieById(dto).getType());
+        assertNull(service.convertSeriesDTOToSerieById(dto).getType());
     }
 
     @Test
     void should_map_periodicity_when_present() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertNotNull(result.getFrequenceCollecte()),
@@ -118,12 +118,12 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_not_set_periodicity_when_null() {
-        assertNull(service.transformSeriesDTOToSerieById(minimalSeriesDTO()).getFrequenceCollecte());
+        assertNull(service.convertSeriesDTOToSerieById(minimalSeriesDTO()).getFrequenceCollecte());
     }
 
     @Test
     void should_parse_famille_from_dollar_separated_string() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertNotNull(result.getFamille()),
@@ -136,12 +136,12 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_not_set_famille_when_families_is_null() {
-        assertNull(service.transformSeriesDTOToSerieById(minimalSeriesDTO()).getFamille());
+        assertNull(service.convertSeriesDTOToSerieById(minimalSeriesDTO()).getFamille());
     }
 
     @Test
     void should_map_rapportQualite_when_simsId_present() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertNotNull(result.getRapportQualite()),
@@ -152,12 +152,12 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_not_set_rapportQualite_when_simsId_is_null() {
-        assertNull(service.transformSeriesDTOToSerieById(minimalSeriesDTO()).getRapportQualite());
+        assertNull(service.convertSeriesDTOToSerieById(minimalSeriesDTO()).getRapportQualite());
     }
 
     @Test
     void should_parse_single_ref_in_previousSeries() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertEquals(1, result.getSeriesPrecedentes().size()),
@@ -170,7 +170,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_parse_multiple_refs_separated_by_pipe_in_seeAlsoSeries() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getSeriesLiees().size()),
@@ -181,7 +181,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_parse_multiple_refs_in_operations() {
-        var result = service.transformSeriesDTOToSerieById(fullSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getOperations().size()),
@@ -192,7 +192,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_return_empty_list_when_refList_field_is_null() {
-        var result = service.transformSeriesDTOToSerieById(minimalSeriesDTO());
+        var result = service.convertSeriesDTOToSerieById(minimalSeriesDTO());
 
         assertAll(
                 () -> assertNotNull(result.getOperations()),
@@ -209,12 +209,12 @@ class SeriesOperationsServiceImplTest {
     }
 
     // =========================================================
-    //   transformSeriesDTOsToSeries
+    //   convertSeriesDTOsToSeries
     // =========================================================
 
     @Test
     void should_return_empty_list_when_input_is_empty() {
-        var result = service.transformSeriesDTOsToSeries(List.of());
+        var result = service.convertSeriesDTOsToSeries(List.of());
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -232,7 +232,7 @@ class SeriesOperationsServiceImplTest {
                         null, null, null, null, null, null, null)
         );
 
-        var result = service.transformSeriesDTOsToSeries(dtos);
+        var result = service.convertSeriesDTOsToSeries(dtos);
 
         assertAll(
                 () -> assertEquals(2, result.size()),
@@ -247,7 +247,7 @@ class SeriesOperationsServiceImplTest {
     void should_map_multilingual_labels_for_each_serie() {
         var dtos = List.of(minimalSeriesDTO());
 
-        var result = service.transformSeriesDTOsToSeries(dtos);
+        var result = service.convertSeriesDTOsToSeries(dtos);
         var label = result.getFirst().getLabel();
 
         assertAll(
@@ -261,7 +261,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_only_populate_seriesId_uri_and_label_not_detail_fields() {
-        var result = service.transformSeriesDTOsToSeries(List.of(fullSeriesDTO()));
+        var result = service.convertSeriesDTOsToSeries(List.of(fullSeriesDTO()));
         var serie = result.getFirst();
 
         assertAll(
@@ -278,12 +278,12 @@ class SeriesOperationsServiceImplTest {
     }
 
     // =========================================================
-    //   transformOperationDTOToOperationById
+    //   convertOperationDTOToOperationById
     // =========================================================
 
     @Test
-    void should_map_identifiers_when_transformOperationDTO() {
-        var result = service.transformOperationDTOToOperation(fullOperationDTO());
+    void should_map_identifiers_when_convertOperationDTO() {
+        var result = service.convertOperationDTOToOperation(fullOperationDTO());
 
         assertAll(
                 () -> assertEquals("s2193", result.getId()),
@@ -296,8 +296,8 @@ class SeriesOperationsServiceImplTest {
     }
 
     @Test
-    void should_map_multilingual_labels_when_transformOperationDTO() {
-        var result = service.transformOperationDTOToOperation(fullOperationDTO());
+    void should_map_multilingual_labels_when_convertOperationDTO() {
+        var result = service.convertOperationDTOToOperation(fullOperationDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getLabel().size()),
@@ -313,7 +313,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_map_serie_when_seriesId_is_present() {
-        var result = service.transformOperationDTOToOperation(fullOperationDTO());
+        var result = service.convertOperationDTOToOperation(fullOperationDTO());
 
         assertAll(
                 () -> assertNotNull(result.getSerie()),
@@ -333,7 +333,7 @@ class SeriesOperationsServiceImplTest {
                 null, null, null, null,
                 null, null, null, null, null
         );
-        assertNull(service.transformOperationDTOToOperation(dto).getSerie());
+        assertNull(service.convertOperationDTOToOperation(dto).getSerie());
     }
 
     @Test
@@ -345,12 +345,12 @@ class SeriesOperationsServiceImplTest {
                 "  ", null, null, null,
                 null, null, null, null, null
         );
-        assertNull(service.transformOperationDTOToOperation(dto).getSerie());
+        assertNull(service.convertOperationDTOToOperation(dto).getSerie());
     }
 
     @Test
     void should_map_rapportQualite_when_simsId_present_for_operation() {
-        var result = service.transformOperationDTOToOperation(fullOperationDTO());
+        var result = service.convertOperationDTOToOperation(fullOperationDTO());
 
         assertAll(
                 () -> assertNotNull(result.getRapportQualite()),
@@ -368,30 +368,30 @@ class SeriesOperationsServiceImplTest {
                 "s1001", "http://id.insee.fr/operations/serie/s1001", null, null,
                 null, null, null, null, null
         );
-        assertNull(service.transformOperationDTOToOperation(dto).getRapportQualite());
+        assertNull(service.convertOperationDTOToOperation(dto).getRapportQualite());
     }
 
     @Test
-    void should_map_null_dates_as_null_when_transformOperationDTO() {
+    void should_map_null_dates_as_null_when_convertOperationDTO() {
         var dto = new OperationDTO(
                 "s2193", "http://id.insee.fr/operations/operation/s2193",
                 "Label FR", "Label EN", null, null,
                 null, null, null, null, null,
                 null, null, null, null, null
         );
-        var result = service.transformOperationDTOToOperation(dto);
+        var result = service.convertOperationDTOToOperation(dto);
 
         assertNull(result.getDateCreation());
         assertNull(result.getDateMiseAJour());
     }
 
     // =========================================================
-    //   transformIndicateurDTOToIndicateurById
+    //   convertIndicateurDTOToIndicateurById
     // =========================================================
 
     @Test
-    void should_map_identifiers_and_dates_when_transformIndicateurDTO() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+    void should_map_identifiers_and_dates_when_convertIndicateurDTO() {
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertEquals("p1001", result.getId()),
@@ -403,16 +403,16 @@ class SeriesOperationsServiceImplTest {
     }
 
     @Test
-    void should_map_null_dates_as_null_when_transformIndicateurDTO() {
-        var result = service.transformIndicateurDTOToIndicateur(minimalIndicateurDTO());
+    void should_map_null_dates_as_null_when_convertIndicateurDTO() {
+        var result = service.convertIndicateurDTOToIndicateur(minimalIndicateurDTO());
 
         assertNull(result.getDateCreation());
         assertNull(result.getDateMiseAJour());
     }
 
     @Test
-    void should_map_multilingual_labels_when_transformIndicateurDTO() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+    void should_map_multilingual_labels_when_convertIndicateurDTO() {
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertEquals(2, result.getLabel().size()),
@@ -434,7 +434,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_map_periodicity_indicateur_when_present() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertNotNull(result.getFrequenceCollecte()),
@@ -447,7 +447,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_not_set_periodicity_indicateur_when_null() {
-        assertNull(service.transformIndicateurDTOToIndicateur(minimalIndicateurDTO()).getFrequenceCollecte());
+        assertNull(service.convertIndicateurDTOToIndicateur(minimalIndicateurDTO()).getFrequenceCollecte());
     }
 
     @Test
@@ -459,12 +459,12 @@ class SeriesOperationsServiceImplTest {
                 null, null, null, null, null,
                 null, null, null, null, null, null
         );
-        assertNull(service.transformIndicateurDTOToIndicateur(dto).getFrequenceCollecte());
+        assertNull(service.convertIndicateurDTOToIndicateur(dto).getFrequenceCollecte());
     }
 
     @Test
     void should_map_rapportQualite_indicateur_when_simsId_present() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertNotNull(result.getRapportQualite()),
@@ -475,7 +475,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_not_set_rapportQualite_indicateur_when_simsId_is_null() {
-        assertNull(service.transformIndicateurDTOToIndicateur(minimalIndicateurDTO()).getRapportQualite());
+        assertNull(service.convertIndicateurDTOToIndicateur(minimalIndicateurDTO()).getRapportQualite());
     }
 
     @Test
@@ -488,12 +488,12 @@ class SeriesOperationsServiceImplTest {
                 "http://id.insee.fr/qualite/rapport/3500", "   ",
                 null, null, null, null, null, null
         );
-        assertNull(service.transformIndicateurDTOToIndicateur(dto).getRapportQualite());
+        assertNull(service.convertIndicateurDTOToIndicateur(dto).getRapportQualite());
     }
 
     @Test
     void should_parse_seriesContributrices_from_dollar_separated_string() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertNotNull(result.getSeriesContributrices()),
@@ -507,7 +507,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_parse_seriesLiees_from_dollar_separated_string() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertNotNull(result.getSeriesLiees()),
@@ -519,7 +519,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_parse_indicateursLies_from_dollar_separated_string() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertNotNull(result.getIndicateursLies()),
@@ -541,7 +541,7 @@ class SeriesOperationsServiceImplTest {
                 null, null, null, null,
                 null, null, null, null, null, null
         );
-        var result = service.transformIndicateurDTOToIndicateur(dto);
+        var result = service.convertIndicateurDTOToIndicateur(dto);
 
         assertAll(
                 () -> assertEquals(2, result.getSeriesContributrices().size()),
@@ -552,7 +552,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_map_proprietaires_organismesResponsables_partenaires() {
-        var result = service.transformIndicateurDTOToIndicateur(fullIndicateurDTO());
+        var result = service.convertIndicateurDTOToIndicateur(fullIndicateurDTO());
 
         assertAll(
                 () -> assertEquals(1, result.getProprietaires().size()),
@@ -569,7 +569,7 @@ class SeriesOperationsServiceImplTest {
 
     @Test
     void should_return_null_for_list_fields_when_raw_is_null() {
-        var result = service.transformIndicateurDTOToIndicateur(minimalIndicateurDTO());
+        var result = service.convertIndicateurDTOToIndicateur(minimalIndicateurDTO());
 
         assertAll(
                 () -> assertNull(result.getSeriesContributrices()),
@@ -591,7 +591,7 @@ class SeriesOperationsServiceImplTest {
                 null, null, null, null,
                 null, null, null, null, null, null
         );
-        var result = service.transformIndicateurDTOToIndicateur(dto);
+        var result = service.convertIndicateurDTOToIndicateur(dto);
 
         assertAll(
                 () -> assertEquals(1, result.getSeriesContributrices().size()),
