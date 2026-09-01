@@ -22,7 +22,7 @@ public class GraphDBContainer extends GenericContainer<GraphDBContainer> {
         super.start();
         withInitFolder("/testcontainers").withExposedPorts(7200);
 
-        withRepository("configDiffusion.ttl");
+        withRepository("config.ttl");
         withTrigFiles("statementsArrondissementTest.trig");
         withTrigFiles("statementsConceptsTest.trig");
     }
