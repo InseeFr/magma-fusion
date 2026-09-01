@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.OperationsEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Tag("integration")
 
-class OperationsQueriesTest extends TestcontainerTestDiffusion {
+class OperationsQueriesTest extends TestcontainerTest {
 
     @Autowired
     OperationsEndpoints endpoints;

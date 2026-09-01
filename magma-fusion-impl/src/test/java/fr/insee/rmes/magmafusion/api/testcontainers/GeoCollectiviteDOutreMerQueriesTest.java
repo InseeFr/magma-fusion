@@ -2,7 +2,7 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 
 import fr.insee.rmes.magmafusion.api.GeoCollectiviteDOutreMerEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
 import fr.insee.rmes.magmafusion.model.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureMockMvc
 @Tag("integration")
 
-public class GeoCollectiviteDOutreMerQueriesTest extends TestcontainerTestDiffusion {
+public class GeoCollectiviteDOutreMerQueriesTest extends TestcontainerTest {
 
     @Autowired
     GeoCollectiviteDOutreMerEndpoints endpoints;

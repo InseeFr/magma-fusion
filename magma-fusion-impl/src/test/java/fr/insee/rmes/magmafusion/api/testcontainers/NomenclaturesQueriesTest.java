@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.NomenclaturesEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Tag("integration")
 
-public class NomenclaturesQueriesTest extends TestcontainerTestDiffusion {
+public class NomenclaturesQueriesTest extends TestcontainerTest {
 
     @Autowired
     NomenclaturesEndpoints endpoints;
