@@ -28,13 +28,6 @@ public class GraphDBContainer extends GenericContainer<GraphDBContainer> {
         withTrigFiles("statementsGestion.trig");
     }
 
-    private void clearStatements() {
-        try {
-            execInContainer("curl", "-s", "-o", "/dev/null", "-X", "DELETE", "http://localhost:7200/repositories/magmafusion/statements");
-        } catch (IOException | InterruptedException e) {
-            throw new AssertionError("Could not clear repository statements", e);
-        }
-    }
 
     public GraphDBContainer withInitFolder(String folder){
         this.folder = folder;
