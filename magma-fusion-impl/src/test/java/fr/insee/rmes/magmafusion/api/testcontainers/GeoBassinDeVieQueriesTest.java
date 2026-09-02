@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoBassinDeVieEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.BassinDeVie2022;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Tag("integration")
 
-public class GeoBassinDeVieQueriesTest extends TestcontainerTestDiffusion {
+public class GeoBassinDeVieQueriesTest extends TestContainer {
 
     @Autowired
     GeoBassinDeVieEndpoints endpoints;

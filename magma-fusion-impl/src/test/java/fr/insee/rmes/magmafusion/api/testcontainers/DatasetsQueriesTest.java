@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.DatasetsEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestGestion;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.Dataset;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-class DatasetsQueriesTest extends TestcontainerTestGestion {
+class DatasetsQueriesTest extends TestContainer {
 
     static final String DATASET_ID = "idDatasetTest";
     static final String DATASET_URI = "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest";

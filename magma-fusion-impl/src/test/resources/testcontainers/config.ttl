@@ -3,7 +3,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <#data> a <http://www.openrdf.org/config/repository#Repository>, config:Repository;
-  <http://www.openrdf.org/config/repository#repositoryID> "data";
+  <http://www.openrdf.org/config/repository#repositoryID> "magmafusion";
   <http://www.openrdf.org/config/repository#repositoryImpl> [
       <http://www.openrdf.org/config/repository#repositoryType> "graphdb:SailRepository";
       <http://www.openrdf.org/config/repository/sail#sailImpl> [

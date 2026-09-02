@@ -8,8 +8,8 @@ import org.springframework.test.context.TestPropertySource;
 
 @Slf4j
 @TestPropertySource(properties = "spring.profiles.active=security.disabled")
-public class TestcontainerTestGestion {
-    static GraphDBContainerGestion container = new GraphDBContainerGestion("ontotext/graphdb:10.8.8").withReuse(false);
+public class TestContainer {
+    static GraphDBContainer container = new GraphDBContainer("ontotext/graphdb:10.8.8").withReuse(false);
 
     @BeforeAll
     static void startContainer(){
@@ -20,7 +20,7 @@ public class TestcontainerTestGestion {
 
     @DynamicPropertySource
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
-        String url  = "http://" + container.getHost() + ":" + container.getMappedPort(7200)+ "/repositories/gestion";
+        String url  = "http://" + container.getHost() + ":" + container.getMappedPort(7200)+ "/repositories/magmafusion";
         log.info("Graphdb URL: " + url);
         registry.add("fr.insee.rmes.magmafusion.api.sparqlEndpoint", () -> url) ;
     }

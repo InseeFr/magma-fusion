@@ -7,11 +7,11 @@ import org.testcontainers.utility.MountableFile;
 import java.io.IOException;
 
 @Slf4j
-public class GraphDBContainerDiffusion extends GenericContainer<GraphDBContainerDiffusion> {
+public class GraphDBContainer extends GenericContainer<GraphDBContainer> {
     public static final String DOCKER_ENTRYPOINT_INITDB = "/docker-entrypoint-initdb";
     private String folder;
 
-    public GraphDBContainerDiffusion(final String dockerImageName) {
+    public GraphDBContainer(final String dockerImageName) {
         super(dockerImageName);
         withExposedPorts(7200);
     }
@@ -22,24 +22,19 @@ public class GraphDBContainerDiffusion extends GenericContainer<GraphDBContainer
         super.start();
         withInitFolder("/testcontainers").withExposedPorts(7200);
 
-        withRepository("configDiffusion.ttl");
-        withTrigFiles("statementsDiffusion.trig");
+        withRepository("config.ttl");
+        withTrigFiles("statementsGeoTest.trig");
+        withTrigFiles("statementsConceptsTest.trig");
+        withTrigFiles("statementsGestion.trig");
     }
 
-    private void clearStatements() {
-        try {
-            execInContainer("curl", "-s", "-o", "/dev/null", "-X", "DELETE", "http://localhost:7200/repositories/data/statements");
-        } catch (IOException | InterruptedException e) {
-            throw new AssertionError("Could not clear repository statements", e);
-        }
-    }
 
-    public GraphDBContainerDiffusion withInitFolder(String folder){
+    public GraphDBContainer withInitFolder(String folder){
         this.folder = folder;
         return this;
     }
 
-    public GraphDBContainerDiffusion withRepository(String ttlFile) {
+    public GraphDBContainer withRepository(String ttlFile) {
         try {
             String path = copyFile(ttlFile);
             ExecResult result = execInContainer("curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}", "-X", "POST", "-H", "Content-Type:multipart/form-data", "-F", "config=@" + path, "http://localhost:7200/rest/repositories");
@@ -55,10 +50,10 @@ public class GraphDBContainerDiffusion extends GenericContainer<GraphDBContainer
         return this;
     }
 
-    public GraphDBContainerDiffusion withTrigFiles(String file) {
+    public GraphDBContainer withTrigFiles(String file) {
         try {
             String path = copyFile(file);
-            ExecResult result = execInContainer("curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "-X", "POST", "-H", "Content-Type: application/x-trig", "--data-binary", "@" + path, "http://localhost:7200/repositories/data/statements");
+            ExecResult result = execInContainer("curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "-X", "POST", "-H", "Content-Type: application/x-trig", "--data-binary", "@" + path, "http://localhost:7200/repositories/magmafusion/statements");
             String httpCode = result.getStdout().trim();
             log.info("Load trig HTTP status: {}", httpCode);
             if (!"204".equals(httpCode)) {
@@ -70,7 +65,7 @@ public class GraphDBContainerDiffusion extends GenericContainer<GraphDBContainer
         return this;
     }
 
-    private String copyFile(String file) throws IOException, InterruptedException {
+    private String copyFile(String file) {
         String fullPath = DOCKER_ENTRYPOINT_INITDB  + "/" + file;
         copyFileToContainer(MountableFile.forClasspathResource(this.folder + "/" + file), fullPath);
         return fullPath;

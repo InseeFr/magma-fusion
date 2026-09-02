@@ -2,7 +2,7 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 
 import fr.insee.rmes.magmafusion.api.GeoArrondissementMunipalEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.ArrondissementMunicipal;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("integration")
 
 
-public class GeoArrondissementMunicipalQueriesTest extends TestcontainerTestDiffusion {
+public class GeoArrondissementMunicipalQueriesTest extends TestContainer {
 
     @Autowired
     GeoArrondissementMunipalEndpoints endpoints;
