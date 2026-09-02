@@ -65,7 +65,7 @@ public class GraphDBContainer extends GenericContainer<GraphDBContainer> {
         return this;
     }
 
-    private String copyFile(String file) throws IOException, InterruptedException {
+    private String copyFile(String file) {
         String fullPath = DOCKER_ENTRYPOINT_INITDB  + "/" + file;
         copyFileToContainer(MountableFile.forClasspathResource(this.folder + "/" + file), fullPath);
         return fullPath;
