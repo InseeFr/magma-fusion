@@ -25,6 +25,7 @@ public class GraphDBContainer extends GenericContainer<GraphDBContainer> {
         withRepository("config.ttl");
         withTrigFiles("statementsGeoTest.trig");
         withTrigFiles("statementsConceptsTest.trig");
+        withTrigFiles("statementsGestion.trig");
     }
 
     private void clearStatements() {
