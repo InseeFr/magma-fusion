@@ -34,7 +34,6 @@ out/
 ### VS Code ###
 .vscode/
 /.smarttomcat/
-*.trig
 
 ### environement variables ##
 *.env
