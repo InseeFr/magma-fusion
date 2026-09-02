@@ -33,7 +33,6 @@ class TestContainerTest {
     // vérifie que overrideSpringProperties enregistre la bonne clé de propriété
     @Test
     void overrideSpringProperties_shouldRegisterSparqlEndpointProperty() {
-        DynamicPropertyRegistry registry = mock(DynamicPropertyRegistry.class);
 
         // On ne peut pas appeler directement la méthode car elle dépend d'un container démarré.
         // On vérifie au moins que la clé attendue est bien "fr.insee.rmes.magmafusion.api.sparqlEndpoint"
