@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.SeriesOperationsEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = "--spring.profiles.active=security.disabled")
 @AutoConfigureMockMvc
 @Tag("integration")
-class SeriesOperationsQueriesTest extends TestcontainerTest {
+class SeriesOperationsQueriesTest extends TestContainer {
 
     static final String SERIE_ID = "idSeriePrincipaleTest";
     static final String OPERATION_ID = "idOperationTest";

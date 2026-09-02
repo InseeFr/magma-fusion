@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoCantonOuVilleEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("integration")
 
 
-public class GeoCantonOuVilleQueriesTest extends TestcontainerTest {
+public class GeoCantonOuVilleQueriesTest extends TestContainer {
     @Autowired
     GeoCantonOuVilleEndpoints endpoints;
     @Autowired

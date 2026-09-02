@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.ConceptsEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-class ConceptsQueriesTest extends TestcontainerTest {
+class ConceptsQueriesTest extends TestContainer {
 
     @Autowired
     ConceptsEndpoints endpoints;

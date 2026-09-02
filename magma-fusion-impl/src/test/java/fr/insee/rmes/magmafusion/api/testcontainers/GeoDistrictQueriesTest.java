@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoDistrictEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
 import fr.insee.rmes.magmafusion.model.District;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Tag("integration")
 
-public class GeoDistrictQueriesTest extends TestcontainerTest {
+public class GeoDistrictQueriesTest extends TestContainer {
 
     @Autowired
     GeoDistrictEndpoints endpoints;

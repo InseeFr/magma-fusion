@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoCommuneEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTest;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCommune;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCommune;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-class GeoCommuneQueriesTest extends TestcontainerTest {
+class GeoCommuneQueriesTest extends TestContainer {
 
     @Autowired
     GeoCommuneEndpoints endpoints;

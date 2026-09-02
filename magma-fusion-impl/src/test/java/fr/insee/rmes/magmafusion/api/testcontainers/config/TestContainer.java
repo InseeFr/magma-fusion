@@ -8,7 +8,7 @@ import org.springframework.test.context.TestPropertySource;
 
 @Slf4j
 @TestPropertySource(properties = "spring.profiles.active=security.disabled")
-public class TestcontainerTest {
+public class TestContainer {
     static GraphDBContainer container = new GraphDBContainer("ontotext/graphdb:10.8.8").withReuse(false);
 
     @BeforeAll
