@@ -13,7 +13,7 @@
     <name>Implementation of the RMéS metadata API</name>
     <version>${revision}</version>
     <properties>
-        <revision>2.0.0-SNAPSHOT</revision>
+        <revision>3.0.0</revision>
         <java.version>25</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <jakarta.version>6.2.0-M2</jakarta.version>

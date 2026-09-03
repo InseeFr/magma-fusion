@@ -1,6 +1,7 @@
 package fr.insee.rmes.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
@@ -22,15 +23,21 @@ import java.util.Map;
 @Service
 public class OpenApiService {
 
-    private static final String VERSION = "3.0.0";
+    private final BuildProperties buildProperties;
 
     @Value("${fr.insee.rmes.magma.display.geo:true}")
     private boolean displayGeo;
 
+    public OpenApiService(BuildProperties buildProperties) {
+
+        //to manage the API version number displayed in Swagger
+        this.buildProperties = buildProperties;
+    }
+
     public String getOpenApiAsYaml() throws IOException {
         String content = StreamUtils.copyToString(
                 new ClassPathResource("openapi.yaml").getInputStream(), StandardCharsets.UTF_8);
-        content = content.replace("${version}", VERSION);
+        content = content.replace("${version}", buildProperties.getVersion());
 
         Yaml yaml = new Yaml();
         Map<String, Object> openApi = yaml.load(content);
