@@ -12,8 +12,8 @@ RUN mkdir /opt/app/
 RUN chown -R 10000:10000 /opt/app/
 
 USER 10000
-COPY --from=builder /opt/app/magma-app/target/*.jar /opt/app/magma.jar
+COPY --from=builder /opt/app/magma-fusion-app/target/*.jar /opt/app/magma-fusion.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar",  "/opt/app/magma.jar"]
+ENTRYPOINT ["java", "-jar",  "/opt/app/magma-fusion.jar"]
