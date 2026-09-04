@@ -10,8 +10,8 @@ info:
 externalDocs:
   description: This API is open source, the sources can be found here
   url: https://github.com/InseeFr/magma-fusion
-servers:
-  - url: http://localhost:8080
+security:
+  - bearerAuth: []
 
 ### TAGS SPECIFICATION ###
 
