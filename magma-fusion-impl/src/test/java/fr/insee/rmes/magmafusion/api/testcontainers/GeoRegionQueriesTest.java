@@ -2,252 +2,234 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoRegionEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
-import fr.insee.rmes.magmafusion.model.Region;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsRegion;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-
-public class GeoRegionQueriesTest extends TestContainer {
-
+class GeoRegionQueriesTest extends TestContainer {
 
     @Autowired
     GeoRegionEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/region/{code}                              ///
-    /////////////////////////////////////////////////////////////////////
+    // =========================================================
+    //   geo/region/{code}
+    // =========================================================
 
-//    geo/region/06?date=2025-09-04
     @Test
-    void should_return_region06_when_regionCode06_date20250904() {
-        var response  = endpoints.getcogreg("06", LocalDate.of(2025, 9, 4));
+    @DisplayName("When getcogreg 99, returns region 99")
+    void should_return_region_99_when_getcogreg_99() throws Exception {
+        var response = endpoints.getcogreg("99", LocalDate.of(2025, 1, 1));
         var result = response.getBody();
+
         assertNotNull(result);
-        assertAll(
-                () -> assertEquals("06", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/region/0e9f9adc-742d-4ab7-90bd-30e5aaf7b2ab", result.getUri()),
-                () -> assertEquals(TypeEnum.REGION, result.getType()),
-                () -> assertEquals(LocalDate.of(2011,3,31), result.getDateCreation()),
-                () -> assertEquals("Mayotte", result.getIntituleSansArticle()),
-                () -> assertEquals(Region.TypeArticleEnum._0, result.getTypeArticle()),
-                () -> assertEquals("97611", result.getChefLieu()),
-                () -> assertEquals("Mayotte", result.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/region-99-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
-
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/region/{code}/descendants                  ///
-    /////////////////////////////////////////////////////////////////////
-
-//   geo/region/06/descendants?date=2025-09-04 : renvoie 209 territoires
     @Test
-    void should_return_209_territoires_when_RegionCodeDescendants_code06_date20250904_typeNull_filtreNomNull(){
-        var response  = endpoints.getcogregdes("06", LocalDate.of(2025, 9, 4), null, null);
+    @DisplayName("When getcogreg 00 (inexistant), returns 404")
+    void should_return_404_when_getcogreg_00_inexistant() {
+        var response = endpoints.getcogreg("00", LocalDate.of(2025, 1, 1));
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    // =========================================================
+    //   geo/region/{code}/descendants
+    // =========================================================
+
+    @Test
+    @DisplayName("When getcogregdes 99 type null, returns 9 descendants")
+    void should_return_9_descendants_when_getcogregdes_99_type_null() throws Exception {
+        var response = endpoints.getcogregdes("99", LocalDate.of(2025, 1, 1), null, null);
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(209, result.size()),
-                () -> assertEquals("97601", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/canton/03e01e65-f723-4998-b9e7-2068df3b053a", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.CANTON, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Bandraboua", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("97602", resultItem1.getChefLieu()),
-                () -> assertEquals("Bandraboua", resultItem1.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/region-99-descendants-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
-//   geo/region/06/descendants?date=2025-09-04?type=CantonOuVille
     @Test
-    void should_return_1_cantonOuVIlle_when_RegionCodeDescendants_code06_date20250904_typeCantonOuVille_filtreNomDembeni(){
-        var response  = endpoints.getcogregdes("06", LocalDate.of(2025, 9, 4), TypeEnumDescendantsRegion.CANTON_OU_VILLE, "Dembeni");
+    @DisplayName("When getcogregdes 99 type Departement filtreNom='Departement test', returns 1 departement")
+    void should_return_1_departement_when_getcogregdes_99_type_departement_filtreNom() throws Exception {
+        var response = endpoints.getcogregdes("99", LocalDate.of(2025, 1, 1), TypeEnumDescendantsRegion.DEPARTEMENT, "Departement test");
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("97603", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/cantonOuVille/ba7925cb-e000-499c-948c-9c7ef47d5f9e", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Dembeni", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Dembeni", resultItem1.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/region-99-descendants-departement-filtreNom-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/regions                                    ///
-    /////////////////////////////////////////////////////////////////////
+    // =========================================================
+    //   geo/regions
+    // =========================================================
 
-//   geo/regions?date=2025-09-04 : renvoie 30 territoires
     @Test
-    void should_return_18_territoires_when_Region_date20250904_typeNull_filtreNomNull(){
-        var response  = endpoints.getcogregliste("2025-09-04");
+    @DisplayName("When getcogregliste date=2025-01-01, returns 1 region active")
+    void should_return_1_region_when_getcogregliste_date() throws Exception {
+        var response = endpoints.getcogregliste("2025-01-01");
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(18, result.size()),
-                () -> assertEquals("01", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/region/598b3ed6-a7ea-44f8-a130-7a42e3630a8a", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateCreation()),
-                () -> assertEquals("Guadeloupe", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(Region.TypeArticleEnum._3, resultItem1.getTypeArticle()),
-                () -> assertEquals("97105", resultItem1.getChefLieu()),
-                () -> assertEquals("Guadeloupe", resultItem1.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/regions-liste-date-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, false);
     }
 
-//  geo/region?date=*
     @Test
-    void should_return_45_regions_when_Regions_dateEtoile(){
-        var response  = endpoints.getcogregliste("*");
+    @DisplayName("When getcogregliste date=*, returns 2 regions")
+    void should_return_2_regions_when_getcogregliste_etoile() throws Exception {
+        var response = endpoints.getcogregliste("*");
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(45, result.size()),
-                () -> assertEquals("01", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/region/c5e2a8e5-2a3b-4ff1-8f01-b6fc5710ceb9", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1982,3,2), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateSuppression()),
-                () -> assertEquals("Guadeloupe", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(Region.TypeArticleEnum._3, resultItem1.getTypeArticle()),
-                () -> assertEquals("97105", resultItem1.getChefLieu()),
-                () -> assertEquals("Guadeloupe", resultItem1.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/regions-liste-etoile-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, false);
     }
 
-    /////////////////////////////////////////////////////////
-    ///        geo/region/{code}/precedents               ///
-    /////////////////////////////////////////////////////////
+    // =========================================================
+    //   geo/region/{code}/precedents
+    // =========================================================
 
-//  geo/region/44?date=2025-09-04
     @Test
-    void should_return_2_regions_when_RegionsCodePrecedents_date20250904(){
-        var response  = endpoints.getcogregprec("44", LocalDate.of(2025, 9, 4));
+    @DisplayName("When getcogregprec 99, returns 1 precedent (region 88)")
+    void should_return_1_precedent_when_getcogregprec_99() throws Exception {
+        var response = endpoints.getcogregprec("99", LocalDate.of(2025, 1, 1));
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("32", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/region/70086d81-9af2-4aeb-8734-502658d6a93f", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2016,9,29), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(2016,12,31), resultItem1.getDateSuppression()),
-                () -> assertEquals("Hauts-de-France", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._4, resultItem1.getTypeArticle()),
-                () -> assertEquals("59350", resultItem1.getChefLieu()),
-                () -> assertEquals("Hauts-de-France", resultItem1.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/region-99-precedents-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
-    //    geo/region/44/precedents?date=201-01-01
     @Test
-    void should_return_404_when_RegionCodePrecedents_code44_date20100101() throws Exception{
-        mockMvc.perform(get("/geo/region/44/precedents")
-                        .param("date", "2010-01-01"))
-                .andExpect(status().isNotFound());
+    @DisplayName("When getcogregprec 88 (no precedents), returns 404")
+    void should_return_404_when_getcogregprec_88_no_precedents() {
+        var response = endpoints.getcogregprec("88", LocalDate.of(1995, 1, 1));
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    /////////////////////////////////////////////////////////
-    ///        geo/region/{code}/projetes               ///
-    /////////////////////////////////////////////////////////
+    // =========================================================
+    //   geo/region/{code}/projetes
+    // =========================================================
 
-
-    //    geo/region/44/projetes?date=2025-09-01
     @Test
-    void should_return_400_when_RegionCodeProjetes_dateProjectionNull() throws Exception{
-        mockMvc.perform(get("/geo/region/44/projetes")
-                        .param("date", "2025-09-01"))
+    @DisplayName("When getcogregproj dateProjection null, returns 400")
+    void should_return_400_when_getcogregproj_dateProjection_null() throws Exception {
+        mockMvc.perform(get("/geo/region/99/projetes")
+                        .param("date", "2025-01-01"))
                 .andExpect(status().isBadRequest());
     }
 
-    //    geo/region/44/projetes?date=2025-09-01&dateProjection=
     @Test
-    public void should_return_400_when_RegionCodeProjetes_dateProjectionEmpty() throws Exception {
-        mockMvc.perform(get("/geo/region/44/projetes")
-                        .param("dateProjection", "")  // Valeur vide
-                        .param("date", "2025-09-01"))
+    @DisplayName("When getcogregproj dateProjection empty, returns 400")
+    void should_return_400_when_getcogregproj_dateProjection_empty() throws Exception {
+        mockMvc.perform(get("/geo/region/99/projetes")
+                        .param("dateProjection", "")
+                        .param("date", "2025-01-01"))
                 .andExpect(status().isBadRequest());
     }
 
-//  geo/region/44?date=2025-09-04&dateProjection=2000-01-01
     @Test
-    void should_return_5_regions_when_RegionsCodeProjetes_date20250904_dateProjection20100101(){
-        var response  = endpoints.getcogregproj("44", LocalDate.of(2000, 1, 1), LocalDate.of(2025,9,4));
+    @DisplayName("When getcogregproj 99 dateProjection=1995-01-01, returns projection (region 88)")
+    void should_return_1_projete_when_getcogregproj_99() throws Exception {
+        var response = endpoints.getcogregproj("99", LocalDate.of(1995, 1, 1), LocalDate.of(2025, 1, 1));
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(5, result.size()),
-                () -> assertEquals("21", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/region/15916a60-04eb-4951-abd4-1bfd0b54f2e9", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.REGION, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1982,3,2), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateSuppression()),
-                () -> assertEquals("Champagne-Ardenne", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Champagne-Ardenne", resultItem1.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/region-99-projetes-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
+    // =========================================================
+    //   geo/region/{code}/suivants
+    // =========================================================
 
-    /////////////////////////////////////////////////////////
-    ///        geo/region/{code}/suivants            ///
-    /////////////////////////////////////////////////////////
-
-    //    geo/region/41/suivants?date=2020-01-01
     @Test
-    void should_return_404_when_RegionCodeSuivants_code41_date20200101() throws Exception{
-        mockMvc.perform(get("/geo/region/41/suivants")
-                        .param("date", "2020-01-01"))
-                .andExpect(status().isNotFound());
+    @DisplayName("When getcogregsuiv 99 (actif, pas de suivant), returns 404")
+    void should_return_404_when_getcogregsuiv_99_no_suivants() {
+        var response = endpoints.getcogregsuiv("99", LocalDate.of(2025, 1, 1));
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    //    geo/region/41/suivants?date=2000-01-01
     @Test
-    void should_return_1_region_when_RegionCodeSuivants_code41_date20000101(){
-        var response  = endpoints.getcogregsuiv("41", LocalDate.of(2000,1,1));
+    @DisplayName("When getcogregsuiv 88, returns 1 suivant (region 99)")
+    void should_return_1_suivant_when_getcogregsuiv_88() throws Exception {
+        var response = endpoints.getcogregsuiv("88", LocalDate.of(1995, 1, 1));
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1, result.size());
-        assertEquals("44", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/region/5295742f-1bd8-4062-b9d2-3a32ab1d8fbe", resultItem1.getUri());
-        assertEquals(TypeEnum.REGION, resultItem1.getType());
-        assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
-        assertEquals(LocalDate.of(2016,9,29), resultItem1.getDateSuppression());
-        assertEquals("Alsace-Champagne-Ardenne-Lorraine", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._1, resultItem1.getTypeArticle());
-        assertEquals("67482", resultItem1.getChefLieu());
-        assertEquals("Alsace-Champagne-Ardenne-Lorraine", resultItem1.getIntitule());
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/region-88-suivants-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+        JSONAssert.assertEquals(expected, data, true);
     }
-
-
 }

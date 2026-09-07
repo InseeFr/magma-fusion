@@ -1,0 +1,23 @@
+[
+  {
+    "code": "88",
+    "uri": "http://id.insee.fr/geo/region/test-reg-88",
+    "type": "Region",
+    "dateCreation": "1990-01-01",
+    "dateSuppression": "2000-01-01",
+    "intituleSansArticle": "Region ancienne",
+    "typeArticle": "0",
+    "intitule": "Region ancienne",
+    "chefLieu": "99002"
+  },
+  {
+    "code": "99",
+    "uri": "http://id.insee.fr/geo/region/test-reg-99",
+    "type": "Region",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Region test",
+    "typeArticle": "0",
+    "intitule": "Region test",
+    "chefLieu": "99001"
+  }
+]

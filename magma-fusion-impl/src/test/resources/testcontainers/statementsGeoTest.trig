@@ -20,6 +20,20 @@
   <http://id.insee.fr/geo/region/99> owl:sameAs <http://id.insee.fr/geo/region/test-reg-99> .
 
   # =========================================================
+  #   Region test 88 (supprimee, predecesseur de region 99)
+  # =========================================================
+
+  <http://id.insee.fr/geo/region/test-reg-88> a igeo:Region ;
+    igeo:codeINSEE "88" ;
+    igeo:nom "Region ancienne" ;
+    igeo:nomSansArticle "Region ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:prefectureDeRegion <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  <http://id.insee.fr/geo/region/test-reg-88> owl:sameAs <http://id.insee.fr/geo/region/88> .
+  <http://id.insee.fr/geo/region/88> owl:sameAs <http://id.insee.fr/geo/region/test-reg-88> .
+
+  # =========================================================
   #   Departement test 10 (actif, successeur de dept 11)
   # =========================================================
 
@@ -232,9 +246,10 @@
     igeo:creation <http://id.insee.fr/geo/arrondissement/test-arr-992>,
       <http://id.insee.fr/geo/arrondissement/test-arr-993> .
 
-  # Evenement 5 : creation de la region test (2000-01-01)
+  # Evenement 5 : suppression de region 88, creation de region 99 (2000-01-01)
   <http://id.insee.fr/geo/evenementGeographique/test-evt-005> a igeo:EvenementGeographique ;
     igeo:date "2000-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/region/test-reg-88> ;
     igeo:creation <http://id.insee.fr/geo/region/test-reg-99> .
 
   # Evenement 6 : suppression de dept 11, creation de dept 10 (2000-01-01)
@@ -356,4 +371,9 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-020> a igeo:EvenementGeographique ;
     igeo:date "1990-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/departement/test-dep-11> .
+
+  # Evenement 21 : creation de la region 88 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-021> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/region/test-reg-88> .
 }

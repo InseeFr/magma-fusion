@@ -1,0 +1,87 @@
+[
+  {
+    "code": "991",
+    "uri": "http://id.insee.fr/geo/arrondissement/test-arr-991",
+    "type": "Arrondissement",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Arrondissement test 1",
+    "typeArticle": "0",
+    "intitule": "Arrondissement test 1",
+    "chefLieu": "99001"
+  },
+  {
+    "code": "992",
+    "uri": "http://id.insee.fr/geo/arrondissement/test-arr-992",
+    "type": "Arrondissement",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Arrondissement test 2",
+    "typeArticle": "0",
+    "intitule": "Arrondissement test 2",
+    "chefLieu": "99002"
+  },
+  {
+    "code": "993",
+    "uri": "http://id.insee.fr/geo/arrondissement/test-arr-993",
+    "type": "Arrondissement",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Arrondissement test 3",
+    "typeArticle": "0",
+    "intitule": "Arrondissement test 3",
+    "chefLieu": "99001"
+  },
+  {
+    "code": "99001",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99001",
+    "type": "Commune",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune test 1",
+    "typeArticle": "0",
+    "intitule": "Commune test 1"
+  },
+  {
+    "code": "99002",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99002",
+    "type": "Commune",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune test 2",
+    "typeArticle": "0",
+    "intitule": "Commune test 2"
+  },
+  {
+    "code": "99003",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99003",
+    "type": "Commune",
+    "dateCreation": "2018-01-01",
+    "intituleSansArticle": "Commune test 3",
+    "typeArticle": "0",
+    "intitule": "Commune test 3"
+  },
+  {
+    "code": "99901",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-99901",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 1",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 1"
+  },
+  {
+    "code": "99902",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-99902",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 2",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 2"
+  },
+  {
+    "code": "10",
+    "uri": "http://id.insee.fr/geo/departement/test-dep-10",
+    "type": "Departement",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Departement test",
+    "typeArticle": "0",
+    "intitule": "Departement test",
+    "chefLieu": "99001"
+  }
+]
