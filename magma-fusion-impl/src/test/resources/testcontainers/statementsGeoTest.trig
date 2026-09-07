@@ -20,19 +20,34 @@
   <http://id.insee.fr/geo/region/99> owl:sameAs <http://id.insee.fr/geo/region/test-reg-99> .
 
   # =========================================================
-  #   Departement test
+  #   Departement test 10 (actif, successeur de dept 11)
   # =========================================================
 
-  <http://id.insee.fr/geo/departement/test-dep-99> a igeo:Departement ;
-    igeo:codeINSEE "99" ;
+  <http://id.insee.fr/geo/departement/test-dep-10> a igeo:Departement ;
+    igeo:codeINSEE "10" ;
     igeo:nom "Departement test" ;
     igeo:nomSansArticle "Departement test" ;
     igeo:codeArticle "0" ;
     igeo:prefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
     igeo:subdivisionDirecteDe <http://id.insee.fr/geo/region/test-reg-99> .
 
-  <http://id.insee.fr/geo/departement/test-dep-99> owl:sameAs <http://id.insee.fr/geo/departement/99> .
-  <http://id.insee.fr/geo/departement/99> owl:sameAs <http://id.insee.fr/geo/departement/test-dep-99> .
+  <http://id.insee.fr/geo/departement/test-dep-10> owl:sameAs <http://id.insee.fr/geo/departement/10> .
+  <http://id.insee.fr/geo/departement/10> owl:sameAs <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  # =========================================================
+  #   Departement test 11 (supprime, predecesseur de dept 10)
+  # =========================================================
+
+  <http://id.insee.fr/geo/departement/test-dep-11> a igeo:Departement ;
+    igeo:codeINSEE "11" ;
+    igeo:nom "Departement ancien" ;
+    igeo:nomSansArticle "Departement ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:prefecture <http://id.insee.fr/geo/commune/test-com-99002> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/region/test-reg-99> .
+
+  <http://id.insee.fr/geo/departement/test-dep-11> owl:sameAs <http://id.insee.fr/geo/departement/11> .
+  <http://id.insee.fr/geo/departement/11> owl:sameAs <http://id.insee.fr/geo/departement/test-dep-11> .
 
   # =========================================================
   #   Communes test (descendants de arrondissement 991)
@@ -92,7 +107,7 @@
     igeo:nomSansArticle "Arrondissement test 1" ;
     igeo:codeArticle "0" ;
     igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/arrondissement/test-arr-991> owl:sameAs <http://id.insee.fr/geo/arrondissement/991> .
   <http://id.insee.fr/geo/arrondissement/991> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-991> .
@@ -107,7 +122,7 @@
     igeo:nomSansArticle "Arrondissement test 2" ;
     igeo:codeArticle "0" ;
     igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99002> ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/arrondissement/test-arr-992> owl:sameAs <http://id.insee.fr/geo/arrondissement/992> .
   <http://id.insee.fr/geo/arrondissement/992> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-992> .
@@ -122,7 +137,7 @@
     igeo:nomSansArticle "Arrondissement test 3" ;
     igeo:codeArticle "0" ;
     igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/arrondissement/test-arr-993> owl:sameAs <http://id.insee.fr/geo/arrondissement/993> .
   <http://id.insee.fr/geo/arrondissement/993> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-993> .
@@ -137,7 +152,7 @@
     igeo:nomSansArticle "Arrondissement ancien 1" ;
     igeo:codeArticle "0" ;
     igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/arrondissement/test-arr-994> owl:sameAs <http://id.insee.fr/geo/arrondissement/994> .
   <http://id.insee.fr/geo/arrondissement/994> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-994> .
@@ -152,7 +167,7 @@
     igeo:nomSansArticle "Arrondissement ancien 2" ;
     igeo:codeArticle "0" ;
     igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99002> ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/arrondissement/test-arr-995> owl:sameAs <http://id.insee.fr/geo/arrondissement/995> .
   <http://id.insee.fr/geo/arrondissement/995> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-995> .
@@ -167,7 +182,7 @@
     igeo:nomSansArticle "Arrondissement remplace" ;
     igeo:codeArticle "0" ;
     igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/arrondissement/test-arr-996> owl:sameAs <http://id.insee.fr/geo/arrondissement/996> .
   <http://id.insee.fr/geo/arrondissement/996> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-996> .
@@ -182,7 +197,7 @@
     igeo:nomSansArticle "Arrondissement ancien 3" ;
     igeo:codeArticle "0" ;
     igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/arrondissement/test-arr-997> owl:sameAs <http://id.insee.fr/geo/arrondissement/997> .
   <http://id.insee.fr/geo/arrondissement/997> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-997> .
@@ -222,10 +237,11 @@
     igeo:date "2000-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/region/test-reg-99> .
 
-  # Evenement 6 : creation du departement test (2000-01-01)
+  # Evenement 6 : suppression de dept 11, creation de dept 10 (2000-01-01)
   <http://id.insee.fr/geo/evenementGeographique/test-evt-006> a igeo:EvenementGeographique ;
     igeo:date "2000-01-01"^^xsd:date ;
-    igeo:creation <http://id.insee.fr/geo/departement/test-dep-99> .
+    igeo:suppression <http://id.insee.fr/geo/departement/test-dep-11> ;
+    igeo:creation <http://id.insee.fr/geo/departement/test-dep-10> .
 
   # Evenement 7 : creation des communes test (2000-01-01)
   <http://id.insee.fr/geo/evenementGeographique/test-evt-007> a igeo:EvenementGeographique ;
@@ -335,4 +351,9 @@
     igeo:date "2000-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/canton/test-can-9901>,
       <http://id.insee.fr/geo/canton/test-can-9902> .
+
+  # Evenement 20 : creation du departement 11 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-020> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/departement/test-dep-11> .
 }

@@ -10,8 +10,8 @@
     "chefLieu": "99001"
   },
   {
-    "code": "99",
-    "uri": "http://id.insee.fr/geo/departement/test-dep-99",
+    "code": "10",
+    "uri": "http://id.insee.fr/geo/departement/test-dep-10",
     "type": "Departement",
     "dateCreation": "2000-01-01",
     "intituleSansArticle": "Departement test",
