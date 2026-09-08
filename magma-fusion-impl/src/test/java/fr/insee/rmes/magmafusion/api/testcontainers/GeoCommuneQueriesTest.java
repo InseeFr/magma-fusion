@@ -6,6 +6,7 @@ import fr.insee.rmes.magmafusion.model.TypeEnum;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCommune;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCommune;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -35,303 +36,311 @@ class GeoCommuneQueriesTest extends TestContainer {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Nested
+    @DisplayName("geo/commune/{code}/ascendants")
+    class GetCogComAsc {
 
-    /// ========================================================= // NOSONAR
-    ///   geo/commune/{code}/ascendants                           // NOSONAR
-    /// ========================================================= // NOSONAR
+        @Test
+        @DisplayName("When getcogcomasc 99001 type null, returns 4 ascendants (arr, dept, region, aav)")
+        void should_return_4_ascendants_when_getcogcomasc_99001_type_null() throws Exception {
+            var response = endpoints.getcogcomasc("99001", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-    @Test
-    @DisplayName("When getcogcomasc 99001 type null, returns 4 ascendants (arr, dept, region, aav)")
-    void should_return_4_ascendants_when_getcogcomasc_99001_type_null() throws Exception {
-        var response = endpoints.getcogcomasc("99001", LocalDate.of(2025, 1, 1), null);
-        var result = response.getBody();
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99001-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99001-ascendants-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
+        @Test
+        @DisplayName("When getcogcomasc 99001 type Departement, returns 1 ascendant (dept)")
+        void should_return_1_departement_when_getcogcomasc_99001_type_departement() throws Exception {
+            var response = endpoints.getcogcomasc("99001", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommune.DEPARTEMENT);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99001-ascendants-departement-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomasc 99001 type Arrondissement before creation, returns 404")
+        void should_return_404_when_getcogcomasc_99001_type_arrondissement_before_creation() throws Exception {
+            mockMvc.perform(get("/geo/commune/99001/ascendants")
+                            .param("date", "2005-01-01")
+                            .param("type", String.valueOf(TypeEnumAscendantsCommune.ARRONDISSEMENT)))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    @DisplayName("When getcogcomasc 99001 type Departement, returns 1 ascendant (dept)")
-    void should_return_1_departement_when_getcogcomasc_99001_type_departement() throws Exception {
-        var response = endpoints.getcogcomasc("99001", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommune.DEPARTEMENT);
-        var result = response.getBody();
+    @Nested
+    @DisplayName("geo/commune/{code}")
+    class GetCogCom {
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99001-ascendants-departement-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
+        @Test
+        @DisplayName("When getcogcom 99001, returns commune 99001")
+        void should_return_commune_99001_when_getcogcom_99001() throws Exception {
+            var response = endpoints.getcogcom("99001", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99001-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcom 99999 (inexistant), returns 404")
+        void should_return_404_when_getcogcom_99999() throws Exception {
+            mockMvc.perform(get("/geo/commune/99999")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    @DisplayName("When getcogcomasc 99001 type Arrondissement before creation, returns 404")
-    void should_return_404_when_getcogcomasc_99001_type_arrondissement_before_creation() throws Exception {
-        mockMvc.perform(get("/geo/commune/99001/ascendants")
-                        .param("date", "2005-01-01")
-                        .param("type", String.valueOf(TypeEnumAscendantsCommune.ARRONDISSEMENT)))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("geo/commune/{code}/cantons")
+    class GetCogComCan {
+
+        @Test
+        @DisplayName("When getcogcomcan 99001, returns 2 cantons (9901, 9902)")
+        void should_return_2_cantons_when_getcogcomcan_99001() throws Exception {
+            var response = endpoints.getcogcomcan("99001", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99001-cantons-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    /// ========================================================= // NOSONAR
-    ///   geo/commune/{code}                                      // NOSONAR
-    /// ========================================================= // NOSONAR
+    @Nested
+    @DisplayName("geo/commune/{code}/descendants")
+    class GetCogComDesc {
 
-    @Test
-    @DisplayName("When getcogcom 99001, returns commune 99001")
-    void should_return_commune_99001_when_getcogcom_99001() throws Exception {
-        var response = endpoints.getcogcom("99001", LocalDate.of(2025, 1, 1));
-        var result = response.getBody();
+        @Test
+        @DisplayName("When getcogcomdesc 99001 type null, returns 3 descendants (2 comdel + 1 arrmu)")
+        void should_return_3_descendants_when_getcogcomdesc_99001_type_null() throws Exception {
+            var response = endpoints.getcogcomdesc("99001", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99001-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99001-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomdesc 99001 type Iris, returns 404")
+        void should_return_404_when_getcogcomdesc_99001_type_iris() throws Exception {
+            mockMvc.perform(get("/geo/commune/99001/descendants")
+                            .param("date", "2025-01-01")
+                            .param("type", String.valueOf(TypeEnumDescendantsCommune.IRIS)))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    @DisplayName("When getcogcom 99999 (inexistant), returns 404")
-    void should_return_404_when_getcogcom_99999() throws Exception {
-        mockMvc.perform(get("/geo/commune/99999")
-                        .param("date", "2025-01-01"))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("geo/communes")
+    class GetCogComListe {
+
+        @Test
+        @DisplayName("When getcogcomliste filtreNom='Commune test', returns 3 communes actives")
+        void should_return_3_communes_when_getcogcomliste_filtreNom() throws Exception {
+            var response = endpoints.getcogcomliste("2025-01-01", "Commune test", false);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/communes-liste-filtreNom-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomliste date=*, returns 5 communes (actives + supprimees)")
+        void should_return_5_communes_when_getcogcomliste_etoile() throws Exception {
+            var response = endpoints.getcogcomliste("*", null, null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/communes-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    /// ========================================================= // NOSONAR
-    ///   geo/commune/{code}/cantons                              // NOSONAR
-    /// ========================================================= // NOSONAR
+    @Nested
+    @DisplayName("geo/commune/{code}/precedents")
+    class GetCogComPrec {
 
-    @Test
-    @DisplayName("When getcogcomcan 99001, returns 2 cantons (9901, 9902)")
-    void should_return_2_cantons_when_getcogcomcan_99001() throws Exception {
-        var response = endpoints.getcogcomcan("99001", LocalDate.of(2025, 1, 1));
-        var result = response.getBody();
+        @Test
+        @DisplayName("When getcogcomprec 99003, returns 2 precedents (99004, 99005)")
+        void should_return_2_precedents_when_getcogcomprec_99003() throws Exception {
+            var response = endpoints.getcogcomprec("99003", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99001-cantons-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99003-precedents-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomprec 99001 (no precedents), returns 404")
+        void should_return_404_when_getcogcomprec_99001_no_precedents() throws Exception {
+            mockMvc.perform(get("/geo/commune/99001/precedents")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    /// ========================================================= // NOSONAR
-    ///   geo/commune/{code}/descendants                          // NOSONAR
-    /// ========================================================= // NOSONAR
+    @Nested
+    @DisplayName("geo/commune/{code}/projetes")
+    class GetCogComProj {
 
-    @Test
-    @DisplayName("When getcogcomdesc 99001 type null, returns 3 descendants (2 comdel + 1 arrmu)")
-    void should_return_3_descendants_when_getcogcomdesc_99001_type_null() throws Exception {
-        var response = endpoints.getcogcomdesc("99001", LocalDate.of(2025, 1, 1), null);
-        var result = response.getBody();
+        @Test
+        @DisplayName("When getcogcomproj 99003 dateProjection=2010-01-01, returns 2 projetes (99004, 99005)")
+        void should_return_2_projetes_when_getcogcomproj_99003() throws Exception {
+            var response = endpoints.getcogcomproj("99003", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99001-descendants-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99003-projetes-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomproj dateProjection null, returns 400")
+        void should_return_400_when_getcogcomproj_dateProjection_null() throws Exception {
+            mockMvc.perform(get("/geo/commune/99001/projetes")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("When getcogcomproj dateProjection empty, returns 400")
+        void should_return_400_when_getcogcomproj_dateProjection_empty() throws Exception {
+            mockMvc.perform(get("/geo/commune/99001/projetes")
+                            .param("dateProjection", "")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
     }
 
-    @Test
-    @DisplayName("When getcogcomdesc 99001 type Iris, returns 404")
-    void should_return_404_when_getcogcomdesc_99001_type_iris() throws Exception {
-        mockMvc.perform(get("/geo/commune/99001/descendants")
-                        .param("date", "2025-01-01")
-                        .param("type", String.valueOf(TypeEnumDescendantsCommune.IRIS)))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("geo/commune/{code}/suivants")
+    class GetCogComSuiv {
+
+        @Test
+        @DisplayName("When getcogcomsuiv 99004, returns 1 suivant (99003)")
+        void should_return_1_suivant_when_getcogcomsuiv_99004() throws Exception {
+            var response = endpoints.getcogcomsuiv("99004", LocalDate.of(2010, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99004-suivants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomsuiv 99001 (active, no suivants), returns 404")
+        void should_return_404_when_getcogcomsuiv_99001_no_suivants() throws Exception {
+            mockMvc.perform(get("/geo/commune/99001/suivants")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    /// ========================================================= // NOSONAR
-    ///   geo/communes                                            // NOSONAR
-    /// ========================================================= // NOSONAR
+    @Nested
+    @DisplayName("geo/commune/{code}/intersections")
+    class GetCogComIntersect {
 
-    @Test
-    @DisplayName("When getcogcomliste filtreNom='Commune test', returns 3 communes actives")
-    void should_return_3_communes_when_getcogcomliste_filtreNom() throws Exception {
-        var response = endpoints.getcogcomliste("2025-01-01", "Commune test", false);
-        var result = response.getBody();
+        @Test
+        @DisplayName("When getcogcomintersect 99001 type null, returns 7 intersections")
+        void should_return_7_intersections_when_getcogcomintersect_99001_type_null() throws Exception {
+            var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/communes-liste-filtreNom-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99001-intersections-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-    @Test
-    @DisplayName("When getcogcomliste date=*, returns 5 communes (actives + supprimees)")
-    void should_return_5_communes_when_getcogcomliste_etoile() throws Exception {
-        var response = endpoints.getcogcomliste("*", null, null);
-        var result = response.getBody();
+        @Test
+        @DisplayName("When getcogcomintersect 99001 type Canton, returns 2 cantons")
+        void should_return_2_cantons_when_getcogcomintersect_99001_type_canton() throws Exception {
+            var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), TypeEnum.CANTON);
+            var result = response.getBody();
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/communes-liste-etoile-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
-
-    /// ========================================================= // NOSONAR
-    ///   geo/commune/{code}/precedents                           // NOSONAR
-    /// ========================================================= // NOSONAR
-
-    @Test
-    @DisplayName("When getcogcomprec 99003, returns 2 precedents (99004, 99005)")
-    void should_return_2_precedents_when_getcogcomprec_99003() throws Exception {
-        var response = endpoints.getcogcomprec("99003", LocalDate.of(2025, 1, 1));
-        var result = response.getBody();
-
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99003-precedents-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
-
-    @Test
-    @DisplayName("When getcogcomprec 99001 (no precedents), returns 404")
-    void should_return_404_when_getcogcomprec_99001_no_precedents() throws Exception {
-        mockMvc.perform(get("/geo/commune/99001/precedents")
-                        .param("date", "2025-01-01"))
-                .andExpect(status().isNotFound());
-    }
-
-    /// ========================================================= // NOSONAR
-    ///   geo/commune/{code}/projetes                             // NOSONAR
-    /// ========================================================= // NOSONAR
-
-    @Test
-    @DisplayName("When getcogcomproj 99003 dateProjection=2010-01-01, returns 2 projetes (99004, 99005)")
-    void should_return_2_projetes_when_getcogcomproj_99003() throws Exception {
-        var response = endpoints.getcogcomproj("99003", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
-        var result = response.getBody();
-
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99003-projetes-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
-
-    @Test
-    @DisplayName("When getcogcomproj dateProjection null, returns 400")
-    void should_return_400_when_getcogcomproj_dateProjection_null() throws Exception {
-        mockMvc.perform(get("/geo/commune/99001/projetes")
-                        .param("date", "2025-01-01"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("When getcogcomproj dateProjection empty, returns 400")
-    void should_return_400_when_getcogcomproj_dateProjection_empty() throws Exception {
-        mockMvc.perform(get("/geo/commune/99001/projetes")
-                        .param("dateProjection", "")
-                        .param("date", "2025-01-01"))
-                .andExpect(status().isBadRequest());
-    }
-
-    /// ========================================================= // NOSONAR
-    ///   geo/commune/{code}/suivants                             // NOSONAR
-    /// ========================================================= // NOSONAR
-
-    @Test
-    @DisplayName("When getcogcomsuiv 99004, returns 1 suivant (99003)")
-    void should_return_1_suivant_when_getcogcomsuiv_99004() throws Exception {
-        var response = endpoints.getcogcomsuiv("99004", LocalDate.of(2010, 1, 1));
-        var result = response.getBody();
-
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99004-suivants-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
-
-    @Test
-    @DisplayName("When getcogcomsuiv 99001 (active, no suivants), returns 404")
-    void should_return_404_when_getcogcomsuiv_99001_no_suivants() throws Exception {
-        mockMvc.perform(get("/geo/commune/99001/suivants")
-                        .param("date", "2025-01-01"))
-                .andExpect(status().isNotFound());
-    }
-
-    /// =========================================================  // NOSONAR
-    ///   geo/commune/{code}/intersections                         // NOSONAR
-    /// =========================================================  // NOSONAR
-
-    @Test
-    @DisplayName("When getcogcomintersect 99001 type null, returns 7 intersections")
-    void should_return_7_intersections_when_getcogcomintersect_99001_type_null() throws Exception {
-        var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), null);
-        var result = response.getBody();
-
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99001-intersections-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
-
-    @Test
-    @DisplayName("When getcogcomintersect 99001 type Canton, returns 2 cantons")
-    void should_return_2_cantons_when_getcogcomintersect_99001_type_canton() throws Exception {
-        var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), TypeEnum.CANTON);
-        var result = response.getBody();
-
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/commune-99001-intersections-canton-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-99001-intersections-canton-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 }
