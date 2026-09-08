@@ -70,8 +70,8 @@ class GeoRegionQueriesTest extends TestContainer {
     class GetCogRegDes {
 
         @Test
-        @DisplayName("When getcogregdes 99 type null, returns 10 descendants")
-        void should_return_10_descendants_when_getcogregdes_99_type_null() throws Exception {
+        @DisplayName("When getcogregdes 99 type null, returns 12 descendants")
+        void should_return_12_descendants_when_getcogregdes_99_type_null() throws Exception {
             var response = endpoints.getcogregdes("99", LocalDate.of(2025, 1, 1), null, null);
             var result = response.getBody();
 

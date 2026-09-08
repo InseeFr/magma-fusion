@@ -39,6 +39,24 @@
     "intitule": "Arrondissement municipal test 1"
   },
   {
+    "code": "7701",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7701",
+    "type": "CantonOuVille",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Canton-ou-ville test 1",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville test 1"
+  },
+  {
+    "code": "7702",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7702",
+    "type": "CantonOuVille",
+    "dateCreation": "2016-01-01",
+    "intituleSansArticle": "Canton-ou-ville test 2",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville test 2"
+  },
+  {
     "code": "99001",
     "uri": "http://id.insee.fr/geo/commune/test-com-99001",
     "type": "Commune",

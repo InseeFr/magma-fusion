@@ -2,16 +2,23 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoCantonOuVilleEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.*;
-import org.junit.jupiter.api.Disabled;
+import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCantonOuVille;
+import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCantonOuVille;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,308 +28,255 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
+class GeoCantonOuVilleQueriesTest extends TestContainer {
 
-public class GeoCantonOuVilleQueriesTest extends TestContainer {
     @Autowired
     GeoCantonOuVilleEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/cantonOuVille/{code}/ascendants          ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/cantonOuVille/{code}")
+    class GetCogCanVil {
 
-//    geo/cantonOuVille/0101/ascendants?date=2025-09-04 renvoie 2 ascendants
-    @Test
-    void should_return_1_region_1_departement_when_CantonOuVilleCodeAscendants_code0101_date20250904_typeNull(){
-        var response  = endpoints.getcogcanvilasc("0101", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2, result.size());
-        assertEquals("01", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/departement/84680e6f-2e99-44c9-a9ba-2e96a2ae48b7", resultItem1.getUri());
-        assertEquals(TypeEnum.DEPARTEMENT, resultItem1.getType());
-        assertEquals(LocalDate.of(1967,12,31), resultItem1.getDateCreation());
-        assertEquals("Ain", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._5, resultItem1.getTypeArticle());
-        assertEquals("01053", resultItem1.getChefLieu());
-        assertEquals("Ain", resultItem1.getIntitule());
+        @Test
+        @DisplayName("When getcogcanvil 7701, returns canton-ou-ville 7701")
+        void should_return_cov_7701_when_getcogcanvil_7701() throws Exception {
+            var response = endpoints.getcogcanvil("7701", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcanvil 7700 (inexistant), returns 404")
+        void should_return_404_when_getcogcanvil_7700_inexistant() {
+            var response = endpoints.getcogcanvil("7700", LocalDate.of(2025, 1, 1));
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
     }
 
-//    geo/cantonOuVille/0101/ascendants?date=2025-09-04&type=Region
-    @Test
-    void should_return_1_region_when_CantonOuVilleCodeAscendants_code0101_date20250904_typeRegion(){
-        var response  = endpoints.getcogcanvilasc("0101", LocalDate.of(2025, 9, 4), TypeEnumAscendantsCantonOuVille.REGION);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1, result.size());
-        assertEquals("84", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/region/c12b23e7-d2e7-4443-ac4b-de8de5ce22f2", resultItem1.getUri());
-        assertEquals(TypeEnum.REGION, resultItem1.getType());
-        assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
-        assertEquals("Auvergne-Rhône-Alpes", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._1, resultItem1.getTypeArticle());
-        assertEquals("69123", resultItem1.getChefLieu());
-        assertEquals("Auvergne-Rhône-Alpes", resultItem1.getIntitule());
+    @Nested
+    @DisplayName("geo/cantonOuVille/{code}/ascendants")
+    class GetCogCanVilAsc {
+
+        @Test
+        @DisplayName("When getcogcanvilasc 7701 type null, returns 2 ascendants (dept 10, region 99)")
+        void should_return_2_ascendants_when_getcogcanvilasc_7701_type_null() throws Exception {
+            var response = endpoints.getcogcanvilasc("7701", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcanvilasc 7701 type Region, returns 1 region")
+        void should_return_1_region_when_getcogcanvilasc_7701_type_region() throws Exception {
+            var response = endpoints.getcogcanvilasc("7701", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCantonOuVille.REGION);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-ascendants-region-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    /////////////////////////////////////////////////////////////////////
-    ///                  geo/cantonOuVille/{code}                     ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/cantonOuVille/{code}/descendants")
+    class GetCogCanVilDes {
 
-//    geo/cantonOuVille/0101?date=2025-09-04
-    @Test
-    void should_return_CantonOuVille_When_code0101_date20250904() throws Exception {
-        var response = endpoints.getcogcanvil("0101", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertEquals("0101", result.getCode());
-        assertEquals("http://id.insee.fr/geo/cantonOuVille/5e75ead7-7564-4480-83b0-7e16a7d8acf7", result.getUri());
-        assertEquals(TypeEnum.CANTON_OU_VILLE, result.getType());
-        assertEquals(LocalDate.of(2016, 1, 1), result.getDateCreation());
-        assertEquals("Ambérieu-en-Bugey", result.getIntituleSansArticle());
-        assertEquals(CantonOuVille.TypeArticleEnum._1, result.getTypeArticle());
-        assertEquals("Ambérieu-en-Bugey", result.getIntitule());
+        @Test
+        @DisplayName("When getcogcanvildes 7701 type null, returns 2 descendants (communes)")
+        void should_return_2_descendants_when_getcogcanvildes_7701_type_null() throws Exception {
+            var response = endpoints.getcogcanvildes("7701", LocalDate.of(2025, 1, 1), null, null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcanvildes 7701 type Commune filtreNom='Commune test 3', returns 1 commune")
+        void should_return_1_commune_when_getcogcanvildes_7701_type_commune_filtreNom() throws Exception {
+            var response = endpoints.getcogcanvildes("7701", LocalDate.of(2025, 1, 1), TypeEnumDescendantsCantonOuVille.COMMUNE, "Commune test 3");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-descendants-commune-filtreNom-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-//    geo/cantonOuVille/2B05?date=2025-09-04
-    @Test
-    void should_return_CantonCode_2B05_when_code2B05_date20250904() {
-        var response  = endpoints.getcogcanvil("2B05", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertEquals("2B05", result.getCode());
-        assertEquals("http://id.insee.fr/geo/cantonOuVille/3a6d53ee-51bb-41d7-91e9-44557fa11791", result.getUri());
-        assertEquals(TypeEnum.CANTON_OU_VILLE, result.getType());
-        assertEquals(LocalDate.of(2016, 1, 1), result.getDateCreation());
-        assertEquals("Biguglia-Nebbio", result.getIntituleSansArticle());
-        assertEquals(CantonOuVille.TypeArticleEnum._0, result.getTypeArticle());
-        assertEquals("Biguglia-Nebbio", result.getIntitule());
+    @Nested
+    @DisplayName("geo/cantonsEtVilles")
+    class GetCogCanVilListe {
+
+        @Test
+        @DisplayName("When getcogcanvilliste date=2025-01-01, returns 2 cantons-ou-villes actifs")
+        void should_return_2_cov_when_getcogcanvilliste_date() throws Exception {
+            var response = endpoints.getcogcanvilliste("2025-01-01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/cantons-et-villes-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
+
+        @Test
+        @DisplayName("When getcogcanvilliste date=*, returns 3 cantons-ou-villes")
+        void should_return_3_cov_when_getcogcanvilliste_etoile() throws Exception {
+            var response = endpoints.getcogcanvilliste("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/cantons-et-villes-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
     }
 
-//    geo/cantonOuVille/0100?date=2025-09-04 renvoie 404
-@Test
-void should_return_404_when_CantonOuVilleCode_code0100_date20250904() throws Exception{
-    mockMvc.perform(get("/geo/cantonOuVille/0100")
-                    .param("date", "2025-09-04"))
-            .andExpect(status().isNotFound());
-}
+    @Nested
+    @DisplayName("geo/cantonOuVille/{code}/precedents")
+    class GetCogCanVilPrec {
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/cantonOuVille/{code}/descendants          ///
-    /////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogcanvilprec 7701, returns 1 precedent (7703)")
+        void should_return_1_precedent_when_getcogcanvilprec_7701() throws Exception {
+            var response = endpoints.getcogcanvilprec("7701", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-    @Test
-    void should_return_1_iris_when_CantonOuVilleCodeDescendants_code0101_date20250904_typeIris_filtreNomPerouses(){
-        var response  = endpoints.getcogcanvildes("0101", LocalDate.of(2025, 9, 4), TypeEnumDescendantsCantonOuVille.IRIS,"Perouses");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1, result.size());
-        assertEquals("010040101", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/iris/b8c772de-9551-4f13-81c5-eca5bb0f2f7d", resultItem1.getUri());
-        assertEquals(TypeEnum.IRIS, resultItem1.getType());
-        assertEquals(LocalDate.of(2008,1,1), resultItem1.getDateCreation());
-        assertEquals("Pérouses-Triangle d'Activités", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._4, resultItem1.getTypeArticle());
-        assertEquals("Les Pérouses-Triangle d'Activités", resultItem1.getIntitule());
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-precedents-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcanvilprec 7702 (no precedents), returns 404")
+        void should_return_404_when_getcogcanvilprec_7702_no_precedents() {
+            var response = endpoints.getcogcanvilprec("7702", LocalDate.of(2025, 1, 1));
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
     }
 
-    @Test
-    void should_return_1_iris_when_CantonOuVilleCodeDescendants_code0101_date20250904_typeIris(){
-        var response  = endpoints.getcogcanvildes("0101", LocalDate.of(2025, 9, 4), TypeEnumDescendantsCantonOuVille.IRIS,null);
-        var result = response.getBody();
-        assertNotNull(result);
-        assertEquals(4, result.size());
+    @Nested
+    @DisplayName("geo/cantonOuVille/{code}/projetes")
+    class GetCogCanVilProj {
+
+        @Test
+        @DisplayName("When getcogcanvilproj dateProjection null, returns 400")
+        void should_return_400_when_getcogcanvilproj_dateProjection_null() throws Exception {
+            mockMvc.perform(get("/geo/cantonOuVille/7701/projetes")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("When getcogcanvilproj dateProjection empty, returns 400")
+        void should_return_400_when_getcogcanvilproj_dateProjection_empty() throws Exception {
+            mockMvc.perform(get("/geo/cantonOuVille/7701/projetes")
+                            .param("dateProjection", "")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("When getcogcanvilproj 7701 dateProjection=2010-01-01, returns projection (7703)")
+        void should_return_1_projete_when_getcogcanvilproj_7701() throws Exception {
+            var response = endpoints.getcogcanvilproj("7701", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-projetes-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    @Test
-    void should_return_23_territoires_when_CantonOuVilleCodeDescendants_code0101_date20250904_typeNull_filtreNomNull(){
-        var response  = endpoints.getcogcanvildes("0101", LocalDate.of(2025, 9, 4), null,null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(23, result.size());
-        assertEquals("01002", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/commune/43018c68-c278-433a-b285-3531e8d5347e", resultItem1.getUri());
-        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
-        assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation());
-        assertEquals("Abergement-de-Varey", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._5, resultItem1.getTypeArticle());
-        assertEquals("L'Abergement-de-Varey", resultItem1.getIntitule());
+    @Nested
+    @DisplayName("geo/cantonOuVille/{code}/suivants")
+    class GetCogCanVilSuiv {
+
+        @Test
+        @DisplayName("When getcogcanvilsuiv 7703, returns 1 suivant (7701)")
+        void should_return_1_suivant_when_getcogcanvilsuiv_7703() throws Exception {
+            var response = endpoints.getcogcanvilsuiv("7703", LocalDate.of(2000, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/canton-ou-ville-7703-suivants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcanvilsuiv 7701 (actif, pas de suivant), returns 404")
+        void should_return_404_when_getcogcanvilsuiv_7701_no_suivants() {
+            var response = endpoints.getcogcanvilsuiv("7701", LocalDate.of(2025, 1, 1));
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
     }
-
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/cantonsEtVilles                         ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/cantonsEtVilles?date=2025-09-04//
-    @Test
-    void should_return_2042_cantonsEtVilles_when_cantonsEtVilles_date20250904(){
-        var response  = endpoints.getcogcanvilliste ("2025-09-04");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2042, result.size());
-        assertEquals("0101", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/cantonOuVille/5e75ead7-7564-4480-83b0-7e16a7d8acf7", resultItem1.getUri());
-        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
-        assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
-        assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
-        assertEquals(CantonOuVille.TypeArticleEnum._1, resultItem1.getTypeArticle());
-        assertEquals("Ambérieu-en-Bugey", resultItem1.getIntitule());
-    }
-
-//    geo/cantonsEtVilles?date=*
-@Test
-void should_return_2042_cantonsEtVilles_when_cantonsEtVilles_dateEtoile(){
-    var response  = endpoints.getcogcanvilliste ("2025-09-04");
-    var result = response.getBody();
-    assertNotNull(result);
-    var resultItem1= result.getFirst();
-    assertEquals(2042, result.size());
-    assertEquals("0101", resultItem1.getCode());
-    assertEquals("http://id.insee.fr/geo/cantonOuVille/5e75ead7-7564-4480-83b0-7e16a7d8acf7", resultItem1.getUri());
-    assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
-    assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
-    assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
-    assertEquals(CantonOuVille.TypeArticleEnum._1, resultItem1.getTypeArticle());
-    assertEquals("Ambérieu-en-Bugey", resultItem1.getIntitule());
-}
-
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/cantonOuVille/{code}/precedents         ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/cantonOuVille/0104/precedents?date=2025-09-04
-    @Test
-    void should_return_3_cantonsOuVilles_when_CantonsOuVillesCodePrecedents_code0104_date20250904(){
-        var response  = endpoints.getcogcanvilprec ("0104", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(3, result.size());
-        assertEquals("0104", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/cantonOuVille/383181fb-59ba-425c-81c1-dfdf1b51cf8c", resultItem1.getUri());
-        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
-        assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
-        assertEquals(LocalDate.of(2020,3,7), resultItem1.getDateSuppression());
-        assertEquals("Belley", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Belley", resultItem1.getIntitule());
-    }
-
-//    geo/cantonOuVille/0104/precedents?date=1950-01-01  renvoie 404
-    @Test
-    void should_return_404_when_CantonOuVilleCodePrecedents_code0104_date19450101() throws Exception{
-        mockMvc.perform(get("/geo/cantonOuVille/0104/precedents")
-                        .param("date", "1945-01-01"))
-                .andExpect(status().isNotFound());
-    }
-
-//    geo/cantonOuVille/2B05/precedents?date=2025-09-04
-    @Test
-    void should_return_404_when_CantonOuVilleCodePrecedents_code2B05_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/cantonOuVille/2B05/precedents")
-                        .param("date", "2025-09-04"))
-                .andExpect(status().isNotFound());
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/cantonOuVille/{code}/projetes           ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/cantonOuVille/0104/projetes?date=2025-09-04&dateProjection=2016-01-01 renvoie 3 cantonsOuVilles
-    @Test
-    void should_return_3_cantonsOuVilles_when_CantonsOuVillesCodeProjetes_code0104_date20250904_dateProjection20160101(){
-        var response  = endpoints.getcogcanvilproj ("0104", LocalDate.of(2016,1,1),LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(3, result.size());
-        assertEquals("0104", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/cantonOuVille/383181fb-59ba-425c-81c1-dfdf1b51cf8c", resultItem1.getUri());
-        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
-        assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
-        assertEquals(LocalDate.of(2020,3,7), resultItem1.getDateSuppression());
-        assertEquals("Belley", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Belley", resultItem1.getIntitule());
-    }
-
-
-    //    geo/cantonOuVille/2B05/projetes?date=2025-09-04&dateProjection=2016-01-01 renvoie 1 cantonOuVilles
-    @Test
-    void should_return_1_cantonsOuVilles_when_CantonsOuVillesCodeProjetes_code2B05_date20250904_dateProjection20160101(){
-        var response  = endpoints.getcogcanvilproj ("2B05", LocalDate.of(2016,1,1),LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1, result.size());
-        assertEquals("2B05", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/cantonOuVille/3a6d53ee-51bb-41d7-91e9-44557fa11791", resultItem1.getUri());
-        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
-        assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation());
-        assertEquals("Biguglia-Nebbio", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Biguglia-Nebbio", resultItem1.getIntitule());
-    }
-
-    //    geo/cantonOuVille/0104/projetes?date=2025-09-01
-    @Test
-    void should_return_400_when_CantonOuVilleCodeProjetes_dateProjectionNull() throws Exception{
-        mockMvc.perform(get("/geo/cantonOuVille/0104/projetes")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isBadRequest());
-    }
-
-    //    geo/cantonOuVille/0104/projetes?date=2025-09-01&dateProjection=
-    @Test
-    public void should_return_400_when_CantonOuVilleCodeProjetes_dateProjectionEmpty() throws Exception {
-        mockMvc.perform(get("/geo/cantonOuVille/0104/projetes")
-                        .param("dateProjection", "")  // Valeur vide
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isBadRequest());
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/cantonOuVille/{code}/suivants           ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/cantonOuVille/0103/suivants?date=1960-01-01 renvoie 1 cantonOuVille
-    @Test
-    void should_return_1_cantonOuVille_when_CantonOuVIlleCodeSuivants_code0103_date20160101(){
-        var response  = endpoints.getcogcanvilsuiv ("0103", LocalDate.of(2016,1,1));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1, result.size());
-        assertEquals("0103", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/cantonOuVille/cb4d9856-a39d-4283-a9ab-d91396ebd705", resultItem1.getUri());
-        assertEquals(TypeEnum.CANTON_OU_VILLE, resultItem1.getType());
-        assertEquals(LocalDate.of(2020,3,7), resultItem1.getDateCreation());
-        assertEquals("Valserhône", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Valserhône", resultItem1.getIntitule());
-    }
-
-    //    geo/cantonOuVille/0103/suivants?date=2025-09-04
-    @Test
-    void should_return_404_when_CantonOuVilleCodeSuivants_code0103_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/cantonOuVille/0103/suivants")
-                        .param("date", "2025-09-04"))
-                .andExpect(status().isNotFound());
-    }
-
-    //    geo/cantonOuVille/2B05/suivants?date=2025-09-04
-    @Test
-    void should_return_404_when_CantonOuVilleCodeSuivants_code2B05_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/cantonOuVille/2B05/suivants")
-                        .param("date", "2025-09-04"))
-                .andExpect(status().isNotFound());
-    }
-
 }

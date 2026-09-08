@@ -519,4 +519,73 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-051> a igeo:EvenementGeographique ;
     igeo:date "2022-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> .
+
+  # =========================================================
+  #   Canton-ou-ville test 7701 (actif, successeur de 7703)
+  # =========================================================
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> a igeo:CantonOuVille ;
+    igeo:codeINSEE "7701" ;
+    igeo:nom "Canton-ou-ville test 1" ;
+    igeo:nomSansArticle "Canton-ou-ville test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/7701> .
+  <http://id.insee.fr/geo/cantonOuVille/7701> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+
+  # =========================================================
+  #   Canton-ou-ville test 7702 (actif, sans historique)
+  # =========================================================
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> a igeo:CantonOuVille ;
+    igeo:codeINSEE "7702" ;
+    igeo:nom "Canton-ou-ville test 2" ;
+    igeo:nomSansArticle "Canton-ou-ville test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/7702> .
+  <http://id.insee.fr/geo/cantonOuVille/7702> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> .
+
+  # =========================================================
+  #   Canton-ou-ville test 7703 (supprime, predecesseur de 7701)
+  # =========================================================
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> a igeo:CantonOuVille ;
+    igeo:codeINSEE "7703" ;
+    igeo:nom "Canton-ou-ville ancien" ;
+    igeo:nomSansArticle "Canton-ou-ville ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/7703> .
+  <http://id.insee.fr/geo/cantonOuVille/7703> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> .
+
+  # =========================================================
+  #   Relations subdivisionDirecteDe communes -> COV 7701
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+  <http://id.insee.fr/geo/commune/test-com-99003> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+
+  # =========================================================
+  #   Evenements COV
+  # =========================================================
+
+  # Evenement 060 : creation de COV 7703 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-060> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> .
+
+  # Evenement 061 : creation de COV 7702 (2016-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-061> a igeo:EvenementGeographique ;
+    igeo:date "2016-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> .
+
+  # Evenement 062 : suppression de COV 7703, creation de COV 7701 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-062> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> ;
+    igeo:creation <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
 }
