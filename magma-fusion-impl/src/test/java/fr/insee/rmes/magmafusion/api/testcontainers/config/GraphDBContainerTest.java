@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers.config;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.Container.ExecResult;
 
@@ -19,25 +20,22 @@ class GraphDBContainerTest {
         container = spy(new GraphDBContainer("ontotext/graphdb:10.8.8"));
     }
 
-//    vérifie que le port 7200 est exposé
     @Test
+    @DisplayName("Port 7200 is exposed")
     void constructor_shouldExposePort7200() {
         var exposedPorts = container.getExposedPorts();
         assertTrue(exposedPorts.contains(7200));
     }
 
-//    vérifie le chaînage fluent
-//garantit qu'on peut écrire des appels chaînés comme :
-//            container.withInitFolder("/testcontainers").withExposedPorts(7200);
-
     @Test
+    @DisplayName("withInitFolder returns same instance (fluent chaining)")
     void withInitFolder_shouldReturnSameInstance() {
         GraphDBContainer result = container.withInitFolder("/testcontainers");
         assertSame(container, result);
     }
 
-//    cas de succès (création)
     @Test
+    @DisplayName("withRepository succeeds on HTTP 201 (creation)")
     void withRepository_shouldSucceedOnHttp201() throws IOException, InterruptedException {
         ExecResult execResult = mock(ExecResult.class);
         when(execResult.getStdout()).thenReturn("some output\nHTTP_STATUS:201");
@@ -52,8 +50,8 @@ class GraphDBContainerTest {
         verify(container).copyFileToContainer(any(), eq("/docker-entrypoint-initdb/config.ttl"));
     }
 
-//    cas de succès (repo existant)
     @Test
+    @DisplayName("withRepository succeeds on HTTP 409 (existing repo)")
     void withRepository_shouldSucceedOnHttp409() throws IOException, InterruptedException {
         ExecResult execResult = mock(ExecResult.class);
         when(execResult.getStdout()).thenReturn("already exists\nHTTP_STATUS:409");
@@ -65,8 +63,8 @@ class GraphDBContainerTest {
         assertDoesNotThrow(() -> container.withRepository("config.ttl"));
     }
 
-//    erreur HTTP 500
     @Test
+    @DisplayName("withRepository fails on HTTP 500")
     void withRepository_shouldThrowOnUnexpectedHttpStatus() throws IOException, InterruptedException {
         ExecResult execResult = mock(ExecResult.class);
         when(execResult.getStdout()).thenReturn("error\nHTTP_STATUS:500");
@@ -79,8 +77,8 @@ class GraphDBContainerTest {
         assertTrue(error.getMessage().contains("500"));
     }
 
-//    erreur I/O lors du curl
     @Test
+    @DisplayName("withRepository fails on IOException")
     void withRepository_shouldThrowOnIOException() throws IOException, InterruptedException {
         doNothing().when(container).copyFileToContainer(any(), anyString());
         doThrow(new IOException("connection refused")).when(container).execInContainer(any(String[].class));
@@ -91,8 +89,8 @@ class GraphDBContainerTest {
         assertInstanceOf(IOException.class, error.getCause());
     }
 
-//    chargement trig réussi
     @Test
+    @DisplayName("withTrigFiles succeeds on HTTP 204")
     void withTrigFiles_shouldSucceedOnHttp204() throws IOException, InterruptedException {
         ExecResult execResult = mock(ExecResult.class);
         when(execResult.getStdout()).thenReturn("204");
@@ -107,8 +105,8 @@ class GraphDBContainerTest {
         verify(container).copyFileToContainer(any(), eq("/docker-entrypoint-initdb/statementsGeoTest.trig"));
     }
 
-//    erreur HTTP sur trig
     @Test
+    @DisplayName("withTrigFiles fails on HTTP 500")
     void withTrigFiles_shouldThrowOnUnexpectedHttpStatus() throws IOException, InterruptedException {
         ExecResult execResult = mock(ExecResult.class);
         when(execResult.getStdout()).thenReturn("500");
@@ -121,8 +119,8 @@ class GraphDBContainerTest {
         assertTrue(error.getMessage().contains("500"));
     }
 
-//    erreur d'exécution
     @Test
+    @DisplayName("withTrigFiles fails on IOException")
     void withTrigFiles_shouldThrowOnIOException() throws IOException, InterruptedException {
         doNothing().when(container).copyFileToContainer(any(), anyString());
         doThrow(new IOException("timeout")).when(container).execInContainer(any(String[].class));
@@ -133,8 +131,8 @@ class GraphDBContainerTest {
         assertInstanceOf(IOException.class, error.getCause());
     }
 
-//    erreur d'exécution
     @Test
+    @DisplayName("withTrigFiles fails on InterruptedException")
     void withTrigFiles_shouldThrowOnInterruptedException() throws IOException, InterruptedException {
         doNothing().when(container).copyFileToContainer(any(), anyString());
         doThrow(new InterruptedException("interrupted")).when(container).execInContainer(any(String[].class));
@@ -145,9 +143,8 @@ class GraphDBContainerTest {
         assertInstanceOf(InterruptedException.class, error.getCause());
     }
 
-//    vérifie le guard :
-//    s'assure que si le conteneur est déjà en cours d'exécution, l'appel à start() retourne immédiatement sans relancer l'initialisation (pas d'appel à withInitFolder, pas de rechargement du repository ni des fichiers trig).
     @Test
+    @DisplayName("start does not restart if container is already running")
     void start_shouldNotRestartIfAlreadyRunning() {
         doReturn(true).when(container).isRunning();
 
@@ -156,8 +153,8 @@ class GraphDBContainerTest {
         verify(container, never()).withInitFolder(anyString());
     }
 
-//    vérifie la constante
     @Test
+    @DisplayName("DOCKER_ENTRYPOINT_INITDB has correct value")
     void dockerEntrypointInitdb_shouldHaveCorrectValue() {
         assertEquals("/docker-entrypoint-initdb", GraphDBContainer.DOCKER_ENTRYPOINT_INITDB);
     }
