@@ -137,8 +137,8 @@ class GeoCommuneQueriesTest extends TestContainer {
     // =========================================================
 
     @Test
-    @DisplayName("When getcogcomdesc 99001 type null, returns 2 communes deleguees")
-    void should_return_2_communeDeleguee_when_getcogcomdesc_99001_type_null() throws Exception {
+    @DisplayName("When getcogcomdesc 99001 type null, returns 3 descendants (2 comdel + 1 arrmu)")
+    void should_return_3_descendants_when_getcogcomdesc_99001_type_null() throws Exception {
         var response = endpoints.getcogcomdesc("99001", LocalDate.of(2025, 1, 1), null);
         var result = response.getBody();
 
@@ -301,8 +301,8 @@ class GeoCommuneQueriesTest extends TestContainer {
     // =========================================================
 
     @Test
-    @DisplayName("When getcogcomintersect 99001 type null, returns 6 intersections")
-    void should_return_6_intersections_when_getcogcomintersect_99001_type_null() throws Exception {
+    @DisplayName("When getcogcomintersect 99001 type null, returns 7 intersections")
+    void should_return_7_intersections_when_getcogcomintersect_99001_type_null() throws Exception {
         var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), null);
         var result = response.getBody();
 

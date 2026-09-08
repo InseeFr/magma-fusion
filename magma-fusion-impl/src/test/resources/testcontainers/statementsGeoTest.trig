@@ -429,4 +429,47 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-032> a igeo:EvenementGeographique ;
     igeo:date "2024-01-01"^^xsd:date ;
     igeo:suppression <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> .
+
+  # =========================================================
+  #   Arrondissement municipal test 75101 (actif, successeur de 75102)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> a igeo:ArrondissementMunicipal ;
+    igeo:codeINSEE "75101" ;
+    igeo:nom "Arrondissement municipal test 1" ;
+    igeo:nomSansArticle "Arrondissement municipal test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/75101> .
+  <http://id.insee.fr/geo/arrondissementMunicipal/75101> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> .
+
+  # =========================================================
+  #   Arrondissement municipal test 75102 (supprime, predecesseur de 75101)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> a igeo:ArrondissementMunicipal ;
+    igeo:codeINSEE "75102" ;
+    igeo:nom "Arrondissement municipal test 2" ;
+    igeo:nomSansArticle "Arrondissement municipal test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/75102> .
+  <http://id.insee.fr/geo/arrondissementMunicipal/75102> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> .
+
+  # =========================================================
+  #   Evenements arrondissements municipaux
+  # =========================================================
+
+  # Evenement 040 : creation de ArrMun 75102 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-040> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> .
+
+  # Evenement 041 : suppression de ArrMun 75102, creation de ArrMun 75101 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-041> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> ;
+    igeo:creation <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> .
 }

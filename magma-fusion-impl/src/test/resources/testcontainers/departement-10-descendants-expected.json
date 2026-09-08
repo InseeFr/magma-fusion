@@ -30,6 +30,15 @@
     "chefLieu": "99001"
   },
   {
+    "code": "75101",
+    "uri": "http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101",
+    "type": "ArrondissementMunicipal",
+    "dateCreation": "2010-01-01",
+    "intituleSansArticle": "Arrondissement municipal test 1",
+    "typeArticle": "0",
+    "intitule": "Arrondissement municipal test 1"
+  },
+  {
     "code": "99001",
     "uri": "http://id.insee.fr/geo/commune/test-com-99001",
     "type": "Commune",
