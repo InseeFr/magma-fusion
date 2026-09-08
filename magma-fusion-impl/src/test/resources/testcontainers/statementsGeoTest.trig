@@ -376,4 +376,57 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-021> a igeo:EvenementGeographique ;
     igeo:date "1990-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/region/test-reg-88> .
+
+  # =========================================================
+  #   Aire d'attraction des villes 2020 test T01 (actif)
+  # =========================================================
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> a igeo:AireDAttractionDesVilles2020 ;
+    igeo:codeINSEE "T01" ;
+    igeo:nom "Aire d attraction test 1" ;
+    igeo:nomSansArticle "Aire d attraction test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T01> .
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T01> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+
+  # =========================================================
+  #   Aire d'attraction des villes 2020 test T02 (supprime)
+  # =========================================================
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> a igeo:AireDAttractionDesVilles2020 ;
+    igeo:codeINSEE "T02" ;
+    igeo:nom "Aire d attraction test 2" ;
+    igeo:nomSansArticle "Aire d attraction test 2" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T02> .
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T02> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> .
+
+  # =========================================================
+  #   Relations subdivisionDirecteDe communes -> AAV T01
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99001> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+  <http://id.insee.fr/geo/commune/test-com-99003> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+
+  # =========================================================
+  #   Evenements AAV
+  # =========================================================
+
+  # Evenement 030 : creation de AAV T01 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-030> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+
+  # Evenement 031 : creation de AAV T02 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-031> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> .
+
+  # Evenement 032 : suppression de AAV T02 (2024-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-032> a igeo:EvenementGeographique ;
+    igeo:date "2024-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> .
 }

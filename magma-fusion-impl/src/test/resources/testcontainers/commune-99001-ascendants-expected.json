@@ -1,5 +1,14 @@
 [
   {
+    "code": "T01",
+    "uri": "http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01",
+    "type": "AireDAttractionDesVilles2020",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Aire d attraction test 1",
+    "typeArticle": "0",
+    "intitule": "Aire d attraction test 1"
+  },
+  {
     "code": "991",
     "uri": "http://id.insee.fr/geo/arrondissement/test-arr-991",
     "type": "Arrondissement",
