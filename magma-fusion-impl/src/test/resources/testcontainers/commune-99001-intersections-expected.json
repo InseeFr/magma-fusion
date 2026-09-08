@@ -1,5 +1,25 @@
 [
   {
+    "code": "98001",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98001",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 1",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 1",
+    "relation": "contient"
+  },
+  {
+    "code": "98002",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98002",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 2",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 2",
+    "relation": "contient"
+  },
+  {
     "code": "9901",
     "uri": "http://id.insee.fr/geo/canton/test-can-9901",
     "type": "Canton",
@@ -28,26 +48,6 @@
     "typeArticle": "0",
     "intitule": "Arrondissement test 1",
     "relation": "inclus"
-  },
-  {
-    "code": "99901",
-    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-99901",
-    "type": "CommuneDeleguee",
-    "dateCreation": "2015-01-01",
-    "intituleSansArticle": "Commune deleguee test 1",
-    "typeArticle": "0",
-    "intitule": "Commune deleguee test 1",
-    "relation": "contient"
-  },
-  {
-    "code": "99902",
-    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-99902",
-    "type": "CommuneDeleguee",
-    "dateCreation": "2015-01-01",
-    "intituleSansArticle": "Commune deleguee test 2",
-    "typeArticle": "0",
-    "intitule": "Commune deleguee test 2",
-    "relation": "contient"
   },
   {
     "code": "T01",

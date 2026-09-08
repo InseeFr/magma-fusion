@@ -18,8 +18,8 @@
     "intitule": "Commune test 2"
   },
   {
-    "code": "99901",
-    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-99901",
+    "code": "98001",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98001",
     "type": "CommuneDeleguee",
     "dateCreation": "2015-01-01",
     "intituleSansArticle": "Commune deleguee test 1",
@@ -27,8 +27,8 @@
     "intitule": "Commune deleguee test 1"
   },
   {
-    "code": "99902",
-    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-99902",
+    "code": "98002",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98002",
     "type": "CommuneDeleguee",
     "dateCreation": "2015-01-01",
     "intituleSansArticle": "Commune deleguee test 2",
