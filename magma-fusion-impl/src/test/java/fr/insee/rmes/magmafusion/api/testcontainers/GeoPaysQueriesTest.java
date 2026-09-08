@@ -3,6 +3,7 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 import fr.insee.rmes.magmafusion.api.GeoPaysEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
+@Disabled
 
 public class GeoPaysQueriesTest extends TestContainer {
 

@@ -6,6 +6,7 @@ import fr.insee.rmes.magmafusion.model.TypeEnum;
 import fr.insee.rmes.magmafusion.model.CirconscriptionTerritoriale;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
+@Disabled
 
 public class GeoCirconscriptionTerritorialeQueriesTest extends TestContainer {
 

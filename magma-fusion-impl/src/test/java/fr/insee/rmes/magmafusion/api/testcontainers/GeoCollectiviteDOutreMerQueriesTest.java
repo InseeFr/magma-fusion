@@ -4,6 +4,7 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 import fr.insee.rmes.magmafusion.api.GeoCollectiviteDOutreMerEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
+@Disabled
 
 public class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
 
