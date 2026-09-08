@@ -3,6 +3,7 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 import fr.insee.rmes.magmafusion.api.ConceptsEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -32,130 +33,132 @@ class ConceptsQueriesTest extends TestContainer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // =========================================================
-    //   concepts/definition/{id}
-    // =========================================================
+    @Nested
+    @DisplayName("concepts/definition/{id}")
+    class GetConceptById {
 
-    @Test
-    @DisplayName("When getConceptById with conceptsSuivants, returns full concept")
-    void should_return_full_concept_when_getConceptById_c0001() throws Exception {
-        var response = endpoints.getconcept("c0001");
-        var result = response.getBody();
+        @Test
+        @DisplayName("When getConceptById with conceptsSuivants, returns full concept")
+        void should_return_full_concept_when_getConceptById_c0001() throws Exception {
+            var response = endpoints.getconcept("c0001");
+            var result = response.getBody();
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/concept-c0001-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/concept-c0001-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getConceptById with conceptsPrecedents and conceptsReferences, returns full concept")
+        void should_return_full_concept_when_getConceptById_c0002() throws Exception {
+            var response = endpoints.getconcept("c0002");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/concept-c0002-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getConceptById with intitulesAlternatifs, returns full concept")
+        void should_return_full_concept_when_getConceptById_c0003() throws Exception {
+            var response = endpoints.getconcept("c0003");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/concept-c0003-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getConceptById with unknown id, returns 404")
+        void should_return_404_when_getConceptById_unknown_id() throws Exception {
+            mockMvc.perform(get("/geo/concepts/definition/c9999"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    @DisplayName("When getConceptById with conceptsPrecedents and conceptsReferences, returns full concept")
-    void should_return_full_concept_when_getConceptById_c0002() throws Exception {
-        var response = endpoints.getconcept("c0002");
-        var result = response.getBody();
+    @Nested
+    @DisplayName("concepts/definitions")
+    class GetConceptsList {
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/concept-c0002-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
+        @Test
+        @DisplayName("When getConceptsList with libelle filter, returns matching concepts")
+        void should_return_matching_concepts_when_getConceptsList_libelle_concept_test() throws Exception {
+            var response = endpoints.getconceptsliste("concept test", null);
+            var result = response.getBody();
 
-    @Test
-    @DisplayName("When getConceptById with intitulesAlternatifs, returns full concept")
-    void should_return_full_concept_when_getConceptById_c0003() throws Exception {
-        var response = endpoints.getconcept("c0003");
-        var result = response.getBody();
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/concepts-list-libelle-concept-test-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/concept-c0003-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
+        @Test
+        @DisplayName("When getConceptsList with collection filter, returns concepts in collection")
+        void should_return_collection_concepts_when_getConceptsList_collection_idCollectionTest() throws Exception {
+            var response = endpoints.getconceptsliste(null, "idCollectionTest");
+            var result = response.getBody();
 
-    @Test
-    @DisplayName("When getConceptById with unknown id, returns 404")
-    void should_return_404_when_getConceptById_unknown_id() throws Exception {
-        mockMvc.perform(get("/geo/concepts/definition/c9999"))
-                .andExpect(status().isNotFound());
-    }
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/concepts-list-collection-idCollectionTest-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-    // =========================================================
-    //   concepts/definitions
-    // =========================================================
+        @Test
+        @DisplayName("When getConceptsList with libelle and collection, returns filtered concepts")
+        void should_return_filtered_concepts_when_getConceptsList_libelle_and_collection() throws Exception {
+            var response = endpoints.getconceptsliste("peuplement", "idCollectionTest");
+            var result = response.getBody();
 
-    @Test
-    @DisplayName("When getConceptsList with libelle filter, returns matching concepts")
-    void should_return_matching_concepts_when_getConceptsList_libelle_concept_test() throws Exception {
-        var response = endpoints.getconceptsliste("concept test", null);
-        var result = response.getBody();
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/concepts-list-peuplement-collection-idCollectionTest-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/concepts-list-libelle-concept-test-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
+        @Test
+        @DisplayName("When getConceptsList with no filter, returns 13 concepts")
+        void should_return_all_concepts_when_getConceptsList_no_filter() {
+            var response = endpoints.getconceptsliste("", null);
+            var result = response.getBody();
 
-    @Test
-    @DisplayName("When getConceptsList with collection filter, returns concepts in collection")
-    void should_return_collection_concepts_when_getConceptsList_collection_idCollectionTest() throws Exception {
-        var response = endpoints.getconceptsliste(null, "idCollectionTest");
-        var result = response.getBody();
-
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/concepts-list-collection-idCollectionTest-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
-
-    @Test
-    @DisplayName("When getConceptsList with libelle and collection, returns filtered concepts")
-    void should_return_filtered_concepts_when_getConceptsList_libelle_and_collection() throws Exception {
-        var response = endpoints.getconceptsliste("peuplement", "idCollectionTest");
-        var result = response.getBody();
-
-        assertNotNull(result);
-        String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/concepts-list-peuplement-collection-idCollectionTest-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-        JSONAssert.assertEquals(expected, data, true);
-    }
-
-    @Test
-    @DisplayName("When getConceptsList with no filter, returns 13 concepts")
-    void should_return_all_concepts_when_getConceptsList_no_filter() {
-        var response = endpoints.getconceptsliste("", null);
-        var result = response.getBody();
-
-        assertNotNull(result);
-        assertEquals(13, result.size(), "Should contain exactly 13 test concepts, got " + result.size());
+            assertNotNull(result);
+            assertEquals(13, result.size(), "Should contain exactly 13 test concepts, got " + result.size());
+        }
     }
 }
