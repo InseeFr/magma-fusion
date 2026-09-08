@@ -472,4 +472,51 @@
     igeo:date "2010-01-01"^^xsd:date ;
     igeo:suppression <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> ;
     igeo:creation <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> .
+
+  # =========================================================
+  #   Bassin de vie 2022 test 88001 (actif)
+  # =========================================================
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> a igeo:BassinDeVie2022 ;
+    igeo:codeINSEE "88001" ;
+    igeo:nom "Bassin de vie test 1" ;
+    igeo:nomSansArticle "Bassin de vie test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/88001> .
+  <http://id.insee.fr/geo/bassinDeVie2022/88001> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+
+  # =========================================================
+  #   Bassin de vie 2022 test 88002 (actif)
+  # =========================================================
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> a igeo:BassinDeVie2022 ;
+    igeo:codeINSEE "88002" ;
+    igeo:nom "Bassin de vie test 2" ;
+    igeo:nomSansArticle "Bassin de vie test 2" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/88002> .
+  <http://id.insee.fr/geo/bassinDeVie2022/88002> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> .
+
+  # =========================================================
+  #   Relations subdivisionDirecteDe communes -> BV 88001
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+  <http://id.insee.fr/geo/commune/test-com-99003> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+
+  # =========================================================
+  #   Evenements BV
+  # =========================================================
+
+  # Evenement 050 : creation de BV 88001 (2022-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-050> a igeo:EvenementGeographique ;
+    igeo:date "2022-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+
+  # Evenement 051 : creation de BV 88002 (2022-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-051> a igeo:EvenementGeographique ;
+    igeo:date "2022-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> .
 }

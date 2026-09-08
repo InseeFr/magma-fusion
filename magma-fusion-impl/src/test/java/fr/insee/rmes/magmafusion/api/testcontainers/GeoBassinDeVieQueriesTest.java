@@ -2,147 +2,129 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoBassinDeVieEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.BassinDeVie2022;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsBassinDeVie;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.HttpStatus;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-
-public class GeoBassinDeVieQueriesTest extends TestContainer {
+class GeoBassinDeVieQueriesTest extends TestContainer {
 
     @Autowired
     GeoBassinDeVieEndpoints endpoints;
     @Autowired
-    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
+    /* geo/bassinDeVie2022/{code} */
 
-
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/bassinDeVie2022/{code}                     ///
-    /////////////////////////////////////////////////////////////////////
-
-//    geo/bassinDeVie2022/01004?date=2025-09-04
     @Test
-    void should_return_BassinDeVie2022Code_01004_when_code01004_date20250904() {
-        var response = endpoints.getcogbass("01004", LocalDate.of(2025, 9, 4));
+    @DisplayName("When getcogbass 88001, returns BV 88001")
+    void should_return_bv_88001_when_getcogbass_88001() throws Exception {
+        var response = endpoints.getcogbass("88001", LocalDate.of(2025, 1, 1));
         var result = response.getBody();
+
         assertNotNull(result);
-        assertAll(
-            () ->  assertNotNull(result),
-            () ->   assertEquals("01004", result.getCode()),
-            () -> assertEquals("http://id.insee.fr/geo/bassinDeVie2022/0e5bcc78-f043-404d-92af-d3d660772675", result.getUri()),
-            () -> assertEquals(TypeEnum.BASSIN_DE_VIE2022, result.getType()),
-            () -> assertEquals(LocalDate.of(2022, 1, 1), result.getDateCreation()),
-            () ->assertEquals("Ambérieu-en-Bugey", result.getIntituleSansArticle()),
-            () ->assertEquals(BassinDeVie2022.TypeArticleEnum._1, result.getTypeArticle()),
-            () ->assertEquals("Ambérieu-en-Bugey", result.getIntitule())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/bassin-de-vie-88001-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
-    //    geo/bassinDeVie2022/01001?date=2025-09-04 renvoie 404
     @Test
-    void should_return_404_when_BassinDeVie2022Code_code01001_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/bassinDeVie20222/01001")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isNotFound());
+    @DisplayName("When getcogbass 88099 (inexistant), returns 404")
+    void should_return_404_when_getcogbass_88099_inexistant() {
+        var response = endpoints.getcogbass("88099", LocalDate.of(2025, 1, 1));
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    /////////////////////////////////////////////////////////////////////
-    ///               geo/bassinDeVie2022/{code}/descendants          ///
-    /////////////////////////////////////////////////////////////////////
+    /* geo/bassinDeVie2022/{code}/descendants */
 
-
-    //    geo/bassinDeVie2022/35176/descendants?date=2025-09-04&type=Commune
     @Test
-    void should_return_2_communes_when_BassinDeVie2022CodeDescendants_code35176_date20250904_typeCommune(){
-        var response  = endpoints.getcogbassdes("35176", LocalDate.of(2025, 9, 4), TypeEnumDescendantsBassinDeVie.COMMUNE);
+    @DisplayName("When getcogbassdes 88001 type null, returns 2 descendants")
+    void should_return_2_descendants_when_getcogbassdes_88001_type_null() throws Exception {
+        var response = endpoints.getcogbassdes("88001", LocalDate.of(2025, 1, 1), null);
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2, result.size());
-        assertEquals("35155", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/commune/4df5a6eb-4ced-4e81-9953-42ff31f073f9", resultItem1.getUri());
-        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
-        assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation());
-        assertEquals("Lohéac", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Lohéac", resultItem1.getIntitule());
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/bassin-de-vie-88001-descendants-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
-    //    geo/departement/22/descendants?date=2025-09-04
     @Test
-    void should_return_2_communes_when_BassinDeVie2022CodeDescendants_code35176_date20250904(){
-        var response  = endpoints.getcogbassdes("35176", LocalDate.of(2025, 9, 4), TypeEnumDescendantsBassinDeVie.COMMUNE);
+    @DisplayName("When getcogbassdes 88001 type Commune, returns 2 communes")
+    void should_return_2_communes_when_getcogbassdes_88001_type_commune() throws Exception {
+        var response = endpoints.getcogbassdes("88001", LocalDate.of(2025, 1, 1), TypeEnumDescendantsBassinDeVie.COMMUNE);
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2, result.size());
-        assertEquals("35155", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/commune/4df5a6eb-4ced-4e81-9953-42ff31f073f9", resultItem1.getUri());
-        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
-        assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation());
-        assertEquals("Lohéac", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Lohéac", resultItem1.getIntitule());
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/bassin-de-vie-88001-descendants-commune-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+        JSONAssert.assertEquals(expected, data, true);
     }
 
+    /* geo/bassinsDeVie2022 */
 
-
-    ////////////////////////////////////////////////////////////////////
-    ///                 geo/bassinsDeVie2022                         ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/bassinsDeVie2022?date=2025-09-04&filtreNom=Ambérieu-en-Bugey//
     @Test
-    void should_return_1_bassinDeVie2022_when_BassinsDeVie2022_date20250904_filtreNomAmberieuEnBugey() {
-        var response = endpoints.getcogbassliste("2025-09-04","Amberieu-en-Bugey");
+    @DisplayName("When getcogbassliste date=2025-01-01 filtreNom='Bassin de vie test 1', returns 1 BV")
+    void should_return_1_bv_when_getcogbassliste_filtre_nom() throws Exception {
+        var response = endpoints.getcogbassliste("2025-01-01", "Bassin de vie test 1");
         var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1 = result.getFirst();
-        Assertions.assertEquals(1, result.size());
 
-        Assertions.assertEquals("01004", resultItem1.getCode());
-        Assertions.assertEquals("http://id.insee.fr/geo/bassinDeVie2022/0e5bcc78-f043-404d-92af-d3d660772675", resultItem1.getUri());
-        Assertions.assertEquals(TypeEnum.BASSIN_DE_VIE2022, resultItem1.getType());
-        Assertions.assertEquals(LocalDate.of(2022, 1, 1), resultItem1.getDateCreation());
-        Assertions.assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
-        Assertions.assertEquals(BassinDeVie2022.TypeArticleEnum._1, resultItem1.getTypeArticle());
-        Assertions.assertEquals("Ambérieu-en-Bugey", resultItem1.getIntitule());
+        assertNotNull(result);
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/bassins-de-vie-liste-filtre-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+        JSONAssert.assertEquals(expected, data, false);
     }
 
-//    geo/bassinsDeVie2022?date=*
     @Test
-    void should_return_1736_bassinDeVie2022_when_BassinsDeVie2022_date20250904_filtreNomNull() {
-        var response = endpoints.getcogbassliste("*",null);
+    @DisplayName("When getcogbassliste date=*, returns 2 BV")
+    void should_return_2_bv_when_getcogbassliste_etoile() throws Exception {
+        var response = endpoints.getcogbassliste("*", null);
         var result = response.getBody();
+
         assertNotNull(result);
-        var resultItem1 = result.getFirst();
-
-        // Vérification du nombre total de bassins de vie
-        assertEquals(1736, result.size());
-
-        assertEquals("01004", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/bassinDeVie2022/0e5bcc78-f043-404d-92af-d3d660772675", resultItem1.getUri());
-        assertEquals(TypeEnum.BASSIN_DE_VIE2022, resultItem1.getType());
-        assertEquals(LocalDate.of(2022, 1, 1), resultItem1.getDateCreation());
-        assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle());
-        assertEquals(BassinDeVie2022.TypeArticleEnum._1, resultItem1.getTypeArticle());
-        assertEquals("Ambérieu-en-Bugey", resultItem1.getIntitule());
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/bassins-de-vie-liste-etoile-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+        JSONAssert.assertEquals(expected, data, false);
     }
 }
