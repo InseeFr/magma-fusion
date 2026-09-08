@@ -35,9 +35,10 @@ class GeoCommuneQueriesTest extends TestContainer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // =========================================================
-    //   geo/commune/{code}/ascendants
-    // =========================================================
+
+    /// ========================================================= // NOSONAR
+    ///   geo/commune/{code}/ascendants                           // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcomasc 99001 type null, returns 4 ascendants (arr, dept, region, aav)")
@@ -82,9 +83,9 @@ class GeoCommuneQueriesTest extends TestContainer {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================================================
-    //   geo/commune/{code}
-    // =========================================================
+    /// ========================================================= // NOSONAR
+    ///   geo/commune/{code}                                      // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcom 99001, returns commune 99001")
@@ -111,9 +112,9 @@ class GeoCommuneQueriesTest extends TestContainer {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================================================
-    //   geo/commune/{code}/cantons
-    // =========================================================
+    /// ========================================================= // NOSONAR
+    ///   geo/commune/{code}/cantons                              // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcomcan 99001, returns 2 cantons (9901, 9902)")
@@ -132,9 +133,9 @@ class GeoCommuneQueriesTest extends TestContainer {
         JSONAssert.assertEquals(expected, data, true);
     }
 
-    // =========================================================
-    //   geo/commune/{code}/descendants
-    // =========================================================
+    /// ========================================================= // NOSONAR
+    ///   geo/commune/{code}/descendants                          // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcomdesc 99001 type null, returns 3 descendants (2 comdel + 1 arrmu)")
@@ -162,9 +163,9 @@ class GeoCommuneQueriesTest extends TestContainer {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================================================
-    //   geo/communes
-    // =========================================================
+    /// ========================================================= // NOSONAR
+    ///   geo/communes                                            // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcomliste filtreNom='Commune test', returns 3 communes actives")
@@ -200,9 +201,9 @@ class GeoCommuneQueriesTest extends TestContainer {
         JSONAssert.assertEquals(expected, data, true);
     }
 
-    // =========================================================
-    //   geo/commune/{code}/precedents
-    // =========================================================
+    /// ========================================================= // NOSONAR
+    ///   geo/commune/{code}/precedents                           // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcomprec 99003, returns 2 precedents (99004, 99005)")
@@ -229,9 +230,9 @@ class GeoCommuneQueriesTest extends TestContainer {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================================================
-    //   geo/commune/{code}/projetes
-    // =========================================================
+    /// ========================================================= // NOSONAR
+    ///   geo/commune/{code}/projetes                             // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcomproj 99003 dateProjection=2010-01-01, returns 2 projetes (99004, 99005)")
@@ -267,9 +268,9 @@ class GeoCommuneQueriesTest extends TestContainer {
                 .andExpect(status().isBadRequest());
     }
 
-    // =========================================================
-    //   geo/commune/{code}/suivants
-    // =========================================================
+    /// ========================================================= // NOSONAR
+    ///   geo/commune/{code}/suivants                             // NOSONAR
+    /// ========================================================= // NOSONAR
 
     @Test
     @DisplayName("When getcogcomsuiv 99004, returns 1 suivant (99003)")
@@ -296,9 +297,9 @@ class GeoCommuneQueriesTest extends TestContainer {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================================================
-    //   geo/commune/{code}/intersections
-    // =========================================================
+    /// =========================================================  // NOSONAR
+    ///   geo/commune/{code}/intersections                         // NOSONAR
+    /// =========================================================  // NOSONAR
 
     @Test
     @DisplayName("When getcogcomintersect 99001 type null, returns 7 intersections")
