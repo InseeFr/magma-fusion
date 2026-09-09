@@ -313,7 +313,7 @@
   <http://id.insee.fr/geo/commune/99005> owl:sameAs <http://id.insee.fr/geo/commune/test-com-99005> .
 
   # =========================================================
-  #   Cantons test (intersections avec commune 99001)
+  #   Canton test 9901 (actif, successeur de 9903)
   # =========================================================
 
   <http://id.insee.fr/geo/canton/test-can-9901> a igeo:Canton ;
@@ -321,20 +321,41 @@
     igeo:nom "Canton test 1" ;
     igeo:nomSansArticle "Canton test 1" ;
     igeo:codeArticle "0" ;
-    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99001> .
+    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/canton/test-can-9901> owl:sameAs <http://id.insee.fr/geo/canton/9901> .
   <http://id.insee.fr/geo/canton/9901> owl:sameAs <http://id.insee.fr/geo/canton/test-can-9901> .
+
+  # =========================================================
+  #   Canton test 9902 (actif, sans historique)
+  # =========================================================
 
   <http://id.insee.fr/geo/canton/test-can-9902> a igeo:Canton ;
     igeo:codeINSEE "9902" ;
     igeo:nom "Canton test 2" ;
     igeo:nomSansArticle "Canton test 2" ;
     igeo:codeArticle "0" ;
-    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99002> .
+    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99002> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
 
   <http://id.insee.fr/geo/canton/test-can-9902> owl:sameAs <http://id.insee.fr/geo/canton/9902> .
   <http://id.insee.fr/geo/canton/9902> owl:sameAs <http://id.insee.fr/geo/canton/test-can-9902> .
+
+  # =========================================================
+  #   Canton test 9903 (supprime, predecesseur de 9901)
+  # =========================================================
+
+  <http://id.insee.fr/geo/canton/test-can-9903> a igeo:Canton ;
+    igeo:codeINSEE "9903" ;
+    igeo:nom "Canton ancien" ;
+    igeo:nomSansArticle "Canton ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99003> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/canton/test-can-9903> owl:sameAs <http://id.insee.fr/geo/canton/9903> .
+  <http://id.insee.fr/geo/canton/9903> owl:sameAs <http://id.insee.fr/geo/canton/test-can-9903> .
 
   # =========================================================
   #   Relations canton-commune (intersection)
@@ -343,6 +364,9 @@
   <http://id.insee.fr/geo/commune/test-com-99001> igeo:territoireCommunAvec
     <http://id.insee.fr/geo/canton/test-can-9901>,
     <http://id.insee.fr/geo/canton/test-can-9902> .
+
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:territoireCommunAvec
+    <http://id.insee.fr/geo/canton/test-can-9901> .
 
   # =========================================================
   #   Evenements geographiques (communes et cantons)
@@ -361,11 +385,21 @@
       <http://id.insee.fr/geo/commune/test-com-99005> ;
     igeo:creation <http://id.insee.fr/geo/commune/test-com-99003> .
 
-  # Evenement 12 : creation des cantons test (2000-01-01)
+  # Evenement 12 : suppression de 9903, creation de 9901 (2000-01-01)
   <http://id.insee.fr/geo/evenementGeographique/test-evt-012> a igeo:EvenementGeographique ;
     igeo:date "2000-01-01"^^xsd:date ;
-    igeo:creation <http://id.insee.fr/geo/canton/test-can-9901>,
-      <http://id.insee.fr/geo/canton/test-can-9902> .
+    igeo:suppression <http://id.insee.fr/geo/canton/test-can-9903> ;
+    igeo:creation <http://id.insee.fr/geo/canton/test-can-9901> .
+
+  # Evenement 14 : creation de 9902 (2001-01-01, sans lien avec suppression de 9903)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-014> a igeo:EvenementGeographique ;
+    igeo:date "2001-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/canton/test-can-9902> .
+
+  # Evenement 13 : creation du canton 9903 (1980-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-013> a igeo:EvenementGeographique ;
+    igeo:date "1980-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/canton/test-can-9903> .
 
   # Evenement 20 : creation du departement 11 (1990-01-01)
   <http://id.insee.fr/geo/evenementGeographique/test-evt-020> a igeo:EvenementGeographique ;

@@ -18,5 +18,16 @@
     "typeArticle": "0",
     "intitule": "Canton test 2",
     "chefLieu": "99002"
+  },
+  {
+    "code": "9903",
+    "uri": "http://id.insee.fr/geo/canton/test-can-9903",
+    "type": "Canton",
+    "dateCreation": "1980-01-01",
+    "dateSuppression": "2000-01-01",
+    "intituleSansArticle": "Canton ancien",
+    "typeArticle": "0",
+    "intitule": "Canton ancien",
+    "chefLieu": "99003"
   }
 ]

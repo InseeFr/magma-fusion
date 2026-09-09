@@ -1,0 +1,22 @@
+[
+  {
+    "code": "99001",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99001",
+    "type": "Commune",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune test 1",
+    "typeArticle": "0",
+    "intitule": "Commune test 1",
+    "relation": "intersecte"
+  },
+  {
+    "code": "99002",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99002",
+    "type": "Commune",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune test 2",
+    "typeArticle": "0",
+    "intitule": "Commune test 2",
+    "relation": "intersecte"
+  }
+]
