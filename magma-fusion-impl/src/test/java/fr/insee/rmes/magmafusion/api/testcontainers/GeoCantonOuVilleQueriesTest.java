@@ -110,8 +110,8 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
     class GetCogCanVilDes {
 
         @Test
-        @DisplayName("When getcogcanvildes 7701 type null, returns 2 descendants (communes)")
-        void should_return_2_descendants_when_getcogcanvildes_7701_type_null() throws Exception {
+        @DisplayName("When getcogcanvildes 7701 type null, returns 4 descendants (2 communes + 2 comdel)")
+        void should_return_4_descendants_when_getcogcanvildes_7701_type_null() throws Exception {
             var response = endpoints.getcogcanvildes("7701", LocalDate.of(2025, 1, 1), null, null);
             var result = response.getBody();
 

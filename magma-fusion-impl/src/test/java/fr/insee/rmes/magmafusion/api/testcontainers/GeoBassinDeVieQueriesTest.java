@@ -65,8 +65,8 @@ class GeoBassinDeVieQueriesTest extends TestContainer {
     class GetCogBassDes {
 
         @Test
-        @DisplayName("When getcogbassdes 88001 type null, returns 2 descendants")
-        void should_return_2_descendants_when_getcogbassdes_88001_type_null() throws Exception {
+        @DisplayName("When getcogbassdes 88001 type null, returns 4 descendants (2 communes + 2 comdel)")
+        void should_return_4_descendants_when_getcogbassdes_88001_type_null() throws Exception {
             var response = endpoints.getcogbassdes("88001", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 

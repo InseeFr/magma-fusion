@@ -88,7 +88,7 @@
   <http://id.insee.fr/geo/commune/99002> owl:sameAs <http://id.insee.fr/geo/commune/test-com-99002> .
 
   # =========================================================
-  #   Communes deleguees test (descendants de arrondissement 991)
+  #   Communes deleguees test (descendants de commune 99002)
   # =========================================================
 
   <http://id.insee.fr/geo/communeDeleguee/test-comdel-98001> a igeo:CommuneDeleguee ;
@@ -96,7 +96,7 @@
     igeo:nom "Commune deleguee test 1" ;
     igeo:nomSansArticle "Commune deleguee test 1" ;
     igeo:codeArticle "0" ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99002> .
 
   <http://id.insee.fr/geo/communeDeleguee/test-comdel-98001> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/98001> .
   <http://id.insee.fr/geo/communeDeleguee/98001> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/test-comdel-98001> .
@@ -106,10 +106,20 @@
     igeo:nom "Commune deleguee test 2" ;
     igeo:nomSansArticle "Commune deleguee test 2" ;
     igeo:codeArticle "0" ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99002> .
 
   <http://id.insee.fr/geo/communeDeleguee/test-comdel-98002> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/98002> .
   <http://id.insee.fr/geo/communeDeleguee/98002> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/test-comdel-98002> .
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> a igeo:CommuneDeleguee ;
+    igeo:codeINSEE "98003" ;
+    igeo:nom "Commune deleguee ancienne" ;
+    igeo:nomSansArticle "Commune deleguee ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/98003> .
+  <http://id.insee.fr/geo/communeDeleguee/98003> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> .
 
   # =========================================================
   #   Arrondissement actif 991 (principal, avec predecesseurs)
@@ -721,4 +731,18 @@
     igeo:date "2000-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/communeAssociee/test-comas-99101> ;
     igeo:suppression <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
+
+  # =========================================================
+  #   Evenements CommuneDeleguee
+  # =========================================================
+
+  # Evenement 082 : creation de commune deleguee 98003 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-082> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> .
+
+  # Evenement 083 : suppression de commune deleguee 98003 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-083> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> .
 }

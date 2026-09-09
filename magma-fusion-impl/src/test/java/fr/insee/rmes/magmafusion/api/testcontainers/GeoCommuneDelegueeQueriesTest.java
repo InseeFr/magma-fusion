@@ -2,159 +2,151 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoCommuneDelegueeEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCommuneDeleguee;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
-
-public class GeoCommuneDelegueeQueriesTest extends TestContainer {
+class GeoCommuneDelegueeQueriesTest extends TestContainer {
 
     @Autowired
     GeoCommuneDelegueeEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/communeDeleguee/{code}/ascendants                  ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/communeDeleguee/{code}")
+    class GetCogComD {
 
-//    geo/communeDeleguee/46248/ascendants?date=2025-09-04
-    @Test
-    void should_return_10_territoires_when_CommuneDelegueeCodeAscendants_code46248_date20250904_typeNull(){
-        var response  = endpoints.getcogcomdasc("46248", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(10, result.size()),
-                () -> assertEquals("153", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/51453875-c332-4dc8-907d-ad950b5b7a7e", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Cahors", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Cahors", resultItem1.getIntitule())
-        );
+        @Test
+        @DisplayName("When getcogcomd 98001, returns commune deleguee 98001")
+        void should_return_commune_deleguee_98001_when_getcogcomd_98001() throws Exception {
+            var response = endpoints.getcogcomd("98001", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-deleguee-98001-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomd 98099 (inexistant), returns 404")
+        void should_return_404_when_getcogcomd_98099_inexistant() throws Exception {
+            mockMvc.perform(get("/geo/communeDeleguee/98099")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-//    geo/communeDeleguee/46248/ascendants?date=2025-09-04&type=Arrondissement
-    @Test
-    void should_return_1_arrondissement_when_CommuneDelegueeCodeAscendants_code46248_date20250904_typeArrondissement(){
-        var response  = endpoints.getcogcomdasc("46248", LocalDate.of(2025, 9, 4), TypeEnumAscendantsCommuneDeleguee.ARRONDISSEMENT);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("461", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/arrondissement/35fe4c0f-c974-483e-b204-7b266bb7876a", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Cahors", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("46042", resultItem1.getChefLieu()),
-                () -> assertEquals("Cahors", resultItem1.getIntitule())
-        );
+    @Nested
+    @DisplayName("geo/communeDeleguee/{code}/ascendants")
+    class GetCogComDAsc {
+
+        @Test
+        @DisplayName("When getcogcomdasc 98001 type null, returns 7 ascendants (aav T01, arr 991, bv 88001, cov 7701, com 99002, dep 10, reg 99)")
+        void should_return_7_ascendants_when_getcogcomdasc_98001_type_null() throws Exception {
+            var response = endpoints.getcogcomdasc("98001", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-deleguee-98001-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomdasc 98001 type Departement, returns 1 departement")
+        void should_return_1_departement_when_getcogcomdasc_98001_type_departement() throws Exception {
+            var response = endpoints.getcogcomdasc("98001", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommuneDeleguee.DEPARTEMENT);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-deleguee-98001-ascendants-departement-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcomdasc 98001 date before creation, returns 404")
+        void should_return_404_when_getcogcomdasc_98001_date_before_creation() throws Exception {
+            mockMvc.perform(get("/geo/communeDeleguee/98001/ascendants")
+                            .param("date", "2010-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    void should_return_404_when_CommuneDelegueeCodeAscendants_code46248_date19500101_typeNull() throws Exception{
-        mockMvc.perform(get("/geo/communeDeleguee/46248/ascendants")
-                        .param("date", "1950-01-01"))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("geo/communesDeleguees")
+    class GetCogComDListe {
+
+        @Test
+        @DisplayName("When getcogcomdliste date=2025-01-01, returns 2 communes deleguees actives (98001, 98002)")
+        void should_return_2_communes_deleguees_when_getcogcomdliste_date() throws Exception {
+            var response = endpoints.getcogcomdliste("2025-01-01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/communes-deleguees-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
+
+        @Test
+        @DisplayName("When getcogcomdliste date=*, returns 3 communes deleguees (98001, 98002, 98003)")
+        void should_return_3_communes_deleguees_when_getcogcomdliste_etoile() throws Exception {
+            var response = endpoints.getcogcomdliste("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/communes-deleguees-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
     }
-
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/communeDeleguee/{code}                     ///
-    /////////////////////////////////////////////////////////////////////
-
-//    geo/communeDeleguee/46248?date=2025-09-04
-    @Test
-    void should_return_communeCode_14475_when_code14475_date20250904() {
-        var response  = endpoints.getcogcomd("46248", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        assertAll(
-                () -> assertEquals("46248", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/communeDeleguee/c333331f-b09b-4253-b012-dc0d0a65a290", result.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE_DELEGUEE, result.getType()),
-                () -> assertEquals(LocalDate.of(2017,1,1), result.getDateCreation()),
-                () -> assertEquals("Sainte-Alauzie", result.getIntituleSansArticle()),
-                () -> assertEquals(CommuneDeleguee.TypeArticleEnum._0, result.getTypeArticle()),
-                () -> assertEquals("Sainte-Alauzie", result.getIntitule())
-        );
-    }
-
-//    geo/communeDeleguee/46249?date=2025-09-04 renvoie 404
-    @Test
-    void should_return_404_when_CommuneDelegueeCode_code46249_date20250901() throws Exception{
-        mockMvc.perform(get("/geo/communeDeleguee/46249")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isNotFound());
-    }
-
-
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/communesDeleguees                         ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/communesDeleguees?date=2025-09-04//
-    @Test
-    void should_return_2135_communesDeleguees_when_CommunesDeleguees_date20250904() {
-        var response  = endpoints.getcogcomdliste("2025-09-04");
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(2135, result.size()),
-                () -> assertEquals("01015", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/communeDeleguee/3c07001c-7efe-40f9-90fc-6a892af20238", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Arbignieu", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(CommuneDeleguee.TypeArticleEnum._1, resultItem1.getTypeArticle()),
-                () -> assertEquals("Arbignieu", resultItem1.getIntitule())
-        );
-    }
-
-//    geo/communesDeleguees?date=*
-    @Test
-    void should_return_2601_communesDeleguees_when_CommunesDeleguees_dateEtoile() {
-        var response  = endpoints.getcogcomdliste("*");
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(2601, result.size()),
-                () -> assertEquals("01015", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/communeDeleguee/3c07001c-7efe-40f9-90fc-6a892af20238", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE_DELEGUEE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2016,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Arbignieu", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(CommuneDeleguee.TypeArticleEnum._1, resultItem1.getTypeArticle()),
-                () -> assertEquals("Arbignieu", resultItem1.getIntitule())
-        );
-    }
-
-
-
 }
