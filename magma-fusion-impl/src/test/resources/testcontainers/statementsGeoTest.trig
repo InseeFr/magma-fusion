@@ -678,4 +678,47 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-071> a igeo:EvenementGeographique ;
     igeo:date "1950-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> .
+
+  # =========================================================
+  #   CommuneAssociee test 99101 (active, subdivision de commune 99001)
+  # =========================================================
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99101> a igeo:CommuneAssociee ;
+    igeo:codeINSEE "99101" ;
+    igeo:nom "Commune associee test 1" ;
+    igeo:nomSansArticle "Commune associee test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99101> owl:sameAs <http://id.insee.fr/geo/communeAssociee/99101> .
+  <http://id.insee.fr/geo/communeAssociee/99101> owl:sameAs <http://id.insee.fr/geo/communeAssociee/test-comas-99101> .
+
+  # =========================================================
+  #   CommuneAssociee test 99102 (supprimee)
+  # =========================================================
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99102> a igeo:CommuneAssociee ;
+    igeo:codeINSEE "99102" ;
+    igeo:nom "Commune associee ancienne" ;
+    igeo:nomSansArticle "Commune associee ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99102> owl:sameAs <http://id.insee.fr/geo/communeAssociee/99102> .
+  <http://id.insee.fr/geo/communeAssociee/99102> owl:sameAs <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
+
+  # =========================================================
+  #   Evenements CommuneAssociee
+  # =========================================================
+
+  # Evenement 080 : creation de commune associee 99102 (1970-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-080> a igeo:EvenementGeographique ;
+    igeo:date "1970-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
+
+  # Evenement 081 : creation de commune associee 99101, suppression de 99102 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-081> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/communeAssociee/test-comas-99101> ;
+    igeo:suppression <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
 }
