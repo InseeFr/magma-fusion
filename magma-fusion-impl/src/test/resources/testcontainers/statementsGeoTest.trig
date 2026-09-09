@@ -637,6 +637,19 @@
   <http://id.insee.fr/geo/collectiviteDOutreMer/986> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> .
 
   # =========================================================
+  #   CollectiviteDOutreMer test 987 (supprimee)
+  # =========================================================
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> a igeo:CollectiviteDOutreMer ;
+    igeo:codeINSEE "987" ;
+    igeo:nom "Collectivite ancienne" ;
+    igeo:nomSansArticle "Collectivite ancienne" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/987> .
+  <http://id.insee.fr/geo/collectiviteDOutreMer/987> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> .
+
+  # =========================================================
   #   CirconscriptionTerritoriale test 98601
   # =========================================================
 
@@ -654,9 +667,15 @@
   #   Evenements CirconscriptionTerritoriale / CollectiviteDOutreMer
   # =========================================================
 
-  # Evenement 070 : creation de COM 986 et CT 98601 (1985-01-01)
+  # Evenement 070 : creation de COM 986 et CT 98601, suppression de COM 987 (1985-01-01)
   <http://id.insee.fr/geo/evenementGeographique/test-evt-070> a igeo:EvenementGeographique ;
     igeo:date "1985-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> ;
-    igeo:creation <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> .
+    igeo:creation <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> ;
+    igeo:suppression <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> .
+
+  # Evenement 071 : creation de COM 987 (1950-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-071> a igeo:EvenementGeographique ;
+    igeo:date "1950-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> .
 }

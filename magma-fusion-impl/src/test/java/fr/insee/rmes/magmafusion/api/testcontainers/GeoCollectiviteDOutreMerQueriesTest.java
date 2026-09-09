@@ -1,135 +1,144 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-
 import fr.insee.rmes.magmafusion.api.GeoCollectiviteDOutreMerEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.*;
-import org.junit.jupiter.api.Disabled;
+import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCollectiviteDOutreMer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
-
-public class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
+class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
 
     @Autowired
     GeoCollectiviteDOutreMerEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
+    @Nested
+    @DisplayName("geo/collectiviteDOutreMer/{code}")
+    class GetCogColl {
 
+        @Test
+        @DisplayName("When getcogcoll 986, returns COM 986")
+        void should_return_com_986_when_getcogcoll_986() throws Exception {
+            var response = endpoints.getcogcoll("986", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/collectiviteDOutreMer/{code}                     ///
-    /////////////////////////////////////////////////////////////////////
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/collectivite-d-outre-mer-986-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-//    geo/collectiviteDOutreMer/69385?date=2025-09-04
-    @Test
-    void should_return_COMCode_988_when_code988_date20250904() {
-        var response  = endpoints.getcogcoll("988", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        //Use assertAll() so that the test does not stop at the first error in the test.
-        assertAll(
-                () -> assertEquals("988", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/bc93b612-59f5-463a-a05f-e5ed9013dc8d", result.getUri()),
-                () -> assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, result.getType()),
-                () -> assertEquals(LocalDate.of(1969,3,30), result.getDateCreation()),
-                () -> assertEquals("Nouvelle-Calédonie", result.getIntituleSansArticle()),
-                () -> assertEquals(CollectiviteDOutreMer.TypeArticleEnum._0, result.getTypeArticle()),
-                () -> assertEquals("Nouvelle-Calédonie", result.getIntitule())
-        );
+        @Test
+        @DisplayName("When getcogcoll 989 (inexistant), returns 404")
+        void should_return_404_when_getcogcoll_989_inexistant() throws Exception {
+            mockMvc.perform(get("/geo/collectiviteDOutreMer/989")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
+    @Nested
+    @DisplayName("geo/collectiviteDOutreMer/{code}/descendants")
+    class GetCogCollDes {
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/collectiviteDOutreMer/{code}/descendants           ///
-    /////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogcolldes 986 type null, returns 1 descendant (CT 98601)")
+        void should_return_1_descendant_when_getcogcolldes_986_type_null() throws Exception {
+            var response = endpoints.getcogcolldes("986", LocalDate.of(2025, 1, 1), null, null);
+            var result = response.getBody();
 
-//    /geo/collectiviteDOutreMer/975/descendants?date=2025-09-04 renvoie 2 communes 2 iris
-    @Test
-    void should_return_2_communes_2_iris_when_COMCodeDescendants_code975_date20250904_typeNull_filtreNomNull(){
-        var response  = endpoints.getcogcolldes("975", LocalDate.of(2025, 9, 4), null,null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(4, result.size());
-        assertEquals("97501", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/commune/8655edf3-9550-4486-8efa-03d97ebe6561", resultItem1.getUri());
-        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
-        assertEquals(LocalDate.of(1976,7,21), resultItem1.getDateCreation());
-        assertEquals("Miquelon-Langlade", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Miquelon-Langlade", resultItem1.getIntitule());
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/collectivite-d-outre-mer-986-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogcolldes 986 type CirconscriptionTerritoriale, returns 1 descendant (CT 98601)")
+        void should_return_1_descendant_when_getcogcolldes_986_type_circonscriptionTerritoriale() throws Exception {
+            var response = endpoints.getcogcolldes("986", LocalDate.of(2025, 1, 1), TypeEnumDescendantsCollectiviteDOutreMer.CIRCONSCRIPTION_TERRITORIALE, null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/collectivite-d-outre-mer-986-descendants-circonscriptionTerritoriale-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-//    geo/collectiviteDOutreMer/975/descendants?date=2025-09-04&type=Commune&filtreNom=Miquelon
-    @Test
-    void should_return_1_commune_when_COMCodeDescendants_code975_date20250904_typeCommune_filtreNomMiquelon(){
-        var response  = endpoints.getcogcolldes("975", LocalDate.of(2025, 9, 4), TypeEnumDescendantsCollectiviteDOutreMer.COMMUNE,"Miquelon");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1, result.size());
-        assertEquals("97501", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/commune/8655edf3-9550-4486-8efa-03d97ebe6561", resultItem1.getUri());
-        assertEquals(TypeEnum.COMMUNE, resultItem1.getType());
-        assertEquals(LocalDate.of(1976,7,21), resultItem1.getDateCreation());
-        assertEquals("Miquelon-Langlade", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Miquelon-Langlade", resultItem1.getIntitule());
+    @Nested
+    @DisplayName("geo/collectivitesDOutreMer")
+    class GetCogCollListe {
+
+        @Test
+        @DisplayName("When getcogcollliste date=2025-01-01, returns 1 COM active (986)")
+        void should_return_1_com_when_getcogcollliste_date() throws Exception {
+            var response = endpoints.getcogcollliste("2025-01-01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/collectivites-d-outre-mer-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
+
+        @Test
+        @DisplayName("When getcogcollliste date=*, returns 2 COMs (986, 987)")
+        void should_return_2_coms_when_getcogcollliste_etoile() throws Exception {
+            var response = endpoints.getcogcollliste("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/collectivites-d-outre-mer-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
     }
-
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/collectivitesDOutreMer                         ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/collectivitesDOutreMer?date=2025-09-04//
-    @Test
-    void should_return_9_COM_when_CollectivitesDOutreMer_date20250904(){
-        var response  = endpoints.getcogcollliste ("2025-09-04");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(9, result.size());
-        assertEquals("975", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/352968dd-fcc7-4950-8b71-8c94053cb126", resultItem1.getUri());
-        assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
-        assertEquals(LocalDate.of(1985,6,15), resultItem1.getDateCreation());
-        assertEquals("Saint-Pierre-et-Miquelon", resultItem1.getIntituleSansArticle());
-        assertEquals(CollectiviteDOutreMer.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Saint-Pierre-et-Miquelon", resultItem1.getIntitule());
-    }
-
-//    geo/collectivitesDOutreMer?date=*
-@Test
-void should_return_67_COM_when_CollectivitesDOutreMer_dateEtoile(){
-    var response  = endpoints.getcogcollliste ("*");
-    var result = response.getBody();
-    assertNotNull(result);
-    var resultItem1= result.getFirst();
-    assertEquals(67, result.size());
-    assertEquals("90bis", resultItem1.getCode());
-    assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/163502e0-72fb-4dab-99d8-996a858733c9", resultItem1.getUri());
-    assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType());
-    assertEquals(LocalDate.of(1947,12,17), resultItem1.getDateCreation());
-    assertEquals(LocalDate.of(1957,1,1), resultItem1.getDateSuppression());
-    assertEquals("Sarre", resultItem1.getIntituleSansArticle());
-    assertEquals(CollectiviteDOutreMer.TypeArticleEnum._3, resultItem1.getTypeArticle());
-    assertEquals("Sarre", resultItem1.getIntitule());
-}
-
-
 }
