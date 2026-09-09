@@ -718,6 +718,20 @@
   <http://id.insee.fr/geo/communeAssociee/99102> owl:sameAs <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
 
   # =========================================================
+  #   District test 98610 (subdivision de COM 986)
+  # =========================================================
+
+  <http://id.insee.fr/geo/district/test-dis-98610> a igeo:District ;
+    igeo:codeINSEE "98610" ;
+    igeo:nom "District test 1" ;
+    igeo:nomSansArticle "District test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> .
+
+  <http://id.insee.fr/geo/district/test-dis-98610> owl:sameAs <http://id.insee.fr/geo/district/98610> .
+  <http://id.insee.fr/geo/district/98610> owl:sameAs <http://id.insee.fr/geo/district/test-dis-98610> .
+
+  # =========================================================
   #   Evenements CommuneAssociee
   # =========================================================
 
@@ -745,4 +759,13 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-083> a igeo:EvenementGeographique ;
     igeo:date "2010-01-01"^^xsd:date ;
     igeo:suppression <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> .
+
+  # =========================================================
+  #   Evenements District
+  # =========================================================
+
+  # Evenement 084 : creation du district 98610 (1985-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-084> a igeo:EvenementGeographique ;
+    igeo:date "1985-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/district/test-dis-98610> .
 }

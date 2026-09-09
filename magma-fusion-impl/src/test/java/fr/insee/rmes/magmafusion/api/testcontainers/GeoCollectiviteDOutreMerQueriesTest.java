@@ -69,8 +69,8 @@ class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
     class GetCogCollDes {
 
         @Test
-        @DisplayName("When getcogcolldes 986 type null, returns 1 descendant (CT 98601)")
-        void should_return_1_descendant_when_getcogcolldes_986_type_null() throws Exception {
+        @DisplayName("When getcogcolldes 986 type null, returns 2 descendants (CT 98601, district 98610)")
+        void should_return_2_descendants_when_getcogcolldes_986_type_null() throws Exception {
             var response = endpoints.getcogcolldes("986", LocalDate.of(2025, 1, 1), null, null);
             var result = response.getBody();
 
