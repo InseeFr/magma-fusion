@@ -622,4 +622,41 @@
     igeo:date "2020-01-01"^^xsd:date ;
     igeo:suppression <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> ;
     igeo:creation <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+
+  # =========================================================
+  #   CollectiviteDOutreMer test 986 (parent de CT 98601)
+  # =========================================================
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> a igeo:CollectiviteDOutreMer ;
+    igeo:codeINSEE "986" ;
+    igeo:nom "Collectivite test" ;
+    igeo:nomSansArticle "Collectivite test" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/986> .
+  <http://id.insee.fr/geo/collectiviteDOutreMer/986> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> .
+
+  # =========================================================
+  #   CirconscriptionTerritoriale test 98601
+  # =========================================================
+
+  <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> a igeo:CirconscriptionTerritoriale ;
+    igeo:codeINSEE "98601" ;
+    igeo:nom "Circonscription test 1" ;
+    igeo:nomSansArticle "Circonscription test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> .
+
+  <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> owl:sameAs <http://id.insee.fr/geo/circonscriptionTerritoriale/98601> .
+  <http://id.insee.fr/geo/circonscriptionTerritoriale/98601> owl:sameAs <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> .
+
+  # =========================================================
+  #   Evenements CirconscriptionTerritoriale / CollectiviteDOutreMer
+  # =========================================================
+
+  # Evenement 070 : creation de COM 986 et CT 98601 (1985-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-070> a igeo:EvenementGeographique ;
+    igeo:date "1985-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> ;
+    igeo:creation <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> .
 }
