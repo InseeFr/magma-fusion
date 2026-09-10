@@ -841,6 +841,68 @@
     igeo:date "2000-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/commune/test-com-88001>,
       <http://id.insee.fr/geo/commune/test-com-88002> .
+
+  # =========================================================
+  #   Pays test
+  # =========================================================
+
+  <http://id.insee.fr/geo/pays/test-pays-99901> a igeo:Pays ;
+    igeo:codeINSEE "99901" ;
+    igeo:nom "Pays test 1" ;
+    igeo:nomLong "Republique du Pays test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:codeIso3166alpha2 "ZT" ;
+    igeo:codeIso3166alpha3 "ZTS" ;
+    igeo:codeIso3166num "991" .
+
+  <http://id.insee.fr/geo/pays/test-pays-99901> owl:sameAs <http://id.insee.fr/geo/pays/99901> .
+  <http://id.insee.fr/geo/pays/99901> owl:sameAs <http://id.insee.fr/geo/pays/test-pays-99901> .
+
+  <http://id.insee.fr/geo/pays/test-pays-99902> a igeo:Pays ;
+    igeo:codeINSEE "99902" ;
+    igeo:nom "Pays test ancien" ;
+    igeo:nomLong "Republique du Pays test ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:codeIso3166alpha2 "ZA" ;
+    igeo:codeIso3166alpha3 "ZAN" ;
+    igeo:codeIso3166num "992" .
+
+  <http://id.insee.fr/geo/pays/test-pays-99902> owl:sameAs <http://id.insee.fr/geo/pays/99902> .
+  <http://id.insee.fr/geo/pays/99902> owl:sameAs <http://id.insee.fr/geo/pays/test-pays-99902> .
+
+  # =========================================================
+  #   Territoire test (descendant de Pays 99901)
+  # =========================================================
+
+  <http://id.insee.fr/geo/territoire/test-territoire-99904> a igeo:Territoire ;
+    igeo:codeINSEE "99904" ;
+    igeo:nom "Territoire test 1" ;
+    igeo:nomLong "Territoire test 1 complet" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/pays/test-pays-99901> .
+
+  <http://id.insee.fr/geo/territoire/test-territoire-99904> owl:sameAs <http://id.insee.fr/geo/territoire/99904> .
+  <http://id.insee.fr/geo/territoire/99904> owl:sameAs <http://id.insee.fr/geo/territoire/test-territoire-99904> .
+
+  # =========================================================
+  #   Evenements Pays
+  # =========================================================
+
+  # Evenement 096 : creation pays ancien 99902 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-096> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/pays/test-pays-99902> .
+
+  # Evenement 097 : succession 99902 -> 99901 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-097> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/pays/test-pays-99902> ;
+    igeo:creation <http://id.insee.fr/geo/pays/test-pays-99901> .
+
+  # Evenement 098 : creation territoire 99904 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-098> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/territoire/test-territoire-99904> .
 }
 
 <http://rdf.insee.fr/graphes/codes/cj> {

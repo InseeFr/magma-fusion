@@ -1,0 +1,13 @@
+[
+  {
+    "code": "99901",
+    "uri": "http://id.insee.fr/geo/pays/test-pays-99901",
+    "type": "Pays",
+    "dateCreation": "2010-01-01",
+    "intitule": "Pays test 1",
+    "intituleComplet": "Republique du Pays test 1",
+    "iso3166alpha2": "ZT",
+    "iso3166alpha3": "ZTS",
+    "iso3166num": "991"
+  }
+]
