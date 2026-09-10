@@ -2,6 +2,8 @@
 @prefix igeo: <http://rdf.insee.fr/def/geo#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix insee: <http://rdf.insee.fr/def/base#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <http://rdf.insee.fr/graphes/geo/cog> {
 
@@ -768,4 +770,85 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-084> a igeo:EvenementGeographique ;
     igeo:date "1985-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/district/test-dis-98610> .
+
+  # =========================================================
+  #   Intercommunalites test
+  # =========================================================
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-001> a igeo:Intercommunalite ;
+    igeo:codeINSEE "999000001" ;
+    igeo:nom "Intercommunalite test 1" ;
+    igeo:nomSansArticle "Intercommunalite test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:nomIntercommunalite "CC d'Intercommunalite test 1" ;
+    insee:categorieJuridique <http://id.insee.fr/codes/cj/n3/245> .
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-001> owl:sameAs <http://id.insee.fr/geo/intercommunalite/999000001> .
+  <http://id.insee.fr/geo/intercommunalite/999000001> owl:sameAs <http://id.insee.fr/geo/intercommunalite/test-interco-001> .
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-002> a igeo:Intercommunalite ;
+    igeo:codeINSEE "999000002" ;
+    igeo:nom "Intercommunalite test ancienne" ;
+    igeo:nomSansArticle "Intercommunalite test ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:nomIntercommunalite "CC d'Intercommunalite test ancienne" ;
+    insee:categorieJuridique <http://id.insee.fr/codes/cj/n3/245> .
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-002> owl:sameAs <http://id.insee.fr/geo/intercommunalite/999000002> .
+  <http://id.insee.fr/geo/intercommunalite/999000002> owl:sameAs <http://id.insee.fr/geo/intercommunalite/test-interco-002> .
+
+  # =========================================================
+  #   Communes test (descendants de intercommunalite 999000001)
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-88001> a igeo:Commune ;
+    igeo:codeINSEE "88001" ;
+    igeo:nom "Commune interco test 1" ;
+    igeo:nomSansArticle "Commune interco test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001> .
+
+  <http://id.insee.fr/geo/commune/test-com-88001> owl:sameAs <http://id.insee.fr/geo/commune/88001> .
+  <http://id.insee.fr/geo/commune/88001> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88001> .
+
+  <http://id.insee.fr/geo/commune/test-com-88002> a igeo:Commune ;
+    igeo:codeINSEE "88002" ;
+    igeo:nom "Commune interco test 2" ;
+    igeo:nomSansArticle "Commune interco test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001> .
+
+  <http://id.insee.fr/geo/commune/test-com-88002> owl:sameAs <http://id.insee.fr/geo/commune/88002> .
+  <http://id.insee.fr/geo/commune/88002> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88002> .
+
+  # =========================================================
+  #   Evenements Intercommunalite
+  # =========================================================
+
+  # Evenement 090 : creation de l'intercommunalite 999000002 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-090> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/intercommunalite/test-interco-002> .
+
+  # Evenement 091 : succession interco2 -> interco1 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-091> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/intercommunalite/test-interco-001> ;
+    igeo:suppression <http://id.insee.fr/geo/intercommunalite/test-interco-002> .
+
+  # Evenement 092 : creation des communes 88001 et 88002 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-092> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/commune/test-com-88001>,
+      <http://id.insee.fr/geo/commune/test-com-88002> .
+}
+
+<http://rdf.insee.fr/graphes/codes/cj> {
+
+  # =========================================================
+  #   Categories juridiques (SKOS) pour intercommunalites
+  # =========================================================
+
+  <http://id.insee.fr/codes/cj/n3/245> a skos:Concept ;
+    skos:prefLabel "Communaute de communes" .
 }
