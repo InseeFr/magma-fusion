@@ -2,143 +2,134 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.QuartierPrioritaireDeLaPolitiqueDeLaVille2024;
-import fr.insee.rmes.magmafusion.model.TerritoireBaseRelation;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
-
 class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestContainer {
 
     @Autowired
     GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /// ///////////////////////////////////////////////////////////////////////
-    ///        geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/{code}     ///
-    /// ///////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/{code}")
+    class GetCogQpv {
 
-//    geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QN06255M?date=2025-09-04
-    @Test
-    void should_return_quartierPrioritaireDeLaVilleCode_when_codeQN06255M_date20250904() {
-        var response = endpoints.getcogqpv("QN06255M", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        assertAll(
-                () -> assertEquals("QN06255M", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/23498c07-2891-41e9-b3d5-d8846188ba0c", result.getUri()),
-                () -> assertEquals(TypeEnum.QUARTIER_PRIORITAIRE_DE_LA_POLITIQUE_DE_LA_VILLE2024, result.getType()),
-                () -> assertEquals(LocalDate.of(2024, 1, 1), result.getDateCreation()),
-                () -> assertEquals("Ville Centre", result.getIntituleSansArticle()),
-                () -> assertEquals(QuartierPrioritaireDeLaPolitiqueDeLaVille2024.TypeArticleEnum.X, result.getTypeArticle()),
-                () -> assertEquals("Ville Centre", result.getIntitule())
-        );
+        @Test
+        @DisplayName("When getcogqpv QN01001M, returns QPV QN01001M")
+        void should_return_qpv_QN01001M_when_getcogqpv_QN01001M() throws Exception {
+            var response = endpoints.getcogqpv("QN01001M", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/qpv-QN01001M-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogqpv QN01099M (inexistant), returns 404")
+        void should_return_404_when_getcogqpv_QN01099M_inexistant() throws Exception {
+            mockMvc.perform(get("/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QN01099M")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("When getcogqpv QJ01001M (code invalide), returns 400")
+        void should_return_400_when_getcogqpv_QJ01001M_code_invalide() throws Exception {
+            mockMvc.perform(get("/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QJ01001M")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
     }
 
-//    geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QN08255M?date=2025-09-04 should return 404
-    @Test
-    void should_return_404_when_CommuneCodeAscendants_codeQN08255M_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QN08255M")
-                        .param("date", "2025-09-04"))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024")
+    class GetCogQpvListe {
+
+        @Test
+        @DisplayName("When getcogqpvliste date=2025-01-01, returns 1 QPV")
+        void should_return_1_qpv_when_getcogqpvliste_date() throws Exception {
+            var response = endpoints.getcogqpvliste(LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/qpv-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-//    geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QJ08255M?date=2025-09-04 should return 400
-    @Test
-    void should_return_400_when_CommuneCodeAscendants_codeQJ08255M_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QJ08255M")
-                        .param("date", "2025-09-04"))
-                .andExpect(status().isBadRequest());
+    @Nested
+    @DisplayName("geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/{code}/intersections")
+    class GetCogQpvIntersect {
+
+        @Test
+        @DisplayName("When getcogqpvintersect QN01001M type null, returns 1 intersection (commune 99001)")
+        void should_return_1_intersection_when_getcogqpvintersect_QN01001M_type_null() throws Exception {
+            var response = endpoints.getcogqpvintersect("QN01001M", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/qpv-QN01001M-intersections-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogqpvintersect QN01001M type Commune, returns 1 commune")
+        void should_return_1_commune_when_getcogqpvintersect_QN01001M_type_commune() throws Exception {
+            var response = endpoints.getcogqpvintersect("QN01001M", LocalDate.of(2025, 1, 1), TypeEnum.COMMUNE);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/qpv-QN01001M-intersections-commune-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
-
-    /// ///////////////////////////////////////////////////////////////////////
-    ///        geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024          ///
-    /// ///////////////////////////////////////////////////////////////////////
-
-//    geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024?date=2025-09-04//
-    @Test
-    void should_return_1609_QPV_when_quartiersPrioritairesDeLaPolitiqueDeLaVille2024_date20250904() {
-        var response  = endpoints.getcogqpvliste(LocalDate.of(2025,9,4));
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(1609, result.size()),
-                () -> assertEquals("QN00101M", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/40526c49-2c78-4856-a4ed-21714bf70cb9", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.QUARTIER_PRIORITAIRE_DE_LA_POLITIQUE_DE_LA_VILLE2024, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2024,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Grande Reyssouze Terre Des Fleurs", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(QuartierPrioritaireDeLaPolitiqueDeLaVille2024.TypeArticleEnum.X, resultItem1.getTypeArticle()),
-                () -> assertEquals("Grande Reyssouze Terre Des Fleurs", resultItem1.getIntitule())
-        );
-    }
-
-    /// ////////////////////////////////////////////////////////////////////////////
-    /// geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024/{code}/intersections ///
-    /// ////////////////////////////////////////////////////////////////////////////
-
-//    geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024/QN08255M/intersections?date=2025-09-04//
-    @Test
-    void should_return_1_commune_when_quartierPrioritaireDeLaPolitiqueDeLaVille2024CodeIntersections_codeQN06255M_date20250904_typeNull() {
-        var response  = endpoints.getcogqpvintersect("QN06255M", LocalDate.of(2025,9,4), null);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("62516", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/2d740bbc-9c75-4fd5-b3f4-63fbab6f2713", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Lillers", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireBaseRelation.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Lillers", resultItem1.getIntitule()),
-                () -> assertEquals("inclus", resultItem1.getRelation())
-        );
-    }
-
-    //    geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024/QN08255M/intersections?date=2025-09-04&type=commune//
-    @Test
-    void should_return_1_commune_when_quartierPrioritaireDeLaPolitiqueDeLaVille2024CodeIntersections_codeQN06255M_date20250904_typeCommune() {
-        var response  = endpoints.getcogqpvintersect("QN06255M", LocalDate.of(2025,9,4), TypeEnum.COMMUNE);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("62516", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/2d740bbc-9c75-4fd5-b3f4-63fbab6f2713", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Lillers", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireBaseRelation.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Lillers", resultItem1.getIntitule()),
-                () -> assertEquals("inclus", resultItem1.getRelation())
-        );
-    }
-
-
 }

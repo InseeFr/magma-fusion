@@ -65,8 +65,8 @@ class GeoAireDAttractionDesVillesQueriesTest extends TestContainer {
     class GetCogAavDesc {
 
         @Test
-        @DisplayName("When getcogaavdesc T01 type null, returns 8 descendants")
-        void should_return_8_descendants_when_getcogaavdesc_T01_type_null() throws Exception {
+        @DisplayName("When getcogaavdesc T01 type null, returns 9 descendants")
+        void should_return_9_descendants_when_getcogaavdesc_T01_type_null() throws Exception {
             var response = endpoints.getcogaavdesc("T01", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 

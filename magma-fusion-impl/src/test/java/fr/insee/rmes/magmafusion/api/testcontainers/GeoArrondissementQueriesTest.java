@@ -118,8 +118,8 @@ class GeoArrondissementQueriesTest extends TestContainer {
         }
 
         @Test
-        @DisplayName("When getcogarrdes 991 type null, returns 7 descendants (1 arrmu + 2 com + 1 comas + 2 comdel + 1 iris)")
-        void should_return_7_descendants_when_getcogarrdes_991_type_null() throws Exception {
+        @DisplayName("When getcogarrdes 991 type null, returns 8 descendants (1 arrmu + 2 com + 1 comas + 2 comdel + 1 iris + 1 qpv)")
+        void should_return_8_descendants_when_getcogarrdes_991_type_null() throws Exception {
             var response = endpoints.getcogarrdes("991", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 

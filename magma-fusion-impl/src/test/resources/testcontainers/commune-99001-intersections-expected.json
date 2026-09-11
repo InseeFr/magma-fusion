@@ -60,6 +60,16 @@
     "relation": "contient"
   },
   {
+    "code": "QN01001M",
+    "uri": "http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M",
+    "type": "QuartierPrioritaireDeLaPolitiqueDeLaVille2024",
+    "dateCreation": "2024-01-01",
+    "intituleSansArticle": "QPV test 1",
+    "typeArticle": "X",
+    "intitule": "QPV test 1",
+    "relation": "contient"
+  },
+  {
     "code": "T01",
     "uri": "http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01",
     "type": "AireDAttractionDesVilles2020",
