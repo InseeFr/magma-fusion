@@ -127,8 +127,8 @@ class GeoDepartementQueriesTest extends TestContainer {
         }
 
         @Test
-        @DisplayName("When getcogdepdesc 10 type null, returns 14 descendants (3 arr + 1 arrmu + 2 can + 2 cov + 3 com + 1 comas + 2 comdel)")
-        void should_return_14_descendants_when_getcogdepdesc_10_type_null() throws Exception {
+        @DisplayName("When getcogdepdesc 10 type null, returns 15 descendants (3 arr + 1 arrmu + 2 can + 2 cov + 3 com + 1 comas + 2 comdel + 1 iris)")
+        void should_return_15_descendants_when_getcogdepdesc_10_type_null() throws Exception {
             var response = endpoints.getcogdepdesc("10", LocalDate.of(2025, 1, 1), null, null);
             var result = response.getBody();
 

@@ -141,8 +141,8 @@ class GeoCommuneQueriesTest extends TestContainer {
     class GetCogComDesc {
 
         @Test
-        @DisplayName("When getcogcomdesc 99001 type null, returns 2 descendants (1 arrmu + 1 comas)")
-        void should_return_2_descendants_when_getcogcomdesc_99001_type_null() throws Exception {
+        @DisplayName("When getcogcomdesc 99001 type null, returns 3 descendants (1 arrmu + 1 comas + 1 iris)")
+        void should_return_3_descendants_when_getcogcomdesc_99001_type_null() throws Exception {
             var response = endpoints.getcogcomdesc("99001", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
@@ -158,9 +158,9 @@ class GeoCommuneQueriesTest extends TestContainer {
         }
 
         @Test
-        @DisplayName("When getcogcomdesc 99001 type Iris, returns 404")
-        void should_return_404_when_getcogcomdesc_99001_type_iris() throws Exception {
-            mockMvc.perform(get("/geo/commune/99001/descendants")
+        @DisplayName("When getcogcomdesc 99002 type Iris, returns 404")
+        void should_return_404_when_getcogcomdesc_99002_type_iris() throws Exception {
+            mockMvc.perform(get("/geo/commune/99002/descendants")
                             .param("date", "2025-01-01")
                             .param("type", String.valueOf(TypeEnumDescendantsCommune.IRIS)))
                     .andExpect(status().isNotFound());
@@ -310,8 +310,8 @@ class GeoCommuneQueriesTest extends TestContainer {
     class GetCogComIntersect {
 
         @Test
-        @DisplayName("When getcogcomintersect 99001 type null, returns 6 intersections")
-        void should_return_6_intersections_when_getcogcomintersect_99001_type_null() throws Exception {
+        @DisplayName("When getcogcomintersect 99001 type null, returns 7 intersections")
+        void should_return_7_intersections_when_getcogcomintersect_99001_type_null() throws Exception {
             var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 

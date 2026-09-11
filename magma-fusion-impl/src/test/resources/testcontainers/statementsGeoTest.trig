@@ -903,6 +903,36 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-098> a igeo:EvenementGeographique ;
     igeo:date "2010-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/territoire/test-territoire-99904> .
+
+  # =========================================================
+  #   IRIS test (descendant de commune 99001)
+  # =========================================================
+
+  <http://id.insee.fr/geo/iris/test-iris-990010101> a igeo:Iris ;
+    igeo:codeINSEE "990010101" ;
+    igeo:nom "Iris test 1" ;
+    igeo:nomSansArticle "Iris test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:typeDIRIS <http://id.insee.fr/codes/iris/type/H> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/iris/test-iris-990010101> owl:sameAs <http://id.insee.fr/geo/iris/990010101> .
+  <http://id.insee.fr/geo/iris/990010101> owl:sameAs <http://id.insee.fr/geo/iris/test-iris-990010101> .
+
+  # =========================================================
+  #   Relation Region -> Pays/france (pour filtre com=false)
+  # =========================================================
+
+  <http://id.insee.fr/geo/region/test-reg-99> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/pays/france> .
+
+  # =========================================================
+  #   Evenements IRIS
+  # =========================================================
+
+  # Evenement 095 : creation de l'IRIS 990010101 (2008-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-095> a igeo:EvenementGeographique ;
+    igeo:date "2008-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/iris/test-iris-990010101> .
 }
 
 <http://rdf.insee.fr/graphes/codes/cj> {

@@ -1,0 +1,65 @@
+[
+  {
+    "code": "10",
+    "uri": "http://id.insee.fr/geo/departement/test-dep-10",
+    "type": "Departement",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Departement test",
+    "typeArticle": "0",
+    "intitule": "Departement test"
+  },
+  {
+    "code": "7701",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7701",
+    "type": "CantonOuVille",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Canton-ou-ville test 1",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville test 1"
+  },
+  {
+    "code": "88001",
+    "uri": "http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001",
+    "type": "BassinDeVie2022",
+    "dateCreation": "2022-01-01",
+    "intituleSansArticle": "Bassin de vie test 1",
+    "typeArticle": "0",
+    "intitule": "Bassin de vie test 1"
+  },
+  {
+    "code": "99",
+    "uri": "http://id.insee.fr/geo/region/test-reg-99",
+    "type": "Region",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Region test",
+    "typeArticle": "0",
+    "intitule": "Region test"
+  },
+  {
+    "code": "99002",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99002",
+    "type": "Commune",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune test 2",
+    "typeArticle": "0",
+    "intitule": "Commune test 2"
+  },
+  {
+    "code": "991",
+    "uri": "http://id.insee.fr/geo/arrondissement/test-arr-991",
+    "type": "Arrondissement",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Arrondissement test 1",
+    "typeArticle": "0",
+    "intitule": "Arrondissement test 1"
+  },
+  {
+    "code": "T01",
+    "uri": "http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01",
+    "type": "AireDAttractionDesVilles2020",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Aire d attraction test 1",
+    "typeArticle": "0",
+    "intitule": "Aire d attraction test 1"
+  }
+]

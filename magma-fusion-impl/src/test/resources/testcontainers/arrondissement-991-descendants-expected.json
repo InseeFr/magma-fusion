@@ -52,5 +52,15 @@
     "intituleSansArticle": "Commune deleguee test 2",
     "typeArticle": "0",
     "intitule": "Commune deleguee test 2"
+  },
+  {
+    "code": "990010101",
+    "uri": "http://id.insee.fr/geo/iris/test-iris-990010101",
+    "type": "Iris",
+    "dateCreation": "2008-01-01",
+    "intituleSansArticle": "Iris test 1",
+    "typeArticle": "0",
+    "typeDIris": "H",
+    "intitule": "Iris test 1"
   }
 ]

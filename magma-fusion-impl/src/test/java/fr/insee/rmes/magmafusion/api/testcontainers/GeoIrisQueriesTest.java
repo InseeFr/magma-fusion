@@ -2,215 +2,202 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoIrisEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
-import fr.insee.rmes.magmafusion.model.Iris;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsIris;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
-
-public class GeoIrisQueriesTest extends TestContainer {
+class GeoIrisQueriesTest extends TestContainer {
 
     @Autowired
     GeoIrisEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
+    @Nested
+    @DisplayName("geo/iris/{code}")
+    class GetCogIris {
 
-    ////////////////////////////////////////////////////////////////////
-    ///                         geo/iris/ascendants                  ///
-    ////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogiris 990010101 (real IRIS), returns IRIS with typeDIris=H")
+        void should_return_real_iris_990010101_when_getcogiris() throws Exception {
+            var response = endpoints.getcogiris("990010101", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-//    geo/iris/010040101/ascendants?date=2025-09-04 (real Iris)
-    @Test
-    void should_return_11_territoires_when_IrisCodeAscendants_Code010040101_date20250904_typeNull(){
-        var response  = endpoints.getcogirisasc ("010040101", LocalDate.of(2025,9,4), null);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-990010101-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        assertAll(
-                () -> Assertions.assertEquals(11, result.size()),
-                () -> Assertions.assertEquals("243", resultItem1.getCode()),
-                () -> Assertions.assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/4af81671-0c2f-4547-a213-dff3f13531e2", resultItem1.getUri()),
-                () -> Assertions.assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
-                () -> Assertions.assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
-                () -> Assertions.assertEquals("Ambérieu-en-Bugey", resultItem1.getIntituleSansArticle()),
-                () -> Assertions.assertEquals(TerritoireTousAttributs.TypeArticleEnum._1 , resultItem1.getTypeArticle()),
-                () -> Assertions.assertEquals("Ambérieu-en-Bugey", resultItem1.getIntitule())
+        @Test
+        @DisplayName("When getcogiris 990020000 (faux-IRIS, commune non-irisee), returns commune as IRIS")
+        void should_return_faux_iris_990020000_when_getcogiris() throws Exception {
+            var response = endpoints.getcogiris("990020000", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-990020000-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogiris 990010000 (commune irisee + code 0000), returns 404")
+        void should_return_404_when_getcogiris_990010000_irisee_0000() throws Exception {
+            mockMvc.perform(get("/geo/iris/990010000")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("When getcogiris 990020101 (commune non-irisee + code non-0000), returns 404")
+        void should_return_404_when_getcogiris_990020101_non_irisee_non_0000() throws Exception {
+            mockMvc.perform(get("/geo/iris/990020101")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    //    geo/iris/010040101/ascendants?date=2025-09-04 (real Iris)
-    @Test
-    void should_return_1_arrondissement_when_IrisCodeAscendants_Code010040101_date20250904_typeArrondissement(){
-        var response  = endpoints.getcogirisasc ("010040101", LocalDate.of(2025,9,4), TypeEnumAscendantsIris.ARRONDISSEMENT);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
+    @Nested
+    @DisplayName("geo/iris/{code}/ascendants")
+    class GetCogIrisAsc {
 
-        assertAll(
-                () -> Assertions.assertEquals(1, result.size()),
-                () -> Assertions.assertEquals("011", resultItem1.getCode()),
-                () -> Assertions.assertEquals("http://id.insee.fr/geo/arrondissement/cc3aee67-96dc-4e9a-ae4e-26860a90e0d5", resultItem1.getUri()),
-                () -> Assertions.assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType()),
-                () -> Assertions.assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateCreation()),
-                () -> Assertions.assertEquals("Belley", resultItem1.getIntituleSansArticle()),
-                () -> Assertions.assertEquals(TerritoireTousAttributs.TypeArticleEnum._0 , resultItem1.getTypeArticle()),
-                () -> Assertions.assertEquals("01034" , resultItem1.getChefLieu()),
-                () -> Assertions.assertEquals("Belley", resultItem1.getIntitule())
+        @Test
+        @DisplayName("When getcogirisasc 990010101 (real IRIS) type null, returns 5 ascendants")
+        void should_return_5_ascendants_when_getcogirisasc_990010101_type_null() throws Exception {
+            var response = endpoints.getcogirisasc("990010101", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-990010101-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogirisasc 990010101 (real IRIS) type Arrondissement, returns 1 arrondissement")
+        void should_return_1_arrondissement_when_getcogirisasc_990010101() throws Exception {
+            var response = endpoints.getcogirisasc("990010101", LocalDate.of(2025, 1, 1), TypeEnumAscendantsIris.ARRONDISSEMENT);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-990010101-ascendants-arrondissement-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogirisasc 990020000 (faux-IRIS) type null, returns 7 ascendants")
+        void should_return_7_ascendants_when_getcogirisasc_990020000_type_null() throws Exception {
+            var response = endpoints.getcogirisasc("990020000", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-990020000-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogirisasc 990020000 (faux-IRIS) type Arrondissement, returns 1 arrondissement")
+        void should_return_1_arrondissement_when_getcogirisasc_990020000() throws Exception {
+            var response = endpoints.getcogirisasc("990020000", LocalDate.of(2025, 1, 1), TypeEnumAscendantsIris.ARRONDISSEMENT);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-990020000-ascendants-arrondissement-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    //    geo/iris/010050000/ascendants?date=2025-09-04 (= false-Iris = non irised commune)
-    @Test
-    void should_return_10_territoires_when_IrisCodeAscendants_Code010050000_date20250904_typeNull(){
-        var response  = endpoints.getcogirisasc ("010050000", LocalDate.of(2025,9,4), null);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
+    @Nested
+    @DisplayName("geo/iris")
+    class GetCogIrisList {
 
-        assertAll(
-                () -> Assertions.assertEquals(10, result.size()),
-                () -> Assertions.assertEquals("002", resultItem1.getCode()),
-                () -> Assertions.assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/7f3934bb-4333-40bf-9753-875b0ecb8829", resultItem1.getUri()),
-                () -> Assertions.assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
-                () -> Assertions.assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
-                () -> Assertions.assertEquals("Lyon", resultItem1.getIntituleSansArticle()),
-                () -> Assertions.assertEquals(TerritoireTousAttributs.TypeArticleEnum._0 , resultItem1.getTypeArticle()),
-                () -> Assertions.assertEquals("Lyon", resultItem1.getIntitule())
+        @Test
+        @DisplayName("When getcogirislist com=false (default), returns 3 entries (1 real iris + 2 faux-iris)")
+        void should_return_3_entries_when_getcogirislist_com_false() throws Exception {
+            var response = endpoints.getcogirislist(LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-        );
-    }
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-liste-com-false-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-    //    geo/iris/010050000/ascendants?date=2025-09-04?type=arrondissement (false-Iris)
-    @Test
-    void should_return_1_arrondissement_when_IrisCodeAscendants_Code010050000_date20250904_typeArrondissement(){
-        var response  = endpoints.getcogirisasc ("010050000", LocalDate.of(2025,9,4), TypeEnumAscendantsIris.ARRONDISSEMENT);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
+        @Test
+        @DisplayName("When getcogirislist com=true, returns 5 entries (1 real iris + 4 faux-iris)")
+        void should_return_5_entries_when_getcogirislist_com_true() throws Exception {
+            var response = endpoints.getcogirislist(LocalDate.of(2025, 1, 1), true);
+            var result = response.getBody();
 
-        assertAll(
-                () -> Assertions.assertEquals(1, result.size()),
-                () -> Assertions.assertEquals("012", resultItem1.getCode()),
-                () -> Assertions.assertEquals("http://id.insee.fr/geo/arrondissement/34ccfd7d-aeeb-4c1d-ae46-c989a82d05b0", resultItem1.getUri()),
-                () -> Assertions.assertEquals(TypeEnum.ARRONDISSEMENT, resultItem1.getType()),
-                () -> Assertions.assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateCreation()),
-                () -> Assertions.assertEquals("Bourg-en-Bresse", resultItem1.getIntituleSansArticle()),
-                () -> Assertions.assertEquals(TerritoireTousAttributs.TypeArticleEnum._0 , resultItem1.getTypeArticle()),
-                () -> Assertions.assertEquals("Bourg-en-Bresse", resultItem1.getIntitule())
-
-        );
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    ///                         geo/iris/{code}                      ///
-    ////////////////////////////////////////////////////////////////////
-
-//  geo/iris/010040101?date=2025-09-04 (hasIrisDescendant = true, does not end with 0000)
-    @Test
-    void should_return_irisCode_010040101_when_code010040101_date20250904() {
-        var response  = endpoints.getcogiris("010040101", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertAll(
-                () -> assertEquals("010040101", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/iris/b8c772de-9551-4f13-81c5-eca5bb0f2f7d", result.getUri()),
-                () -> assertEquals(TypeEnum.IRIS, result.getType()),
-                () -> assertEquals(LocalDate.of(2008,1,1), result.getDateCreation()),
-                () -> assertEquals("H", result.getTypeDIris()),
-                () -> assertEquals("Pérouses-Triangle d'Activités", result.getIntituleSansArticle()),
-                () -> assertEquals(Iris.TypeArticleEnum._4, result.getTypeArticle()),
-                () -> assertEquals("Les Pérouses-Triangle d'Activités", result.getIntitule())
-        );
-    }
-
-//  geo/iris/010020000?date=2025-09-04 (hasIrisDescendant = false, ends with 0000)
-    @Test
-    void should_return_irisCode_010020000_when_code010020000_date20250904() {
-        var response  = endpoints.getcogiris("010020000", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertAll(
-                () -> assertEquals("010020000", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/43018c68-c278-433a-b285-3531e8d5347e", result.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, result.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), result.getDateCreation()),
-                () -> assertEquals("Abergement-de-Varey", result.getIntituleSansArticle()),
-                () -> assertEquals(Iris.TypeArticleEnum._5, result.getTypeArticle()),
-                () -> assertEquals("L'Abergement-de-Varey", result.getIntitule())
-        );
-    }
-
-//  geo/iris/010040000?date=2025-09-04 (hasIrisDescendant = true, ends with 0000)
-    @Test
-    void should_return_404_when_code010040000_date20250904() throws Exception {
-        mockMvc.perform(get("/geo/iris/010040000")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isNotFound());
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    ///                         geo/iris                             ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/iris?date=2025-09-04
-    @Test
-    void should_return_49343_territoires_when_Iris_date20250904(){
-        var response  = endpoints.getcogirislist (LocalDate.of(2025,9,4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(49343, result.size()),
-                () -> assertEquals("010010000", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/166857ef-114f-4067-9d3d-f712562850c5", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Abergement-Clémenciat", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._5 , resultItem1.getTypeArticle()),
-                () -> assertEquals("L'Abergement-Clémenciat", resultItem1.getIntitule())
-
-        );
-    }
-
-//    geo/iris?date=2025-09-04&com=true
-    @Test
-    void should_return_49444_territoires_when_Iris_date20250904_comTrue(){
-        var response  = endpoints.getcogirislist (LocalDate.of(2025,9,4), true);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(49444, result.size()),
-                () -> assertEquals("010010000", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/166857ef-114f-4067-9d3d-f712562850c5", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Abergement-Clémenciat", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._5 , resultItem1.getTypeArticle()),
-                () -> assertEquals("L'Abergement-Clémenciat", resultItem1.getIntitule())
-
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/iris-liste-com-true-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 }
