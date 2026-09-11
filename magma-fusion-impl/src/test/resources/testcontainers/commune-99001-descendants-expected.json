@@ -1,0 +1,39 @@
+[
+  {
+    "code": "75101",
+    "uri": "http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101",
+    "type": "ArrondissementMunicipal",
+    "dateCreation": "2010-01-01",
+    "intituleSansArticle": "Arrondissement municipal test 1",
+    "typeArticle": "0",
+    "intitule": "Arrondissement municipal test 1"
+  },
+  {
+    "code": "99101",
+    "uri": "http://id.insee.fr/geo/communeAssociee/test-comas-99101",
+    "type": "CommuneAssociee",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune associee test 1",
+    "typeArticle": "0",
+    "intitule": "Commune associee test 1"
+  },
+  {
+    "code": "990010101",
+    "uri": "http://id.insee.fr/geo/iris/test-iris-990010101",
+    "type": "Iris",
+    "dateCreation": "2008-01-01",
+    "intituleSansArticle": "Iris test 1",
+    "typeArticle": "0",
+    "typeDIris": "H",
+    "intitule": "Iris test 1"
+  },
+  {
+    "code": "QN01001M",
+    "uri": "http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M",
+    "type": "QuartierPrioritaireDeLaPolitiqueDeLaVille2024",
+    "dateCreation": "2024-01-01",
+    "intituleSansArticle": "QPV test 1",
+    "typeArticle": "X",
+    "intitule": "QPV test 1"
+  }
+]

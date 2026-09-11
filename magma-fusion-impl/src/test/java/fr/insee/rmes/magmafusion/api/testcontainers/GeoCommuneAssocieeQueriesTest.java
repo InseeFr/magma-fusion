@@ -1,155 +1,144 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoCommuneAssocieeEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magmafusion.model.*;
-import org.junit.jupiter.api.Assertions;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
+import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCommuneAssociee;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
+class GeoCommuneAssocieeQueriesTest extends TestContainer {
 
+    @Autowired
+    GeoCommuneAssocieeEndpoints endpoints;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-public class GeoCommuneAssocieeQueriesTest extends TestcontainerTestDiffusion {
-    
-        @Autowired
-        GeoCommuneAssocieeEndpoints endpoints;
-        @Autowired
-        private MockMvc mockMvc;
+    @Nested
+    @DisplayName("geo/communeAssociee/{code}")
+    class GetCogComA {
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/communeAssociee/{code}/ascendants                  ///
-    /////////////////////////////////////////////////////////////////////
-
-    //   geo/communeAssociee/59355/ascendants?date=2025-09-04 : renvoie 10 territoires
-    @Test
-    void should_return_10_territoires_when_CommuneAssocieeCodeAscendants_code59355_date20250904_typeNull(){
-        var response  = endpoints.getcogcomaasc("59355", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(10, result.size()),
-                () -> assertEquals("004", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/83109274-b915-41be-a7b6-0e09a0a625c1", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Lille (partie française)", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Lille (partie française)", resultItem1.getIntitule())
-        );
-    }
-
-
-//   geo/communeAssociee/59355/ascendants?date=2025-09-04&type=Departement : renvoie 1 territoire
-@Test
-void should_return_1_departement_when_CommuneAssocieesCodeAscendants_code59355_date20250904_typeDepartement(){
-    var response  = endpoints.getcogcomaasc("59355", LocalDate.of(2025, 9, 4), TypeEnumAscendantsCommuneAssociee.DEPARTEMENT);
-    var result = response.getBody();
-    Assertions.assertNotNull(result);
-    var resultItem1= result.getFirst();
-    assertAll(
-            () -> assertEquals(1, result.size()),
-            () -> assertEquals("59", resultItem1.getCode()),
-            () -> assertEquals("http://id.insee.fr/geo/departement/1cabcdea-d4dc-4df1-96c2-ed1db0fa594c", resultItem1.getUri()),
-            () -> assertEquals(TypeEnum.DEPARTEMENT, resultItem1.getType()),
-            () -> assertEquals(LocalDate.of(1973,9,1), resultItem1.getDateCreation()),
-            () -> assertEquals("Nord", resultItem1.getIntituleSansArticle()),
-            () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._2, resultItem1.getTypeArticle()),
-            () -> assertEquals("59350", resultItem1.getChefLieu()),
-            () -> assertEquals("Nord", resultItem1.getIntitule())
-    );
-}
-
-
-        /////////////////////////////////////////////////////////////////////
-        ///        geo/communeAssociee/{code}                     ///
-        /////////////////////////////////////////////////////////////////////
-
-//    geo/communeAssociee/59355?date=2025-09-04
         @Test
-        void should_return_communeCode_59355_when_code59355_date20250904() {
-            var response  = endpoints.getcogcoma("59355", LocalDate.of(2025, 9, 4));
+        @DisplayName("When getcogcoma 99101, returns commune associee 99101")
+        void should_return_commune_associee_99101_when_getcogcoma_99101() throws Exception {
+            var response = endpoints.getcogcoma("99101", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
-            Assertions.assertNotNull(result);
-            assertAll(
-                () -> assertEquals("59355", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/communeAssociee/84564ad2-a211-4744-9e01-1bb1900e2e68", result.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE_ASSOCIEE, result.getType()),
-                () -> assertEquals(LocalDate.of(2000,2,27), result.getDateCreation()),
-                () -> assertEquals("Lomme", result.getIntituleSansArticle()),
-                () -> assertEquals(CommuneAssociee.TypeArticleEnum._0, result.getTypeArticle()),
-                () -> assertEquals("Lomme", result.getIntitule())
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-associee-99101-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
             );
+            JSONAssert.assertEquals(expected, data, true);
         }
 
-
-//    geo/communeAssociee/69392?date=2025-09-04 renvoie 404
-    @Test
-    void should_return_404_when_CommuneAssocieeCode_code69392_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/communeAssociee/69392")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isNotFound());
+        @Test
+        @DisplayName("When getcogcoma 99100 (inexistant), returns 404")
+        void should_return_404_when_getcogcoma_99100_inexistant() throws Exception {
+            mockMvc.perform(get("/geo/communeAssociee/99100")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
+    @Nested
+    @DisplayName("geo/communeAssociee/{code}/ascendants")
+    class GetCogComAAsc {
 
-
-        ////////////////////////////////////////////////////////////////////
-        ///        geo/communesAssociees                         ///
-        ////////////////////////////////////////////////////////////////////
-
-//    geo/communesAssociees?date=2025-09-04//
         @Test
-        void should_return_475_communesAssociees_when_CommunesAssociees_date20250904() {
-            var response  = endpoints.getcogcomaliste("2025-09-04");
+        @DisplayName("When getcogcomaasc 99101 type null, returns 5 ascendants (aav T01, arr 991, com 99001, dep 10, reg 99)")
+        void should_return_5_ascendants_when_getcogcomaasc_99101_type_null() throws Exception {
+            var response = endpoints.getcogcomaasc("99101", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
-            Assertions.assertNotNull(result);
-            var resultItem1= result.getFirst();
 
-            assertAll(
-                    () -> assertEquals(475, result.size()),
-                    () -> assertEquals("01120", resultItem1.getCode()),
-                    () -> assertEquals("http://id.insee.fr/geo/communeAssociee/2c8fa8e3-dc3b-4b8a-907a-82e4d07bce2c", resultItem1.getUri()),
-                    () -> assertEquals(TypeEnum.COMMUNE_ASSOCIEE, resultItem1.getType()),
-                    () -> assertEquals(LocalDate.of(1973,1,1), resultItem1.getDateCreation()),
-                    () -> assertEquals("Cordieux", resultItem1.getIntituleSansArticle()),
-                    () -> assertEquals(CommuneAssociee.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                    () -> assertEquals("Cordieux", resultItem1.getIntitule())
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-associee-99101-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
             );
+            JSONAssert.assertEquals(expected, data, true);
         }
 
+        @Test
+        @DisplayName("When getcogcomaasc 99101 type Departement, returns 1 departement")
+        void should_return_1_departement_when_getcogcomaasc_99101_type_departement() throws Exception {
+            var response = endpoints.getcogcomaasc("99101", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommuneAssociee.DEPARTEMENT);
+            var result = response.getBody();
 
-//    geo/communesAssociees?date=*
-    @Test
-    void should_return_1046_communesAssociees_when_CommunesAssociees_dateEtoile(){
-        var response  = endpoints.getcogcomaliste ("*");
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1046, result.size());
-        assertAll(
-                () -> assertEquals("01003", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/communeAssociee/b86253e9-d7b0-46cf-81ae-e940ad457a85", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE_ASSOCIEE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1974,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(1983,1,1), resultItem1.getDateSuppression()),
-                () -> assertEquals("Amareins", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(CommuneAssociee.TypeArticleEnum._1, resultItem1.getTypeArticle()),
-                () -> assertEquals("Amareins", resultItem1.getIntitule())
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/commune-associee-99101-ascendants-departement-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
+    @Nested
+    @DisplayName("geo/communesAssociees")
+    class GetCogComAListe {
+
+        @Test
+        @DisplayName("When getcogcomaliste date=2025-01-01, returns 1 commune associee active (99101)")
+        void should_return_1_commune_associee_when_getcogcomaliste_date() throws Exception {
+            var response = endpoints.getcogcomaliste("2025-01-01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/communes-associees-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
+
+        @Test
+        @DisplayName("When getcogcomaliste date=*, returns 2 communes associees (99101, 99102)")
+        void should_return_2_communes_associees_when_getcogcomaliste_etoile() throws Exception {
+            var response = endpoints.getcogcomaliste("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/communes-associees-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
+    }
 }

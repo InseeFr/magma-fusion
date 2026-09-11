@@ -1,0 +1,11 @@
+[
+  {
+    "code": "9901",
+    "uri": "http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901",
+    "type": "ZoneDEmploi2020",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Zone d emploi test 1",
+    "typeArticle": "0",
+    "intitule": "Zone d emploi test 1"
+  }
+]

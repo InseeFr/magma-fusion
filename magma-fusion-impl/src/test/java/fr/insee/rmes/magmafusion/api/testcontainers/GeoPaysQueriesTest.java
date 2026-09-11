@@ -1,190 +1,197 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoPaysEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
+import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsPays;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-
-public class GeoPaysQueriesTest extends TestcontainerTestDiffusion {
+class GeoPaysQueriesTest extends TestContainer {
 
     @Autowired
     GeoPaysEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/pays/{code}                                ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/pays/{code}")
+    class GetCogPays {
 
-//    geo/pays/99132?date=2025-09-04
-    @Test
-    void should_return_Pays99132_when_PaysCode_code99132_date20250904(){
-        var response  = endpoints.getcogpays("99132", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertAll(
-                () -> assertEquals("99132", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/pays/7c3380f3-897b-4470-a12f-2ae3b61fe4d0", result.getUri()),
-                () -> assertEquals(TypeEnum.PAYS, result.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), result.getDateCreation()),
-                () -> assertEquals("Royaume-Uni", result.getIntitule()),
-                () -> assertEquals("Royaume-Uni de Grande-Bretagne et d’Irlande du Nord", result.getIntituleComplet()),
-                () -> assertEquals("GB", result.getIso3166alpha2()),
-                () -> assertEquals("GBR", result.getIso3166alpha3()),
-                () -> assertEquals("826", result.getIso3166num())
-        );
+        @Test
+        @DisplayName("When getcogpays 99901, returns pays 99901")
+        void should_return_pays_99901_when_getcogpays() throws Exception {
+            var response = endpoints.getcogpays("99901", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/pays-99901-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogpays 99999 (inexistant), returns 404")
+        void should_return_404_when_getcogpays_99999_inexistant() {
+            var response = endpoints.getcogpays("99999", LocalDate.of(2025, 1, 1));
+            assertNotNull(response);
+            assert response.getStatusCode().value() == 404;
+        }
     }
 
-    //    geo/pays/99000?date=2025-09-04
-    @Test
-    void should_return_404_when_PaysCode_code99000_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/pays/99000")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("geo/pays/{code}/descendants")
+    class GetCogPaysDes {
+
+        @Test
+        @DisplayName("When getcogpaysdesc 99901 type null, returns 1 territoire")
+        void should_return_1_territoire_when_getcogpaysdesc_99901_type_null() throws Exception {
+            var response = endpoints.getcogpaysdesc("99901", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/pays-99901-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogpaysdesc 99901 type Territoire, returns 1 territoire")
+        void should_return_1_territoire_when_getcogpaysdesc_99901_type_territoire() throws Exception {
+            var response = endpoints.getcogpaysdesc("99901", LocalDate.of(2025, 1, 1), TypeEnumDescendantsPays.TERRITOIRE);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/pays-99901-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogpaysdesc type Region, returns 400")
+        void should_return_400_when_getcogpaysdesc_type_region() throws Exception {
+            mockMvc.perform(get("/geo/pays/99901/descendants")
+                            .param("date", "2025-01-01")
+                            .param("type", "Region"))
+                    .andExpect(status().isBadRequest());
+        }
     }
 
-    ////////////////////////////////////////////////////////////////////
-    ///                  geo/pays/descendants                    ///
-    ////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/pays")
+    class GetCogPaysListe {
 
-//    geo/pays/99132/descendants?date=2025-09-04
-    @Test
-    void should_return_7_territoires_when_PaysCodeDescendants_code99132_date20250904_typeNull() {
-        var response  = endpoints.getcogpaysdesc("99132", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(7, result.size());
-        assertAll(
-                () -> assertEquals("99133", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/territoire/1af281f6-f58a-4197-a40c-3c1514ebd9c5", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.TERRITOIRE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1964,9,21), resultItem1.getDateCreation()),
-                () -> assertEquals("Territoires britanniques en Méditerranée", resultItem1.getIntitule()),
-                () -> assertEquals("Gibraltar, Akrotiri et Dhekelia", resultItem1.getIntituleComplet())
-        );
+        @Test
+        @DisplayName("When getcogpayslist date=2025-01-01, returns 1 pays actif")
+        void should_return_1_pays_when_getcogpayslist_date() throws Exception {
+            var response = endpoints.getcogpayslist("2025-01-01");
+            var result = response.getBody();
 
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/pays-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogpayslist date=*, returns 2 pays (historique)")
+        void should_return_2_pays_when_getcogpayslist_etoile() throws Exception {
+            var response = endpoints.getcogpayslist("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/pays-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-//    geo/pays/99132/descendants?date=2025-09-04&type=Region - only Territoire is authorized for type
-    @Test
-    void should_return_400_when_PaysCodeDescendants_code99000_date20250904_typeRegion() throws Exception{
-        mockMvc.perform(get("/geo/pays/99000/descendants")
-                        .param("date", "2025-09-01")
-                        .param("type", "Region"))
-                .andExpect(status().isBadRequest());
+    @Nested
+    @DisplayName("geo/pays/{code}/precedents")
+    class GetCogPaysPrec {
+
+        @Test
+        @DisplayName("When getcogpaysprec 99901, returns 1 precedent (99902)")
+        void should_return_1_precedent_when_getcogpaysprec_99901() throws Exception {
+            var response = endpoints.getcogpaysprec("99901", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/pays-99901-precedents-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    ////////////////////////////////////////////////////////////////////
-    ///                  geo/pays                                    ///
-    ////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/pays/{code}/suivants")
+    class GetCogPaysSuiv {
 
-//    geo/pays?date=2025-09-04
-    @Test
-    void should_return_196_pays_when_Pays_date20250904() {
-        var response  = endpoints.getcogpayslist("2025-09-04");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(196, result.size());
-        assertAll(
-                () -> assertEquals("99100", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/pays/b7e3f0c9-b653-4a3e-904a-de63b80e108b", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("France", resultItem1.getIntitule()),
-                () -> assertEquals("République française", resultItem1.getIntituleComplet()),
-                () -> assertEquals("FR", resultItem1.getIso3166alpha2()),
-                () -> assertEquals("FRA", resultItem1.getIso3166alpha3()),
-                () -> assertEquals("250", resultItem1.getIso3166num())
-        );
+        @Test
+        @DisplayName("When getcogpayssuiv 99902, returns 1 suivant (99901)")
+        void should_return_1_suivant_when_getcogpayssuiv_99902() throws Exception {
+            var response = endpoints.getcogpayssuiv("99902", LocalDate.of(2005, 1, 1));
+            var result = response.getBody();
 
-    }
-
-//    geo/pays?date=*
-    @Test
-    void should_return_343_pays_when_Pays_dateEtoile(){
-        var response  = endpoints.getcogpayslist ("*");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(343, result.size()),
-                () -> assertEquals("99100", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/pays/b7e3f0c9-b653-4a3e-904a-de63b80e108b", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("France", resultItem1.getIntitule()),
-                () -> assertEquals("République française", resultItem1.getIntituleComplet()),
-                () -> assertEquals("FR", resultItem1.getIso3166alpha2()),
-                () -> assertEquals("FRA", resultItem1.getIso3166alpha3()),
-                () -> assertEquals("250", resultItem1.getIso3166num())
-        );
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    ///                  geo/pays/precedents                         ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/pays/99309/descendants?date=1965-01-01
-    @Test
-    void should_return_2_pays_when_PaysCodePrecedents_code99309_date19650101() {
-        var response  = endpoints.getcogpaysprec("99309", LocalDate.of(1965, 1, 1));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2, result.size());
-        assertAll(
-                () -> assertEquals("99309", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/pays/aed778dc-3f9e-467d-a7c2-c875a12cb44d", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1962,12,9), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(1964,4,26), resultItem1.getDateSuppression()),
-                () -> assertEquals("Tanganyika", resultItem1.getIntitule()),
-                () -> assertEquals("République du Tanganyika", resultItem1.getIntituleComplet())
-        );
-
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    ///                  geo/pays/suivants                           ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/pays/99121/suivants?date=1950-01-01
-    @Test
-    void should_return_3_pays_when_PaysCodeSuivants_code99121_date19500101() {
-        var response  = endpoints.getcogpayssuiv("99121", LocalDate.of(1950, 1, 1));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(3, result.size());
-        assertAll(
-                () -> assertEquals("99119", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/pays/0b0d2b49-54a2-4d6c-be48-8900c905eaaa", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.PAYS, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1991,6,25), resultItem1.getDateCreation()),
-                () -> assertEquals("Croatie", resultItem1.getIntitule()),
-                () -> assertEquals("République de Croatie", resultItem1.getIntituleComplet()),
-                () -> assertEquals("HR", resultItem1.getIso3166alpha2()),
-                () -> assertEquals("HRV", resultItem1.getIso3166alpha3()),
-                () -> assertEquals("191", resultItem1.getIso3166num())
-        );
-
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/pays-99902-suivants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 }

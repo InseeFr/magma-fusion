@@ -1,252 +1,227 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoIntercommunaliteEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
-import fr.insee.rmes.magmafusion.model.Intercommunalite;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsIntercommunalite;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-
-public class GeoIntercommunaliteQueriesTest extends TestcontainerTestDiffusion {
+class GeoIntercommunaliteQueriesTest extends TestContainer {
 
     @Autowired
     GeoIntercommunaliteEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    ////////////////////////////////////////////////////////////////////
-    ///                geo/intercommunalite/{code}/precedents        ///
-    ////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/intercommunalite/{code}")
+    class GetCogInterco {
 
-//    geo/intercommunalite/200046977/precedents?date=2025-09-04
-    @Test
-    void should_return_1_intercommunalite_when_intercommunaliteCodePrecedents_date20250904(){
-        var response  = endpoints.getcogintercoprec ("200046977", LocalDate.of(2025,9,4));
-        var result = response.getBody();
-        Assertions.assertNotNull(result);
-        var resultItem1= result.getFirst();
+        @Test
+        @DisplayName("When getcoginterco 999000001, returns intercommunalite 999000001")
+        void should_return_intercommunalite_999000001_when_getcoginterco() throws Exception {
+            var response = endpoints.getcoginterco("999000001", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("246900245", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/intercommunalite/831d6a01-3f71-47a0-940b-04df167053c1", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2014,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(2015,1,1), resultItem1.getDateSuppression()),
-                () -> assertEquals("Lyon (Grand Lyon)", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0 , resultItem1.getTypeArticle()),
-                () -> assertEquals("Communauté urbaine de Lyon (Grand Lyon)", resultItem1.getIntituleComplet()),
-                () -> assertEquals("Communauté urbaine", resultItem1.getCategorieJuridique()),
-                () -> assertEquals("Lyon (Grand Lyon)", resultItem1.getIntitule())
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-999000001-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        );
+        @Test
+        @DisplayName("When getcoginterco 999000099 (inexistant), returns 404")
+        void should_return_404_when_getcoginterco_999000099_inexistant() {
+            var response = endpoints.getcoginterco("999000099", LocalDate.of(2025, 1, 1));
+            assertNotNull(response);
+            assert response.getStatusCode().value() == 404;
+        }
     }
 
+    @Nested
+    @DisplayName("geo/intercommunalite/{code}/descendants")
+    class GetCogIntercoDes {
 
-    ////////////////////////////////////////////////////////////////////
-    ///                geo/intercommunalite/{code}                   ///
-    ////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogintercodes 999000001 type null, returns 2 descendants (2 communes)")
+        void should_return_2_descendants_when_getcogintercodes_999000001_type_null() throws Exception {
+            var response = endpoints.getcogintercodes("999000001", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-//    geo/intercommunalite/240100883?date=2025-09-04
-    @Test
-    void should_return_intercommunalite240100883_when_IntercommunaliteCode_code240100883_date20250904(){
-        var response  = endpoints.getcoginterco ("240100883", LocalDate.of(2025,9,4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertAll(
-                () -> assertEquals("240100883", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/intercommunalite/5a238840-5cbd-469f-80c8-43713bf8e4a8", result.getUri()),
-                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, result.getType()),
-                () -> assertEquals(LocalDate.of(2017,1,1), result.getDateCreation()),
-                () -> assertEquals("Plaine de l'Ain", result.getIntituleSansArticle()),
-                () -> assertEquals(Intercommunalite.TypeArticleEnum._3, result.getTypeArticle()),
-                () -> assertEquals("Communauté de communes de La Plaine de l'Ain", result.getIntituleComplet()),
-                () -> assertEquals("Communauté de communes", result.getCategorieJuridique()),
-                () -> assertEquals("La Plaine de l'Ain", result.getIntitule())
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-999000001-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        );
+        @Test
+        @DisplayName("When getcogintercodes 999000001 type Commune, returns 2 communes")
+        void should_return_2_communes_when_getcogintercodes_999000001_type_commune() throws Exception {
+            var response = endpoints.getcogintercodes("999000001", LocalDate.of(2025, 1, 1), TypeEnumDescendantsIntercommunalite.COMMUNE);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-999000001-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    ////////////////////////////////////////////////////////////////////
-    ///                geo/intercommunalite/{code}/descendants       ///
-    ////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/intercommunalites")
+    class GetCogIntercoListe {
 
-//    geo/intercommunalite/200000438/descendants?date=2025-09-04
-    @Test
-    void should_return_11_territoires_when_IntercommunaliteCodeDescendants_code200000438_date20250904_typeNull(){
-        var response  = endpoints.getcogintercodes("200000438", LocalDate.of(2025,9,4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(11, result.size());
-        assertAll(
-                () -> assertEquals("44050", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/b1b6ffdd-2493-485f-9da2-ff640677adc3", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Crossac", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Crossac", resultItem1.getIntitule())
+        @Test
+        @DisplayName("When getcogintercoliste date=2025-01-01 filtreNom='Intercommunalite test 1', returns 1 intercommunalite")
+        void should_return_1_intercommunalite_when_getcogintercoliste_date_filtreNom() throws Exception {
+            var response = endpoints.getcogintercoliste("2025-01-01", "Intercommunalite test 1");
+            var result = response.getBody();
 
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogintercoliste date=* filtreNom='Intercommunalite test', returns 2 intercommunalites (historique)")
+        void should_return_2_intercommunalites_when_getcogintercoliste_etoile_filtreNom() throws Exception {
+            var response = endpoints.getcogintercoliste("*", "Intercommunalite test");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    //    geo/intercommunalite/200000438/descendants?date=2025-09-04&type=IRIS
-    @Test
-    void should_return_2_territoires_when_IntercommunaliteCodeDescendants_code200000438_date20250904_typeIris(){
-        var response  = endpoints.getcogintercodes("200000438", LocalDate.of(2025,9,4), TypeEnumDescendantsIntercommunalite.IRIS);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2, result.size());
-        assertAll(
-                () -> assertEquals("441290101", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/iris/3394e3ae-bce6-44c4-ac19-190acdaa6a2d", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.IRIS, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2008,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("H", resultItem1.getTypeDIris()),
-                () -> assertEquals("Agglomération", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum.X, resultItem1.getTypeArticle()),//en prod : X, mais la log veut 0
-                () -> assertEquals("Agglomération", resultItem1.getIntitule())
+    @Nested
+    @DisplayName("geo/intercommunalite/{code}/precedents")
+    class GetCogIntercoPrec {
 
-        );
+        @Test
+        @DisplayName("When getcogintercoprec 999000001, returns 1 precedent (999000002)")
+        void should_return_1_precedent_when_getcogintercoprec_999000001() throws Exception {
+            var response = endpoints.getcogintercoprec("999000001", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-999000001-precedents-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
+    @Nested
+    @DisplayName("geo/intercommunalite/{code}/suivants")
+    class GetCogIntercoSuiv {
 
-    ////////////////////////////////////////////////////////////////////
-    ///                  geo/intercommunalites                       ///
-    ////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogintercosuiv 999000002, returns 1 suivant (999000001)")
+        void should_return_1_suivant_when_getcogintercosuiv_999000002() throws Exception {
+            var response = endpoints.getcogintercosuiv("999000002", LocalDate.of(2005, 1, 1));
+            var result = response.getBody();
 
-//    geo/intercommunalites?date=2025-09-04&filtreNom=Bonnay&com=false//
-    @Test
-    void should_return_1_intercommunalite_when_Intercommunalites_date20250904_filtreNomPlaineDeLAin() {
-        var response  = endpoints.getcogintercoliste("2025-09-04", "Plaine de l'Ain");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("240100883", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/intercommunalite/5a238840-5cbd-469f-80c8-43713bf8e4a8", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Plaine de l'Ain", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(Intercommunalite.TypeArticleEnum._3, resultItem1.getTypeArticle()),
-                () -> assertEquals("Communauté de communes de La Plaine de l'Ain", resultItem1.getIntituleComplet()),
-                () -> assertEquals("Communauté de communes", resultItem1.getCategorieJuridique()),
-                () -> assertEquals("La Plaine de l'Ain", resultItem1.getIntitule())
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-999000002-suivants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    //    geo/intercommunalites?date=*filtreNom=Bonnay&com=false//
-    @Test
-    void should_return_2_intercommunalite_when_Intercommunalites_dateEtoile_filtreNomPlaineDeLAin() {
-        var response  = endpoints.getcogintercoliste("*", "Plaine de l'Ain");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
+    @Nested
+    @DisplayName("geo/intercommunalite/{code}/projetes")
+    class GetCogIntercoProj {
 
-        assertAll(
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("240100883", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/intercommunalite/da6087eb-5061-4d99-82c4-03ae9ef5334f", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2008,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(2017,1,1), resultItem1.getDateSuppression()),
-                () -> assertEquals("Plaine de l'Ain", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(Intercommunalite.TypeArticleEnum._3, resultItem1.getTypeArticle()),
-                () -> assertEquals("Communauté de communes de La Plaine de l'Ain", resultItem1.getIntituleComplet()),
-                () -> assertEquals("Communauté de communes", resultItem1.getCategorieJuridique()),
-                () -> assertEquals("La Plaine de l'Ain", resultItem1.getIntitule())
-        );
-    }
+        @Test
+        @DisplayName("When getcogintercoproj 999000001 dateProjection=2005-01-01, returns 1 projete (999000002)")
+        void should_return_1_projete_when_getcogintercoproj_999000001() throws Exception {
+            var response = endpoints.getcogintercoproj("999000001", LocalDate.of(2005, 1, 1), LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-    ////////////////////////////////////////////////////////////////////
-    ///                  geo/intercommunalite/{code}/projetes        ///
-    ////////////////////////////////////////////////////////////////////
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/intercommunalite-999000001-projetes-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-//    geo/intercommunalite/200046977/projetes?date=2025-09-04&dateProjection=2013-01-01
-    @Test
-    void should_return_1_intercommunalite_when_IntercommunalitesCodeProjetes_date20250904_dateProjection20130101() {
-        var response  = endpoints.getcogintercoproj("200046977", LocalDate.of(2013,1,1), LocalDate.of(2025,9,4));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
+        @Test
+        @DisplayName("When getcogintercoproj dateProjection null, returns 400")
+        void should_return_400_when_getcogintercoproj_dateProjection_null() throws Exception {
+            mockMvc.perform(get("/geo/intercommunalite/999000001/projetes")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
 
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("246900245", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/intercommunalite/3e9c401d-ba60-4640-97d4-a3c2f024c59d", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2011,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(2014,1,1), resultItem1.getDateSuppression()),
-                () -> assertEquals("Lyon (Grand Lyon)", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Communauté urbaine de Lyon (Grand Lyon)", resultItem1.getIntituleComplet()),
-                () -> assertEquals("Communauté urbaine", resultItem1.getCategorieJuridique()),
-                () -> assertEquals("Lyon (Grand Lyon)", resultItem1.getIntitule())
-        );
-    }
-
-    //    geo/intercommunalite/200046977/projetes?date=2025-09-01
-    @Test
-    void should_return_400_when_IntercommunaliteCodeProjetes_dateProjectionNull() throws Exception{
-        mockMvc.perform(get("/geo/intercommunalite/200046977/projetes")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isBadRequest());
-    }
-
-    //    geo/intercommunalite/200046977/projetes?date=2025-09-01&dateProjection=
-    @Test
-    public void should_return_400_when_IntercommunaliteCodeProjetes_dateProjectionEmpty() throws Exception {
-        mockMvc.perform(get("/geo/intercommunalite/200046977/projetes")
-                        .param("dateProjection", "")  // Valeur vide
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isBadRequest());
-    }
-
-
-    ////////////////////////////////////////////////////////////////////
-    ///                  geo/intercommunalite/{code}/suivants        ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/intercommunalite/246900245/suivants?date=2025-09-04
-    @Test
-    void should_return_1_intercommunalite_when_IntercommunalitesCodeSuivants_Code246900245_date20140101() {
-        var response  = endpoints.getcogintercosuiv("246900245", LocalDate.of(2014,1,1));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("200046977", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/intercommunalite/66a4c53d-5215-4258-b828-490773264671", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.INTERCOMMUNALITE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2015,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Métropole de Lyon", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum.Y, resultItem1.getTypeArticle()),
-                () -> assertEquals("Métropole de Lyon", resultItem1.getIntituleComplet()),
-                () -> assertEquals("(Autre) Collectivité territoriale", resultItem1.getCategorieJuridique()),
-                () -> assertEquals("Métropole de Lyon", resultItem1.getIntitule())
-        );
+        @Test
+        @DisplayName("When getcogintercoproj dateProjection empty, returns 400")
+        void should_return_400_when_getcogintercoproj_dateProjection_empty() throws Exception {
+            mockMvc.perform(get("/geo/intercommunalite/999000001/projetes")
+                            .param("dateProjection", "")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
     }
 }

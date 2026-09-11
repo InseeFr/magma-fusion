@@ -1,0 +1,30 @@
+[
+  {
+    "code": "7701",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7701",
+    "type": "CantonOuVille",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Canton-ou-ville test 1",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville test 1"
+  },
+  {
+    "code": "7702",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7702",
+    "type": "CantonOuVille",
+    "dateCreation": "2016-01-01",
+    "intituleSansArticle": "Canton-ou-ville test 2",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville test 2"
+  },
+  {
+    "code": "7703",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7703",
+    "type": "CantonOuVille",
+    "dateCreation": "2000-01-01",
+    "dateSuppression": "2020-01-01",
+    "intituleSansArticle": "Canton-ou-ville ancien",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville ancien"
+  }
+]

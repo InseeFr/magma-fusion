@@ -1,0 +1,34 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xkos: <http://rdf-vocabulary.ddialliance.org/xkos#> .
+
+<http://rdf.insee.fr/graphes/codes/testclassif> {
+
+  # =========================================================
+  #   Nomenclature 1 : testclassif / niveauA / T01
+  # =========================================================
+
+  <http://id.insee.fr/codes/testclassif> a skos:ConceptScheme ;
+    xkos:levels ( <http://id.insee.fr/codes/testclassif/niveauA> ) .
+
+  <http://id.insee.fr/codes/testclassif/niveauA> a xkos:ClassificationLevel ;
+    skos:member <http://id.insee.fr/codes/testclassif/niveauA/T01> .
+
+  <http://id.insee.fr/codes/testclassif/niveauA/T01> a skos:Concept ;
+    skos:notation "T01" ;
+    skos:prefLabel "Categorie test un"@fr .
+
+  # =========================================================
+  #   Nomenclature 2 : testclassif2 / niveauB / A01
+  # =========================================================
+
+  <http://id.insee.fr/codes/testclassif2> a skos:ConceptScheme ;
+    xkos:levels ( <http://id.insee.fr/codes/testclassif2/niveauB> ) .
+
+  <http://id.insee.fr/codes/testclassif2/niveauB> a xkos:ClassificationLevel ;
+    skos:member <http://id.insee.fr/codes/testclassif2/niveauB/A01> .
+
+  <http://id.insee.fr/codes/testclassif2/niveauB/A01> a skos:Concept ;
+    skos:notation "A01" ;
+    skos:prefLabel "Classification test deux"@fr .
+}

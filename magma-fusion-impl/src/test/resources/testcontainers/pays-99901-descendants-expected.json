@@ -1,0 +1,10 @@
+[
+  {
+    "code": "99904",
+    "uri": "http://id.insee.fr/geo/territoire/test-territoire-99904",
+    "type": "Territoire",
+    "dateCreation": "2010-01-01",
+    "intitule": "Territoire test 1",
+    "intituleComplet": "Territoire test 1 complet"
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "code": "98001",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98001",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 1",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 1"
+  },
+  {
+    "code": "98002",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98002",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 2",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 2"
+  },
+  {
+    "code": "98003",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98003",
+    "type": "CommuneDeleguee",
+    "dateCreation": "1990-01-01",
+    "intituleSansArticle": "Commune deleguee ancienne",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee ancienne"
+  }
+]

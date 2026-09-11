@@ -1,104 +1,105 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoDistrictEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
-import fr.insee.rmes.magmafusion.model.District;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsDistrict;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-
-public class GeoDistrictQueriesTest extends TestcontainerTestDiffusion {
+class GeoDistrictQueriesTest extends TestContainer {
 
     @Autowired
     GeoDistrictEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///               geo/district/{code}/ascendants                  ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/district/{code}")
+    class GetCogDis {
 
-//    geo/district/98411/ascendants?date=2025-09-04
-    @Test
-    void should_return_1_COM_when_districitCodeAscendants_code46248_date20250904(){
-        var response  = endpoints.getcogdisasc("98411", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("984", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/f6496613-8f78-4184-80ab-81a077db6b37", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateCreation()),
-                () -> assertEquals("Terres australes et antarctiques françaises", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._4, resultItem1.getTypeArticle()),
-                () -> assertEquals("Terres australes et antarctiques françaises", resultItem1.getIntitule())
-        );
+        @Test
+        @DisplayName("When getcogdis 98610, returns district 98610")
+        void should_return_district_98610_when_getcogdis_98610() throws Exception {
+            var response = endpoints.getcogdis("98610", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/district-98610-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogdis 98699 (inexistant), returns 404")
+        void should_return_404_when_getcogdis_98699_inexistant() throws Exception {
+            mockMvc.perform(get("/geo/district/98699")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-//    geo/district/98411/ascendants?date=2025-09-04&type=CollectiviteDOutreMer
-    @Test
-    void should_return_1_arrondissement_when_districtCodeAscendants_code46248_date20250904_typeCollectiviteDoutreMer(){
-        var response  = endpoints.getcogdisasc("98411", LocalDate.of(2025, 9, 4), TypeEnumAscendantsDistrict.COLLECTIVITE_D_OUTRE_MER);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(1, result.size()),
-                () -> assertEquals("984", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/collectiviteDOutreMer/f6496613-8f78-4184-80ab-81a077db6b37", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COLLECTIVITE_D_OUTRE_MER, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2007,2,23), resultItem1.getDateCreation()),
-                () -> assertEquals("Terres australes et antarctiques françaises", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._4, resultItem1.getTypeArticle()),
-                () -> assertEquals("Terres australes et antarctiques françaises", resultItem1.getIntitule())
-        );
-    }
+    @Nested
+    @DisplayName("geo/district/{code}/ascendants")
+    class GetCogDisAsc {
 
-    /////////////////////////////////////////////////////////////////////
-    ///                       geo/district/{code}                     ///
-    /////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogdisasc 98610 type null, returns 1 ascendant (COM 986)")
+        void should_return_1_ascendant_when_getcogdisasc_98610_type_null() throws Exception {
+            var response = endpoints.getcogdisasc("98610", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-//geo/district/98411?date=2025-09-04
-    @Test
-    void should_return_communeCode_98411_when_code98411_date20250904() {
-        var response  = endpoints.getcogdis("98411", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertAll(
-                () -> assertEquals("98411", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/district/d028b78a-9c4d-4e22-9b60-efffd7085eb0", result.getUri()),
-                () -> assertEquals(TypeEnum.DISTRICT, result.getType()),
-                () -> assertEquals(LocalDate.of(2007,2,23), result.getDateCreation()),
-                () -> assertEquals("Îles Saint-Paul et Amsterdam", result.getIntituleSansArticle()),
-                () -> assertEquals(District.TypeArticleEnum._4, result.getTypeArticle()),
-                () -> assertEquals("Îles Saint-Paul et Amsterdam", result.getIntitule())
-        );
-    }
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/district-98610-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-//geo/district/98410?date=2025-09-04 renvoie 4044
+        @Test
+        @DisplayName("When getcogdisasc 98610 type CollectiviteDOutreMer, returns 1 COM")
+        void should_return_1_com_when_getcogdisasc_98610_type_collectiviteDOutreMer() throws Exception {
+            var response = endpoints.getcogdisasc("98610", LocalDate.of(2025, 1, 1), TypeEnumAscendantsDistrict.COLLECTIVITE_D_OUTRE_MER);
+            var result = response.getBody();
 
-    @Test
-    void should_return_404_when_DistrictCode_code98410_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/district/98410")
-                        .param("date", "2025-09-01"))
-                .andExpect(status().isNotFound());
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/district-98610-ascendants-collectiviteDOutreMer-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 }

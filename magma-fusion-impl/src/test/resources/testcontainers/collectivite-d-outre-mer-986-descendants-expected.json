@@ -1,0 +1,20 @@
+[
+  {
+    "code": "98601",
+    "uri": "http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601",
+    "type": "CirconscriptionTerritoriale",
+    "dateCreation": "1985-01-01",
+    "intituleSansArticle": "Circonscription test 1",
+    "typeArticle": "0",
+    "intitule": "Circonscription test 1"
+  },
+  {
+    "code": "98610",
+    "uri": "http://id.insee.fr/geo/district/test-dis-98610",
+    "type": "District",
+    "dateCreation": "1985-01-01",
+    "intituleSansArticle": "District test 1",
+    "typeArticle": "0",
+    "intitule": "District test 1"
+  }
+]

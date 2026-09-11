@@ -1,0 +1,14 @@
+[
+  {
+    "code": "99902",
+    "uri": "http://id.insee.fr/geo/pays/test-pays-99902",
+    "type": "Pays",
+    "dateCreation": "2000-01-01",
+    "dateSuppression": "2010-01-01",
+    "intitule": "Pays test ancien",
+    "intituleComplet": "Republique du Pays test ancien",
+    "iso3166alpha2": "ZA",
+    "iso3166alpha3": "ZAN",
+    "iso3166num": "992"
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "code": "99101",
+    "uri": "http://id.insee.fr/geo/communeAssociee/test-comas-99101",
+    "type": "CommuneAssociee",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune associee test 1",
+    "typeArticle": "0",
+    "intitule": "Commune associee test 1"
+  }
+]
