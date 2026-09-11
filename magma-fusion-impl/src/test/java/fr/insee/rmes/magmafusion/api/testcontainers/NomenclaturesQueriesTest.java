@@ -2,71 +2,86 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.NomenclaturesEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import org.junit.jupiter.api.Disabled;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 @Tag("integration")
-
-
-public class NomenclaturesQueriesTest extends TestContainer {
+class NomenclaturesQueriesTest extends TestContainer {
 
     @Autowired
     NomenclaturesEndpoints endpoints;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    @Test
-    void shouldReturnCorrectNafr2Classification () {
-        var response = endpoints.getClassificationByCode("nafr2", "sousClasses", "33.16Z");
-        var result = response.getBody();
+    @Nested
+    @DisplayName("codes/{nomenclature}/{niveau}/{code}")
+    class GetClassificationByCode {
 
-        Assertions.assertNotNull(result);
-        assertAll(
-                () -> assertEquals("http://id.insee.fr/codes/nafr2/sousClasse/33.16Z", result.getUri()),
-                () -> assertEquals("Réparation et maintenance d'aéronefs et d'engins spatiaux", result.getIntitule())
-        );
+        @Test
+        @DisplayName("When testclassif/niveauA/T01, returns concept T01")
+        void should_return_concept_T01_when_testclassif_niveauA_T01() throws Exception {
+            var response = endpoints.getClassificationByCode("testclassif", "niveauA", "T01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/nomenclature-testclassif-T01-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When testclassif2/niveauB/A01, returns concept A01")
+        void should_return_concept_A01_when_testclassif2_niveauB_A01() throws Exception {
+            var response = endpoints.getClassificationByCode("testclassif2", "niveauB", "A01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/nomenclature-testclassif2-A01-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When testclassif/niveauA/T99 (code inexistant), returns 404")
+        void should_return_404_when_code_inexistant() throws Exception {
+            mockMvc.perform(get("/codes/testclassif/niveauA/T99"))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("When inexistant/niveauA/T01 (nomenclature inexistante), returns 404")
+        void should_return_404_when_nomenclature_inexistante() throws Exception {
+            mockMvc.perform(get("/codes/inexistant/niveauA/T01"))
+                    .andExpect(status().isNotFound());
+        }
     }
-
-    @Test
-    void shouldReturnCorrectNaf2025Classification () {
-        var response = endpoints.getClassificationByCode("naf2025", "sousClasses", "01.13Y");
-        var result = response.getBody();
-
-        Assertions.assertNotNull(result);
-        assertAll(
-                () -> assertEquals("http://id.insee.fr/codes/naf2025/sousClasse/01.13Y", result.getUri()),
-                () -> assertEquals("Culture de légumes, de melons, de racines et de tubercules", result.getIntitule())
-        );
-    }
-
-    @Test
-    void shouldReturnCorrectCjClassification () {
-        var response = endpoints.getClassificationByCode("cj", "niveauIII", "5520");
-        var result = response.getBody();
-
-        Assertions.assertNotNull(result);
-        assertAll(
-                () -> assertEquals("http://id.insee.fr/codes/cj/niveauIII/5520", result.getUri()),
-                () -> assertEquals("Fonds à forme sociétale à conseil d'administration", result.getIntitule())
-        );
-    }
-
-    @Test
-    void shouldReturnCorrectPcs2020Classification () {
-        var response = endpoints.getClassificationByCode("pcs2020", "profession", "21B4");
-        var result = response.getBody();
-
-        Assertions.assertNotNull(result);
-        assertAll(
-                () -> assertEquals("http://id.insee.fr/codes/pcs2020/4/21B4", result.getUri()),
-                () -> assertEquals("Artisans plombiers / Artisanes plombières, chauffagistes", result.getIntitule())
-        );
-    }
-
 }
