@@ -807,7 +807,8 @@
     igeo:nomSansArticle "Commune interco test 1" ;
     igeo:codeArticle "0" ;
     igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001>,
-      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
+      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101>,
+      <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
 
   <http://id.insee.fr/geo/commune/test-com-88001> owl:sameAs <http://id.insee.fr/geo/commune/88001> .
   <http://id.insee.fr/geo/commune/88001> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88001> .
@@ -818,7 +819,8 @@
     igeo:nomSansArticle "Commune interco test 2" ;
     igeo:codeArticle "0" ;
     igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001>,
-      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
+      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101>,
+      <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
 
   <http://id.insee.fr/geo/commune/test-com-88002> owl:sameAs <http://id.insee.fr/geo/commune/88002> .
   <http://id.insee.fr/geo/commune/88002> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88002> .
@@ -985,6 +987,28 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-101> a igeo:EvenementGeographique ;
     igeo:date "2020-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
+
+  # =========================================================
+  #   Zone d'Emploi 2020
+  # =========================================================
+
+  <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> a igeo:ZoneDEmploi2020 ;
+    igeo:codeINSEE "9901" ;
+    igeo:nom "Zone d emploi test 1" ;
+    igeo:nomSansArticle "Zone d emploi test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> owl:sameAs <http://id.insee.fr/geo/zoneDEmploi2020/9901> .
+  <http://id.insee.fr/geo/zoneDEmploi2020/9901> owl:sameAs <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
+
+  # =========================================================
+  #   Evenements Zone d'Emploi 2020
+  # =========================================================
+
+  # Evenement 102 : creation de la zone d'emploi 9901 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-102> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
 }
 
 <http://rdf.insee.fr/graphes/codes/cj> {

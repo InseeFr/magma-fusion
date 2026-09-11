@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Tag("integration")
-@Disabled
+
 
 public class NomenclaturesQueriesTest extends TestContainer {
 

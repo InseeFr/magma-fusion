@@ -2,152 +2,143 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoZoneDEmploiEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsZoneDEmploi;
-import fr.insee.rmes.magmafusion.model.ZoneDEmploi2020;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
-
-public class GeoZoneDEmploiQueriesTest extends TestContainer {
+class GeoZoneDEmploiQueriesTest extends TestContainer {
 
     @Autowired
     GeoZoneDEmploiEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/zoneDEmploi2020/{code}                    ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/zoneDEmploi2020/{code}")
+    class GetCogZe {
 
-//    geo/zoneDEmploi2020/01121?date=2025-09-04
-    @Test
-    void should_return_uniteUrbaine2415_when_zoneDEmploi2020Code2415_date20250904() {
-        var response  = endpoints.getcogze("2415", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertAll(
-                () -> assertEquals("2415", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/zoneDEmploi2020/dbab03e7-3d8d-4797-8ab1-0ed36a4db9c1", result.getUri()),
-                () -> assertEquals(TypeEnum.ZONE_D_EMPLOI2020, result.getType()),
-                () -> assertEquals(LocalDate.of(2020,1,1), result.getDateCreation()),
-                () -> assertEquals("Vierzon", result.getIntituleSansArticle()),
-                () -> assertEquals(ZoneDEmploi2020.TypeArticleEnum._0, result.getTypeArticle()),
-                () -> assertEquals("Vierzon", result.getIntitule())
-        );
+        @Test
+        @DisplayName("When getcogze 9901, returns zone d'emploi 9901")
+        void should_return_ze_9901_when_getcogze_9901() throws Exception {
+            var response = endpoints.getcogze("9901", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/zone-d-emploi-9901-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogze 9999 (inexistant), returns 404")
+        void should_return_404_when_getcogze_9999_inexistant() throws Exception {
+            mockMvc.perform(get("/geo/zoneDEmploi2020/9999")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/zoneDEmploi2020/{code}/descendants        ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/zoneDEmploi2020/{code}/descendants")
+    class GetCogZeDesc {
 
+        @Test
+        @DisplayName("When getcogzedesc 9901 type null, returns 2 descendants")
+        void should_return_2_descendants_when_getcogzedesc_9901_type_null() throws Exception {
+            var response = endpoints.getcogzedesc("9901", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-//   geo/zoneDEmploi2020/2415/descendants?date=2025-09-04
-    @Test
-    void should_return_42_territoires_when_zoneDEmploi2020CodeDescendants_code2415_date20250904_typeNull(){
-        var response  = endpoints.getcogzedesc("2415", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(42, result.size()),
-                () -> assertEquals("18036", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/9d090028-9065-4c75-bb2b-6ea30d430af7", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Brinay", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Brinay", resultItem1.getIntitule())
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/zone-d-emploi-9901-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogzedesc 9901 type Commune, returns 2 communes")
+        void should_return_2_communes_when_getcogzedesc_9901_type_commune() throws Exception {
+            var response = endpoints.getcogzedesc("9901", LocalDate.of(2025, 1, 1), TypeEnumDescendantsZoneDEmploi.COMMUNE);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/zone-d-emploi-9901-descendants-commune-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-    //   geo/zoneDEmploi2020/2415/descendants?date=2025-09-04=Commune
-    @Test
-    void should_return_28_communes_when_zoneDEmploi2020CodeDescendants_code01121_date20250904_typeCommune(){
-        var response  = endpoints.getcogzedesc("2415", LocalDate.of(2025, 9, 4), TypeEnumDescendantsZoneDEmploi.COMMUNE);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(28, result.size()),
-                () -> assertEquals("18036", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/9d090028-9065-4c75-bb2b-6ea30d430af7", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Brinay", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Brinay", resultItem1.getIntitule())
-        );
+    @Nested
+    @DisplayName("geo/zonesDEmploi2020")
+    class GetCogZeListe {
+
+        @Test
+        @DisplayName("When getcogzeliste date 2025-01-01, returns 1 zone d'emploi")
+        void should_return_1_ze_when_getcogzeliste_date() throws Exception {
+            var response = endpoints.getcogzeliste("2025-01-01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/zones-d-emploi-liste-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogzeliste date *, returns 1 zone d'emploi")
+        void should_return_1_ze_when_getcogzeliste_date_etoile() throws Exception {
+            var response = endpoints.getcogzeliste("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/zones-d-emploi-liste-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
-
-
-    //   geo/zoneDEmploi2020/2415/descendants?date=2025-09-04&type=ArrondissementMunicipal : renvoie 404
-    @Test
-    void should_return_404_when_zoneDEmploi2020CodeDescendants_code2415_date20250904_typeArrondissementMunicipal() throws Exception{
-        mockMvc.perform(get("/geo/zoneDEmploi2020/2415/descendants")
-                        .param("date", "2025-09-04")
-                        .param("type", "ArrondissementMunicipal"))
-                .andExpect(status().isNotFound());
-    }
-
-
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/zoneDEmploi2020                         ///
-    /////////////////////////////////////////////////////////////////////
-
-//   geo/zoneDEmploi2020?date=2025-09-04
-    @Test
-    void should_return_306_zonesDEmploi_when_ZonesDEmploi2020_date20250904(){
-        var response  = endpoints.getcogzeliste("2025-09-04");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(306, result.size()),
-                () -> assertEquals("0051", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/zoneDEmploi2020/e6911283-05f4-4997-916a-cc2b58c1e013", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.ZONE_D_EMPLOI2020, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2025,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Alençon", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(ZoneDEmploi2020.TypeArticleEnum._1, resultItem1.getTypeArticle()),
-                () -> assertEquals("Alençon", resultItem1.getIntitule())
-        );
-    }
-    //  geo/unitesUrbaines2020?date=*
-    @Test
-    void should_return_332_zonesDEmploi_when_ZonesDEmploi2020_dateEtoile(){
-        var response  = endpoints.getcogzeliste("*");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(332, result.size()),
-                () -> assertEquals("0051", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/zoneDEmploi2020/1d5754fc-cb01-47cf-a9a8-f16f30110d9a", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.ZONE_D_EMPLOI2020, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals(LocalDate.of(2025,1,1), resultItem1.getDateSuppression()),
-                () -> assertEquals("Alençon", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(ZoneDEmploi2020.TypeArticleEnum._1, resultItem1.getTypeArticle()),
-                () -> assertEquals("Alençon", resultItem1.getIntitule())
-        );
-    }
-
-
 }
