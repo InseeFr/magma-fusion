@@ -2,152 +2,143 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.GeoUniteUrbaineEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsUniteUrbaine;
-import fr.insee.rmes.magmafusion.model.UniteUrbaine2020;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
-
-public class GeoUniteUrbaineQueriesTest extends TestContainer {
+class GeoUniteUrbaineQueriesTest extends TestContainer {
 
     @Autowired
     GeoUniteUrbaineEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/uniteUrbaine2020/{code}                    ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/uniteUrbaine2020/{code}")
+    class GetCogUu {
 
-//    geo/uniteUrbaine2020/01121?date=2025-09-04
-    @Test
-    void should_return_uniteUrbaine01121_when_UniteUrbaine2020Code01121_date20250904() {
-        var response  = endpoints.getcoguu("01121", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertAll(
-                () -> assertEquals("01121", result.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/uniteUrbaine2020/57a37c9b-e426-430e-b8c1-ac0fd640e345", result.getUri()),
-                () -> assertEquals(TypeEnum.UNITE_URBAINE2020, result.getType()),
-                () -> assertEquals(LocalDate.of(2020,1,1), result.getDateCreation()),
-                () -> assertEquals("Jujurieux", result.getIntituleSansArticle()),
-                () -> assertEquals(UniteUrbaine2020.TypeArticleEnum._0, result.getTypeArticle()),
-                () -> assertEquals("Jujurieux", result.getIntitule())
-        );
+        @Test
+        @DisplayName("When getcoguu 99101, returns unite urbaine 99101")
+        void should_return_uu_99101_when_getcoguu_99101() throws Exception {
+            var response = endpoints.getcoguu("99101", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/unite-urbaine-99101-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcoguu 99199 (inexistant), returns 404")
+        void should_return_404_when_getcoguu_99199_inexistant() throws Exception {
+            mockMvc.perform(get("/geo/uniteUrbaine2020/99199")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/uniteUrbaine2020/{code}/descendants        ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/uniteUrbaine2020/{code}/descendants")
+    class GetCogUuDes {
 
+        @Test
+        @DisplayName("When getcoguudes 99101 type null, returns 2 descendants")
+        void should_return_2_descendants_when_getcoguudes_99101_type_null() throws Exception {
+            var response = endpoints.getcoguudes("99101", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
 
-//   geo/uniteUrbaine2020/01121/descendants?date=2025-09-04 : renvoie 2 communes
-    @Test
-    void should_return_2_communes_when_UniteUrbaine2020CodeDescendants_code01121_date20250904_typeNull(){
-        var response  = endpoints.getcoguudes("01121", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("01199", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/0d69a92e-70d3-4ebf-aa3b-db76e6bedf7e", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Jujurieux", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Jujurieux", resultItem1.getIntitule())
-        );
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/unite-urbaine-99101-descendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcoguudes 99101 type Commune, returns 2 communes")
+        void should_return_2_communes_when_getcoguudes_99101_type_commune() throws Exception {
+            var response = endpoints.getcoguudes("99101", LocalDate.of(2025, 1, 1), TypeEnumDescendantsUniteUrbaine.COMMUNE);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/unite-urbaine-99101-descendants-commune-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-//   geo/uniteUrbaine2020/01121/descendants?date=2025-09-04&type=Commune : renvoie 2 communes
-    @Test
-    void should_return_2_communes_when_UniteUrbaine2020CodeDescendants_code01121_date20250904_typeCommune(){
-        var response  = endpoints.getcoguudes("01121", LocalDate.of(2025, 9, 4), TypeEnumDescendantsUniteUrbaine.COMMUNE);
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("01199", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/commune/0d69a92e-70d3-4ebf-aa3b-db76e6bedf7e", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.COMMUNE, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(1943,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Jujurieux", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Jujurieux", resultItem1.getIntitule())
-        );
+    @Nested
+    @DisplayName("geo/unitesUrbaines2020")
+    class GetCogUuListe {
+
+        @Test
+        @DisplayName("When getcoguuliste date 2025-01-01, returns 1 unite urbaine")
+        void should_return_1_uu_when_getcoguuliste_date() throws Exception {
+            var response = endpoints.getcoguuliste("2025-01-01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/unites-urbaines-liste-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcoguuliste date *, returns 1 unite urbaine")
+        void should_return_1_uu_when_getcoguuliste_date_etoile() throws Exception {
+            var response = endpoints.getcoguuliste("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/unites-urbaines-liste-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
-
-
-//   geo/uniteUrbaine2020/01121/descendants?date=2025-09-04&type=ArrondissementMunicipal : renvoie 404
-    @Test
-    void should_return_404_when_UniteUrbaine2020CodePrecedents_code01121_date20250904() throws Exception{
-        mockMvc.perform(get("/geo/uniteUrbaine2020/01121/precedents")
-                        .param("date", "2025-09-04")
-                        .param("type", "ArrondissementMunicipal"))
-                .andExpect(status().isNotFound());
-    }
-
-
-    /////////////////////////////////////////////////////////////////////
-    ///                geo/unitesUrbaines2020                         ///
-    /////////////////////////////////////////////////////////////////////
-
-//   geo/unitesUrbaines2020?date=2025-09-04 : renvoie 30 territoires
-    @Test
-    void should_return_2472_unitesUrbaines_when_UnitesUrbaines2020_date20250904(){
-        var response  = endpoints.getcoguuliste("2025-09-04");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(2472, result.size()),
-                () -> assertEquals("00151", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/uniteUrbaine2020/a7355a50-7516-4f7b-8919-a03bc28cd12b", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.UNITE_URBAINE2020, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Lécluse", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(UniteUrbaine2020.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Lécluse", resultItem1.getIntitule())
-        );
-    }
-    //  geo/unitesUrbaines2020?date=*
-    @Test
-    void should_return_2500_unitesUrbaines_when_UnitesUrbaines2020_dateEtoile(){
-        var response  = endpoints.getcoguuliste("*");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertAll(
-                () -> assertEquals(2500, result.size()),
-                () -> assertEquals("00151", resultItem1.getCode()),
-                () -> assertEquals("http://id.insee.fr/geo/uniteUrbaine2020/a7355a50-7516-4f7b-8919-a03bc28cd12b", resultItem1.getUri()),
-                () -> assertEquals(TypeEnum.UNITE_URBAINE2020, resultItem1.getType()),
-                () -> assertEquals(LocalDate.of(2020,1,1), resultItem1.getDateCreation()),
-                () -> assertEquals("Lécluse", resultItem1.getIntituleSansArticle()),
-                () -> assertEquals(UniteUrbaine2020.TypeArticleEnum._0, resultItem1.getTypeArticle()),
-                () -> assertEquals("Lécluse", resultItem1.getIntitule())
-        );
-    }
-
-
 }

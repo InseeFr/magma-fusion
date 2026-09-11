@@ -806,7 +806,8 @@
     igeo:nom "Commune interco test 1" ;
     igeo:nomSansArticle "Commune interco test 1" ;
     igeo:codeArticle "0" ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001>,
+      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
 
   <http://id.insee.fr/geo/commune/test-com-88001> owl:sameAs <http://id.insee.fr/geo/commune/88001> .
   <http://id.insee.fr/geo/commune/88001> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88001> .
@@ -816,7 +817,8 @@
     igeo:nom "Commune interco test 2" ;
     igeo:nomSansArticle "Commune interco test 2" ;
     igeo:codeArticle "0" ;
-    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001> .
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001>,
+      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
 
   <http://id.insee.fr/geo/commune/test-com-88002> owl:sameAs <http://id.insee.fr/geo/commune/88002> .
   <http://id.insee.fr/geo/commune/88002> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88002> .
@@ -961,6 +963,28 @@
   <http://id.insee.fr/geo/evenementGeographique/test-evt-100> a igeo:EvenementGeographique ;
     igeo:date "2024-01-01"^^xsd:date ;
     igeo:creation <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M> .
+
+  # =========================================================
+  #   Unite Urbaine 2020
+  # =========================================================
+
+  <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> a igeo:UniteUrbaine2020 ;
+    igeo:codeINSEE "99101" ;
+    igeo:nom "Unite urbaine test 1" ;
+    igeo:nomSansArticle "Unite urbaine test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> owl:sameAs <http://id.insee.fr/geo/uniteUrbaine2020/99101> .
+  <http://id.insee.fr/geo/uniteUrbaine2020/99101> owl:sameAs <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
+
+  # =========================================================
+  #   Evenements Unite Urbaine 2020
+  # =========================================================
+
+  # Evenement 101 : creation de l'unite urbaine 99101 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-101> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
 }
 
 <http://rdf.insee.fr/graphes/codes/cj> {
