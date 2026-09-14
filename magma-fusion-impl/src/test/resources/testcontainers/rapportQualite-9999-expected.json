@@ -1,0 +1,140 @@
+{
+  "id": "9999",
+  "uri": "http://bauhaus/qualite/rapport/9999",
+  "label": [
+    {"langue": "fr", "contenu": "Rapport qualite : Operation test"},
+    {"langue": "en", "contenu": "Quality report: Test operation"}
+  ],
+  "rubriques": [
+    {
+      "id": "R.1.1",
+      "uri": "http://id.insee.fr/qualite/simsv2fr/attribut/R.1.1",
+      "idParent": "R.1",
+      "type": "TEXT",
+      "titre": [
+        {"langue": "fr", "contenu": "Numero de visa"},
+        {"langue": "en", "contenu": "Visa number"}
+      ],
+      "label": [
+        {"langue": "fr", "contenu": "2025T001OP"},
+        {"langue": "en", "contenu": "2025T001OP"}
+      ]
+    },
+    {
+      "id": "R.2.1",
+      "uri": "http://id.insee.fr/qualite/simsv2fr/attribut/R.2.1",
+      "idParent": "R.2",
+      "type": "DATE",
+      "titre": [
+        {"langue": "fr", "contenu": "Date de mise a jour"},
+        {"langue": "en", "contenu": "Last update date"}
+      ],
+      "date": "2025-06-15"
+    },
+    {
+      "id": "R.3.1",
+      "uri": "http://id.insee.fr/qualite/simsv2fr/attribut/R.3.1",
+      "idParent": "R.3",
+      "type": "RICH_TEXT",
+      "titre": [
+        {"langue": "fr", "contenu": "Note methodologique"},
+        {"langue": "en", "contenu": "Methodological note"}
+      ],
+      "contenus": [
+        {
+          "texte": "Texte methodologique test",
+          "langue": "fr",
+          "documents": [
+            {
+              "url": "https://www.test.fr/doc/note-methodo-test.pdf",
+              "label": [
+                {"langue": "fr", "contenu": "Note methodologique test"},
+                {"langue": "en", "contenu": "Test methodological note"}
+              ],
+              "dateMiseAJour": "2025-03-01T00:00:00",
+              "langue": "fr"
+            }
+          ]
+        },
+        {
+          "texte": "Test methodological text",
+          "langue": "en",
+          "documents": [
+            {
+              "url": "https://www.test.fr/doc/note-methodo-test.pdf",
+              "label": [
+                {"langue": "fr", "contenu": "Note methodologique test"},
+                {"langue": "en", "contenu": "Test methodological note"}
+              ],
+              "dateMiseAJour": "2025-03-01T00:00:00",
+              "langue": "fr"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "R.4.1",
+      "uri": "http://id.insee.fr/qualite/simsv2fr/attribut/R.4.1",
+      "idParent": "R.4",
+      "type": "GEOGRAPHY",
+      "titre": [
+        {"langue": "fr", "contenu": "Zone geographique"},
+        {"langue": "en", "contenu": "Reference area"}
+      ],
+      "territoire": {
+        "id": "franceTerritoireTest",
+        "uri": "http://id.insee.fr/qualite/territoire/franceTerritoireTest",
+        "label": [
+          {"langue": "fr", "contenu": "France territoire test"}
+        ]
+      }
+    },
+    {
+      "id": "R.5.1",
+      "uri": "http://id.insee.fr/qualite/simsv2fr/attribut/R.5.1",
+      "idParent": "R.5",
+      "type": "ORGANIZATION",
+      "titre": [
+        {"langue": "fr", "contenu": "Unite responsable"},
+        {"langue": "en", "contenu": "Responsible unit"}
+      ],
+      "organisme": {
+        "id": "orgaRapportTestId",
+        "uri": "http://bauhaus/organisations/orgaRapportTest",
+        "label": [
+          {"langue": "fr", "contenu": "Organisation Rapport Test fr"},
+          {"langue": "en", "contenu": "Report Test Organisation en"}
+        ]
+      }
+    },
+    {
+      "id": "R.6.1",
+      "uri": "http://id.insee.fr/qualite/simsv2fr/attribut/R.6.1",
+      "idParent": "R.6",
+      "type": "CODE_LIST",
+      "titre": [
+        {"langue": "fr", "contenu": "Mode de collecte"},
+        {"langue": "en", "contenu": "Collection mode"}
+      ],
+      "codes": [
+        {
+          "id": "W",
+          "uri": "http://id.insee.fr/codes/modeCollecte/W",
+          "label": [
+            {"langue": "fr", "contenu": "Via internet"},
+            {"langue": "en", "contenu": "By internet"}
+          ]
+        },
+        {
+          "id": "T",
+          "uri": "http://id.insee.fr/codes/modeCollecte/T",
+          "label": [
+            {"langue": "fr", "contenu": "Par telephone"},
+            {"langue": "en", "contenu": "By phone"}
+          ]
+        }
+      ]
+    }
+  ]
+}

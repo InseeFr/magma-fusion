@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = "--spring.profiles.active=security.disabled")
 @AutoConfigureMockMvc
 @Tag("integration")
-@Disabled
 
 class SeriesOperationsQueriesTest extends TestContainer {
 

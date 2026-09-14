@@ -12,6 +12,7 @@
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix adms: <http://www.w3.org/ns/adms#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix pav: <http://purl.org/pav/> .
 
 <http://rdf.insee.fr/graphes/structures> {
     <http://bauhaus/structuresDeDonnees/structure/dsd1000>
@@ -265,4 +266,154 @@
         dc:contributor "DG75-TEST" ;
         dcterms:created "2024-12-09T12:00:00.000"^^xsd:dateTime ;
         dcterms:modified "2024-12-09T12:00:00.000"^^xsd:dateTime .
+}
+
+# ===== Test data for OperationsQueriesTest (rapportQualite) =====
+
+<http://rdf.insee.fr/graphes/qualite/rapport/9999> {
+
+    <http://bauhaus/qualite/rapport/9999>
+        rdf:type sdmx-mm:MetadataReport ;
+        rdfs:label "Rapport qualite : Operation test"@fr ;
+        rdfs:label "Quality report: Test operation"@en ;
+        sdmx-mm:target <http://bauhaus/operations/operation/idOperationTest> .
+
+    <http://bauhaus/operations/operation/idOperationTest>
+        rdfs:label "Label Operation Test fr"@fr ;
+        rdfs:label "Test Operation Label en"@en .
+
+    _:reported9999 sdmx-mm:metadataReport <http://bauhaus/qualite/rapport/9999> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.1.1> "2025T001OP"@fr ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.1.1> "2025T001OP"@en ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.2.1> "2025-06-15"^^xsd:date ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.3.1> <http://bauhaus/qualite/rapport/9999/R.3.1/fr> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.3.1> <http://bauhaus/qualite/rapport/9999/R.3.1/en> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.4.1> <http://id.insee.fr/qualite/territoire/franceTerritoireTest> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.5.1> <http://bauhaus/organisations/orgaRapportTest> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.6.1> <http://id.insee.fr/codes/modeCollecte/W> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/R.6.1> <http://id.insee.fr/codes/modeCollecte/T> .
+
+    <http://bauhaus/qualite/rapport/9999/R.3.1/fr> rdf:type <http://purl.org/dc/dcmitype/Text> ;
+        dcterms:language <http://id.insee.fr/codes/langue/fr> ;
+        rdf:value "Texte methodologique test" ;
+        insee:additionalMaterial _:docListFrR31 .
+
+    _:docListFrR31 rdf:first <http://bauhaus/documents/docTestR31> ;
+        rdf:rest rdf:nil .
+
+    <http://bauhaus/qualite/rapport/9999/R.3.1/en> rdf:type <http://purl.org/dc/dcmitype/Text> ;
+        dcterms:language <http://id.insee.fr/codes/langue/en> ;
+        rdf:value "Test methodological text" ;
+        insee:additionalMaterial _:docListEnR31 .
+
+    _:docListEnR31 rdf:first <http://bauhaus/documents/docTestR31> ;
+        rdf:rest rdf:nil .
+
+    <http://bauhaus/documents/docTestR31> rdf:type foaf:Document ;
+        <http://schema.org/url> <https://www.test.fr/doc/note-methodo-test.pdf> ;
+        rdfs:label "Note methodologique test"@fr ;
+        rdfs:label "Test methodological note"@en ;
+        pav:lastRefreshedOn "2025-03-01T00:00:00"^^xsd:dateTime ;
+        dc:language "fr" .
+}
+
+<http://rdf.insee.fr/graphes/qualite/rapport/9998> {
+    <http://bauhaus/qualite/rapport/9998>
+        rdf:type sdmx-mm:MetadataReport ;
+        rdfs:label "Rapport qualite sans rubriques"@fr ;
+        rdfs:label "Quality report without rubriques"@en .
+}
+
+<http://rdf.insee.fr/graphes/qualite/simsv2fr> {
+    <http://id.insee.fr/qualite/simsv2fr/attribut/R.1.1>
+        sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR11> .
+
+    <http://id.insee.fr/qualite/simsv2fr/attribut/R.2.1>
+        sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR21> .
+
+    <http://id.insee.fr/qualite/simsv2fr/attribut/R.3.1>
+        sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR31> .
+
+    <http://id.insee.fr/qualite/simsv2fr/attribut/R.4.1>
+        sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR41> .
+
+    <http://id.insee.fr/qualite/simsv2fr/attribut/R.5.1>
+        sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR51> .
+
+    <http://id.insee.fr/qualite/simsv2fr/attribut/R.6.1>
+        sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR61> .
+
+    _:masR11 sdmx-mm:metadataAttributeProperty <http://id.insee.fr/qualite/simsv2fr/attribut/R.1.1> ;
+        sdmx-mm:parent <http://id.insee.fr/qualite/simsv2fr/attribut/R.1> .
+
+    _:masR21 sdmx-mm:metadataAttributeProperty <http://id.insee.fr/qualite/simsv2fr/attribut/R.2.1> ;
+        sdmx-mm:parent <http://id.insee.fr/qualite/simsv2fr/attribut/R.2> .
+
+    _:masR31 sdmx-mm:metadataAttributeProperty <http://id.insee.fr/qualite/simsv2fr/attribut/R.3.1> ;
+        sdmx-mm:parent <http://id.insee.fr/qualite/simsv2fr/attribut/R.3> .
+
+    _:masR41 sdmx-mm:metadataAttributeProperty <http://id.insee.fr/qualite/simsv2fr/attribut/R.4.1> ;
+        sdmx-mm:parent <http://id.insee.fr/qualite/simsv2fr/attribut/R.4> .
+
+    _:masR51 sdmx-mm:metadataAttributeProperty <http://id.insee.fr/qualite/simsv2fr/attribut/R.5.1> ;
+        sdmx-mm:parent <http://id.insee.fr/qualite/simsv2fr/attribut/R.5> .
+
+    _:masR61 sdmx-mm:metadataAttributeProperty <http://id.insee.fr/qualite/simsv2fr/attribut/R.6.1> ;
+        sdmx-mm:parent <http://id.insee.fr/qualite/simsv2fr/attribut/R.6> .
+}
+
+<http://rdf.insee.fr/graphes/concepts/qualite> {
+    <http://id.insee.fr/concepts/qualite/conceptR11>
+        skos:prefLabel "Numero de visa"@fr ;
+        skos:prefLabel "Visa number"@en .
+
+    <http://id.insee.fr/concepts/qualite/conceptR21>
+        skos:prefLabel "Date de mise a jour"@fr ;
+        skos:prefLabel "Last update date"@en .
+
+    <http://id.insee.fr/concepts/qualite/conceptR31>
+        skos:prefLabel "Note methodologique"@fr ;
+        skos:prefLabel "Methodological note"@en .
+
+    <http://id.insee.fr/concepts/qualite/conceptR41>
+        skos:prefLabel "Zone geographique"@fr ;
+        skos:prefLabel "Reference area"@en .
+
+    <http://id.insee.fr/concepts/qualite/conceptR51>
+        skos:prefLabel "Unite responsable"@fr ;
+        skos:prefLabel "Responsible unit"@en .
+
+    <http://id.insee.fr/concepts/qualite/conceptR61>
+        skos:prefLabel "Mode de collecte"@fr ;
+        skos:prefLabel "Collection mode"@en .
+}
+
+<http://rdf.insee.fr/graphes/organisations> {
+    <http://bauhaus/organisations/orgaRapportTest>
+        rdf:type org:Organization ;
+        dcterms:identifier "orgaRapportTestId" ;
+        skos:prefLabel "Organisation Rapport Test fr"@fr ;
+        skos:prefLabel "Report Test Organisation en"@en .
+}
+
+<http://rdf.insee.fr/graphes/codes> {
+    <http://id.insee.fr/codes/conceptScheme/modeCollecteTest>
+        skos:notation "modeCollecteTest" .
+
+    <http://id.insee.fr/codes/modeCollecte/W>
+        skos:notation "W" ;
+        skos:inScheme <http://id.insee.fr/codes/conceptScheme/modeCollecteTest> ;
+        skos:prefLabel "Via internet"@fr ;
+        skos:prefLabel "By internet"@en .
+
+    <http://id.insee.fr/codes/modeCollecte/T>
+        skos:notation "T" ;
+        skos:inScheme <http://id.insee.fr/codes/conceptScheme/modeCollecteTest> ;
+        skos:prefLabel "Par telephone"@fr ;
+        skos:prefLabel "By phone"@en .
+}
+
+<http://rdf.insee.fr/graphes/qualite/territoires> {
+    <http://id.insee.fr/qualite/territoire/franceTerritoireTest>
+        rdfs:label "France territoire test"@fr .
 }
