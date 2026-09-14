@@ -59,7 +59,7 @@ class ConceptsQueriesTest extends TestContainer {
             );
             JSONAssert.assertEquals(expected, data, true);
         }
-        
+
         @Test
         @DisplayName("When getConceptById with unknown id, returns 404")
         void should_return_404_when_getConceptById_unknown_id() throws Exception {
@@ -72,57 +72,26 @@ class ConceptsQueriesTest extends TestContainer {
     @DisplayName("concepts/definitions")
     class GetConceptsList {
 
-        @Test
-        @DisplayName("When getConceptsList with libelle filter, returns matching concepts")
-        void should_return_matching_concepts_when_getConceptsList_libelle_concept_test() throws Exception {
-            var response = endpoints.getconceptsliste("concept test", null);
+        @ParameterizedTest(name = "{2}")
+        @CsvSource({
+                "concept test,                 , 'When getConceptsList with libelle filter, returns matching concepts', testcontainers/concepts-list-libelle-concept-test-expected.json",
+                "             , idCollectionTest, 'When getConceptsList with collection filter, returns concepts in collection', testcontainers/concepts-list-collection-idCollectionTest-expected.json",
+                "peuplement   , idCollectionTest, 'When getConceptsList with libelle and collection, returns filtered concepts', testcontainers/concepts-list-peuplement-collection-idCollectionTest-expected.json"
+        })
+        void should_return_filtered_concepts_when_getConceptsList(String libelle, String idCollection, String displayName, String expectedFile) throws Exception {
+            var response = endpoints.getconceptsliste(libelle, idCollection);
             var result = response.getBody();
 
             assertNotNull(result);
             String data = objectMapper.writeValueAsString(result);
             String expected = new String(
                     Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/concepts-list-libelle-concept-test-expected.json"))
+                                    .getResourceAsStream(expectedFile))
                             .readAllBytes(),
                     StandardCharsets.UTF_8
             );
             JSONAssert.assertEquals(expected, data, true);
         }
-
-        @Test
-        @DisplayName("When getConceptsList with collection filter, returns concepts in collection")
-        void should_return_collection_concepts_when_getConceptsList_collection_idCollectionTest() throws Exception {
-            var response = endpoints.getconceptsliste(null, "idCollectionTest");
-            var result = response.getBody();
-
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/concepts-list-collection-idCollectionTest-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
-            );
-            JSONAssert.assertEquals(expected, data, true);
-        }
-
-        @Test
-        @DisplayName("When getConceptsList with libelle and collection, returns filtered concepts")
-        void should_return_filtered_concepts_when_getConceptsList_libelle_and_collection() throws Exception {
-            var response = endpoints.getconceptsliste("peuplement", "idCollectionTest");
-            var result = response.getBody();
-
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/concepts-list-peuplement-collection-idCollectionTest-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
-            );
-            JSONAssert.assertEquals(expected, data, true);
-        }
-
         @Test
         @DisplayName("When getConceptsList with no filter, returns 13 concepts")
         void should_return_all_concepts_when_getConceptsList_no_filter() {
