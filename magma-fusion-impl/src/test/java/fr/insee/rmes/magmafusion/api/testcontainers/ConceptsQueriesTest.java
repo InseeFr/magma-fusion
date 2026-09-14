@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,57 +39,27 @@ class ConceptsQueriesTest extends TestContainer {
     @DisplayName("concepts/definition/{id}")
     class GetConceptById {
 
-        @Test
-        @DisplayName("When getConceptById with conceptsSuivants, returns full concept")
-        void should_return_full_concept_when_getConceptById_c0001() throws Exception {
-            var response = endpoints.getconcept("c0001");
+        @ParameterizedTest(name = "When getConceptById with {1}, returns full concept")
+        @CsvSource({
+                "c0001, conceptsSuivants",
+                "c0002, conceptsPrecedents and conceptsReferences",
+                "c0003, intitulesAlternatifs"
+        })
+        void should_return_full_concept_when_getConceptById(String conceptId, String description) throws Exception {
+            var response = endpoints.getconcept(conceptId);
             var result = response.getBody();
 
             assertNotNull(result);
             String data = objectMapper.writeValueAsString(result);
             String expected = new String(
                     Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/concept-c0001-expected.json"))
+                                    .getResourceAsStream("testcontainers/concept-" + conceptId + "-expected.json"))
                             .readAllBytes(),
                     StandardCharsets.UTF_8
             );
             JSONAssert.assertEquals(expected, data, true);
         }
-
-        @Test
-        @DisplayName("When getConceptById with conceptsPrecedents and conceptsReferences, returns full concept")
-        void should_return_full_concept_when_getConceptById_c0002() throws Exception {
-            var response = endpoints.getconcept("c0002");
-            var result = response.getBody();
-
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/concept-c0002-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
-            );
-            JSONAssert.assertEquals(expected, data, true);
-        }
-
-        @Test
-        @DisplayName("When getConceptById with intitulesAlternatifs, returns full concept")
-        void should_return_full_concept_when_getConceptById_c0003() throws Exception {
-            var response = endpoints.getconcept("c0003");
-            var result = response.getBody();
-
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/concept-c0003-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
-            );
-            JSONAssert.assertEquals(expected, data, true);
-        }
-
+        
         @Test
         @DisplayName("When getConceptById with unknown id, returns 404")
         void should_return_404_when_getConceptById_unknown_id() throws Exception {
