@@ -63,7 +63,7 @@ class ConceptsQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getConceptById with unknown id, returns 404")
         void should_return_404_when_getConceptById_unknown_id() throws Exception {
-            mockMvc.perform(get("/geo/concepts/definition/c9999"))
+            mockMvc.perform(get("/concepts/definition/c9999"))
                     .andExpect(status().isNotFound());
         }
     }
