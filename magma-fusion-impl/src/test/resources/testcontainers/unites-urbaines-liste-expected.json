@@ -1,0 +1,11 @@
+[
+  {
+    "code": "99101",
+    "uri": "http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101",
+    "type": "UniteUrbaine2020",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Unite urbaine test 1",
+    "typeArticle": "0",
+    "intitule": "Unite urbaine test 1"
+  }
+]

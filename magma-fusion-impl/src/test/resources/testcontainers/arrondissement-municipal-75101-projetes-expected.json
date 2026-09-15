@@ -1,0 +1,12 @@
+[
+  {
+    "code": "75102",
+    "uri": "http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102",
+    "type": "ArrondissementMunicipal",
+    "dateCreation": "1990-01-01",
+    "dateSuppression": "2010-01-01",
+    "intituleSansArticle": "Arrondissement municipal test 2",
+    "typeArticle": "0",
+    "intitule": "Arrondissement municipal test 2"
+  }
+]

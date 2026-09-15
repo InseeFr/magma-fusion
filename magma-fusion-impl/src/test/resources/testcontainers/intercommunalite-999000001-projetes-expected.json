@@ -1,0 +1,14 @@
+[
+  {
+    "code": "999000002",
+    "uri": "http://id.insee.fr/geo/intercommunalite/test-interco-002",
+    "type": "Intercommunalite",
+    "dateCreation": "2000-01-01",
+    "dateSuppression": "2010-01-01",
+    "intituleSansArticle": "Intercommunalite test ancienne",
+    "typeArticle": "0",
+    "intitule": "Intercommunalite test ancienne",
+    "intituleComplet": "CC d'Intercommunalite test ancienne",
+    "categorieJuridique": "Communaute de communes"
+  }
+]

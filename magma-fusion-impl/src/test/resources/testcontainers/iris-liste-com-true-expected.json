@@ -1,0 +1,48 @@
+[
+  {
+    "code": "880010000",
+    "uri": "http://id.insee.fr/geo/commune/test-com-88001",
+    "type": "Commune",
+    "intitule": "Commune interco test 1",
+    "intituleSansArticle": "Commune interco test 1",
+    "typeArticle": "0",
+    "dateCreation": "2000-01-01"
+  },
+  {
+    "code": "880020000",
+    "uri": "http://id.insee.fr/geo/commune/test-com-88002",
+    "type": "Commune",
+    "intitule": "Commune interco test 2",
+    "intituleSansArticle": "Commune interco test 2",
+    "typeArticle": "0",
+    "dateCreation": "2000-01-01"
+  },
+  {
+    "code": "990010101",
+    "uri": "http://id.insee.fr/geo/iris/test-iris-990010101",
+    "type": "Iris",
+    "intitule": "Iris test 1",
+    "intituleSansArticle": "Iris test 1",
+    "typeArticle": "0",
+    "typeDIris": "H",
+    "dateCreation": "2008-01-01"
+  },
+  {
+    "code": "990020000",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99002",
+    "type": "Commune",
+    "intitule": "Commune test 2",
+    "intituleSansArticle": "Commune test 2",
+    "typeArticle": "0",
+    "dateCreation": "2000-01-01"
+  },
+  {
+    "code": "990030000",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99003",
+    "type": "Commune",
+    "intitule": "Commune test 3",
+    "intituleSansArticle": "Commune test 3",
+    "typeArticle": "0",
+    "dateCreation": "2018-01-01"
+  }
+]

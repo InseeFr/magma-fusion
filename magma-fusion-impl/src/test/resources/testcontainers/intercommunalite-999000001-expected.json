@@ -1,0 +1,11 @@
+{
+  "code": "999000001",
+  "uri": "http://id.insee.fr/geo/intercommunalite/test-interco-001",
+  "type": "Intercommunalite",
+  "dateCreation": "2010-01-01",
+  "intituleSansArticle": "Intercommunalite test 1",
+  "typeArticle": "0",
+  "intitule": "Intercommunalite test 1",
+  "intituleComplet": "CC d'Intercommunalite test 1",
+  "categorieJuridique": "Communaute de communes"
+}

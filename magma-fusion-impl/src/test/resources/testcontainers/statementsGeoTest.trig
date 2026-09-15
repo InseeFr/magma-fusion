@@ -1,0 +1,1022 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix igeo: <http://rdf.insee.fr/def/geo#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix insee: <http://rdf.insee.fr/def/base#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://rdf.insee.fr/graphes/geo/cog> {
+
+  # =========================================================
+  #   Region test
+  # =========================================================
+
+  <http://id.insee.fr/geo/region/test-reg-99> a igeo:Region ;
+    igeo:codeINSEE "99" ;
+    igeo:nom "Region test" ;
+    igeo:nomSansArticle "Region test" ;
+    igeo:codeArticle "0" ;
+    igeo:prefectureDeRegion <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/region/test-reg-99> owl:sameAs <http://id.insee.fr/geo/region/99> .
+  <http://id.insee.fr/geo/region/99> owl:sameAs <http://id.insee.fr/geo/region/test-reg-99> .
+
+  # =========================================================
+  #   Region test 88 (supprimee, predecesseur de region 99)
+  # =========================================================
+
+  <http://id.insee.fr/geo/region/test-reg-88> a igeo:Region ;
+    igeo:codeINSEE "88" ;
+    igeo:nom "Region ancienne" ;
+    igeo:nomSansArticle "Region ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:prefectureDeRegion <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  <http://id.insee.fr/geo/region/test-reg-88> owl:sameAs <http://id.insee.fr/geo/region/88> .
+  <http://id.insee.fr/geo/region/88> owl:sameAs <http://id.insee.fr/geo/region/test-reg-88> .
+
+  # =========================================================
+  #   Departement test 10 (actif, successeur de dept 11)
+  # =========================================================
+
+  <http://id.insee.fr/geo/departement/test-dep-10> a igeo:Departement ;
+    igeo:codeINSEE "10" ;
+    igeo:nom "Departement test" ;
+    igeo:nomSansArticle "Departement test" ;
+    igeo:codeArticle "0" ;
+    igeo:prefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/region/test-reg-99> .
+
+  <http://id.insee.fr/geo/departement/test-dep-10> owl:sameAs <http://id.insee.fr/geo/departement/10> .
+  <http://id.insee.fr/geo/departement/10> owl:sameAs <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  # =========================================================
+  #   Departement test 11 (supprime, predecesseur de dept 10)
+  # =========================================================
+
+  <http://id.insee.fr/geo/departement/test-dep-11> a igeo:Departement ;
+    igeo:codeINSEE "11" ;
+    igeo:nom "Departement ancien" ;
+    igeo:nomSansArticle "Departement ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:prefecture <http://id.insee.fr/geo/commune/test-com-99002> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/region/test-reg-99> .
+
+  <http://id.insee.fr/geo/departement/test-dep-11> owl:sameAs <http://id.insee.fr/geo/departement/11> .
+  <http://id.insee.fr/geo/departement/11> owl:sameAs <http://id.insee.fr/geo/departement/test-dep-11> .
+
+  # =========================================================
+  #   Communes test (descendants de arrondissement 991)
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99001> a igeo:Commune ;
+    igeo:codeINSEE "99001" ;
+    igeo:nom "Commune test 1" ;
+    igeo:nomSansArticle "Commune test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/arrondissement/test-arr-991> .
+
+  <http://id.insee.fr/geo/commune/test-com-99001> owl:sameAs <http://id.insee.fr/geo/commune/99001> .
+  <http://id.insee.fr/geo/commune/99001> owl:sameAs <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/commune/test-com-99002> a igeo:Commune ;
+    igeo:codeINSEE "99002" ;
+    igeo:nom "Commune test 2" ;
+    igeo:nomSansArticle "Commune test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/arrondissement/test-arr-991> .
+
+  <http://id.insee.fr/geo/commune/test-com-99002> owl:sameAs <http://id.insee.fr/geo/commune/99002> .
+  <http://id.insee.fr/geo/commune/99002> owl:sameAs <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  # =========================================================
+  #   Communes deleguees test (descendants de commune 99002)
+  # =========================================================
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98001> a igeo:CommuneDeleguee ;
+    igeo:codeINSEE "98001" ;
+    igeo:nom "Commune deleguee test 1" ;
+    igeo:nomSansArticle "Commune deleguee test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98001> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/98001> .
+  <http://id.insee.fr/geo/communeDeleguee/98001> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/test-comdel-98001> .
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98002> a igeo:CommuneDeleguee ;
+    igeo:codeINSEE "98002" ;
+    igeo:nom "Commune deleguee test 2" ;
+    igeo:nomSansArticle "Commune deleguee test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98002> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/98002> .
+  <http://id.insee.fr/geo/communeDeleguee/98002> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/test-comdel-98002> .
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> a igeo:CommuneDeleguee ;
+    igeo:codeINSEE "98003" ;
+    igeo:nom "Commune deleguee ancienne" ;
+    igeo:nomSansArticle "Commune deleguee ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/98003> .
+  <http://id.insee.fr/geo/communeDeleguee/98003> owl:sameAs <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> .
+
+  # =========================================================
+  #   Arrondissement actif 991 (principal, avec predecesseurs)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-991> a igeo:Arrondissement ;
+    igeo:codeINSEE "991" ;
+    igeo:nom "Arrondissement test 1" ;
+    igeo:nomSansArticle "Arrondissement test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-991> owl:sameAs <http://id.insee.fr/geo/arrondissement/991> .
+  <http://id.insee.fr/geo/arrondissement/991> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-991> .
+
+  # =========================================================
+  #   Arrondissement actif 992 (sans historique)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-992> a igeo:Arrondissement ;
+    igeo:codeINSEE "992" ;
+    igeo:nom "Arrondissement test 2" ;
+    igeo:nomSansArticle "Arrondissement test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99002> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-992> owl:sameAs <http://id.insee.fr/geo/arrondissement/992> .
+  <http://id.insee.fr/geo/arrondissement/992> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-992> .
+
+  # =========================================================
+  #   Arrondissement actif 993 (sans historique)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-993> a igeo:Arrondissement ;
+    igeo:codeINSEE "993" ;
+    igeo:nom "Arrondissement test 3" ;
+    igeo:nomSansArticle "Arrondissement test 3" ;
+    igeo:codeArticle "0" ;
+    igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-993> owl:sameAs <http://id.insee.fr/geo/arrondissement/993> .
+  <http://id.insee.fr/geo/arrondissement/993> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-993> .
+
+  # =========================================================
+  #   Arrondissement supprime 994 (predecesseur de 991)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-994> a igeo:Arrondissement ;
+    igeo:codeINSEE "994" ;
+    igeo:nom "Arrondissement ancien 1" ;
+    igeo:nomSansArticle "Arrondissement ancien 1" ;
+    igeo:codeArticle "0" ;
+    igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-994> owl:sameAs <http://id.insee.fr/geo/arrondissement/994> .
+  <http://id.insee.fr/geo/arrondissement/994> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-994> .
+
+  # =========================================================
+  #   Arrondissement supprime 995 (predecesseur de 991)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-995> a igeo:Arrondissement ;
+    igeo:codeINSEE "995" ;
+    igeo:nom "Arrondissement ancien 2" ;
+    igeo:nomSansArticle "Arrondissement ancien 2" ;
+    igeo:codeArticle "0" ;
+    igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99002> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-995> owl:sameAs <http://id.insee.fr/geo/arrondissement/995> .
+  <http://id.insee.fr/geo/arrondissement/995> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-995> .
+
+  # =========================================================
+  #   Arrondissement supprime 996 (remplace par 994, 995, 997)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-996> a igeo:Arrondissement ;
+    igeo:codeINSEE "996" ;
+    igeo:nom "Arrondissement remplace" ;
+    igeo:nomSansArticle "Arrondissement remplace" ;
+    igeo:codeArticle "0" ;
+    igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-996> owl:sameAs <http://id.insee.fr/geo/arrondissement/996> .
+  <http://id.insee.fr/geo/arrondissement/996> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-996> .
+
+  # =========================================================
+  #   Arrondissement supprime 997 (successeur de 996, pas lie a 991)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-997> a igeo:Arrondissement ;
+    igeo:codeINSEE "997" ;
+    igeo:nom "Arrondissement ancien 3" ;
+    igeo:nomSansArticle "Arrondissement ancien 3" ;
+    igeo:codeArticle "0" ;
+    igeo:sousPrefecture <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/arrondissement/test-arr-997> owl:sameAs <http://id.insee.fr/geo/arrondissement/997> .
+  <http://id.insee.fr/geo/arrondissement/997> owl:sameAs <http://id.insee.fr/geo/arrondissement/test-arr-997> .
+
+  # =========================================================
+  #   Evenements geographiques
+  # =========================================================
+
+  # Evenement 1 : creation de 996 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-001> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/arrondissement/test-arr-996> .
+
+  # Evenement 2 : suppression de 996, creation de 994, 995, 997 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-002> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/arrondissement/test-arr-996> ;
+    igeo:creation <http://id.insee.fr/geo/arrondissement/test-arr-994>,
+      <http://id.insee.fr/geo/arrondissement/test-arr-995>,
+      <http://id.insee.fr/geo/arrondissement/test-arr-997> .
+
+  # Evenement 3 : suppression de 994, 995, creation de 991 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-003> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/arrondissement/test-arr-994>,
+      <http://id.insee.fr/geo/arrondissement/test-arr-995> ;
+    igeo:creation <http://id.insee.fr/geo/arrondissement/test-arr-991> .
+
+  # Evenement 4 : creation de 992, 993 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-004> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/arrondissement/test-arr-992>,
+      <http://id.insee.fr/geo/arrondissement/test-arr-993> .
+
+  # Evenement 5 : suppression de region 88, creation de region 99 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-005> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/region/test-reg-88> ;
+    igeo:creation <http://id.insee.fr/geo/region/test-reg-99> .
+
+  # Evenement 6 : suppression de dept 11, creation de dept 10 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-006> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/departement/test-dep-11> ;
+    igeo:creation <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  # Evenement 7 : creation des communes test (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-007> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/commune/test-com-99001>,
+      <http://id.insee.fr/geo/commune/test-com-99002> .
+
+  # Evenement 8 : creation des communes deleguees test (2015-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-008> a igeo:EvenementGeographique ;
+    igeo:date "2015-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/communeDeleguee/test-comdel-98001>,
+      <http://id.insee.fr/geo/communeDeleguee/test-comdel-98002> .
+
+  # Evenement 9 : suppression de 997 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-009> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/arrondissement/test-arr-997> .
+
+  # =========================================================
+  #   Communes test pour succession (descendants de arr 992)
+  # =========================================================
+
+  # Commune active 99003 (a 2 predecesseurs : 99004, 99005)
+  <http://id.insee.fr/geo/commune/test-com-99003> a igeo:Commune ;
+    igeo:codeINSEE "99003" ;
+    igeo:nom "Commune test 3" ;
+    igeo:nomSansArticle "Commune test 3" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/arrondissement/test-arr-992> .
+
+  <http://id.insee.fr/geo/commune/test-com-99003> owl:sameAs <http://id.insee.fr/geo/commune/99003> .
+  <http://id.insee.fr/geo/commune/99003> owl:sameAs <http://id.insee.fr/geo/commune/test-com-99003> .
+
+  # Commune supprimee 99004 (predecesseur de 99003)
+  <http://id.insee.fr/geo/commune/test-com-99004> a igeo:Commune ;
+    igeo:codeINSEE "99004" ;
+    igeo:nom "Commune ancienne 1" ;
+    igeo:nomSansArticle "Commune ancienne 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/arrondissement/test-arr-992> .
+
+  <http://id.insee.fr/geo/commune/test-com-99004> owl:sameAs <http://id.insee.fr/geo/commune/99004> .
+  <http://id.insee.fr/geo/commune/99004> owl:sameAs <http://id.insee.fr/geo/commune/test-com-99004> .
+
+  # Commune supprimee 99005 (predecesseur de 99003)
+  <http://id.insee.fr/geo/commune/test-com-99005> a igeo:Commune ;
+    igeo:codeINSEE "99005" ;
+    igeo:nom "Commune ancienne 2" ;
+    igeo:nomSansArticle "Commune ancienne 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/arrondissement/test-arr-992> .
+
+  <http://id.insee.fr/geo/commune/test-com-99005> owl:sameAs <http://id.insee.fr/geo/commune/99005> .
+  <http://id.insee.fr/geo/commune/99005> owl:sameAs <http://id.insee.fr/geo/commune/test-com-99005> .
+
+  # =========================================================
+  #   Canton test 9901 (actif, successeur de 9903)
+  # =========================================================
+
+  <http://id.insee.fr/geo/canton/test-can-9901> a igeo:Canton ;
+    igeo:codeINSEE "9901" ;
+    igeo:nom "Canton test 1" ;
+    igeo:nomSansArticle "Canton test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99001> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/canton/test-can-9901> owl:sameAs <http://id.insee.fr/geo/canton/9901> .
+  <http://id.insee.fr/geo/canton/9901> owl:sameAs <http://id.insee.fr/geo/canton/test-can-9901> .
+
+  # =========================================================
+  #   Canton test 9902 (actif, sans historique)
+  # =========================================================
+
+  <http://id.insee.fr/geo/canton/test-can-9902> a igeo:Canton ;
+    igeo:codeINSEE "9902" ;
+    igeo:nom "Canton test 2" ;
+    igeo:nomSansArticle "Canton test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99002> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/canton/test-can-9902> owl:sameAs <http://id.insee.fr/geo/canton/9902> .
+  <http://id.insee.fr/geo/canton/9902> owl:sameAs <http://id.insee.fr/geo/canton/test-can-9902> .
+
+  # =========================================================
+  #   Canton test 9903 (supprime, predecesseur de 9901)
+  # =========================================================
+
+  <http://id.insee.fr/geo/canton/test-can-9903> a igeo:Canton ;
+    igeo:codeINSEE "9903" ;
+    igeo:nom "Canton ancien" ;
+    igeo:nomSansArticle "Canton ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:bureauCentralisateur <http://id.insee.fr/geo/commune/test-com-99003> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/canton/test-can-9903> owl:sameAs <http://id.insee.fr/geo/canton/9903> .
+  <http://id.insee.fr/geo/canton/9903> owl:sameAs <http://id.insee.fr/geo/canton/test-can-9903> .
+
+  # =========================================================
+  #   Relations canton-commune (intersection)
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99001> igeo:territoireCommunAvec
+    <http://id.insee.fr/geo/canton/test-can-9901>,
+    <http://id.insee.fr/geo/canton/test-can-9902> .
+
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:territoireCommunAvec
+    <http://id.insee.fr/geo/canton/test-can-9901> .
+
+  # =========================================================
+  #   Evenements geographiques (communes et cantons)
+  # =========================================================
+
+  # Evenement 10 : creation des communes 99004, 99005 (2005-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-010> a igeo:EvenementGeographique ;
+    igeo:date "2005-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/commune/test-com-99004>,
+      <http://id.insee.fr/geo/commune/test-com-99005> .
+
+  # Evenement 11 : suppression de 99004, 99005, creation de 99003 (2018-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-011> a igeo:EvenementGeographique ;
+    igeo:date "2018-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/commune/test-com-99004>,
+      <http://id.insee.fr/geo/commune/test-com-99005> ;
+    igeo:creation <http://id.insee.fr/geo/commune/test-com-99003> .
+
+  # Evenement 12 : suppression de 9903, creation de 9901 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-012> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/canton/test-can-9903> ;
+    igeo:creation <http://id.insee.fr/geo/canton/test-can-9901> .
+
+  # Evenement 14 : creation de 9902 (2001-01-01, sans lien avec suppression de 9903)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-014> a igeo:EvenementGeographique ;
+    igeo:date "2001-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/canton/test-can-9902> .
+
+  # Evenement 13 : creation du canton 9903 (1980-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-013> a igeo:EvenementGeographique ;
+    igeo:date "1980-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/canton/test-can-9903> .
+
+  # Evenement 20 : creation du departement 11 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-020> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/departement/test-dep-11> .
+
+  # Evenement 21 : creation de la region 88 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-021> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/region/test-reg-88> .
+
+  # =========================================================
+  #   Aire d'attraction des villes 2020 test T01 (actif)
+  # =========================================================
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> a igeo:AireDAttractionDesVilles2020 ;
+    igeo:codeINSEE "T01" ;
+    igeo:nom "Aire d attraction test 1" ;
+    igeo:nomSansArticle "Aire d attraction test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T01> .
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T01> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+
+  # =========================================================
+  #   Aire d'attraction des villes 2020 test T02 (supprime)
+  # =========================================================
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> a igeo:AireDAttractionDesVilles2020 ;
+    igeo:codeINSEE "T02" ;
+    igeo:nom "Aire d attraction test 2" ;
+    igeo:nomSansArticle "Aire d attraction test 2" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T02> .
+  <http://id.insee.fr/geo/aireDAttractionDesVilles2020/T02> owl:sameAs <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> .
+
+  # =========================================================
+  #   Relations subdivisionDirecteDe communes -> AAV T01
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99001> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+  <http://id.insee.fr/geo/commune/test-com-99003> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+
+  # =========================================================
+  #   Evenements AAV
+  # =========================================================
+
+  # Evenement 030 : creation de AAV T01 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-030> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T01> .
+
+  # Evenement 031 : creation de AAV T02 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-031> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> .
+
+  # Evenement 032 : suppression de AAV T02 (2024-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-032> a igeo:EvenementGeographique ;
+    igeo:date "2024-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/aireDAttractionDesVilles2020/test-aav-T02> .
+
+  # =========================================================
+  #   Arrondissement municipal test 75101 (actif, successeur de 75102)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> a igeo:ArrondissementMunicipal ;
+    igeo:codeINSEE "75101" ;
+    igeo:nom "Arrondissement municipal test 1" ;
+    igeo:nomSansArticle "Arrondissement municipal test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/75101> .
+  <http://id.insee.fr/geo/arrondissementMunicipal/75101> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> .
+
+  # =========================================================
+  #   Arrondissement municipal test 75102 (supprime, predecesseur de 75101)
+  # =========================================================
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> a igeo:ArrondissementMunicipal ;
+    igeo:codeINSEE "75102" ;
+    igeo:nom "Arrondissement municipal test 2" ;
+    igeo:nomSansArticle "Arrondissement municipal test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/75102> .
+  <http://id.insee.fr/geo/arrondissementMunicipal/75102> owl:sameAs <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> .
+
+  # =========================================================
+  #   Evenements arrondissements municipaux
+  # =========================================================
+
+  # Evenement 040 : creation de ArrMun 75102 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-040> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> .
+
+  # Evenement 041 : suppression de ArrMun 75102, creation de ArrMun 75101 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-041> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75102> ;
+    igeo:creation <http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101> .
+
+  # =========================================================
+  #   Bassin de vie 2022 test 88001 (actif)
+  # =========================================================
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> a igeo:BassinDeVie2022 ;
+    igeo:codeINSEE "88001" ;
+    igeo:nom "Bassin de vie test 1" ;
+    igeo:nomSansArticle "Bassin de vie test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/88001> .
+  <http://id.insee.fr/geo/bassinDeVie2022/88001> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+
+  # =========================================================
+  #   Bassin de vie 2022 test 88002 (actif)
+  # =========================================================
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> a igeo:BassinDeVie2022 ;
+    igeo:codeINSEE "88002" ;
+    igeo:nom "Bassin de vie test 2" ;
+    igeo:nomSansArticle "Bassin de vie test 2" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/88002> .
+  <http://id.insee.fr/geo/bassinDeVie2022/88002> owl:sameAs <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> .
+
+  # =========================================================
+  #   Relations subdivisionDirecteDe communes -> BV 88001
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+  <http://id.insee.fr/geo/commune/test-com-99003> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+
+  # =========================================================
+  #   Evenements BV
+  # =========================================================
+
+  # Evenement 050 : creation de BV 88001 (2022-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-050> a igeo:EvenementGeographique ;
+    igeo:date "2022-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001> .
+
+  # Evenement 051 : creation de BV 88002 (2022-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-051> a igeo:EvenementGeographique ;
+    igeo:date "2022-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002> .
+
+  # =========================================================
+  #   Canton-ou-ville test 7701 (actif, successeur de 7703)
+  # =========================================================
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> a igeo:CantonOuVille ;
+    igeo:codeINSEE "7701" ;
+    igeo:nom "Canton-ou-ville test 1" ;
+    igeo:nomSansArticle "Canton-ou-ville test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/7701> .
+  <http://id.insee.fr/geo/cantonOuVille/7701> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+
+  # =========================================================
+  #   Canton-ou-ville test 7702 (actif, sans historique)
+  # =========================================================
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> a igeo:CantonOuVille ;
+    igeo:codeINSEE "7702" ;
+    igeo:nom "Canton-ou-ville test 2" ;
+    igeo:nomSansArticle "Canton-ou-ville test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/7702> .
+  <http://id.insee.fr/geo/cantonOuVille/7702> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> .
+
+  # =========================================================
+  #   Canton-ou-ville test 7703 (supprime, predecesseur de 7701)
+  # =========================================================
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> a igeo:CantonOuVille ;
+    igeo:codeINSEE "7703" ;
+    igeo:nom "Canton-ou-ville ancien" ;
+    igeo:nomSansArticle "Canton-ou-ville ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/departement/test-dep-10> .
+
+  <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/7703> .
+  <http://id.insee.fr/geo/cantonOuVille/7703> owl:sameAs <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> .
+
+  # =========================================================
+  #   Relations subdivisionDirecteDe communes -> COV 7701
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-99002> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+  <http://id.insee.fr/geo/commune/test-com-99003> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+
+  # =========================================================
+  #   Evenements COV
+  # =========================================================
+
+  # Evenement 060 : creation de COV 7703 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-060> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> .
+
+  # Evenement 061 : creation de COV 7702 (2016-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-061> a igeo:EvenementGeographique ;
+    igeo:date "2016-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/cantonOuVille/test-cov-7702> .
+
+  # Evenement 062 : suppression de COV 7703, creation de COV 7701 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-062> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/cantonOuVille/test-cov-7703> ;
+    igeo:creation <http://id.insee.fr/geo/cantonOuVille/test-cov-7701> .
+
+  # =========================================================
+  #   CollectiviteDOutreMer test 986 (parent de CT 98601)
+  # =========================================================
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> a igeo:CollectiviteDOutreMer ;
+    igeo:codeINSEE "986" ;
+    igeo:nom "Collectivite test" ;
+    igeo:nomSansArticle "Collectivite test" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/986> .
+  <http://id.insee.fr/geo/collectiviteDOutreMer/986> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> .
+
+  # =========================================================
+  #   CollectiviteDOutreMer test 987 (supprimee)
+  # =========================================================
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> a igeo:CollectiviteDOutreMer ;
+    igeo:codeINSEE "987" ;
+    igeo:nom "Collectivite ancienne" ;
+    igeo:nomSansArticle "Collectivite ancienne" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/987> .
+  <http://id.insee.fr/geo/collectiviteDOutreMer/987> owl:sameAs <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> .
+
+  # =========================================================
+  #   CirconscriptionTerritoriale test 98601
+  # =========================================================
+
+  <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> a igeo:CirconscriptionTerritoriale ;
+    igeo:codeINSEE "98601" ;
+    igeo:nom "Circonscription test 1" ;
+    igeo:nomSansArticle "Circonscription test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> .
+
+  <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> owl:sameAs <http://id.insee.fr/geo/circonscriptionTerritoriale/98601> .
+  <http://id.insee.fr/geo/circonscriptionTerritoriale/98601> owl:sameAs <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> .
+
+  # =========================================================
+  #   Evenements CirconscriptionTerritoriale / CollectiviteDOutreMer
+  # =========================================================
+
+  # Evenement 070 : creation de COM 986 et CT 98601, suppression de COM 987 (1985-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-070> a igeo:EvenementGeographique ;
+    igeo:date "1985-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> ;
+    igeo:creation <http://id.insee.fr/geo/circonscriptionTerritoriale/test-cir-98601> ;
+    igeo:suppression <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> .
+
+  # Evenement 071 : creation de COM 987 (1950-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-071> a igeo:EvenementGeographique ;
+    igeo:date "1950-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-987> .
+
+  # =========================================================
+  #   CommuneAssociee test 99101 (active, subdivision de commune 99001)
+  # =========================================================
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99101> a igeo:CommuneAssociee ;
+    igeo:codeINSEE "99101" ;
+    igeo:nom "Commune associee test 1" ;
+    igeo:nomSansArticle "Commune associee test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99101> owl:sameAs <http://id.insee.fr/geo/communeAssociee/99101> .
+  <http://id.insee.fr/geo/communeAssociee/99101> owl:sameAs <http://id.insee.fr/geo/communeAssociee/test-comas-99101> .
+
+  # =========================================================
+  #   CommuneAssociee test 99102 (supprimee)
+  # =========================================================
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99102> a igeo:CommuneAssociee ;
+    igeo:codeINSEE "99102" ;
+    igeo:nom "Commune associee ancienne" ;
+    igeo:nomSansArticle "Commune associee ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/communeAssociee/test-comas-99102> owl:sameAs <http://id.insee.fr/geo/communeAssociee/99102> .
+  <http://id.insee.fr/geo/communeAssociee/99102> owl:sameAs <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
+
+  # =========================================================
+  #   District test 98610 (subdivision de COM 986)
+  # =========================================================
+
+  <http://id.insee.fr/geo/district/test-dis-98610> a igeo:District ;
+    igeo:codeINSEE "98610" ;
+    igeo:nom "District test 1" ;
+    igeo:nomSansArticle "District test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986> .
+
+  <http://id.insee.fr/geo/district/test-dis-98610> owl:sameAs <http://id.insee.fr/geo/district/98610> .
+  <http://id.insee.fr/geo/district/98610> owl:sameAs <http://id.insee.fr/geo/district/test-dis-98610> .
+
+  # =========================================================
+  #   Evenements CommuneAssociee
+  # =========================================================
+
+  # Evenement 080 : creation de commune associee 99102 (1970-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-080> a igeo:EvenementGeographique ;
+    igeo:date "1970-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
+
+  # Evenement 081 : creation de commune associee 99101, suppression de 99102 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-081> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/communeAssociee/test-comas-99101> ;
+    igeo:suppression <http://id.insee.fr/geo/communeAssociee/test-comas-99102> .
+
+  # =========================================================
+  #   Evenements CommuneDeleguee
+  # =========================================================
+
+  # Evenement 082 : creation de commune deleguee 98003 (1990-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-082> a igeo:EvenementGeographique ;
+    igeo:date "1990-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> .
+
+  # Evenement 083 : suppression de commune deleguee 98003 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-083> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/communeDeleguee/test-comdel-98003> .
+
+  # =========================================================
+  #   Evenements District
+  # =========================================================
+
+  # Evenement 084 : creation du district 98610 (1985-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-084> a igeo:EvenementGeographique ;
+    igeo:date "1985-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/district/test-dis-98610> .
+
+  # =========================================================
+  #   Intercommunalites test
+  # =========================================================
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-001> a igeo:Intercommunalite ;
+    igeo:codeINSEE "999000001" ;
+    igeo:nom "Intercommunalite test 1" ;
+    igeo:nomSansArticle "Intercommunalite test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:nomIntercommunalite "CC d'Intercommunalite test 1" ;
+    insee:categorieJuridique <http://id.insee.fr/codes/cj/n3/245> .
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-001> owl:sameAs <http://id.insee.fr/geo/intercommunalite/999000001> .
+  <http://id.insee.fr/geo/intercommunalite/999000001> owl:sameAs <http://id.insee.fr/geo/intercommunalite/test-interco-001> .
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-002> a igeo:Intercommunalite ;
+    igeo:codeINSEE "999000002" ;
+    igeo:nom "Intercommunalite test ancienne" ;
+    igeo:nomSansArticle "Intercommunalite test ancienne" ;
+    igeo:codeArticle "0" ;
+    igeo:nomIntercommunalite "CC d'Intercommunalite test ancienne" ;
+    insee:categorieJuridique <http://id.insee.fr/codes/cj/n3/245> .
+
+  <http://id.insee.fr/geo/intercommunalite/test-interco-002> owl:sameAs <http://id.insee.fr/geo/intercommunalite/999000002> .
+  <http://id.insee.fr/geo/intercommunalite/999000002> owl:sameAs <http://id.insee.fr/geo/intercommunalite/test-interco-002> .
+
+  # =========================================================
+  #   Communes test (descendants de intercommunalite 999000001)
+  # =========================================================
+
+  <http://id.insee.fr/geo/commune/test-com-88001> a igeo:Commune ;
+    igeo:codeINSEE "88001" ;
+    igeo:nom "Commune interco test 1" ;
+    igeo:nomSansArticle "Commune interco test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001>,
+      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101>,
+      <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
+
+  <http://id.insee.fr/geo/commune/test-com-88001> owl:sameAs <http://id.insee.fr/geo/commune/88001> .
+  <http://id.insee.fr/geo/commune/88001> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88001> .
+
+  <http://id.insee.fr/geo/commune/test-com-88002> a igeo:Commune ;
+    igeo:codeINSEE "88002" ;
+    igeo:nom "Commune interco test 2" ;
+    igeo:nomSansArticle "Commune interco test 2" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/intercommunalite/test-interco-001>,
+      <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101>,
+      <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
+
+  <http://id.insee.fr/geo/commune/test-com-88002> owl:sameAs <http://id.insee.fr/geo/commune/88002> .
+  <http://id.insee.fr/geo/commune/88002> owl:sameAs <http://id.insee.fr/geo/commune/test-com-88002> .
+
+  # =========================================================
+  #   Evenements Intercommunalite
+  # =========================================================
+
+  # Evenement 090 : creation de l'intercommunalite 999000002 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-090> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/intercommunalite/test-interco-002> .
+
+  # Evenement 091 : succession interco2 -> interco1 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-091> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/intercommunalite/test-interco-001> ;
+    igeo:suppression <http://id.insee.fr/geo/intercommunalite/test-interco-002> .
+
+  # Evenement 092 : creation des communes 88001 et 88002 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-092> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/commune/test-com-88001>,
+      <http://id.insee.fr/geo/commune/test-com-88002> .
+
+  # =========================================================
+  #   Pays test
+  # =========================================================
+
+  <http://id.insee.fr/geo/pays/test-pays-99901> a igeo:Pays ;
+    igeo:codeINSEE "99901" ;
+    igeo:nom "Pays test 1" ;
+    igeo:nomLong "Republique du Pays test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:codeIso3166alpha2 "ZT" ;
+    igeo:codeIso3166alpha3 "ZTS" ;
+    igeo:codeIso3166num "991" .
+
+  <http://id.insee.fr/geo/pays/test-pays-99901> owl:sameAs <http://id.insee.fr/geo/pays/99901> .
+  <http://id.insee.fr/geo/pays/99901> owl:sameAs <http://id.insee.fr/geo/pays/test-pays-99901> .
+
+  <http://id.insee.fr/geo/pays/test-pays-99902> a igeo:Pays ;
+    igeo:codeINSEE "99902" ;
+    igeo:nom "Pays test ancien" ;
+    igeo:nomLong "Republique du Pays test ancien" ;
+    igeo:codeArticle "0" ;
+    igeo:codeIso3166alpha2 "ZA" ;
+    igeo:codeIso3166alpha3 "ZAN" ;
+    igeo:codeIso3166num "992" .
+
+  <http://id.insee.fr/geo/pays/test-pays-99902> owl:sameAs <http://id.insee.fr/geo/pays/99902> .
+  <http://id.insee.fr/geo/pays/99902> owl:sameAs <http://id.insee.fr/geo/pays/test-pays-99902> .
+
+  # =========================================================
+  #   Territoire test (descendant de Pays 99901)
+  # =========================================================
+
+  <http://id.insee.fr/geo/territoire/test-territoire-99904> a igeo:Territoire ;
+    igeo:codeINSEE "99904" ;
+    igeo:nom "Territoire test 1" ;
+    igeo:nomLong "Territoire test 1 complet" ;
+    igeo:codeArticle "0" ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/pays/test-pays-99901> .
+
+  <http://id.insee.fr/geo/territoire/test-territoire-99904> owl:sameAs <http://id.insee.fr/geo/territoire/99904> .
+  <http://id.insee.fr/geo/territoire/99904> owl:sameAs <http://id.insee.fr/geo/territoire/test-territoire-99904> .
+
+  # =========================================================
+  #   Evenements Pays
+  # =========================================================
+
+  # Evenement 096 : creation pays ancien 99902 (2000-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-096> a igeo:EvenementGeographique ;
+    igeo:date "2000-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/pays/test-pays-99902> .
+
+  # Evenement 097 : succession 99902 -> 99901 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-097> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:suppression <http://id.insee.fr/geo/pays/test-pays-99902> ;
+    igeo:creation <http://id.insee.fr/geo/pays/test-pays-99901> .
+
+  # Evenement 098 : creation territoire 99904 (2010-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-098> a igeo:EvenementGeographique ;
+    igeo:date "2010-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/territoire/test-territoire-99904> .
+
+  # =========================================================
+  #   IRIS test (descendant de commune 99001)
+  # =========================================================
+
+  <http://id.insee.fr/geo/iris/test-iris-990010101> a igeo:Iris ;
+    igeo:codeINSEE "990010101" ;
+    igeo:nom "Iris test 1" ;
+    igeo:nomSansArticle "Iris test 1" ;
+    igeo:codeArticle "0" ;
+    igeo:typeDIRIS <http://id.insee.fr/codes/iris/type/H> ;
+    igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  <http://id.insee.fr/geo/iris/test-iris-990010101> owl:sameAs <http://id.insee.fr/geo/iris/990010101> .
+  <http://id.insee.fr/geo/iris/990010101> owl:sameAs <http://id.insee.fr/geo/iris/test-iris-990010101> .
+
+  # =========================================================
+  #   Relation Region -> Pays/france (pour filtre com=false)
+  # =========================================================
+
+  <http://id.insee.fr/geo/region/test-reg-99> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/pays/france> .
+
+  # =========================================================
+  #   Evenements IRIS
+  # =========================================================
+
+  # Evenement 095 : creation de l'IRIS 990010101 (2008-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-095> a igeo:EvenementGeographique ;
+    igeo:date "2008-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/iris/test-iris-990010101> .
+
+  # =========================================================
+  #   Quartier prioritaire de la politique de la ville 2024
+  # =========================================================
+
+  <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M> a igeo:QuartierPrioritaireDeLaPolitiqueDeLaVille2024 ;
+    igeo:codeINSEE "QN01001M" ;
+    igeo:codeArticle "X" ;
+    igeo:nom "QPV test 1" ;
+    igeo:nomSansArticle "QPV test 1" .
+
+  <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M> owl:sameAs <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QN01001M> .
+  <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/QN01001M> owl:sameAs <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M> .
+
+  # =========================================================
+  #   Relation QPV -> Commune (subdivisionDirecteDe)
+  # =========================================================
+
+  <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M> igeo:subdivisionDirecteDe <http://id.insee.fr/geo/commune/test-com-99001> .
+
+  # =========================================================
+  #   Evenements QPV
+  # =========================================================
+
+  # Evenement 100 : creation du QPV QN01001M (2024-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-100> a igeo:EvenementGeographique ;
+    igeo:date "2024-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M> .
+
+  # =========================================================
+  #   Unite Urbaine 2020
+  # =========================================================
+
+  <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> a igeo:UniteUrbaine2020 ;
+    igeo:codeINSEE "99101" ;
+    igeo:nom "Unite urbaine test 1" ;
+    igeo:nomSansArticle "Unite urbaine test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> owl:sameAs <http://id.insee.fr/geo/uniteUrbaine2020/99101> .
+  <http://id.insee.fr/geo/uniteUrbaine2020/99101> owl:sameAs <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
+
+  # =========================================================
+  #   Evenements Unite Urbaine 2020
+  # =========================================================
+
+  # Evenement 101 : creation de l'unite urbaine 99101 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-101> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/uniteUrbaine2020/test-uu-99101> .
+
+  # =========================================================
+  #   Zone d'Emploi 2020
+  # =========================================================
+
+  <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> a igeo:ZoneDEmploi2020 ;
+    igeo:codeINSEE "9901" ;
+    igeo:nom "Zone d emploi test 1" ;
+    igeo:nomSansArticle "Zone d emploi test 1" ;
+    igeo:codeArticle "0" .
+
+  <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> owl:sameAs <http://id.insee.fr/geo/zoneDEmploi2020/9901> .
+  <http://id.insee.fr/geo/zoneDEmploi2020/9901> owl:sameAs <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
+
+  # =========================================================
+  #   Evenements Zone d'Emploi 2020
+  # =========================================================
+
+  # Evenement 102 : creation de la zone d'emploi 9901 (2020-01-01)
+  <http://id.insee.fr/geo/evenementGeographique/test-evt-102> a igeo:EvenementGeographique ;
+    igeo:date "2020-01-01"^^xsd:date ;
+    igeo:creation <http://id.insee.fr/geo/zoneDEmploi2020/test-ze-9901> .
+}
+
+<http://rdf.insee.fr/graphes/codes/cj> {
+
+  # =========================================================
+  #   Categories juridiques (SKOS) pour intercommunalites
+  # =========================================================
+
+  <http://id.insee.fr/codes/cj/n3/245> a skos:Concept ;
+    skos:prefLabel "Communaute de communes" .
+}

@@ -1,19 +1,23 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-
 import fr.insee.rmes.magmafusion.api.GeoArrondissementMunipalEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestcontainerTestDiffusion;
-import fr.insee.rmes.magmafusion.model.ArrondissementMunicipal;
-import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
-import fr.insee.rmes.magmafusion.model.TypeEnum;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
+import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsArrondissementMunicipal;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,219 +27,216 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Tag("integration")
-
-
-public class GeoArrondissementMunicipalQueriesTest extends TestcontainerTestDiffusion {
+class GeoArrondissementMunicipalQueriesTest extends TestContainer {
 
     @Autowired
     GeoArrondissementMunipalEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/arrondissementMunicipal/{code}/ascendants          ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/arrondissementMunicipal/{code}")
+    class GetCogArrMu {
 
-//    geo/arrondissementMunicipal/13202/ascendants renvoie 11 ascendants
-    @Test
-    void should_return_11_territoires_when_ArrondissementMunicipalCodeAscendants_code13202_date20250904_typeNull(){
-        var response  = endpoints.getcogarrmuasc("13202", LocalDate.of(2025, 9, 4), null);
-        var result = response.getBody();
-        assertNotNull(result);
-        assertEquals(11, result.size());
+        @Test
+        @DisplayName("When getcogarrmu 75101, returns ArrMun 75101")
+        void should_return_arrmu_75101_when_getcogarrmu_75101() throws Exception {
+            var response = endpoints.getcogarrmu("75101", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-        // Vérifie le premier élément (AireDAttractionDesVilles2020)
-        var resultItem1 = result.getFirst();
-        assertEquals("003", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/aireDAttractionDesVilles2020/132d17f0-048f-4e01-91f6-88c383c7a2b9", resultItem1.getUri());
-        assertEquals(TypeEnum.AIRE_D_ATTRACTION_DES_VILLES2020, resultItem1.getType());
-        assertEquals(LocalDate.of(2020, 1, 1), resultItem1.getDateCreation());
-        assertEquals("Marseille - Aix-en-Provence", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Marseille - Aix-en-Provence", resultItem1.getIntitule());
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        // Vérifie le deuxième élément (Arrondissement)
-        assertEquals("133", result.get(1).getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissement/5af92f83-0b53-4143-91a0-e5206ce9d5f6", result.get(1).getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT, result.get(1).getType());
-        assertEquals(LocalDate.of(2017, 3, 1), result.get(1).getDateCreation());
-        assertEquals("Marseille", result.get(1).getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, result.get(1).getTypeArticle());
-        assertEquals("Marseille", result.get(1).getIntitule());
+        @Test
+        @DisplayName("When getcogarrmu 75199 (inexistant), returns 404")
+        void should_return_404_when_getcogarrmu_75199_inexistant() {
+            var response = endpoints.getcogarrmu("75199", LocalDate.of(2025, 1, 1));
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
     }
 
-    /////////////////////////////////////////////////////////////////////
-    ///        geo/arrondissementMunicipal/{code}                     ///
-    /////////////////////////////////////////////////////////////////////
+    @Nested
+    @DisplayName("geo/arrondissementMunicipal/{code}/ascendants")
+    class GetCogArrMuAsc {
 
-//    geo/arrondissementMunicipal/69385?date=2025-09-04
-    @Test
-    void should_return_ArrondissementMunicipal_When_code69385_date20250904() {
-        var response = endpoints.getcogarrmu("69385", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        assertEquals("69385", result.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/cd9f4663-684c-455d-b62e-39e51c6fad99", result.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, result.getType());
-        assertEquals(LocalDate.of(1964, 8, 12), result.getDateCreation());
-        assertEquals("Lyon 5e Arrondissement", result.getIntituleSansArticle());
-        assertEquals(ArrondissementMunicipal.TypeArticleEnum._0, result.getTypeArticle());
-        assertEquals("Lyon 5e Arrondissement", result.getIntitule());
+        @Test
+        @DisplayName("When getcogarrmuasc 75101 type null, returns 5 ascendants")
+        void should_return_5_ascendants_when_getcogarrmuasc_75101_type_null() throws Exception {
+            var response = endpoints.getcogarrmuasc("75101", LocalDate.of(2025, 1, 1), null);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-ascendants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+
+        @Test
+        @DisplayName("When getcogarrmuasc 75101 type Commune, returns 1 commune")
+        void should_return_1_commune_when_getcogarrmuasc_75101_type_commune() throws Exception {
+            var response = endpoints.getcogarrmuasc("75101", LocalDate.of(2025, 1, 1), TypeEnumAscendantsArrondissementMunicipal.COMMUNE);
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-ascendants-commune-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-//    geo/arrondissementMunicipal/69380?date=2025-09-04 renvoie 404
-    @Test
-    //l'arrondissement municipal 69380 n'existe pas
-    void should_return_404_when_ArrondissementMunicipalCode_code69380_date20250904() throws Exception {
-            mockMvc.perform(get("/geo/arrondissementMunicipal/69380")
-                            .param("date", "2025-09-01"))
-                    .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("geo/arrondissementsMunicipaux")
+    class GetCogArrMuListe {
+
+        @Test
+        @DisplayName("When getcogarrmuliste date=2025-01-01, returns 1 ArrMun actif")
+        void should_return_1_arrmu_when_getcogarrmuliste_date() throws Exception {
+            var response = endpoints.getcogarrmuliste("2025-01-01");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissements-municipaux-liste-date-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
+
+        @Test
+        @DisplayName("When getcogarrmuliste date=*, returns 2 ArrMun")
+        void should_return_2_arrmu_when_getcogarrmuliste_etoile() throws Exception {
+            var response = endpoints.getcogarrmuliste("*");
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissements-municipaux-liste-etoile-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, false);
+        }
     }
 
+    @Nested
+    @DisplayName("geo/arrondissementMunicipal/{code}/precedents")
+    class GetCogArrMuPrec {
 
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/arrondissementsMunicipaux                         ///
-    ////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogarrmuprec 75101, returns 1 precedent (75102)")
+        void should_return_1_precedent_when_getcogarrmuprec_75101() throws Exception {
+            var response = endpoints.getcogarrmuprec("75101", LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
 
-//    geo/arrondissementsMunicipaux?date=2025-09-04//
-    @Test
-    void should_return_45_arrondissementsMunicipaux_when_ArrondissementsMunicipaux_date20250904(){
-        var response  = endpoints.getcogarrmuliste ("2025-09-04");
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(45, result.size());
-        assertEquals("13201", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/d2ae811d-f0b8-4bac-972d-01dabe292665", resultItem1.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem1.getType());
-        assertEquals(LocalDate.of(1946, 10, 18), resultItem1.getDateCreation());
-        assertEquals("Marseille 1er Arrondissement", resultItem1.getIntituleSansArticle());
-        assertEquals(ArrondissementMunicipal.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Marseille 1er Arrondissement", resultItem1.getIntitule());
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-precedents-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
 
-        var resultItem2= result.get(1);
-        assertEquals("13202", resultItem2.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/00b1eb8a-1163-4108-a64f-aee2e6d88e0a", resultItem2.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem2.getType());
-        assertEquals(LocalDate.of(1946, 10, 18), resultItem2.getDateCreation());
-        assertEquals("Marseille 2e Arrondissement", resultItem2.getIntituleSansArticle());
-        assertEquals(ArrondissementMunicipal.TypeArticleEnum._0, resultItem2.getTypeArticle());
-        assertEquals("Marseille 2e Arrondissement", resultItem2.getIntitule());
+        @Test
+        @DisplayName("When getcogarrmuprec 75102 (no precedents), returns 404")
+        void should_return_404_when_getcogarrmuprec_75102_no_precedents() {
+            var response = endpoints.getcogarrmuprec("75102", LocalDate.of(1995, 1, 1));
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
     }
 
-//    geo/arrondissementsMunicipaux?date=*
-@Test
-void should_return_45_arrondissementsMunicipaux_when_ArrondissementsMunicipaux_dateEtoile(){
-    var response  = endpoints.getcogarrmuliste ("2025-09-04");
-    var result = response.getBody();
-    assertNotNull(result);
-    var resultItem1= result.getFirst();
-    assertEquals(45, result.size());
-    assertEquals("13201", resultItem1.getCode());
-    assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/d2ae811d-f0b8-4bac-972d-01dabe292665", resultItem1.getUri());
-    assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem1.getType());
-    assertEquals(LocalDate.of(1946, 10, 18), resultItem1.getDateCreation());
-    assertEquals("Marseille 1er Arrondissement", resultItem1.getIntituleSansArticle());
-    assertEquals(ArrondissementMunicipal.TypeArticleEnum._0, resultItem1.getTypeArticle());
-    assertEquals("Marseille 1er Arrondissement", resultItem1.getIntitule());
+    @Nested
+    @DisplayName("geo/arrondissementMunicipal/{code}/projetes")
+    class GetCogArrMuProj {
 
-    var resultItem2= result.get(1);
-    assertEquals("13202", resultItem2.getCode());
-    assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/00b1eb8a-1163-4108-a64f-aee2e6d88e0a", resultItem2.getUri());
-    assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem2.getType());
-    assertEquals(LocalDate.of(1946, 10, 18), resultItem2.getDateCreation());
-    assertEquals("Marseille 2e Arrondissement", resultItem2.getIntituleSansArticle());
-    assertEquals(ArrondissementMunicipal.TypeArticleEnum._0, resultItem2.getTypeArticle());
-    assertEquals("Marseille 2e Arrondissement", resultItem2.getIntitule());
-}
+        @Test
+        @DisplayName("When getcogarrmuproj dateProjection null, returns 400")
+        void should_return_400_when_getcogarrmuproj_dateProjection_null() throws Exception {
+            mockMvc.perform(get("/geo/arrondissementMunicipal/75101/projetes")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
 
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/arrondissementMunicipal/{code}/precedents         ///
-    ////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogarrmuproj dateProjection empty, returns 400")
+        void should_return_400_when_getcogarrmuproj_dateProjection_empty() throws Exception {
+            mockMvc.perform(get("/geo/arrondissementMunicipal/75101/projetes")
+                            .param("dateProjection", "")
+                            .param("date", "2025-01-01"))
+                    .andExpect(status().isBadRequest());
+        }
 
-//    geo/arrondissementMunicipal/69385/precedents renvoie l’arrondissement municipal de Lyon 5e
-    @Test
-    void should_return_1_arrondissementMunicipal_when_ArrondissementMunicipalCodePrecedents_code69385_date20250904(){
-        var response  = endpoints.getcogarrmuprec ("69385", LocalDate.of(2025, 9, 4));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(1, result.size());
-        assertEquals("69385", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/67a81278-24c3-4aec-a2e8-fe914fe05fc2", resultItem1.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem1.getType());
-        assertEquals(LocalDate.of(1943, 1, 1), resultItem1.getDateCreation());
-        assertEquals(LocalDate.of(1964, 8, 12), resultItem1.getDateSuppression());
-        assertEquals("Lyon 5e Arrondissement", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Lyon 5e Arrondissement", resultItem1.getIntitule());
+        @Test
+        @DisplayName("When getcogarrmuproj 75101 dateProjection=1995-01-01, returns projection (75102)")
+        void should_return_1_projete_when_getcogarrmuproj_75101() throws Exception {
+            var response = endpoints.getcogarrmuproj("75101", LocalDate.of(1995, 1, 1), LocalDate.of(2025, 1, 1));
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-projetes-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 
-//    geo/arrondissementMunicipal/69385/precedents?date=1945-01-01  renvoie 404
-    @Test
-    void should_return_404_when_ArrondissementMunicipalCodePrecedents_code69385_date19450101() throws Exception{
-        mockMvc.perform(get("/geo/arrondissementMunicipal/69385/precedents")
-                        .param("date", "1945-01-01"))
-                .andExpect(status().isNotFound());
-    }
+    @Nested
+    @DisplayName("geo/arrondissementMunicipal/{code}/suivants")
+    class GetCogArrMuSuiv {
 
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/arrondissementMunicipal/{code}/projetes           ///
-    ////////////////////////////////////////////////////////////////////
+        @Test
+        @DisplayName("When getcogarrmusuiv 75101 (actif, pas de suivant), returns 404")
+        void should_return_404_when_getcogarrmusuiv_75101_no_suivants() {
+            var response = endpoints.getcogarrmusuiv("75101", LocalDate.of(2025, 1, 1));
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
 
-//    geo/arrondissementMunicipal/69385/projetes?date=1960-01-01&dateProjection=2011-12-31: renvoie les arrondissements de Lyon 5e et Lyon 9e
-    @Test
-    void should_return_2_arrondissementsMunicipaux_when_ArrondissementMunicipalCodeProjetes_code69385_date19600101_dateProjection20111231(){
-        var response  = endpoints.getcogarrmuproj ("69385", LocalDate.of(2011,12,31), LocalDate.of(1950,1,1));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2, result.size());
-        assertEquals("69385", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/cd9f4663-684c-455d-b62e-39e51c6fad99", resultItem1.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem1.getType());
-        assertEquals(LocalDate.of(1964, 8, 12), resultItem1.getDateCreation());
-        assertEquals("Lyon 5e Arrondissement", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Lyon 5e Arrondissement", resultItem1.getIntitule());
+        @Test
+        @DisplayName("When getcogarrmusuiv 75102, returns 1 suivant (75101)")
+        void should_return_1_suivant_when_getcogarrmusuiv_75102() throws Exception {
+            var response = endpoints.getcogarrmusuiv("75102", LocalDate.of(1995, 1, 1));
+            var result = response.getBody();
 
-        var resultItem2= result.get(1);
-        assertEquals("69389", resultItem2.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/c14e7076-ffb4-490b-96c2-341e832d5f60", resultItem2.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem2.getType());
-        assertEquals(LocalDate.of(1964, 8, 12), resultItem2.getDateCreation());
-        assertEquals("Lyon 9e Arrondissement", resultItem2.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem2.getTypeArticle());
-        assertEquals("Lyon 9e Arrondissement", resultItem2.getIntitule());
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    ///        geo/arrondissementMunicipal/{code}/suivants           ///
-    ////////////////////////////////////////////////////////////////////
-
-//    geo/arrondissementMunicipal/69385/suivants?date=1960-01-01 renvoie 2 arrondissements municipaux
-    @Test
-    void should_return_2_arrondissementsMunicipaux_when_ArrondissementMunicipalCodeSuivants_code69385_date19600101(){
-        var response  = endpoints.getcogarrmusuiv ("69385", LocalDate.of(1960,1,1));
-        var result = response.getBody();
-        assertNotNull(result);
-        var resultItem1= result.getFirst();
-        assertEquals(2, result.size());
-        assertEquals("69385", resultItem1.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/cd9f4663-684c-455d-b62e-39e51c6fad99", resultItem1.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem1.getType());
-        assertEquals(LocalDate.of(1964, 8, 12), resultItem1.getDateCreation());
-        assertEquals("Lyon 5e Arrondissement", resultItem1.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem1.getTypeArticle());
-        assertEquals("Lyon 5e Arrondissement", resultItem1.getIntitule());
-
-        var resultItem2= result.get(1);
-        assertEquals("69389", resultItem2.getCode());
-        assertEquals("http://id.insee.fr/geo/arrondissementMunicipal/c14e7076-ffb4-490b-96c2-341e832d5f60", resultItem2.getUri());
-        assertEquals(TypeEnum.ARRONDISSEMENT_MUNICIPAL, resultItem2.getType());
-        assertEquals(LocalDate.of(1964, 8, 12), resultItem2.getDateCreation());
-        assertEquals("Lyon 9e Arrondissement", resultItem2.getIntituleSansArticle());
-        assertEquals(TerritoireTousAttributs.TypeArticleEnum._0, resultItem2.getTypeArticle());
-        assertEquals("Lyon 9e Arrondissement", resultItem2.getIntitule());
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75102-suivants-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
     }
 }

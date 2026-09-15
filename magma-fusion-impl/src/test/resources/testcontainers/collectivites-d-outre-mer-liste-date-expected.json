@@ -1,0 +1,11 @@
+[
+  {
+    "code": "986",
+    "uri": "http://id.insee.fr/geo/collectiviteDOutreMer/test-coll-986",
+    "type": "CollectiviteDOutreMer",
+    "dateCreation": "1985-01-01",
+    "intituleSansArticle": "Collectivite test",
+    "typeArticle": "0",
+    "intitule": "Collectivite test"
+  }
+]

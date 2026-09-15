@@ -1,0 +1,20 @@
+[
+  {
+    "code": "88001",
+    "uri": "http://id.insee.fr/geo/bassinDeVie2022/test-bv-88001",
+    "type": "BassinDeVie2022",
+    "dateCreation": "2022-01-01",
+    "intituleSansArticle": "Bassin de vie test 1",
+    "typeArticle": "0",
+    "intitule": "Bassin de vie test 1"
+  },
+  {
+    "code": "88002",
+    "uri": "http://id.insee.fr/geo/bassinDeVie2022/test-bv-88002",
+    "type": "BassinDeVie2022",
+    "dateCreation": "2022-01-01",
+    "intituleSansArticle": "Bassin de vie test 2",
+    "typeArticle": "0",
+    "intitule": "Bassin de vie test 2"
+  }
+]

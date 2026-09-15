@@ -1,0 +1,162 @@
+[
+  {
+    "code": "991",
+    "uri": "http://id.insee.fr/geo/arrondissement/test-arr-991",
+    "type": "Arrondissement",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Arrondissement test 1",
+    "typeArticle": "0",
+    "intitule": "Arrondissement test 1",
+    "chefLieu": "99001"
+  },
+  {
+    "code": "992",
+    "uri": "http://id.insee.fr/geo/arrondissement/test-arr-992",
+    "type": "Arrondissement",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Arrondissement test 2",
+    "typeArticle": "0",
+    "intitule": "Arrondissement test 2",
+    "chefLieu": "99002"
+  },
+  {
+    "code": "993",
+    "uri": "http://id.insee.fr/geo/arrondissement/test-arr-993",
+    "type": "Arrondissement",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Arrondissement test 3",
+    "typeArticle": "0",
+    "intitule": "Arrondissement test 3",
+    "chefLieu": "99001"
+  },
+  {
+    "code": "75101",
+    "uri": "http://id.insee.fr/geo/arrondissementMunicipal/test-arrmu-75101",
+    "type": "ArrondissementMunicipal",
+    "dateCreation": "2010-01-01",
+    "intituleSansArticle": "Arrondissement municipal test 1",
+    "typeArticle": "0",
+    "intitule": "Arrondissement municipal test 1"
+  },
+  {
+    "code": "9901",
+    "uri": "http://id.insee.fr/geo/canton/test-can-9901",
+    "type": "Canton",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Canton test 1",
+    "typeArticle": "0",
+    "intitule": "Canton test 1",
+    "chefLieu": "99001"
+  },
+  {
+    "code": "9902",
+    "uri": "http://id.insee.fr/geo/canton/test-can-9902",
+    "type": "Canton",
+    "dateCreation": "2001-01-01",
+    "intituleSansArticle": "Canton test 2",
+    "typeArticle": "0",
+    "intitule": "Canton test 2",
+    "chefLieu": "99002"
+  },
+  {
+    "code": "7701",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7701",
+    "type": "CantonOuVille",
+    "dateCreation": "2020-01-01",
+    "intituleSansArticle": "Canton-ou-ville test 1",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville test 1"
+  },
+  {
+    "code": "7702",
+    "uri": "http://id.insee.fr/geo/cantonOuVille/test-cov-7702",
+    "type": "CantonOuVille",
+    "dateCreation": "2016-01-01",
+    "intituleSansArticle": "Canton-ou-ville test 2",
+    "typeArticle": "0",
+    "intitule": "Canton-ou-ville test 2"
+  },
+  {
+    "code": "99001",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99001",
+    "type": "Commune",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune test 1",
+    "typeArticle": "0",
+    "intitule": "Commune test 1"
+  },
+  {
+    "code": "99002",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99002",
+    "type": "Commune",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune test 2",
+    "typeArticle": "0",
+    "intitule": "Commune test 2"
+  },
+  {
+    "code": "99003",
+    "uri": "http://id.insee.fr/geo/commune/test-com-99003",
+    "type": "Commune",
+    "dateCreation": "2018-01-01",
+    "intituleSansArticle": "Commune test 3",
+    "typeArticle": "0",
+    "intitule": "Commune test 3"
+  },
+  {
+    "code": "99101",
+    "uri": "http://id.insee.fr/geo/communeAssociee/test-comas-99101",
+    "type": "CommuneAssociee",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Commune associee test 1",
+    "typeArticle": "0",
+    "intitule": "Commune associee test 1"
+  },
+  {
+    "code": "98001",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98001",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 1",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 1"
+  },
+  {
+    "code": "98002",
+    "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98002",
+    "type": "CommuneDeleguee",
+    "dateCreation": "2015-01-01",
+    "intituleSansArticle": "Commune deleguee test 2",
+    "typeArticle": "0",
+    "intitule": "Commune deleguee test 2"
+  },
+  {
+    "code": "10",
+    "uri": "http://id.insee.fr/geo/departement/test-dep-10",
+    "type": "Departement",
+    "dateCreation": "2000-01-01",
+    "intituleSansArticle": "Departement test",
+    "typeArticle": "0",
+    "intitule": "Departement test",
+    "chefLieu": "99001"
+  },
+  {
+    "code": "990010101",
+    "uri": "http://id.insee.fr/geo/iris/test-iris-990010101",
+    "type": "Iris",
+    "dateCreation": "2008-01-01",
+    "intituleSansArticle": "Iris test 1",
+    "typeArticle": "0",
+    "typeDIris": "H",
+    "intitule": "Iris test 1"
+  },
+  {
+    "code": "QN01001M",
+    "uri": "http://id.insee.fr/geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/test-qpv-QN01001M",
+    "type": "QuartierPrioritaireDeLaPolitiqueDeLaVille2024",
+    "dateCreation": "2024-01-01",
+    "intituleSansArticle": "QPV test 1",
+    "typeArticle": "X",
+    "intitule": "QPV test 1"
+  }
+]
