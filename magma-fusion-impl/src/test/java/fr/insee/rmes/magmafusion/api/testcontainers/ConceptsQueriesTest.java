@@ -8,39 +8,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.test.web.servlet.client.RestTestClient;
 import org.springframework.web.util.UriBuilder;
 
-import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
 class ConceptsQueriesTest extends TestContainer {
-
-    @Autowired
-    private RestTestClient restTestClient;
-
-    private String loadExpectedJson(String resourcePath) throws IOException {
-        return new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream(resourcePath))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-    }
-
-    private String bodyAsString(byte[] body) {
-        return new String(body, StandardCharsets.UTF_8);
-    }
 
     @Nested
     @DisplayName("concepts/definition/{id}")
@@ -62,7 +41,7 @@ class ConceptsQueriesTest extends TestContainer {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("testcontainers/concept-" + conceptId + "-expected.json"),
+                    loadExpectedJson("concept-" + conceptId + "-expected.json"),
                     bodyAsString(body),
                     true
             );
@@ -97,9 +76,9 @@ class ConceptsQueriesTest extends TestContainer {
 
         @ParameterizedTest(name = "{2}")
         @CsvSource({
-                "concept test,                 , 'When getConceptsList with libelle filter, returns matching concepts', testcontainers/concepts-list-libelle-concept-test-expected.json",
-                "             , idCollectionTest, 'When getConceptsList with collection filter, returns concepts in collection', testcontainers/concepts-list-collection-idCollectionTest-expected.json",
-                "peuplement   , idCollectionTest, 'When getConceptsList with libelle and collection, returns filtered concepts', testcontainers/concepts-list-peuplement-collection-idCollectionTest-expected.json"
+                "concept test,                 , 'When getConceptsList with libelle filter, returns matching concepts', concepts-list-libelle-concept-test-expected.json",
+                "             , idCollectionTest, 'When getConceptsList with collection filter, returns concepts in collection', concepts-list-collection-idCollectionTest-expected.json",
+                "peuplement   , idCollectionTest, 'When getConceptsList with libelle and collection, returns filtered concepts', concepts-list-peuplement-collection-idCollectionTest-expected.json"
         })
         void should_return_filtered_concepts_when_getConceptsList(
                 String libelle, String collection, String displayName, String expectedFile) throws Exception {

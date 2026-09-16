@@ -1,21 +1,14 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsPays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.client.RestTestClient;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -23,21 +16,6 @@ import java.util.Objects;
 @Tag("integration")
 class GeoPaysQueriesTest extends TestContainer {
 
-    @Autowired
-    private RestTestClient restTestClient;
-
-    private String loadExpectedJson(String resourceName) throws IOException {
-        return new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("testcontainers/" + resourceName))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
-    }
-
-    private String bodyAsString(byte[] body) {
-        return new String(body, StandardCharsets.UTF_8);
-    }
 
     @Nested
     @DisplayName("geo/pays/{code}")
