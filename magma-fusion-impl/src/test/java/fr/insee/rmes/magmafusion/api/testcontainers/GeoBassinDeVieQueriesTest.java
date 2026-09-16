@@ -109,7 +109,7 @@ class GeoBassinDeVieQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("bassins-de-vie-liste-filtre-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
 
@@ -127,7 +127,7 @@ class GeoBassinDeVieQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("bassins-de-vie-liste-etoile-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
     }

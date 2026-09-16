@@ -150,7 +150,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("cantons-et-villes-liste-date-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
 
@@ -168,7 +168,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("cantons-et-villes-liste-etoile-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
     }

@@ -108,7 +108,7 @@ class GeoAireDAttractionDesVillesQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("aav-liste-date-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
 
@@ -126,7 +126,7 @@ class GeoAireDAttractionDesVillesQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("aav-liste-etoile-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
     }

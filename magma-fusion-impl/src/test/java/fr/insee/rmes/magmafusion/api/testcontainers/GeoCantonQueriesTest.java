@@ -131,7 +131,7 @@ class GeoCantonQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("cantons-liste-date-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
 
@@ -149,7 +149,7 @@ class GeoCantonQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("cantons-liste-etoile-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
     }

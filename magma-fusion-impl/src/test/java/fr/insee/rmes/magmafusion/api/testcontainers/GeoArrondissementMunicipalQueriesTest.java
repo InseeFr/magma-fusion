@@ -108,7 +108,7 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("arrondissements-municipaux-liste-date-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
 
@@ -126,7 +126,7 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
             JSONAssert.assertEquals(
                     loadExpectedJson("arrondissements-municipaux-liste-etoile-expected.json"),
                     bodyAsString(body),
-                    false
+                    true
             );
         }
     }
