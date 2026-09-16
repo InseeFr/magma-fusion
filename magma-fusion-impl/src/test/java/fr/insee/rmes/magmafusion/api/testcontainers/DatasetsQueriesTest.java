@@ -2,7 +2,7 @@ package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.DatasetsEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.Dataset;
+import org.json.JSONException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -14,10 +14,12 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,20 +73,6 @@ class DatasetsQueriesTest extends TestContainer {
     class GetListDatasets {
 
         @Test
-        @DisplayName("When getListDatasets, returns all datasets")
-        void should_return_all_datasets_when_getListDatasets() {
-            var response = endpoints.getListDatasets(null);
-            var result = response.getBody();
-
-            assertNotNull(result);
-            assertEquals(2, result.size());
-
-            var ids = result.stream().map(Dataset::getId).toList();
-            assertTrue(ids.contains(DATASET_ID));
-            assertTrue(ids.contains(DATASET_ID_2));
-        }
-
-        @Test
         @DisplayName("When getListDatasets, returns datasets with correct fields")
         void should_return_dataset_list_with_correct_fields() throws Exception {
             var response = endpoints.getListDatasets(null);
@@ -114,22 +102,28 @@ class DatasetsQueriesTest extends TestContainer {
 
         @Test
         @DisplayName("When getListDatasets with dateMiseAJour before modified date, returns all datasets")
-        void should_return_all_datasets_when_dateMiseAJour_is_before_modified_date() {
-            var response = endpoints.getListDatasets("2024-12-08T00:00:00.000");
+        void should_return_all_datasets_when_dateMiseAJour_is_before_modified_date() throws IOException, JSONException {
+            var response = endpoints.getListDatasets("2025-01-01T00:00:00.000");
             var result = response.getBody();
 
             assertNotNull(result);
-            assertEquals(2, result.size());
 
-            var ids = result.stream().map(Dataset::getId).toList();
-            assertTrue(ids.contains(DATASET_ID));
-            assertTrue(ids.contains(DATASET_ID_2));
+            var ds = result.stream().filter(d -> DATASET_ID_2.equals(d.getId())).findFirst().orElseThrow();
+
+            String ds1Expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/dataset-list-idDatasetTest2-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(ds1Expected, objectMapper.writeValueAsString(ds), false);
+
         }
 
         @Test
         @DisplayName("When getListDatasets with dateMiseAJour after modified date, returns empty list")
         void should_return_empty_list_when_dateMiseAJour_is_after_modified_date() {
-            var response = endpoints.getListDatasets("2024-12-10T00:00:00.000");
+            var response = endpoints.getListDatasets("2026-12-10T00:00:00.000");
             var result = response.getBody();
 
             assertNotNull(result);
