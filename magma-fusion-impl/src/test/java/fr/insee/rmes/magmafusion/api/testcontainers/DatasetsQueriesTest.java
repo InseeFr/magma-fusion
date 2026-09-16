@@ -59,17 +59,11 @@ class DatasetsQueriesTest extends TestContainer {
 
         @Test
         @DisplayName("When getDataSetById with unknown id, returns 404")
-        void should_return_404_when_getDataSetById_unknown_id_dateMiseAJour_false() throws Exception {
-            mockMvc.perform(get("/dataset/id-inconnu").param("dateMiseAJour", "false"))
+        void should_return_404_when_getDataSetById_unknown_id() throws Exception {
+            mockMvc.perform(get("/dataset/id-inconnu"))
                     .andExpect(status().isNotFound());
         }
 
-        @Test
-        @DisplayName("When getDataSetById with unknown id and dateMiseAJour true, returns 404")
-        void should_return_404_when_getDataSetById_unknown_id_dateMiseAJour_true() throws Exception {
-            mockMvc.perform(get("/dataset/id-inconnu").param("dateMiseAJour", "true"))
-                    .andExpect(status().isNotFound());
-        }
     }
 
     @Nested
