@@ -1,8 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsArrondissement;
-import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsArrondissement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
