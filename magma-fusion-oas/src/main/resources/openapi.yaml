@@ -6354,13 +6354,21 @@ components:
 
     ListeIris:
       value:
-        code: '010010000'
-        uri: 'http://id.insee.fr/geo/commune/166857ef-114f-4067-9d3d-f712562850c5'
-        type': 'Commune'
-        dateCreation: '1943-01-01'
-        intituleSansArticle: 'Abergement-Clémenciat'
-        typeArticle: '5'
-        intitule: 'L''Abergement-Clémenciat'
+        - code: '010010000'
+          uri: 'http://id.insee.fr/geo/commune/166857ef-114f-4067-9d3d-f712562850c5'
+          type: 'Commune'
+          dateCreation: '1943-01-01'
+          intituleSansArticle: 'Abergement-Clémenciat'
+          typeArticle: '5'
+          intitule: 'L''Abergement-Clémenciat'
+        - code: '010040101'
+          uri: 'http://id.insee.fr/geo/iris/b8c772de-9551-4f13-81c5-eca5bb0f2f7d'
+          type: 'Iris'
+          dateCreation: '2008-01-01'
+          intituleSansArticle: 'Pérouses-Triangle d''Activités'
+          typeArticle: '4'
+          intitule: 'Les Pérouses-Triangle d''Activités'
+          typeDIris: 'H'
 
 
     Pays:
