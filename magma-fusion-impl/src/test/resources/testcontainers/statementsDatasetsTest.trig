@@ -1,0 +1,101 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix insee: <http://rdf.insee.fr/def/base#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix sdmx-mm: <http://www.w3.org/ns/sdmx-mm#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix pav: <http://purl.org/pav/> .
+
+<http://rdf.insee.fr/graphes/structures> {
+    <http://bauhaus/structuresDeDonnees/structure/dsd1000>
+        rdf:type qb:DataStructureDefinition ;
+        dcterms:identifier "dsd1000" ;
+        dcterms:created "2024-07-02T07:47:06.152238061"^^xsd:dateTime ;
+        dcterms:modified "2024-07-02T07:47:06.152282664"^^xsd:dateTime ;
+        skos:notation "TEST_NOT_FOR_PUBLICATION" ;
+        rdfs:label "Test (à ne pas publier)"@fr ;
+        rdfs:label "Test (not for publication)"@en ;
+        insee:validationState "Provisoire, jamais publiée" .
+
+    <http://bauhaus/structuresDeDonnees/structure/dsd1001>
+        rdf:type qb:DataStructureDefinition ;
+        dcterms:identifier "dsd1001" ;
+        dcterms:created "2025-02-19T14:48:49.041372902"^^xsd:dateTime ;
+        dcterms:modified "2025-02-19T14:48:49.041372902"^^xsd:dateTime ;
+        rdfs:label "Structure 1001"@fr ;
+        rdfs:label "Structure 1001"@en ;
+        insee:validationState "Provisoire, jamais publiée" .
+}
+
+<http://rdf.insee.fr/graphes/composants> {
+}
+
+<http://rdf.insee.fr/graphes/catalogue> {
+    <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest>
+        rdf:type dcat:Dataset ;
+        dcterms:identifier "idDatasetTest" ;
+        dcterms:title "Titre du dataset test"@fr ;
+        dcterms:title "Dataset Test Title"@en ;
+        dcterms:abstract "Résumé du dataset test"@fr ;
+        dcterms:description "Description du dataset test"@fr ;
+        skos:scopeNote "Note de portée du dataset test"@fr ;
+        insee:validationState "Unpublished" ;
+        prov:wasGeneratedBy <http://bauhaus/operations/serie/idSerieGeneratrice> ;
+        adms:identifier <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest/ident> ;
+        dcat:distribution <http://bauhaus/catalogues/distribution/idDistributionTest> .
+
+    <http://bauhaus/catalogues/distribution/idDistributionTest>
+        rdf:type dcat:Distribution ;
+        dcterms:identifier "idDistributionTest" ;
+        dcterms:title "Titre de la distribution test"@fr ;
+        dcterms:title "Distribution Test Title"@en ;
+        dcterms:description "Description de la distribution test"@fr ;
+        dcterms:description "Distribution test description"@en ;
+        dcat:byteSize "1024" ;
+        dcterms:created "2024-12-09T12:00:00.000"^^xsd:dateTime ;
+        dcterms:modified "2024-12-09T12:00:00.000"^^xsd:dateTime ;
+        dcat:downloadURL <https://download.test/idDistributionTest.csv> ;
+        dcterms:format "text/csv" .
+
+    <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest/ident>
+        skos:notation "DD_DATASET_TEST" .
+
+    <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest/record>
+        rdf:type dcat:CatalogRecord ;
+        foaf:primaryTopic <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest> ;
+        dc:creator "DG75-TEST" ;
+        dc:contributor "DG75-TEST" ;
+        dcterms:created "2024-12-09T12:00:00.000"^^xsd:dateTime ;
+        dcterms:modified "2024-12-09T12:00:00.000"^^xsd:dateTime .
+
+    <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2>
+        rdf:type dcat:Dataset ;
+        dcterms:identifier "idDatasetTest2" ;
+        dcterms:title "Titre du dataset test 2"@fr ;
+        dcterms:title "Dataset test title 2"@en ;
+        dcterms:abstract "Abstract du dataset test 2"@fr ;
+        dcterms:description "Description du dataset test 2"@fr ;
+        skos:scopeNote "ScopeNote du dataset test 2"@fr ;
+        insee:validationState "Unpublished" ;
+        prov:wasGeneratedBy <http://bauhaus/operations/serie/idSerieGeneratriceTest2> ;
+        adms:identifier <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2/ident> .
+
+    <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2/ident>
+        skos:notation "DD_CNA_BRANCHES" .
+
+    <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2/record>
+        rdf:type dcat:CatalogRecord ;
+        foaf:primaryTopic <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2> ;
+        dc:creator "DG75-TEST" ;
+        dc:contributor "DG75-TEST" ;
+        dcterms:created "2024-12-09T12:00:00.000"^^xsd:dateTime ;
+        dcterms:modified "2025-12-09T12:00:00.000"^^xsd:dateTime .
+}
