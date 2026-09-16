@@ -80,43 +80,34 @@ class DatasetsQueriesTest extends TestContainer {
 
             assertNotNull(result);
 
-            var ds1 = result.stream().filter(d -> DATASET_ID.equals(d.getId())).findFirst().orElseThrow();
-            var ds2 = result.stream().filter(d -> DATASET_ID_2.equals(d.getId())).findFirst().orElseThrow();
+            String data = objectMapper.writeValueAsString(result);
 
-            String ds1Expected = new String(
+            String expected = new String(
                     Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/dataset-list-idDatasetTest-expected.json"))
+                                    .getResourceAsStream("testcontainers/dataset-list-expected.json"))
                             .readAllBytes(),
                     StandardCharsets.UTF_8
             );
-            JSONAssert.assertEquals(ds1Expected, objectMapper.writeValueAsString(ds1), false);
 
-            String ds2Expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/dataset-list-idDatasetTest2-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
-            );
-            JSONAssert.assertEquals(ds2Expected, objectMapper.writeValueAsString(ds2), false);
+            JSONAssert.assertEquals(expected, data, false);
         }
 
         @Test
-        @DisplayName("When getListDatasets with dateMiseAJour before modified date, returns all datasets")
-        void should_return_all_datasets_when_dateMiseAJour_is_before_modified_date() throws IOException, JSONException {
+        @DisplayName("When getListDatasets with dateMiseAJour before modified date, returns one of the datasets")
+        void should_return_one_dataset_when_dateMiseAJour_is_before_modified_date() throws IOException, JSONException {
             var response = endpoints.getListDatasets("2025-01-01T00:00:00.000");
             var result = response.getBody();
 
-            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
 
-            var ds = result.stream().filter(d -> DATASET_ID_2.equals(d.getId())).findFirst().orElseThrow();
-
-            String ds1Expected = new String(
+            String expected = new String(
                     Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/dataset-list-idDatasetTest2-expected.json"))
+                                    .getResourceAsStream("testcontainers/dataset-list2-expected.json"))
                             .readAllBytes(),
                     StandardCharsets.UTF_8
             );
-            JSONAssert.assertEquals(ds1Expected, objectMapper.writeValueAsString(ds), false);
+
+            JSONAssert.assertEquals(expected, data, false);
 
         }
 

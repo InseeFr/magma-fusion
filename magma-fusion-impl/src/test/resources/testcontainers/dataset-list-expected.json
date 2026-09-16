@@ -1,0 +1,16 @@
+[
+  {
+    "id": "idDatasetTest",
+    "uri": "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest",
+    "catalogRecordCreated": "2024-12-09",
+    "catalogRecordModified": "2024-12-09",
+    "validationState": "Unpublished"
+  },
+  {
+    "id": "idDatasetTest2",
+    "uri": "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2",
+    "catalogRecordCreated": "2024-12-09",
+    "catalogRecordModified": "2025-12-09",
+    "validationState": "Unpublished"
+  }
+]
