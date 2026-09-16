@@ -1,6 +1,5 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoArrondissementMunipalEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsArrondissementMunicipal;
 import org.junit.jupiter.api.DisplayName;
@@ -9,32 +8,36 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.ObjectMapper;
+import org.springframework.test.web.servlet.client.RestTestClient;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestTestClient
 @Tag("integration")
 class GeoArrondissementMunicipalQueriesTest extends TestContainer {
 
     @Autowired
-    GeoArrondissementMunipalEndpoints endpoints;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+    private RestTestClient restTestClient;
+
+    private String loadExpectedJson(String resourceName) throws IOException {
+        return new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("testcontainers/" + resourceName))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+    }
+
+    private String bodyAsString(byte[] body) {
+        return new String(body, StandardCharsets.UTF_8);
+    }
 
     @Nested
     @DisplayName("geo/arrondissementMunicipal/{code}")
@@ -43,25 +46,28 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogarrmu 75101, returns ArrMun 75101")
         void should_return_arrmu_75101_when_getcogarrmu_75101() throws Exception {
-            var response = endpoints.getcogarrmu("75101", LocalDate.of(2025, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}?date={date}", "75101", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissement-municipal-75101-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogarrmu 75199 (inexistant), returns 404")
         void should_return_404_when_getcogarrmu_75199_inexistant() {
-            var response = endpoints.getcogarrmu("75199", LocalDate.of(2025, 1, 1));
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}?date={date}", "75199", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 
@@ -72,35 +78,38 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogarrmuasc 75101 type null, returns 5 ascendants")
         void should_return_5_ascendants_when_getcogarrmuasc_75101_type_null() throws Exception {
-            var response = endpoints.getcogarrmuasc("75101", LocalDate.of(2025, 1, 1), null);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}/ascendants?date={date}", "75101", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-ascendants-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissement-municipal-75101-ascendants-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogarrmuasc 75101 type Commune, returns 1 commune")
         void should_return_1_commune_when_getcogarrmuasc_75101_type_commune() throws Exception {
-            var response = endpoints.getcogarrmuasc("75101", LocalDate.of(2025, 1, 1), TypeEnumAscendantsArrondissementMunicipal.COMMUNE);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}/ascendants?date={date}&type={type}",
+                            "75101", "2025-01-01", "Commune")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-ascendants-commune-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissement-municipal-75101-ascendants-commune-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
     }
 
@@ -111,35 +120,37 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogarrmuliste date=2025-01-01, returns 1 ArrMun actif")
         void should_return_1_arrmu_when_getcogarrmuliste_date() throws Exception {
-            var response = endpoints.getcogarrmuliste("2025-01-01");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementsMunicipaux?date={date}", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissements-municipaux-liste-date-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissements-municipaux-liste-date-expected.json"),
+                    bodyAsString(body),
+                    false
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
 
         @Test
         @DisplayName("When getcogarrmuliste date=*, returns 2 ArrMun")
         void should_return_2_arrmu_when_getcogarrmuliste_etoile() throws Exception {
-            var response = endpoints.getcogarrmuliste("*");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementsMunicipaux?date={date}", "*")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissements-municipaux-liste-etoile-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissements-municipaux-liste-etoile-expected.json"),
+                    bodyAsString(body),
+                    false
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
     }
 
@@ -150,25 +161,28 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogarrmuprec 75101, returns 1 precedent (75102)")
         void should_return_1_precedent_when_getcogarrmuprec_75101() throws Exception {
-            var response = endpoints.getcogarrmuprec("75101", LocalDate.of(2025, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}/precedents?date={date}", "75101", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-precedents-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissement-municipal-75101-precedents-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogarrmuprec 75102 (no precedents), returns 404")
         void should_return_404_when_getcogarrmuprec_75102_no_precedents() {
-            var response = endpoints.getcogarrmuprec("75102", LocalDate.of(1995, 1, 1));
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}/precedents?date={date}", "75102", "1995-01-01")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 
@@ -178,36 +192,39 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
 
         @Test
         @DisplayName("When getcogarrmuproj dateProjection null, returns 400")
-        void should_return_400_when_getcogarrmuproj_dateProjection_null() throws Exception {
-            mockMvc.perform(get("/geo/arrondissementMunicipal/75101/projetes")
-                            .param("date", "2025-01-01"))
-                    .andExpect(status().isBadRequest());
+        void should_return_400_when_getcogarrmuproj_dateProjection_null() {
+            restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/75101/projetes?date={date}", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isBadRequest();
         }
 
         @Test
         @DisplayName("When getcogarrmuproj dateProjection empty, returns 400")
-        void should_return_400_when_getcogarrmuproj_dateProjection_empty() throws Exception {
-            mockMvc.perform(get("/geo/arrondissementMunicipal/75101/projetes")
-                            .param("dateProjection", "")
-                            .param("date", "2025-01-01"))
-                    .andExpect(status().isBadRequest());
+        void should_return_400_when_getcogarrmuproj_dateProjection_empty() {
+            restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/75101/projetes?dateProjection=&date={date}", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isBadRequest();
         }
 
         @Test
         @DisplayName("When getcogarrmuproj 75101 dateProjection=1995-01-01, returns projection (75102)")
         void should_return_1_projete_when_getcogarrmuproj_75101() throws Exception {
-            var response = endpoints.getcogarrmuproj("75101", LocalDate.of(1995, 1, 1), LocalDate.of(2025, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}/projetes?dateProjection={dateProjection}&date={date}",
+                            "75101", "1995-01-01", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75101-projetes-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissement-municipal-75101-projetes-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
     }
 
@@ -218,25 +235,28 @@ class GeoArrondissementMunicipalQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogarrmusuiv 75101 (actif, pas de suivant), returns 404")
         void should_return_404_when_getcogarrmusuiv_75101_no_suivants() {
-            var response = endpoints.getcogarrmusuiv("75101", LocalDate.of(2025, 1, 1));
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}/suivants?date={date}", "75101", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
 
         @Test
         @DisplayName("When getcogarrmusuiv 75102, returns 1 suivant (75101)")
         void should_return_1_suivant_when_getcogarrmusuiv_75102() throws Exception {
-            var response = endpoints.getcogarrmusuiv("75102", LocalDate.of(1995, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/arrondissementMunicipal/{code}/suivants?date={date}", "75102", "1995-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/arrondissement-municipal-75102-suivants-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("arrondissement-municipal-75102-suivants-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
     }
 }
