@@ -4,6 +4,10 @@
     "uri": "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2",
     "catalogRecordCreated": "2024-12-09",
     "catalogRecordModified": "2025-12-09",
-    "validationState": "Unpublished"
+    "validationState": "Unpublished",
+    "title": [
+      { "contenu": "Titre du dataset test 2", "langue": "fr" },
+      { "contenu": "Dataset test title 2", "langue": "en" }
+    ]
   }
 ]
