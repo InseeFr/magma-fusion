@@ -10,7 +10,7 @@ public record PrecedentsSuivantsRequestParametizer(String code,
 
 
     @Override
-    public ParameterValueDecoder<?> findParameterValueDecoder(RecordComponent recordComponent) {
+    public ParameterValueDecoder<Object> findParameterValueDecoder(RecordComponent recordComponent) {
         return ParametersForQuery.super.findParameterValueDecoder(recordComponent);
     }
 }

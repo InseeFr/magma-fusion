@@ -23,7 +23,7 @@ public interface ParametersForQuery<E extends Record & ParametersForQuery<E>> {
     }
 
     private String decodeValue(RecordComponent recordComponent) {
-        ParameterValueDecoder<Object> decoder = (ParameterValueDecoder<Object>) findParameterValueDecoder(recordComponent);
+        ParameterValueDecoder<Object> decoder = findParameterValueDecoder(recordComponent);
         return decoder.decode(value(recordComponent));
     }
 
@@ -32,8 +32,8 @@ public interface ParametersForQuery<E extends Record & ParametersForQuery<E>> {
     }
 
 
-    default ParameterValueDecoder<?> findParameterValueDecoder(RecordComponent recordComponent) {
-        return ParameterValueDecoder.of(recordComponent.getType());
+    default ParameterValueDecoder<Object> findParameterValueDecoder(RecordComponent recordComponent) {
+        return (ParameterValueDecoder<Object>) ParameterValueDecoder.of(recordComponent.getType());
     }
 
 }
