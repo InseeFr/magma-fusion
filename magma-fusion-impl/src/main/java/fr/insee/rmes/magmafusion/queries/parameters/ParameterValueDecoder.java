@@ -77,58 +77,43 @@ public interface ParameterValueDecoder<T> {
             case BOOLEAN_CLASS -> b -> b == null ? "false" : String.valueOf(b);
             case BOOLEAN2_CLASS -> bool -> (boolean) bool ? "true" : "false";
             case INTEGER_CLASS -> i -> i == null ? "0" : String.valueOf(i);
-              case CLASS_CLASS -> clazz -> ((Class<?>) clazz).getSimpleName();
-             case ENUM_DESCENDANTS_AIREDATTRACTIONDESVILLES_CLASS ->
-                    enumAavValue -> enumAavValue == null ? "none" : ((TypeEnumDescendantsAireDAttractionDesVilles) enumAavValue).getValue();
-            case ENUM_DESCENDANTS_ARRONDISSEMENT_CLASS ->
-                    enumArrValue -> enumArrValue == null ? "none" : ((TypeEnumDescendantsArrondissement) enumArrValue).getValue();
-            case ENUM_ASCENDANTS_ARRONDISSEMENT_CLASS ->
-                    enumArrValue -> enumArrValue == null ? "none" : ((TypeEnumAscendantsArrondissement) enumArrValue).getValue();
-            case ENUM_ASCENDANTS_ARRONDISSEMENTMUNICIPAL_CLASS ->
-                    enumArrMuValue -> enumArrMuValue == null ? "none" : ((TypeEnumAscendantsArrondissementMunicipal) enumArrMuValue).getValue();
-            case ENUM_DESCENDANTS_BASSINDEVIE_CLASS ->
-                    enumBassValue -> enumBassValue == null ? "none" : ((TypeEnumDescendantsBassinDeVie) enumBassValue).getValue();
-            case ENUM_ASCENDANTS_CANTON_CLASS ->
-                    enumCanValue -> enumCanValue == null ? "none" : ((TypeEnumAscendantsCanton) enumCanValue).getValue();
-            case ENUM_ASCENDANTS_CANTONOUVILLE_CLASS ->
-                    enumCanOuVilValue -> enumCanOuVilValue == null ? "none" : ((TypeEnumAscendantsCantonOuVille) enumCanOuVilValue).getValue();
-            case ENUM_DESCENDANTS_CANTONOUVILLE_CLASS ->
-                    enumCanOuVilValue -> enumCanOuVilValue == null ? "none" : ((TypeEnumDescendantsCantonOuVille) enumCanOuVilValue).getValue();
-            case ENUM_ASCENDANTS_CIRCONSCRIPTIONTERRITORIALE_CLASS ->
-                    enumCirValue -> enumCirValue == null ? "none" : ((TypeEnumAscendantsCirconscriptionTerritoriale) enumCirValue).getValue();
-            case ENUM_DESCENDANTS_COLLECTIVITEDOUTREMER_CLASS ->
-                    enumComValue -> enumComValue == null ? "none" : ((TypeEnumDescendantsCollectiviteDOutreMer) enumComValue).getValue();
-            case ENUM_ASCENDANTS_COMMUNE_CLASS ->
-                    enumComValue -> enumComValue == null ? "none" : ((TypeEnumAscendantsCommune) enumComValue).getValue();
-            case ENUM_DESCENDANTS_COMMUNE_CLASS ->
-                    enumComDesValue -> enumComDesValue == null ? "none" : ((TypeEnumDescendantsCommune) enumComDesValue).getValue();
-            case ENUM_ASCENDANTS_COMMUNEASSOCIEE_CLASS ->
-                    enumComAValue -> enumComAValue == null ? "none" : ((TypeEnumAscendantsCommuneAssociee) enumComAValue).getValue();
-            case ENUM_ASCENDANTS_COMMUNEDELEGUEE_CLASS ->
-                    enumComDValue -> enumComDValue == null ? "none" : ((TypeEnumAscendantsCommuneDeleguee) enumComDValue).getValue();
-            case ENUM_ASCENDANTS_DISTRICT_CLASS ->
-                    enumDisValue -> enumDisValue == null ? "none" : ((TypeEnumAscendantsDistrict) enumDisValue).getValue();
-            case ENUM_DESCENDANTS_DEPARTEMENT_CLASS ->
-                    enumDepAscValue -> enumDepAscValue == null ? "none" : ((TypeEnumDescendantsDepartement) enumDepAscValue).getValue();
-            case ENUM_ASCENDANTS_DEPARTEMENT_CLASS ->
-                    enumDepDesValue -> enumDepDesValue == null ? "none" : ((TypeEnumAscendantsDepartement) enumDepDesValue).getValue();
-            case ENUM_DESCENDANTS_INTERCOMMUNALITE_CLASS ->
-                    enumIntercoValue -> enumIntercoValue == null ? "none" : ((TypeEnumDescendantsIntercommunalite) enumIntercoValue).getValue();
-            case ENUM_ASCENDANTS_IRIS_CLASS ->
-                    enumIrisValue -> enumIrisValue == null ? "none" : ((TypeEnumAscendantsIris) enumIrisValue).getValue();
-            case ENUM_DESCENDANTS_PAYS_CLASS ->
-                    enumPaysValue -> enumPaysValue == null ? "none" : ((TypeEnumDescendantsPays) enumPaysValue).getValue();
-            case ENUM_DESCENDANTS_REGION_CLASS ->
-                    enumRegValue -> enumRegValue == null ? "none" : ((TypeEnumDescendantsRegion) enumRegValue).getValue();
-            case ENUM_DESCENDANTS_UNITEURBAINE_CLASS ->
-                    enumUuValue -> enumUuValue == null ? "none" : ((TypeEnumDescendantsUniteUrbaine) enumUuValue).getValue();
-            case ENUM_DESCENDANTS_ZONEDEMPLOI_CLASS ->
-                    enumZeValue -> enumZeValue == null ? "none" : ((TypeEnumDescendantsZoneDEmploi) enumZeValue).getValue();
-            case ENUM_TERRITOIRE_LIE ->
-                    enumValue -> enumValue == null ? "none" : ((TypeEnum) enumValue).getValue();
+            case CLASS_CLASS -> clazz -> ((Class<?>) clazz).getSimpleName();
+            case ENUM_DESCENDANTS_AIREDATTRACTIONDESVILLES_CLASS,
+                 ENUM_DESCENDANTS_ARRONDISSEMENT_CLASS,
+                 ENUM_ASCENDANTS_ARRONDISSEMENT_CLASS,
+                 ENUM_ASCENDANTS_ARRONDISSEMENTMUNICIPAL_CLASS,
+                 ENUM_DESCENDANTS_BASSINDEVIE_CLASS,
+                 ENUM_ASCENDANTS_CANTON_CLASS,
+                 ENUM_ASCENDANTS_CANTONOUVILLE_CLASS,
+                 ENUM_DESCENDANTS_CANTONOUVILLE_CLASS,
+                 ENUM_ASCENDANTS_CIRCONSCRIPTIONTERRITORIALE_CLASS,
+                 ENUM_DESCENDANTS_COLLECTIVITEDOUTREMER_CLASS,
+                 ENUM_ASCENDANTS_COMMUNE_CLASS,
+                 ENUM_DESCENDANTS_COMMUNE_CLASS,
+                 ENUM_ASCENDANTS_COMMUNEASSOCIEE_CLASS,
+                 ENUM_ASCENDANTS_COMMUNEDELEGUEE_CLASS,
+                 ENUM_ASCENDANTS_DISTRICT_CLASS,
+                 ENUM_DESCENDANTS_DEPARTEMENT_CLASS,
+                 ENUM_ASCENDANTS_DEPARTEMENT_CLASS,
+                 ENUM_DESCENDANTS_INTERCOMMUNALITE_CLASS,
+                 ENUM_ASCENDANTS_IRIS_CLASS,
+                 ENUM_DESCENDANTS_PAYS_CLASS,
+                 ENUM_DESCENDANTS_REGION_CLASS,
+                 ENUM_DESCENDANTS_UNITEURBAINE_CLASS,
+                 ENUM_DESCENDANTS_ZONEDEMPLOI_CLASS,
+                 ENUM_TERRITOIRE_LIE ->
+                    enumValue -> enumValue == null ? "none" : invokeGetValue(enumValue);
             case String _ when Enum.class.isAssignableFrom(type) -> simpleEnum -> ((Enum<?>) simpleEnum).name();
             default -> throw new IllegalArgumentException("Unsupported type: " + type.getName());
         };
+    }
+
+    private static String invokeGetValue(Object enumValue) {
+        try {
+            return (String) enumValue.getClass().getMethod("getValue").invoke(enumValue);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("No accessible getValue() on " + enumValue.getClass(), e);
+        }
     }
 
 }
