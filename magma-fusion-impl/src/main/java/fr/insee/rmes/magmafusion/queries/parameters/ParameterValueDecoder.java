@@ -126,7 +126,7 @@ public interface ParameterValueDecoder<T> {
                     enumZeValue -> enumZeValue == null ? "none" : ((TypeEnumDescendantsZoneDEmploi) enumZeValue).getValue();
             case ENUM_TERRITOIRE_LIE ->
                     enumValue -> enumValue == null ? "none" : ((TypeEnum) enumValue).getValue();
-            case String ignored when Enum.class.isAssignableFrom(type) -> simpleEnum -> ((Enum<?>) simpleEnum).name();
+            case String _ when Enum.class.isAssignableFrom(type) -> simpleEnum -> ((Enum<?>) simpleEnum).name();
             default -> throw new IllegalArgumentException("Unsupported type: " + type.getName());
         };
     }
