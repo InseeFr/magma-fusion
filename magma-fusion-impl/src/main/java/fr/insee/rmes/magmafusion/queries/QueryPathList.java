@@ -1,12 +1,9 @@
 package fr.insee.rmes.magmafusion.queries;
 
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-@Component
-@Slf4j
 public class QueryPathList {
+
+    private QueryPathList() {
+    }
 
     public static final String SERIE_BY_ID = "seriesOperations/getSerieById.ftlh";
     public static final String OPERATION_BY_CODE = "seriesOperations/getOperationByCode.ftlh";
