@@ -11,7 +11,7 @@ public record AscendantsDescendantsRequestParametizer(String code,
                                                       String filtreNom,
                                                       String territoriesFilter,
                                                       Class<?> typeOrigine,
-                                                      boolean ascendant) implements ParametersForQueryDiffusion<AscendantsDescendantsRequestParametizer> {
+                                                      boolean ascendant) implements ParametersForQuery<AscendantsDescendantsRequestParametizer> {
 
     //for geo/pays/{code}/descendants
     public AscendantsDescendantsRequestParametizer(String code,
@@ -44,6 +44,6 @@ public record AscendantsDescendantsRequestParametizer(String code,
         if ("filtreNom".equals(recordComponent.getName())) {
             return new ParameterValueDecoder.DelegaterDecoder<>(stringValue -> stringValue == null ? "*" : stringValue.toString());
         }
-        return ParametersForQueryDiffusion.super.findParameterValueDecoder(recordComponent);
+        return ParametersForQuery.super.findParameterValueDecoder(recordComponent);
     }
 }

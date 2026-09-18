@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.queries.parameters;
 
 
-public record ConceptsRequestParametizer(String id, String libelle, String collection, String uriConcept) implements ParametersForQueryDiffusion<ConceptsRequestParametizer> {
+public record ConceptsRequestParametizer(String id, String libelle, String collection, String uriConcept) implements ParametersForQuery<ConceptsRequestParametizer> {
 
     public static ConceptsRequestParametizer ofId(String id) {
         return new ConceptsRequestParametizer(id, "none", "none", "none");
