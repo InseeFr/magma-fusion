@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.queries.parameters;
 
-public record DatasetsRequestParametizer(String id, String date) implements ParametersForQueryGestion<DatasetsRequestParametizer> {
+public record DatasetsRequestParametizer(String id, String date) implements ParametersForQuery<DatasetsRequestParametizer> {
 
     // for getListDatasets (no filter)
     public DatasetsRequestParametizer() {

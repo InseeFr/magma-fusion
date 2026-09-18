@@ -10,7 +10,7 @@ public record TerritoireRequestParametizer(String code,
                                            Class<?> typeOrigine,
                                            String filtreNom,
                                            String chefLieu,
-                                           boolean com) implements ParametersForQueryDiffusion<TerritoireRequestParametizer> {
+                                           boolean com) implements ParametersForQuery<TerritoireRequestParametizer> {
 
     //for geo/departement/{code} and geo/region/{code}
     public TerritoireRequestParametizer(String code,
@@ -55,7 +55,7 @@ public record TerritoireRequestParametizer(String code,
 
     @Override
     public ParameterValueDecoder<?> findParameterValueDecoder(RecordComponent recordComponent) {
-        return ParametersForQueryDiffusion.super.findParameterValueDecoder(recordComponent);
+        return ParametersForQuery.super.findParameterValueDecoder(recordComponent);
     }
 
 

@@ -7,11 +7,11 @@ import java.time.LocalDate;
 public record TerritoiresLiesRequestParametizer(String code,
                                                 LocalDate date,
                                                 String territoriesFilter,
-                                                Class<?> typeOrigine) implements ParametersForQueryDiffusion<TerritoiresLiesRequestParametizer> {
+                                                Class<?> typeOrigine) implements ParametersForQuery<TerritoiresLiesRequestParametizer> {
 
 
     @Override
     public ParameterValueDecoder<?> findParameterValueDecoder(RecordComponent recordComponent) {
-        return ParametersForQueryDiffusion.super.findParameterValueDecoder(recordComponent);
+        return ParametersForQuery.super.findParameterValueDecoder(recordComponent);
     }
 }

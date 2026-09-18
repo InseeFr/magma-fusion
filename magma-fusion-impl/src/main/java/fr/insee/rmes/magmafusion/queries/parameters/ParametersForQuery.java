@@ -31,7 +31,9 @@ public interface ParametersForQuery<E extends Record & ParametersForQuery<E>> {
         return invokeMethod(recordComponent.getAccessor(), this);
     }
 
-    ParameterValueDecoder<?> findParameterValueDecoder(RecordComponent recordComponent);
 
+    default ParameterValueDecoder<?> findParameterValueDecoder(RecordComponent recordComponent) {
+        return ParameterValueDecoder.of(recordComponent.getType());
+    }
 
 }
