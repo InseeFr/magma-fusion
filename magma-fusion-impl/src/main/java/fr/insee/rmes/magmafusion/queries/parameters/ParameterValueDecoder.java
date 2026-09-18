@@ -4,6 +4,7 @@ import fr.insee.rmes.magmafusion.model.*;
 
 import java.lang.reflect.RecordComponent;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.function.Function;
 
 @FunctionalInterface
@@ -72,7 +73,7 @@ public interface ParameterValueDecoder<T> {
 
     static <U> ParameterValueDecoder<U> of(Class<U> type) {
         return switch (type.getName()) {
-            case LOCALE_DATE_CLASS -> localDate -> String.valueOf(localDate == null ? LocalDate.now() : localDate);
+            case LOCALE_DATE_CLASS -> localDate -> String.valueOf(localDate == null ? LocalDate.now(ZoneId.systemDefault()) : localDate);
             case STRING_CLASS -> s -> s == null ? "" : (String) s;
             case BOOLEAN_CLASS -> b -> b == null ? "false" : String.valueOf(b);
             case BOOLEAN2_CLASS -> bool -> (boolean) bool ? "true" : "false";
