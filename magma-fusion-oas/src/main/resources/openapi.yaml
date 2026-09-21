@@ -16,119 +16,40 @@ security:
 ### TAGS SPECIFICATION ###
 
 tags:
-  # -- Concepts
-
-  - name: concepts
+  # -- Définitions
+  - name: Definitions
     description: API Concepts
 
-  # -- Géographie
+  # -- Opérations
+  - name: Operations
+    description: Consultation des séries, opérations et rapports qualité
 
-  - name: geo
+  # -- Nomenclatures
+  - name: Nomenclatures
+    description: API Nomenclatures
+
+  # -- Géographie
+  - name: Geographie
     x-geo: true
     description: 'API géographie : Générique'
 
-  - name: geoAireDAttractionDesVilles
-    x-geo: true
-    description: 'API géographie : aire d''attraction des villes 2020'
-  - name: geoArrondissement
-    x-geo: true
-    description: 'API géographie : Arrondissement'
-  - name: geoArrondissementMunicipal
-    x-geo: true
-    description: 'API géographie : Arrondissement municipal'
-  - name: geoBassinDeVie
-    x-geo: true
-    description: 'API géographie : Bassin de vie 2022'
-  - name: geoCanton
-    x-geo: true
-    description: 'API géographie : Canton'
-  - name: geoCantonEtVille
-    x-geo: true
-    description: 'API géographie : Canton ou ville'
-  - name: geoCirconscriptionTerritoriale
-    x-geo: true
-    description: 'API géographie : CirconscriptionTerritoriale'
-  - name: geoCollectiviteDOutreMer
-    x-geo: true
-    description: 'API géographie : Collectivité d''outre-mer'
-  - name: geoCommune
-    x-geo: true
-    description: 'API géographie : Commune'
-  - name: geoCommuneAssociee
-    x-geo: true
-    description: 'API géographie : Commune associée'
-  - name: geoCommuneDeleguee
-    x-geo: true
-    description: 'API géographie : Commune déléguée'
-  - name: geoDepartement
-    x-geo: true
-    description: 'API géographie : Département'
-  - name: geoDistrict
-    x-geo: true
-    description: 'API géographie : District'
-  - name: geoIntercommunalite
-    x-geo: true
-    description: 'API géographie : Intercommunalité'
-  - name: geoIris
-    x-geo: true
-    description: 'API géographie : Iris'
-  - name: geoPays
-    x-geo: true
-    description: 'API géographie : Pays'
-  - name: geoQuartierPrioritaireDeLaPolitiqueDeLaVille
-    x-geo: true
-    description: 'API géographie : Quartier Prioritaire de la politique de la ville 2024'
-  - name: geoRegion
-    x-geo: true
-    description: 'API géographie : Région'
-  - name: geoUniteUrbaine
-    x-geo: true
-    description: 'API géographie : Unité urbaine 2020'
-  - name: geoZoneDEmploi
-    x-geo: true
-    description: 'API géographie : Zone d''emploi'
 
-  # -- Nomenclatures
-  - name: nomenclatures
-    description: API Nomenclatures
+  # -- Datasets
+  - name: Jeux de donnees
+    description: Consultation des jeux de données
 
-  # -- Opérations
-  - name: operations
-    description: Consultation des rapports qualité
-  - name: Series-Operations
-    description: Consultation des Séries et Opérations
-  - name: Datasets
-    description: Consultation MagmaFusion API - datasets
+
 
 ### PATHS SPECIFICATION ###
 
 paths:
-  # -- Concepts
 
-  /concepts/definition/{id}:
-    get:
-      tags:
-        - concepts
-      summary: Informations sur la définition d'un concept statistique de l'Insee
-      operationId: getconcept
-      parameters:
-        - $ref: '#/components/parameters/idConceptInPath'
-      responses:
-        '200':
-          $ref: '#/components/responses/Concept200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
+  # -- Définitions
 
   /concepts/definitions:
     get:
       tags:
-        - concepts
+        - Definitions
       summary: Informations sur les définitions des concepts statistiques de l'Insee
       operationId: getconceptsliste
       parameters:
@@ -145,6 +66,173 @@ paths:
           $ref: '#/components/responses/NotAcceptable'
         '500':
           $ref: '#/components/responses/ServerError'
+
+  /concepts/definition/{id}:
+    get:
+      tags:
+        - Definitions
+      summary: Informations sur la définition d'un concept statistique de l'Insee
+      operationId: getconcept
+      parameters:
+        - $ref: '#/components/parameters/idConceptInPath'
+      responses:
+        '200':
+          $ref: '#/components/responses/Concept200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+  # -- Opérations
+
+  /operations/series:
+    get:
+      tags:
+        - Operations
+      summary: Get all series
+      operationId: getAllSeries
+      parameters:
+        - name: dateMiseAJour
+          in: query
+          description: 'Date of last update. Example: 2023-01-31'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SeriesListe200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/serie/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get one serie
+      operationId: getSerieById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Serie200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/operation/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get operation by code
+      operationId: getOperationByCode
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Operation200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/indicateur/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get one indicator
+      operationId: getIndicatorById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Indicateur200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/rapportQualite/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Documentation d''une opération, d''un indicateur ou d''une série
+      operationId: 'getRapportQualiteByCode'
+      parameters:
+        - $ref: '#/components/parameters/idDocumentation'
+      responses:
+        '200':
+          $ref: '#/components/responses/RapportQualiteByCode200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+  # -- Nomenclatures
+
+  /codes/{nomenclature}/{niveau}/{code}:
+    get:
+      tags:
+        - Nomenclatures
+      summary: Informations sur une nomenclature d'un certain niveau identifiée par son code
+      operationId: getClassificationByCode
+      parameters:
+        - $ref: '#/components/parameters/nomenclature'
+        - $ref: '#/components/parameters/niveauNomenclature'
+        - $ref: '#/components/parameters/codeNomenclature'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClassificationByCode200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
 
   # -- Géographie
 
@@ -726,7 +814,7 @@ paths:
   /geo/cantonOuVille/{code}/ascendants:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les territoires qui contiennent le canton-ou-ville'
       operationId: 'getcogcanvilasc'
       parameters:
@@ -748,7 +836,7 @@ paths:
   /geo/cantonOuVille/{code}:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations sur un canton-ou-ville identifié par son code (quatre chiffres pour la Métropole ou cinq pour les DOM)'
       operationId: 'getcogcanvil'
       parameters:
@@ -769,7 +857,7 @@ paths:
   /geo/cantonOuVille/{code}/descendants:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les territoires inclus dans le canton-ou-ville'
       operationId: 'getcogcanvildes'
       parameters:
@@ -792,7 +880,7 @@ paths:
   /geo/cantonsEtVilles:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations sur tous les cantons et villes actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogcanvilliste'
       parameters:
@@ -812,7 +900,7 @@ paths:
   /geo/cantonOuVille/{code}/precedents:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les cantons-ou-villes qui précèdent le canton-ou-ville'
       operationId: 'getcogcanvilprec'
       parameters:
@@ -833,7 +921,7 @@ paths:
   /geo/cantonOuVille/{code}/projetes:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les cantons-ou-villes qui résultent de la projection du canton-ou-ville à la date passée en paramètre.'
       operationId: 'getcogcanvilproj'
       parameters:
@@ -855,7 +943,7 @@ paths:
   /geo/cantonOuVille/{code}/suivants:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les cantons-ou-villes qui succèdent au canton-ou-ville'
       operationId: 'getcogcanvilsuiv'
       parameters:
@@ -2108,61 +2196,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  # -- Nomenclatures
 
-  /codes/{nomenclature}/{niveau}/{code}:
+
+
+  # -- Jeux de données
+
+  /datasets/list:
     get:
       tags:
-        - nomenclatures
-      summary: Informations sur une nomenclature d'un certain niveau identifiée par son code
-      operationId: getClassificationByCode
-      parameters:
-        - $ref: '#/components/parameters/nomenclature'
-        - $ref: '#/components/parameters/niveauNomenclature'
-        - $ref: '#/components/parameters/codeNomenclature'
-      responses:
-        '200':
-          $ref: '#/components/responses/ClassificationByCode200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  # -- Opérations
-
-  /operations/rapportQualite/{id}:
-    get:
-      tags:
-        - operations
-      summary: Documentation d''une opération, d''un indicateur ou d''une série
-      operationId: 'getRapportQualiteByCode'
-      parameters:
-        - $ref: '#/components/parameters/idDocumentation'
-      responses:
-        '200':
-          $ref: '#/components/responses/RapportQualiteByCode200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  # ============================================
-  # SERIES / OPERATIONS
-  # ============================================
-  /operations/series:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get all series
-      operationId: getAllSeries
+        - Jeux de donnees
+      summary: Get list of datasets
+      operationId: getListDatasets
       parameters:
         - name: dateMiseAJour
           in: query
@@ -2172,7 +2216,7 @@ paths:
             type: string
       responses:
         '200':
-          $ref: '#/components/responses/SeriesListe200'
+          $ref: '#/components/responses/DatasetsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -2182,114 +2226,11 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-
-
-
-  /operations/serie/{id}:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get one serie
-      operationId: getSerieById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Serie200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/operation/{id}:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get operation by code
-      operationId: getOperationByCode
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Operation200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/indicateur/{id}:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get one indicator
-      operationId: getIndicatorById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Indicateur200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-
-  # ============================================
-  # DATASETS
-  # ============================================
-
-  /dataset/{id}:
-    get:
-      tags:
-        - Datasets
-      summary: Get one dataset
-      operationId: getDataSetById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Dataset200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
 
   /dataset/{id}/distributions:
     get:
       tags:
-        - Datasets
+        - Jeux de donnees
       summary: Get dataset distributions
       operationId: getDataSetDistributionsById
       parameters:
@@ -2311,22 +2252,21 @@ paths:
           $ref: '#/components/responses/ServerError'
 
 
-  /datasets/list:
+  /dataset/{id}:
     get:
       tags:
-        - Datasets
-      summary: Get list of datasets
-      operationId: getListDatasets
+        - Jeux de donnees
+      summary: Get one dataset
+      operationId: getDataSetById
       parameters:
-        - name: dateMiseAJour
-          in: query
-          description: 'Date of last update. Example: 2023-01-31'
-          required: false
+        - name: id
+          in: path
+          required: true
           schema:
             type: string
       responses:
         '200':
-          $ref: '#/components/responses/DatasetsListe200'
+          $ref: '#/components/responses/Dataset200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -2335,6 +2275,8 @@ paths:
           $ref: '#/components/responses/NotAcceptable'
         '500':
           $ref: '#/components/responses/ServerError'
+
+
 
 ### COMPONENTS SPECIFICATION ###
 
