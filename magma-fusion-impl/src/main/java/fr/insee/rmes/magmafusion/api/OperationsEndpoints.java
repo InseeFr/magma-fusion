@@ -3,14 +3,15 @@ package fr.insee.rmes.magmafusion.api;
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.Indicateur;
 import fr.insee.rmes.magmafusion.model.Operation;
+import fr.insee.rmes.magmafusion.model.RapportQualite;
 import fr.insee.rmes.magmafusion.model.Serie;
 import fr.insee.rmes.magmafusion.queries.parameters.IndicateurRequestParametizer;
+import fr.insee.rmes.magmafusion.queries.parameters.OperationRequestParametizer;
+import fr.insee.rmes.magmafusion.queries.parameters.OperationRubriquesRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.SeriesOperationsRequestParametizer;
+import fr.insee.rmes.magmafusion.services.RapportQualiteService;
 import fr.insee.rmes.magmafusion.services.SeriesOperationsService;
-import fr.insee.rmes.magmafusion.utils.IndicateurDTO;
-import fr.insee.rmes.magmafusion.utils.OperationDTO;
-import fr.insee.rmes.magmafusion.utils.SeriesDTO;
-import fr.insee.rmes.magmafusion.utils.EndpointsUtils;
+import fr.insee.rmes.magmafusion.utils.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,10 +22,12 @@ public class OperationsEndpoints implements OperationsApi {
 
     private final RequestProcessor requestProcessor;
     private final SeriesOperationsService seriesOperationsService;
+    private final RapportQualiteService rapportQualiteService;
 
-    public OperationsEndpoints(RequestProcessor requestProcessor, SeriesOperationsService seriesOperationsService) {
+    public OperationsEndpoints(RequestProcessor requestProcessor, SeriesOperationsService seriesOperationsService, RapportQualiteService rapportQualiteService) {
         this.requestProcessor = requestProcessor;
         this.seriesOperationsService = seriesOperationsService;
+        this.rapportQualiteService=rapportQualiteService;
     }
 
     @Override
@@ -80,5 +83,35 @@ public class OperationsEndpoints implements OperationsApi {
         Indicateur indicateur = seriesOperationsService.convertIndicateurDTOToIndicateur(indicateurDTO);
         return EndpointsUtils.toResponseEntity(indicateur);
     }
+
+    @Override
+    public ResponseEntity<RapportQualite> getRapportQualiteByCode(String idSims) {
+        RapportQualiteDTO rapportQualiteDTO = requestProcessor.queryToFindRapportQualite()
+                .with(new OperationRequestParametizer(idSims))
+                .executeQuery()
+                .singleResult(RapportQualiteDTO.class)
+                .result();
+
+        if (rapportQualiteDTO == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        String LG1_CL = "http://id.insee.fr/codes/langue/fr";
+        String LG2_CL = "http://id.insee.fr/codes/langue/en";
+
+        List<RubriqueDTO> rubriqueList = requestProcessor.queryToFindRubriques()
+                .with(new OperationRubriquesRequestParametizer(rapportQualiteDTO.id(), LG1_CL, LG2_CL))
+                .executeQuery()
+                .listResult(RubriqueDTO.class)
+                .result();
+        rapportQualiteDTO = rapportQualiteDTO.withRubriqueDTOList(rubriqueList);
+
+
+        RapportQualite rapportQualite = rapportQualiteService.convertDTOToRapportQualite(rapportQualiteDTO);
+
+        return EndpointsUtils.toResponseEntity(rapportQualite);
+
+    }
+
 
 }
