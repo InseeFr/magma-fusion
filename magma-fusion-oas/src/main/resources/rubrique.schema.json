@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://magma-fusion.insee/rubrique.schema.json",
+  "$id": "https://magmafusion.insee/rubrique.schema.json",
   "title": "Rubrique",
   "description": "Rubrique d'un rapport qualité",
   "type": "object",
