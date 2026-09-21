@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://magma.insee/rapport-qualite.schema.json",
+  "$id": "https://magma-fusion.insee/rapport-qualite.schema.json",
   "title": "RapportQualite",
   "description": "Rapport qualité",
   "type": "object",
