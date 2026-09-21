@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @RestController
-public class GeoCantonOuVilleEndpoints implements GeoCantonEtVilleApi {
+public class GeoCantonOuVilleEndpoints implements GeoCantonOuVilleApi {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
