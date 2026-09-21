@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.SeriesOperationsEndpoints;
+import fr.insee.rmes.magmafusion.api.OperationsEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -27,7 +27,7 @@ class SeriesOperationsQueriesTest extends TestContainer {
     static final String OPERATION_ID = "idOperationTest";
 
     @Autowired
-    SeriesOperationsEndpoints endpoints;
+    OperationsEndpoints endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
