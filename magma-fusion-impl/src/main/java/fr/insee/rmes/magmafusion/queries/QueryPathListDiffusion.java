@@ -1,19 +1,6 @@
 package fr.insee.rmes.magmafusion.queries;
 
-public class QueryPathList {
-
-    private QueryPathList() {
-    }
-
-    public static final String SERIE_BY_ID = "seriesOperations/getSerieById.ftlh";
-    public static final String OPERATION_BY_CODE = "seriesOperations/getOperationByCode.ftlh";
-    public static final String ALL_SERIES = "seriesOperations/getAllSeries.ftlh";
-    public static final String INDICATOR_BY_ID = "seriesOperations/getIndicatorById.ftlh";
-
-    public static final String ALL_DATASETS = "datasets/getListDatasets.ftlh";
-    public static final String DATASET_BY_ID = "datasets/getDatasetById.ftlh";
-    public static final String DISTRIBUTIONS_BY_DATASET_ID = "datasets/getDistributionsById.ftlh";
-
+public final class QueryPathListDiffusion {
     public static final String ASCENDANTS_OR_DESCENDANTS = "geographie/getAscendantsOrDescendantsByCodeTypeDate.ftlh";
     public static final String CONCEPT = "concepts/getConceptByCode.ftlh";
     public static final String CONCEPTS = "concepts/getConceptsByLabelOrCollection.ftlh";
@@ -37,4 +24,6 @@ public class QueryPathList {
     public static final String RUBRIQUES = "operations/getDocumentationRubricsByIdSimsQuery.ftlh";
     public static final String DOCUMENTS = "operations/getDocumentsQueryByIdSimsIdRubric.ftlh";
     public static final String NOMENCLATURE = "classifications/getClassificationByCode.ftlh";
+
+
 }

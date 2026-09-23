@@ -11,7 +11,8 @@ import fr.insee.rmes.magmafusion.unmarshaller.JacksonUnmarshaller;
 import fr.insee.rmes.magmafusion.unmarshaller.Unmarshaller;
 import org.springframework.stereotype.Component;
 
-import static fr.insee.rmes.magmafusion.queries.QueryPathList.*;
+import static fr.insee.rmes.magmafusion.queries.QueryPathListDiffusion.*;
+import static fr.insee.rmes.magmafusion.queries.QueryPathListGestion.*;
 
 @Component
 public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExecutor,
