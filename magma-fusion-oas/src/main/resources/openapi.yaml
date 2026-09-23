@@ -6835,6 +6835,9 @@ components:
             - contenu: 'Monthly'
               langue: 'en'
         rapportQualite:
+          id: '1772'
+          uri: 'http://bauhaus/qualite/rapport/1772'
+        seriesContributrices:
           id: 's2120'
           uri: 'http://bauhaus/operations/serie/s2120'
           label:
