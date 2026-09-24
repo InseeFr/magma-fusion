@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SeriesOperationsServiceImplTest {
+class OperationsServiceImplTest {
 
     private OperationsServiceImpl service;
 
