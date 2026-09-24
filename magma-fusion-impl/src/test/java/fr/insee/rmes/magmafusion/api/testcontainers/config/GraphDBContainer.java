@@ -26,7 +26,8 @@ public class GraphDBContainer extends GenericContainer<GraphDBContainer> {
         withTrigFiles("statementsGeoTest.trig");
         withTrigFiles("statementsConceptsTest.trig");
         withTrigFiles("statementsNomenclatures.trig");
-        withTrigFiles("statementsGestion.trig");
+        withTrigFiles("statementsOperationsTest.trig");
+        withTrigFiles("statementsDatasetsTest.trig");
     }
 
 

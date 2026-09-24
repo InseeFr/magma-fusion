@@ -1,0 +1,24 @@
+[
+  {
+    "id": "idDatasetTest",
+    "uri": "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest",
+    "catalogRecordCreated": "2024-12-09",
+    "catalogRecordModified": "2024-12-09",
+    "validationState": "Unpublished",
+    "title": [
+      { "contenu": "Titre du dataset test", "langue": "fr" },
+      { "contenu": "Dataset Test Title", "langue": "en" }
+    ]
+  },
+  {
+    "id": "idDatasetTest2",
+    "uri": "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2",
+    "catalogRecordCreated": "2024-12-09",
+    "catalogRecordModified": "2025-12-09",
+    "validationState": "Unpublished",
+    "title": [
+      { "contenu": "Titre du dataset test 2", "langue": "fr" },
+      { "contenu": "Dataset test title 2", "langue": "en" }
+    ]
+  }
+]

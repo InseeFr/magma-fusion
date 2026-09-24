@@ -1,41 +1,20 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoCantonOuVilleEndpoints;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCantonOuVille;
-import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCantonOuVille;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.ObjectMapper;
-
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestTestClient
 @Tag("integration")
 class GeoCantonOuVilleQueriesTest extends TestContainer {
-
-    @Autowired
-    GeoCantonOuVilleEndpoints endpoints;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Nested
     @DisplayName("geo/cantonOuVille/{code}")
@@ -44,25 +23,28 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvil 7701, returns canton-ou-ville 7701")
         void should_return_cov_7701_when_getcogcanvil_7701() throws Exception {
-            var response = endpoints.getcogcanvil("7701", LocalDate.of(2025, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}?date={date}", "7701", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7701-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogcanvil 7700 (inexistant), returns 404")
         void should_return_404_when_getcogcanvil_7700_inexistant() {
-            var response = endpoints.getcogcanvil("7700", LocalDate.of(2025, 1, 1));
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}?date={date}", "7700", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 
@@ -73,35 +55,38 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilasc 7701 type null, returns 2 ascendants (dept 10, region 99)")
         void should_return_2_ascendants_when_getcogcanvilasc_7701_type_null() throws Exception {
-            var response = endpoints.getcogcanvilasc("7701", LocalDate.of(2025, 1, 1), null);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/ascendants?date={date}", "7701", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-ascendants-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7701-ascendants-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogcanvilasc 7701 type Region, returns 1 region")
         void should_return_1_region_when_getcogcanvilasc_7701_type_region() throws Exception {
-            var response = endpoints.getcogcanvilasc("7701", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCantonOuVille.REGION);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/ascendants?date={date}&type={type}",
+                            "7701", "2025-01-01", "Region")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-ascendants-region-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7701-ascendants-region-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
     }
 
@@ -112,35 +97,38 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvildes 7701 type null, returns 4 descendants (2 communes + 2 comdel)")
         void should_return_4_descendants_when_getcogcanvildes_7701_type_null() throws Exception {
-            var response = endpoints.getcogcanvildes("7701", LocalDate.of(2025, 1, 1), null, null);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/descendants?date={date}", "7701", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-descendants-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7701-descendants-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogcanvildes 7701 type Commune filtreNom='Commune test 3', returns 1 commune")
         void should_return_1_commune_when_getcogcanvildes_7701_type_commune_filtreNom() throws Exception {
-            var response = endpoints.getcogcanvildes("7701", LocalDate.of(2025, 1, 1), TypeEnumDescendantsCantonOuVille.COMMUNE, "Commune test 3");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/descendants?date={date}&type={type}&filtreNom={filtreNom}",
+                            "7701", "2025-01-01", "Commune", "Commune test 3")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-descendants-commune-filtreNom-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7701-descendants-commune-filtreNom-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
     }
 
@@ -151,35 +139,37 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilliste date=2025-01-01, returns 2 cantons-ou-villes actifs")
         void should_return_2_cov_when_getcogcanvilliste_date() throws Exception {
-            var response = endpoints.getcogcanvilliste("2025-01-01");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonsEtVilles?date={date}", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/cantons-et-villes-liste-date-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("cantons-et-villes-liste-date-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
 
         @Test
         @DisplayName("When getcogcanvilliste date=*, returns 3 cantons-ou-villes")
         void should_return_3_cov_when_getcogcanvilliste_etoile() throws Exception {
-            var response = endpoints.getcogcanvilliste("*");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonsEtVilles?date={date}", "*")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/cantons-et-villes-liste-etoile-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("cantons-et-villes-liste-etoile-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
     }
 
@@ -190,25 +180,28 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilprec 7701, returns 1 precedent (7703)")
         void should_return_1_precedent_when_getcogcanvilprec_7701() throws Exception {
-            var response = endpoints.getcogcanvilprec("7701", LocalDate.of(2025, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/precedents?date={date}", "7701", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-precedents-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7701-precedents-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogcanvilprec 7702 (no precedents), returns 404")
         void should_return_404_when_getcogcanvilprec_7702_no_precedents() {
-            var response = endpoints.getcogcanvilprec("7702", LocalDate.of(2025, 1, 1));
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/precedents?date={date}", "7702", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 
@@ -218,36 +211,39 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
 
         @Test
         @DisplayName("When getcogcanvilproj dateProjection null, returns 400")
-        void should_return_400_when_getcogcanvilproj_dateProjection_null() throws Exception {
-            mockMvc.perform(get("/geo/cantonOuVille/7701/projetes")
-                            .param("date", "2025-01-01"))
-                    .andExpect(status().isBadRequest());
+        void should_return_400_when_getcogcanvilproj_dateProjection_null() {
+            restTestClient.get()
+                    .uri("/geo/cantonOuVille/7701/projetes?date={date}", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isBadRequest();
         }
 
         @Test
         @DisplayName("When getcogcanvilproj dateProjection empty, returns 400")
-        void should_return_400_when_getcogcanvilproj_dateProjection_empty() throws Exception {
-            mockMvc.perform(get("/geo/cantonOuVille/7701/projetes")
-                            .param("dateProjection", "")
-                            .param("date", "2025-01-01"))
-                    .andExpect(status().isBadRequest());
+        void should_return_400_when_getcogcanvilproj_dateProjection_empty() {
+            restTestClient.get()
+                    .uri("/geo/cantonOuVille/7701/projetes?dateProjection=&date={date}", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isBadRequest();
         }
 
         @Test
         @DisplayName("When getcogcanvilproj 7701 dateProjection=2010-01-01, returns projection (7703)")
         void should_return_1_projete_when_getcogcanvilproj_7701() throws Exception {
-            var response = endpoints.getcogcanvilproj("7701", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/projetes?dateProjection={dateProjection}&date={date}",
+                            "7701", "2010-01-01", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7701-projetes-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7701-projetes-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
     }
 
@@ -258,25 +254,28 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilsuiv 7703, returns 1 suivant (7701)")
         void should_return_1_suivant_when_getcogcanvilsuiv_7703() throws Exception {
-            var response = endpoints.getcogcanvilsuiv("7703", LocalDate.of(2000, 1, 1));
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/suivants?date={date}", "7703", "2000-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/canton-ou-ville-7703-suivants-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("canton-ou-ville-7703-suivants-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getcogcanvilsuiv 7701 (actif, pas de suivant), returns 404")
         void should_return_404_when_getcogcanvilsuiv_7701_no_suivants() {
-            var response = endpoints.getcogcanvilsuiv("7701", LocalDate.of(2025, 1, 1));
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            restTestClient.get()
+                    .uri("/geo/cantonOuVille/{code}/suivants?date={date}", "7701", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 }
