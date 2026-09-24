@@ -16,7 +16,7 @@ import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangFiel
 import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
 
 @Service
-public class SeriesOperationsServiceImpl implements SeriesOperationsService {
+public class OperationsServiceImpl implements OperationsService {
 
     @Value("${fr.insee.rmes.magmafusion.lg1}")
     private String lg1;

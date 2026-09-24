@@ -9,7 +9,7 @@ import fr.insee.rmes.magmafusion.utils.SeriesDTO;
 
 import java.util.List;
 
-public interface SeriesOperationsService {
+public interface OperationsService {
     Serie convertSeriesDTOToSerieById(SeriesDTO seriesDTO);
     Operation convertOperationDTOToOperation(OperationDTO dto);
     List<Serie> convertSeriesDTOsToSeries(List<SeriesDTO> dtos);

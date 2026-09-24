@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SeriesOperationsServiceImplTest {
 
-    private SeriesOperationsServiceImpl service;
+    private OperationsServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        service = new SeriesOperationsServiceImpl();
+        service = new OperationsServiceImpl();
         ReflectionTestUtils.setField(service, "lg1", "fr");
         ReflectionTestUtils.setField(service, "lg2", "en");
     }

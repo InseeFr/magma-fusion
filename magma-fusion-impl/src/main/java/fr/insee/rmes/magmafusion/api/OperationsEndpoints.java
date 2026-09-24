@@ -10,7 +10,7 @@ import fr.insee.rmes.magmafusion.queries.parameters.OperationRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationRubriquesRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.SeriesOperationsRequestParametizer;
 import fr.insee.rmes.magmafusion.services.RapportQualiteService;
-import fr.insee.rmes.magmafusion.services.SeriesOperationsService;
+import fr.insee.rmes.magmafusion.services.OperationsService;
 import fr.insee.rmes.magmafusion.utils.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +21,10 @@ import java.util.List;
 public class OperationsEndpoints implements OperationsApi {
 
     private final RequestProcessor requestProcessor;
-    private final SeriesOperationsService seriesOperationsService;
+    private final OperationsService seriesOperationsService;
     private final RapportQualiteService rapportQualiteService;
 
-    public OperationsEndpoints(RequestProcessor requestProcessor, SeriesOperationsService seriesOperationsService, RapportQualiteService rapportQualiteService) {
+    public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService, RapportQualiteService rapportQualiteService) {
         this.requestProcessor = requestProcessor;
         this.seriesOperationsService = seriesOperationsService;
         this.rapportQualiteService=rapportQualiteService;
