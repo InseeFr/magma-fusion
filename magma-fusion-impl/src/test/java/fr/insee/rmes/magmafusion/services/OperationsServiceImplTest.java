@@ -19,7 +19,7 @@ class OperationsServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new OperationsServiceImpl();
+        service = new OperationsServiceImpl(null);
         ReflectionTestUtils.setField(service, "lg1", "fr");
         ReflectionTestUtils.setField(service, "lg2", "en");
     }

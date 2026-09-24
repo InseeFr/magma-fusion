@@ -9,7 +9,6 @@ import fr.insee.rmes.magmafusion.queries.parameters.IndicateurRequestParametizer
 import fr.insee.rmes.magmafusion.queries.parameters.OperationRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationRubriquesRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.SeriesOperationsRequestParametizer;
-import fr.insee.rmes.magmafusion.services.RapportQualiteService;
 import fr.insee.rmes.magmafusion.services.OperationsService;
 import fr.insee.rmes.magmafusion.utils.*;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +21,10 @@ public class OperationsEndpoints implements OperationsApi {
 
     private final RequestProcessor requestProcessor;
     private final OperationsService seriesOperationsService;
-    private final RapportQualiteService rapportQualiteService;
 
-    public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService, RapportQualiteService rapportQualiteService) {
+    public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService) {
         this.requestProcessor = requestProcessor;
         this.seriesOperationsService = seriesOperationsService;
-        this.rapportQualiteService=rapportQualiteService;
     }
 
     @Override
@@ -107,7 +104,7 @@ public class OperationsEndpoints implements OperationsApi {
         rapportQualiteDTO = rapportQualiteDTO.withRubriqueDTOList(rubriqueList);
 
 
-        RapportQualite rapportQualite = rapportQualiteService.convertDTOToRapportQualite(rapportQualiteDTO);
+        RapportQualite rapportQualite = seriesOperationsService.convertDTOToRapportQualite(rapportQualiteDTO);
 
         return EndpointsUtils.toResponseEntity(rapportQualite);
 

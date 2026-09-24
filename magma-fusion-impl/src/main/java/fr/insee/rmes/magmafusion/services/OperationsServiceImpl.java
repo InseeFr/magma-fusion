@@ -17,7 +17,7 @@ import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangFiel
 import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
 
 @Service
-public class OperationsServiceImpl implements OperationsService, RapportQualiteService {
+public class OperationsServiceImpl implements OperationsService {
 
     @Value("${fr.insee.rmes.magmafusion.lg1}")
     private String lg1;
@@ -27,12 +27,6 @@ public class OperationsServiceImpl implements OperationsService, RapportQualiteS
 
     private final RequestProcessor requestProcessor;
 
-    // Constructeur par défaut (pour les tests qui n'ont pas besoin de RequestProcessor)
-    public OperationsServiceImpl() {
-        this.requestProcessor = null;
-    }
-
-    // Constructeur avec RequestProcessor (pour les tests qui en ont besoin)
     public OperationsServiceImpl(RequestProcessor requestProcessor) {
         this.requestProcessor = requestProcessor;
     }
