@@ -1,28 +1,42 @@
 package fr.insee.rmes.magmafusion.services;
 
+import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.*;
-import fr.insee.rmes.magmafusion.utils.IndicateurDTO;
-import fr.insee.rmes.magmafusion.utils.OperationDTO;
-import fr.insee.rmes.magmafusion.utils.SeriesDTO;
+import fr.insee.rmes.magmafusion.queries.parameters.OperationsDocumentsRequestParametizer;
+import fr.insee.rmes.magmafusion.utils.*;
+import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
 import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
 
 @Service
-public class OperationsServiceImpl implements OperationsService {
+public class OperationsServiceImpl implements OperationsService, RapportQualiteService {
 
     @Value("${fr.insee.rmes.magmafusion.lg1}")
     private String lg1;
 
     @Value("${fr.insee.rmes.magmafusion.lg2}")
     private String lg2;
+
+    private final RequestProcessor requestProcessor;
+
+    // Constructeur par défaut (pour les tests qui n'ont pas besoin de RequestProcessor)
+    public OperationsServiceImpl() {
+        this.requestProcessor = null;
+    }
+
+    // Constructeur avec RequestProcessor (pour les tests qui en ont besoin)
+    public OperationsServiceImpl(RequestProcessor requestProcessor) {
+        this.requestProcessor = requestProcessor;
+    }
+
 
     @Override
     public Serie convertSeriesDTOToSerieById(SeriesDTO dto) {
@@ -50,7 +64,7 @@ public class OperationsServiceImpl implements OperationsService {
                 createLangField(dto.seriesHistoryNoteLg1(), lg1),
                 createLangField(dto.seriesHistoryNoteLg2(), lg2)));
 
-        if (StringUtils.hasText(dto.type()) ) {
+        if (StringUtils.hasText(dto.type())) {
             IdUriLabel type = new IdUriLabel();
             type.setId(dto.typeID());
             type.setUri(URI.create(dto.type()));
@@ -60,7 +74,7 @@ public class OperationsServiceImpl implements OperationsService {
             serieById.setType(type);
         }
 
-        if (StringUtils.hasText(dto.periodicity()) ) {
+        if (StringUtils.hasText(dto.periodicity())) {
             IdUriLabel frequence = new IdUriLabel();
             frequence.setId(dto.periodicityId());
             frequence.setUri(URI.create(dto.periodicity()));
@@ -70,11 +84,11 @@ public class OperationsServiceImpl implements OperationsService {
             serieById.setFrequenceCollecte(frequence);
         }
 
-        if (StringUtils.hasText(dto.families()) ) {
+        if (StringUtils.hasText(dto.families())) {
             serieById.setFamille(parseFamille(dto.families()));
         }
 
-        if (StringUtils.hasText(dto.sims()) ) {
+        if (StringUtils.hasText(dto.sims())) {
             IdUri rapportQualite = new IdUri();
             rapportQualite.setId(dto.simsId());
             rapportQualite.setUri(URI.create(dto.sims()));
@@ -113,7 +127,7 @@ public class OperationsServiceImpl implements OperationsService {
                 createLangField(dto.operationAltLabelLg1(), lg1),
                 createLangField(dto.operationAltLabelLg2(), lg2)));
 
-        if (StringUtils.hasText(dto.series()) ) {
+        if (StringUtils.hasText(dto.series())) {
             SerieRef serie = new SerieRef();
             serie.setId(dto.seriesId());
             serie.setUri(dto.series());
@@ -123,7 +137,7 @@ public class OperationsServiceImpl implements OperationsService {
             operation.setSerie(serie);
         }
 
-        if (StringUtils.hasText(dto.simsId()) ) {
+        if (StringUtils.hasText(dto.simsId())) {
             IdUri rapportQualite = new IdUri();
             rapportQualite.setId(dto.simsId());
             rapportQualite.setUri(URI.create(dto.sims()));
@@ -223,8 +237,6 @@ public class OperationsServiceImpl implements OperationsService {
         indicateur.setOrganismesResponsables(null);
         indicateur.setPartenaires(null);
 
-
-
         indicateur.setId(dto.indicatorId());
         indicateur.setUri(dto.indicator());
         indicateur.setDateCreation(dto.created() != null ? dto.created().toString() : null);
@@ -305,5 +317,200 @@ public class OperationsServiceImpl implements OperationsService {
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+
+    @Override
+    public RapportQualite convertDTOToRapportQualite(RapportQualiteDTO rapportQualiteDTO) {
+        RapportQualite rapportQualite = new RapportQualite();
+        rapportQualite.setId(rapportQualiteDTO.id());
+        rapportQualite.setUri(URI.create(rapportQualiteDTO.uri()));
+        if (rapportQualiteDTO.labelLg1() != null && rapportQualiteDTO.labelLg2() != null) {
+            List<LocalisedContenu> label = createListLangField(
+                    createLangField(rapportQualiteDTO.labelLg1(), "fr"),
+                    createLangField(rapportQualiteDTO.labelLg2(), "en"));
+            rapportQualite.setLabel(label);
+        }
+        if (rapportQualiteDTO.labelLg1() != null && rapportQualiteDTO.labelLg2() == null) {
+            List<LocalisedContenu> label = createListLangField(
+                    createLangField(rapportQualiteDTO.labelLg1(), "fr"),
+                    createLangField("", "en"));
+            rapportQualite.setLabel(label);
+        }
+        rapportQualite.setRubriques(null);
+
+        if (rapportQualiteDTO.rubriqueDTOList() != null) {
+            for (RubriqueDTO rubDTO : rapportQualiteDTO.rubriqueDTOList()) {
+                Rubrique rubrique = convertRubrique(rubDTO, rapportQualite);
+                if (rubrique != null) {
+                    rapportQualite.addRubriquesItem(rubrique);
+                }
+            }
+        }
+
+        return rapportQualite;
+    }
+
+    private Rubrique convertRubrique(RubriqueDTO rubriqueDTO, RapportQualite rapportQualite) {
+        Rubrique rubrique = createRubrique(rubriqueDTO);
+
+        if (rubriqueDTO.titreLg1() != null && rubriqueDTO.titreLg2() != null) {
+            List<LocalisedContenu> titre = createListLangField(
+                    createLangField(rubriqueDTO.titreLg1(), "fr"),
+                    createLangField(rubriqueDTO.titreLg2(), "en"));
+            rubrique.setTitre(titre);
+        }
+
+        switch (rubriqueDTO.type()) {
+            case "DATE":
+                rubrique.setDate(rubriqueDTO.valeurSimple());
+                break;
+            case "CODE_LIST":
+                rubrique = addCodeList(rubriqueDTO, rubrique, rapportQualite);
+                break;
+            case "RICH_TEXT":
+                addRichText(rubriqueDTO, rubrique, rapportQualite);
+                break;
+            case "TEXT":
+                List<LocalisedContenu> label = createListLangField(
+                        createLangField(rubriqueDTO.labelLg1(), "fr"),
+                        createLangField(rubriqueDTO.labelLg2(), "en"));
+                rubrique.setLabel(label);
+                break;
+            case "GEOGRAPHY":
+                rubrique.setTerritoire(createUriLabel(rubriqueDTO, rubriqueDTO.geoUri()));
+                break;
+            case "ORGANIZATION":
+                rubrique.setOrganisme(createUriLabel(rubriqueDTO, rubriqueDTO.organisationUri()));
+                break;
+            default:
+                break;
+        }
+
+        return rubrique;
+    }
+
+    private static Rubrique createRubrique(RubriqueDTO rubriqueDTO) {
+        Rubrique rubrique = new Rubrique();
+        rubrique.setId(rubriqueDTO.id());
+        rubrique.setUri(rubriqueDTO.uri());
+        rubrique.setIdParent(rubriqueDTO.idParent());
+        rubrique.setType(rubriqueDTO.type());
+        rubrique.setLabel(null);
+        rubrique.setContenus(null);
+        rubrique.setCodes(null);
+        return rubrique;
+    }
+
+    private IdUriLabel createUriLabel(RubriqueDTO rubriqueDTO, String uri) {
+        IdUriLabel rubriqueWithIdUriLabel = new IdUriLabel();
+        rubriqueWithIdUriLabel.setId(rubriqueDTO.valeurSimple());
+        rubriqueWithIdUriLabel.setUri(URI.create(uri));
+
+        if (rubriqueDTO.labelObjLg1() != null && rubriqueDTO.labelObjLg2() != null) {
+            List<LocalisedContenu> label = createListLangField(
+                    createLangField(rubriqueDTO.labelObjLg1(), "fr"),
+                    createLangField(rubriqueDTO.labelObjLg2(), "en"));
+            rubriqueWithIdUriLabel.setLabel(label);
+        }
+        if (rubriqueDTO.labelObjLg1() != null && rubriqueDTO.labelObjLg2() == null) {
+            LocalisedContenu labelLg1 = createLangField(rubriqueDTO.labelObjLg1(), "fr");
+            List<LocalisedContenu> label = new ArrayList<>();
+            label.add(labelLg1);
+            rubriqueWithIdUriLabel.setLabel(label);
+        }
+        return rubriqueWithIdUriLabel;
+    }
+
+    private void addRichText(RubriqueDTO rubriqueDTO, Rubrique rubrique, RapportQualite rapportQualite) {
+        Contenu contenuLg1 = new Contenu();
+        contenuLg1.setDocuments(null);
+        if (StringUtils.hasText(rubriqueDTO.labelLg1())) {
+            contenuLg1.setTexte(rubriqueDTO.labelLg1());
+        } else {
+            contenuLg1.setTexte("");
+        }
+        contenuLg1.setLangue("fr");
+        if (Boolean.TRUE.equals(rubriqueDTO.hasDocLg1())) {
+            contenuLg1.setDocuments(findDocuments(rapportQualite.getId(), rubriqueDTO.id(), "fr"));
+        }
+        rubrique.addContenusItem(contenuLg1);
+
+        if (isConditionForContenuLg2(rubriqueDTO)) {
+            Contenu contenuLg2 = new Contenu();
+            contenuLg2.setDocuments(null);
+            if (StringUtils.hasText(rubriqueDTO.labelLg2())) {
+                contenuLg2.setTexte(rubriqueDTO.labelLg2());
+            } else {
+                contenuLg2.setTexte("");
+            }
+            contenuLg2.setLangue("en");
+            if (Boolean.TRUE.equals(rubriqueDTO.hasDocLg2())) {
+                contenuLg2.setDocuments(findDocuments(rapportQualite.getId(), rubriqueDTO.id(), "en"));
+            }
+            rubrique.addContenusItem(contenuLg2);
+        }
+    }
+
+    private static boolean isConditionForContenuLg2(RubriqueDTO rubriqueDTO) {
+        return rubriqueDTO.hasDocLg2() != null &&
+                (StringUtils.hasText(rubriqueDTO.labelLg2()) || rubriqueDTO.hasDocLg2());
+    }
+
+    private List<Document> findDocuments(String rapportQualiteId, String rubriqueDTOId, String lang) {
+        List<DocumentDTO> documentsDTO = this.requestProcessor.queryToFindDocuments()
+                .with(new OperationsDocumentsRequestParametizer(rapportQualiteId, rubriqueDTOId, lang))
+                .executeQuery()
+                .listResult(DocumentDTO.class)
+                .result();
+        List<Document> documents = new ArrayList<>();
+        for (DocumentDTO documentDTO : documentsDTO) {
+            Document document = new Document();
+            if (documentDTO.labelLg1() != null && documentDTO.labelLg2() != null) {
+                List<LocalisedContenu> label = createListLangField(
+                        createLangField(documentDTO.labelLg1(), "fr"),
+                        createLangField(documentDTO.labelLg2(), "en"));
+                document.label(label);
+            }
+            if (documentDTO.labelLg1() != null && documentDTO.labelLg2() == null) {
+                LocalisedContenu labelsLg1 = createLangField(documentDTO.labelLg1(), "fr");
+                List<LocalisedContenu> label = createListLangField(labelsLg1, null);
+                document.label(label);
+            }
+            document.setDateMiseAJour(documentDTO.dateMiseAJour());
+            document.setLangue(documentDTO.langue());
+            document.setUrl(documentDTO.url());
+            documents.add(document);
+        }
+        return documents;
+    }
+
+    private Rubrique addCodeList(RubriqueDTO rubriqueDTO, Rubrique rubrique, RapportQualite rapportQualite) {
+        IdUriLabel rubriqueCodeList = new IdUriLabel();
+        rubriqueCodeList.setId(rubriqueDTO.valeurSimple());
+        rubriqueCodeList.setUri(URI.create(rubriqueDTO.codeUri()));
+        if (rubriqueDTO.labelObjLg1() != null) {
+            LocalisedContenu labelLg1 = createLangField(rubriqueDTO.labelObjLg1(), "fr");
+            LocalisedContenu labelLg2 = rubriqueDTO.labelObjLg2() != null ?
+                    createLangField(rubriqueDTO.labelObjLg2(), "en") : null;
+            rubriqueCodeList.setLabel(createListLangField(labelLg1, labelLg2));
+        }
+
+        if (rapportQualite.getRubriques() != null) {
+            boolean rubricExist = rapportQualite.getRubriques().stream()
+                    .filter(Objects::nonNull)
+                    .anyMatch(r -> r.getId().equals(rubriqueDTO.id()));
+
+            if (rubricExist) {
+                Rubrique existingRubric = rapportQualite.getRubriques().stream()
+                        .filter(r -> r.getId().equals(rubriqueDTO.id()))
+                        .findFirst()
+                        .orElseThrow();
+                existingRubric.addCodesItem(rubriqueCodeList);
+                return null;
+            }
+        }
+        rubrique.addCodesItem(rubriqueCodeList);
+        return rubrique;
     }
 }
