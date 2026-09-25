@@ -13,13 +13,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SeriesOperationsServiceImplTest {
+class OperationsServiceImplTest {
 
-    private SeriesOperationsServiceImpl service;
+    private OperationsServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        service = new SeriesOperationsServiceImpl();
+        service = new OperationsServiceImpl(null);
         ReflectionTestUtils.setField(service, "lg1", "fr");
         ReflectionTestUtils.setField(service, "lg2", "en");
     }

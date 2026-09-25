@@ -16,119 +16,37 @@ security:
 ### TAGS SPECIFICATION ###
 
 tags:
-  # -- Concepts
-
-  - name: concepts
+  # -- Définitions
+  - name: Definitions
     description: API Concepts
 
-  # -- Géographie
-
-  - name: geo
-    x-geo: true
-    description: 'API géographie : Générique'
-
-  - name: geoAireDAttractionDesVilles
-    x-geo: true
-    description: 'API géographie : aire d''attraction des villes 2020'
-  - name: geoArrondissement
-    x-geo: true
-    description: 'API géographie : Arrondissement'
-  - name: geoArrondissementMunicipal
-    x-geo: true
-    description: 'API géographie : Arrondissement municipal'
-  - name: geoBassinDeVie
-    x-geo: true
-    description: 'API géographie : Bassin de vie 2022'
-  - name: geoCanton
-    x-geo: true
-    description: 'API géographie : Canton'
-  - name: geoCantonEtVille
-    x-geo: true
-    description: 'API géographie : Canton ou ville'
-  - name: geoCirconscriptionTerritoriale
-    x-geo: true
-    description: 'API géographie : CirconscriptionTerritoriale'
-  - name: geoCollectiviteDOutreMer
-    x-geo: true
-    description: 'API géographie : Collectivité d''outre-mer'
-  - name: geoCommune
-    x-geo: true
-    description: 'API géographie : Commune'
-  - name: geoCommuneAssociee
-    x-geo: true
-    description: 'API géographie : Commune associée'
-  - name: geoCommuneDeleguee
-    x-geo: true
-    description: 'API géographie : Commune déléguée'
-  - name: geoDepartement
-    x-geo: true
-    description: 'API géographie : Département'
-  - name: geoDistrict
-    x-geo: true
-    description: 'API géographie : District'
-  - name: geoIntercommunalite
-    x-geo: true
-    description: 'API géographie : Intercommunalité'
-  - name: geoIris
-    x-geo: true
-    description: 'API géographie : Iris'
-  - name: geoPays
-    x-geo: true
-    description: 'API géographie : Pays'
-  - name: geoQuartierPrioritaireDeLaPolitiqueDeLaVille
-    x-geo: true
-    description: 'API géographie : Quartier Prioritaire de la politique de la ville 2024'
-  - name: geoRegion
-    x-geo: true
-    description: 'API géographie : Région'
-  - name: geoUniteUrbaine
-    x-geo: true
-    description: 'API géographie : Unité urbaine 2020'
-  - name: geoZoneDEmploi
-    x-geo: true
-    description: 'API géographie : Zone d''emploi'
+  # -- Opérations
+  - name: Operations
+    description: Consultation des séries, opérations et rapports qualité
 
   # -- Nomenclatures
-  - name: nomenclatures
+  - name: Nomenclatures
     description: API Nomenclatures
 
-  # -- Opérations
-  - name: operations
-    description: Consultation des rapports qualité
-  - name: Series-Operations
-    description: Consultation des Séries et Opérations
-  - name: Datasets
-    description: Consultation MagmaFusion API - datasets
+  # -- Géographie
+  - name: Geographie
+    description: API Géographie
+
+  # -- Datasets
+  - name: Jeux de donnees
+    description: Consultation des jeux de données
+
 
 ### PATHS SPECIFICATION ###
 
 paths:
-  # -- Concepts
 
-  /concepts/definition/{id}:
-    get:
-      tags:
-        - concepts
-      summary: Informations sur la définition d'un concept statistique de l'Insee
-      operationId: getconcept
-      parameters:
-        - $ref: '#/components/parameters/idConceptInPath'
-      responses:
-        '200':
-          $ref: '#/components/responses/Concept200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
+  # -- Définitions
 
   /concepts/definitions:
     get:
       tags:
-        - concepts
+        - Definitions
       summary: Informations sur les définitions des concepts statistiques de l'Insee
       operationId: getconceptsliste
       parameters:
@@ -146,7 +64,194 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /concepts/definition/{id}:
+    get:
+      tags:
+        - Definitions
+      summary: Informations sur la définition d'un concept statistique de l'Insee
+      operationId: getconcept
+      parameters:
+        - $ref: '#/components/parameters/idConceptInPath'
+      responses:
+        '200':
+          $ref: '#/components/responses/Concept200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+  # -- Opérations
+
+  /operations/series:
+    get:
+      tags:
+        - Operations
+      summary: Get all series
+      operationId: getAllSeries
+      parameters:
+        - name: dateMiseAJour
+          in: query
+          description: 'Date of last update. Example: 2023-01-31'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SeriesListe200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/serie/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get one serie
+      operationId: getSerieById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Serie200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/operation/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get operation by code
+      operationId: getOperationByCode
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Operation200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/indicateur/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get one indicator
+      operationId: getIndicatorById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Indicateur200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/rapportQualite/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Documentation d''une opération, d''un indicateur ou d''une série
+      operationId: 'getRapportQualiteByCode'
+      parameters:
+        - $ref: '#/components/parameters/idDocumentation'
+      responses:
+        '200':
+          $ref: '#/components/responses/RapportQualiteByCode200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+  # -- Nomenclatures
+
+  /codes/{nomenclature}/{niveau}/{code}:
+    get:
+      tags:
+        - Nomenclatures
+      summary: Informations sur une nomenclature d'un certain niveau identifiée par son code
+      operationId: getClassificationByCode
+      parameters:
+        - $ref: '#/components/parameters/nomenclature'
+        - $ref: '#/components/parameters/niveauNomenclature'
+        - $ref: '#/components/parameters/codeNomenclature'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClassificationByCode200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+
   # -- Géographie
+
+  /geo/airesDAttractionDesVilles2020:
+    get:
+      tags:
+        - geoAireDAttractionDesVilles
+      summary: 'Informations sur toutes les aires d''attraction 2020 actives à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogaavliste'
+      parameters:
+        - $ref: '#/components/parameters/dateAiresDAttractionDesVilles2020Actives'
+      responses:
+        '200':
+          $ref: '#/components/responses/AiresDAttractionDesVilles2020Liste200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
 
   /geo/aireDAttractionDesVilles2020/{code}:
     get:
@@ -191,39 +296,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/airesDAttractionDesVilles2020:
-    get:
-      tags:
-        - geoAireDAttractionDesVilles
-      summary: 'Informations sur toutes les aires d''attraction 2020 actives à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogaavliste'
-      parameters:
-        - $ref: '#/components/parameters/dateAiresDAttractionDesVilles2020Actives'
-      responses:
-        '200':
-          $ref: '#/components/responses/AiresDAttractionDesVilles2020Liste200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/arrondissement/{code}/ascendants:
+  /geo/arrondissements:
     get:
       tags:
         - geoArrondissement
-      summary: 'Informations concernant les territoires qui contiennent l''arrondissement'
-      operationId: 'getcogarrasc'
+      summary: 'Informations sur tous les arrondissements atifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogarrliste'
       parameters:
-        - $ref: '#/components/parameters/codeArrondissementInPath'
-        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsArrondissement'
-        - $ref: '#/components/parameters/typeTerritoireAscendantArrondissement'
+        - $ref: '#/components/parameters/dateArrondissementsActifs'
       responses:
         '200':
-          $ref: '#/components/responses/ArrondissementListeAscendants200'
+          $ref: '#/components/responses/ArrondissementsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -276,17 +359,19 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/arrondissements:
+  /geo/arrondissement/{code}/ascendants:
     get:
       tags:
         - geoArrondissement
-      summary: 'Informations sur tous les arrondissements atifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogarrliste'
+      summary: 'Informations concernant les territoires qui contiennent l''arrondissement'
+      operationId: 'getcogarrasc'
       parameters:
-        - $ref: '#/components/parameters/dateArrondissementsActifs'
+        - $ref: '#/components/parameters/codeArrondissementInPath'
+        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsArrondissement'
+        - $ref: '#/components/parameters/typeTerritoireAscendantArrondissement'
       responses:
         '200':
-          $ref: '#/components/responses/ArrondissementsListe200'
+          $ref: '#/components/responses/ArrondissementListeAscendants200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -360,19 +445,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/arrondissementMunicipal/{code}/ascendants:
+  /geo/arrondissementsMunicipaux:
     get:
       tags:
         - geoArrondissementMunicipal
-      summary: 'Informations concernant les territoires qui contiennent l''arrondissement municipal'
-      operationId: 'getcogarrmuasc'
+      summary: 'Informations sur tous les arrondissements municipaux actifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogarrmuliste'
       parameters:
-        - $ref: '#/components/parameters/codeArrondissementMunicipalInPath'
-        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsArrondissementMunicipal'
-        - $ref: '#/components/parameters/typeTerritoireAscendantArrondissementMunicipal'
+        - $ref: '#/components/parameters/dateArrondissementsMunicipauxActifs'
       responses:
         '200':
-          $ref: '#/components/responses/ArrondissementMunicipalListeAscendants200'
+          $ref: '#/components/responses/ArrondissementsMunicipauxListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -403,17 +486,19 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/arrondissementsMunicipaux:
+  /geo/arrondissementMunicipal/{code}/ascendants:
     get:
       tags:
         - geoArrondissementMunicipal
-      summary: 'Informations sur tous les arrondissements municipaux actifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogarrmuliste'
+      summary: 'Informations concernant les territoires qui contiennent l''arrondissement municipal'
+      operationId: 'getcogarrmuasc'
       parameters:
-        - $ref: '#/components/parameters/dateArrondissementsMunicipauxActifs'
+        - $ref: '#/components/parameters/codeArrondissementMunicipalInPath'
+        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsArrondissementMunicipal'
+        - $ref: '#/components/parameters/typeTerritoireAscendantArrondissementMunicipal'
       responses:
         '200':
-          $ref: '#/components/responses/ArrondissementsMunicipauxListe200'
+          $ref: '#/components/responses/ArrondissementMunicipalListeAscendants200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -422,6 +507,7 @@ paths:
           $ref: '#/components/responses/NotAcceptable'
         '500':
           $ref: '#/components/responses/ServerError'
+
 
   /geo/arrondissementMunicipal/{code}/precedents:
     get:
@@ -487,6 +573,27 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /geo/bassinsDeVie2022:
+    get:
+      tags:
+        - geoBassinDeVie
+      summary: 'Informations sur tous les bassins de vie 2022 actifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogbassliste'
+      parameters:
+        - $ref: '#/components/parameters/dateBassinsDeVie2022Actifs'
+        - $ref: '#/components/parameters/filtreNomBassinDeVie2022'
+      responses:
+        '200':
+          $ref: '#/components/responses/BassinsDeVie2022Liste200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /geo/bassinDeVie2022/{code}:
     get:
       tags:
@@ -530,40 +637,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/bassinsDeVie2022:
-    get:
-      tags:
-        - geoBassinDeVie
-      summary: 'Informations sur tous les bassins de vie 2022 actifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogbassliste'
-      parameters:
-        - $ref: '#/components/parameters/dateBassinsDeVie2022Actifs'
-        - $ref: '#/components/parameters/filtreNomBassinDeVie2022'
-      responses:
-        '200':
-          $ref: '#/components/responses/BassinsDeVie2022Liste200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/canton/{code}/ascendants:
+  /geo/cantons:
     get:
       tags:
         - geoCanton
-      summary: 'Informations concernant les territoires qui contiennent le canton'
-      operationId: 'getcogcanasc'
+      summary: 'Informations sur tous les cantons actifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogcanliste'
       parameters:
-        - $ref: '#/components/parameters/codeCantonInPath'
-        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsCanton'
-        - $ref: '#/components/parameters/typeTerritoireAscendantCanton'
+        - $ref: '#/components/parameters/dateCantonsActifs'
       responses:
         '200':
-          $ref: '#/components/responses/CantonListeAscendants200'
+          $ref: '#/components/responses/CantonsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -594,39 +678,19 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/canton/{code}/communes:
+  /geo/canton/{code}/ascendants:
     get:
       tags:
         - geoCanton
-      summary: 'Récupérer les informations concernant les communes qui ont un territoire commun avec le canton {code}'
-      operationId: 'getcogcancom'
+      summary: 'Informations concernant les territoires qui contiennent le canton'
+      operationId: 'getcogcanasc'
       parameters:
         - $ref: '#/components/parameters/codeCantonInPath'
-        - $ref: '#/components/parameters/dateCantonCommunesActives'
+        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsCanton'
+        - $ref: '#/components/parameters/typeTerritoireAscendantCanton'
       responses:
         '200':
-          $ref: '#/components/responses/CantonCommunes200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-
-  /geo/cantons:
-    get:
-      tags:
-        - geoCanton
-      summary: 'Informations sur tous les cantons actifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogcanliste'
-      parameters:
-        - $ref: '#/components/parameters/dateCantonsActifs'
-      responses:
-        '200':
-          $ref: '#/components/responses/CantonsListe200'
+          $ref: '#/components/responses/CantonListeAscendants200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -700,6 +764,27 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /geo/canton/{code}/communes:
+    get:
+      tags:
+        - geoCanton
+      summary: 'Récupérer les informations concernant les communes qui ont un territoire commun avec le canton {code}'
+      operationId: 'getcogcancom'
+      parameters:
+        - $ref: '#/components/parameters/codeCantonInPath'
+        - $ref: '#/components/parameters/dateCantonCommunesActives'
+      responses:
+        '200':
+          $ref: '#/components/responses/CantonCommunes200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /geo/canton/{code}/intersections:
     get:
       tags:
@@ -722,20 +807,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-
-  /geo/cantonOuVille/{code}/ascendants:
+  /geo/cantonsEtVilles:
     get:
       tags:
-        - geoCantonEtVille
-      summary: 'Informations concernant les territoires qui contiennent le canton-ou-ville'
-      operationId: 'getcogcanvilasc'
+        - geoCantonOuVille
+      summary: 'Informations sur tous les cantons et villes actifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogcanvilliste'
       parameters:
-        - $ref: '#/components/parameters/codeCantonOuVilleInPath'
-        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsCantonOuVille'
-        - $ref: '#/components/parameters/typeTerritoireAscendantCantonOuVille'
+        - $ref: '#/components/parameters/dateCantonsEtVillesActifs'
       responses:
         '200':
-          $ref: '#/components/responses/CantonOuVilleListeAscendants200'
+          $ref: '#/components/responses/CantonsEtVilles200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -748,7 +830,7 @@ paths:
   /geo/cantonOuVille/{code}:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations sur un canton-ou-ville identifié par son code (quatre chiffres pour la Métropole ou cinq pour les DOM)'
       operationId: 'getcogcanvil'
       parameters:
@@ -769,7 +851,7 @@ paths:
   /geo/cantonOuVille/{code}/descendants:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les territoires inclus dans le canton-ou-ville'
       operationId: 'getcogcanvildes'
       parameters:
@@ -789,17 +871,19 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/cantonsEtVilles:
+  /geo/cantonOuVille/{code}/ascendants:
     get:
       tags:
-        - geoCantonEtVille
-      summary: 'Informations sur tous les cantons et villes actifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogcanvilliste'
+        - geoCantonOuVille
+      summary: 'Informations concernant les territoires qui contiennent le canton-ou-ville'
+      operationId: 'getcogcanvilasc'
       parameters:
-        - $ref: '#/components/parameters/dateCantonsEtVillesActifs'
+        - $ref: '#/components/parameters/codeCantonOuVilleInPath'
+        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsCantonOuVille'
+        - $ref: '#/components/parameters/typeTerritoireAscendantCantonOuVille'
       responses:
         '200':
-          $ref: '#/components/responses/CantonsEtVilles200'
+          $ref: '#/components/responses/CantonOuVilleListeAscendants200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -812,7 +896,7 @@ paths:
   /geo/cantonOuVille/{code}/precedents:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les cantons-ou-villes qui précèdent le canton-ou-ville'
       operationId: 'getcogcanvilprec'
       parameters:
@@ -833,7 +917,7 @@ paths:
   /geo/cantonOuVille/{code}/projetes:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les cantons-ou-villes qui résultent de la projection du canton-ou-ville à la date passée en paramètre.'
       operationId: 'getcogcanvilproj'
       parameters:
@@ -855,7 +939,7 @@ paths:
   /geo/cantonOuVille/{code}/suivants:
     get:
       tags:
-        - geoCantonEtVille
+        - geoCantonOuVille
       summary: 'Informations concernant les cantons-ou-villes qui succèdent au canton-ou-ville'
       operationId: 'getcogcanvilsuiv'
       parameters:
@@ -864,6 +948,29 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/CantonOuVilleListeSuivants200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+
+  /geo/circonscriptionTerritoriale/{code}:
+    get:
+      tags:
+        - geoCirconscriptionTerritoriale
+      summary: 'Informations sur une circonscription territoriale identifiée par son code (cinq caractères)'
+      operationId: 'getcogcir'
+      parameters:
+        - $ref: '#/components/parameters/codeCirconscriptionTerritorialeInPath'
+        - $ref: '#/components/parameters/dateCirconscriptionTerritorialeActive'
+      responses:
+        '200':
+          $ref: '#/components/responses/CirconscriptionTerritoriale200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -895,18 +1002,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/circonscriptionTerritoriale/{code}:
+  /geo/collectivitesDOutreMer:
     get:
       tags:
-        - geoCirconscriptionTerritoriale
-      summary: 'Informations sur une circonscription territoriale identifiée par son code (cinq caractères)'
-      operationId: 'getcogcir'
+        - geoCollectiviteDOutreMer
+      summary: 'Informations sur toutes les collectivités d''outre-mer actives à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogcollliste'
       parameters:
-        - $ref: '#/components/parameters/codeCirconscriptionTerritorialeInPath'
-        - $ref: '#/components/parameters/dateCirconscriptionTerritorialeActive'
+        - $ref: '#/components/parameters/dateCollectivitesDOutreMerActives'
       responses:
         '200':
-          $ref: '#/components/responses/CirconscriptionTerritoriale200'
+          $ref: '#/components/responses/CollectivitesDOutreMerListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -960,39 +1066,19 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/collectivitesDOutreMer:
-    get:
-      tags:
-        - geoCollectiviteDOutreMer
-      summary: 'Informations sur toutes les collectivités d''outre-mer actives à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogcollliste'
-      parameters:
-        - $ref: '#/components/parameters/dateCollectivitesDOutreMerActives'
-      responses:
-        '200':
-          $ref: '#/components/responses/CollectivitesDOutreMerListe200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/commune/{code}/ascendants:
+  /geo/communes:
     get:
       tags:
         - geoCommune
-      summary: 'Informations concernant les territoires qui contiennent la commune'
-      operationId: 'getcogcomasc'
+      summary: Informations sur toutes les communes actives à la date donnée. Par défaut, c'est la date courante.
+      operationId: 'getcogcomliste'
       parameters:
-        - $ref: '#/components/parameters/codeCommuneInPath'
-        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsCommune'
-        - $ref: '#/components/parameters/typeTerritoireAscendantCommune'
+        - $ref: '#/components/parameters/dateCommunesActives'
+        - $ref: '#/components/parameters/filtreNomCommune'
+        - $ref: '#/components/parameters/com'
       responses:
         '200':
-          $ref: '#/components/responses/CommuneListeAscendants200'
+          $ref: '#/components/responses/CommunesListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1002,7 +1088,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  # utiliser responses.200.links.getcogcom.operationID : getcogcom
   /geo/commune/{code}:
     get:
       tags:
@@ -1015,27 +1100,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Commune200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/commune/{code}/cantons:
-    get:
-      tags:
-        - geoCommune
-      summary: 'Information sur le(s) canton(s) associé(s) à la commune identifiée par son code (cinq caractères)'
-      operationId: getcogcomcan
-      parameters:
-        - $ref: '#/components/parameters/codeCommuneInPath'
-        - $ref: '#/components/parameters/dateCommuneCantonsActifs'
-      responses:
-        '200':
-          $ref: '#/components/responses/CommuneCantons200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1067,19 +1131,19 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/communes:
+  /geo/commune/{code}/ascendants:
     get:
       tags:
         - geoCommune
-      summary: Informations sur toutes les communes actives à la date donnée. Par défaut, c'est la date courante.
-      operationId: 'getcogcomliste'
+      summary: 'Informations concernant les territoires qui contiennent la commune'
+      operationId: 'getcogcomasc'
       parameters:
-        - $ref: '#/components/parameters/dateCommunesActives'
-        - $ref: '#/components/parameters/filtreNomCommune'
-        - $ref: '#/components/parameters/com'
+        - $ref: '#/components/parameters/codeCommuneInPath'
+        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsCommune'
+        - $ref: '#/components/parameters/typeTerritoireAscendantCommune'
       responses:
         '200':
-          $ref: '#/components/responses/CommunesListe200'
+          $ref: '#/components/responses/CommuneListeAscendants200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1153,6 +1217,27 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /geo/commune/{code}/cantons:
+    get:
+      tags:
+        - geoCommune
+      summary: 'Information sur le(s) canton(s) associé(s) à la commune identifiée par son code (cinq caractères)'
+      operationId: getcogcomcan
+      parameters:
+        - $ref: '#/components/parameters/codeCommuneInPath'
+        - $ref: '#/components/parameters/dateCommuneCantonsActifs'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommuneCantons200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /geo/commune/{code}/intersections:
     get:
       tags:
@@ -1166,6 +1251,47 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/CommuneListeTerritoiresLies200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /geo/communesAssociees:
+    get:
+      tags:
+        - geoCommuneAssociee
+      summary: 'Informations sur toutes les communes associées actives à la date donnée. Par défaut, c''est la date courante.'
+      operationId: 'getcogcomaliste'
+      parameters:
+        - $ref: '#/components/parameters/dateCommunesAssocieesActives'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommunesAssocieesListe200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /geo/communeAssociee/{code}:
+    get:
+      tags:
+        - geoCommuneAssociee
+      summary: 'Informations sur une commune associée identifiée par son code (cinq caractères)'
+      operationId: 'getcogcoma'
+      parameters:
+        - $ref: '#/components/parameters/codeCommuneAssocieeInPath'
+        - $ref: '#/components/parameters/dateCommuneAssocieeActive'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommuneAssociee200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1197,18 +1323,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/communeAssociee/{code}:
+  /geo/communesDeleguees:
     get:
       tags:
-        - geoCommuneAssociee
-      summary: 'Informations sur une commune associée identifiée par son code (cinq caractères)'
-      operationId: 'getcogcoma'
+        - geoCommuneDeleguee
+      summary: 'Informations sur toutes les communes déléguées actives à la date donnée. Par défaut, c''est la date courante.'
+      operationId: 'getcogcomdliste'
       parameters:
-        - $ref: '#/components/parameters/codeCommuneAssocieeInPath'
-        - $ref: '#/components/parameters/dateCommuneAssocieeActive'
+        - $ref: '#/components/parameters/dateCommunesDelegueesActives'
       responses:
         '200':
-          $ref: '#/components/responses/CommuneAssociee200'
+          $ref: '#/components/responses/CommunesDelegueesListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1218,17 +1343,18 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/communesAssociees:
+  /geo/communeDeleguee/{code}:
     get:
       tags:
-        - geoCommuneAssociee
-      summary: 'Informations sur toutes les communes associées actives à la date donnée. Par défaut, c''est la date courante.'
-      operationId: 'getcogcomaliste'
+        - geoCommuneDeleguee
+      summary: 'Informations sur une commune déléguée identifiée par son code (cinq caractères)'
+      operationId: 'getcogcomd'
       parameters:
-        - $ref: '#/components/parameters/dateCommunesAssocieesActives'
+        - $ref: '#/components/parameters/codeCommuneDelegueeInPath'
+        - $ref: '#/components/parameters/dateCommuneDelegueeActive'
       responses:
         '200':
-          $ref: '#/components/responses/CommunesAssocieesListe200'
+          $ref: '#/components/responses/CommuneDeleguee200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1260,60 +1386,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/communeDeleguee/{code}:
-    get:
-      tags:
-        - geoCommuneDeleguee
-      summary: 'Informations sur une commune déléguée identifiée par son code (cinq caractères)'
-      operationId: 'getcogcomd'
-      parameters:
-        - $ref: '#/components/parameters/codeCommuneDelegueeInPath'
-        - $ref: '#/components/parameters/dateCommuneDelegueeActive'
-      responses:
-        '200':
-          $ref: '#/components/responses/CommuneDeleguee200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/communesDeleguees:
-    get:
-      tags:
-        - geoCommuneDeleguee
-      summary: 'Informations sur toutes les communes déléguées actives à la date donnée. Par défaut, c''est la date courante.'
-      operationId: 'getcogcomdliste'
-      parameters:
-        - $ref: '#/components/parameters/dateCommunesDelegueesActives'
-      responses:
-        '200':
-          $ref: '#/components/responses/CommunesDelegueesListe200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/departement/{code}/ascendants:
+  /geo/departements:
     get:
       tags:
         - geoDepartement
-      summary: 'Informations concernant les territoires qui contiennent le departement'
-      operationId: 'getcogdepasc'
+      summary: 'Informations sur tous les départements actifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogdepts'
       parameters:
-        - $ref: '#/components/parameters/codeDepInPath'
-        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsDepartement'
-        - $ref: '#/components/parameters/typeTerritoireAscendantDepartement'
+        - $ref: '#/components/parameters/dateDepartementsInPath'
       responses:
         '200':
-          $ref: '#/components/responses/DepartementListeAscendants200'
+          $ref: '#/components/responses/DepartementsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1367,17 +1450,19 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/departements:
+  /geo/departement/{code}/ascendants:
     get:
       tags:
         - geoDepartement
-      summary: 'Informations sur tous les départements actifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogdepts'
+      summary: 'Informations concernant les territoires qui contiennent le departement'
+      operationId: 'getcogdepasc'
       parameters:
-        - $ref: '#/components/parameters/dateDepartementsInPath'
+        - $ref: '#/components/parameters/codeDepInPath'
+        - $ref: '#/components/parameters/dateTerritoiresActifsAscendantsDepartement'
+        - $ref: '#/components/parameters/typeTerritoireAscendantDepartement'
       responses:
         '200':
-          $ref: '#/components/responses/DepartementsListe200'
+          $ref: '#/components/responses/DepartementListeAscendants200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1451,6 +1536,27 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /geo/district/{code}:
+    get:
+      tags:
+        - geoDistrict
+      summary: 'Informations sur un district identifié par son code (cinq caractères)'
+      operationId: 'getcogdis'
+      parameters:
+        - $ref: '#/components/parameters/codeDistrictInPath'
+        - $ref: '#/components/parameters/dateDistrictActif'
+      responses:
+        '200':
+          $ref: '#/components/responses/District200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /geo/district/{code}/ascendants:
     get:
       tags:
@@ -1473,18 +1579,18 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/district/{code}:
+  /geo/intercommunalites:
     get:
       tags:
-        - geoDistrict
-      summary: 'Informations sur un district identifié par son code (cinq caractères)'
-      operationId: 'getcogdis'
+        - geoIntercommunalite
+      summary: 'Informations sur toutes les intercommunalités actives à la date donnée. Par défaut, c''est la date courante.'
+      operationId: 'getcogintercoliste'
       parameters:
-        - $ref: '#/components/parameters/codeDistrictInPath'
-        - $ref: '#/components/parameters/dateDistrictActif'
+        - $ref: '#/components/parameters/dateIntercommunalitesActives'
+        - $ref: '#/components/parameters/filtreNomIntercommunalite'
       responses:
         '200':
-          $ref: '#/components/responses/District200'
+          $ref: '#/components/responses/IntercommunalitesListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1528,27 +1634,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/IntercommunaliteListeDescendants200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/intercommunalites:
-    get:
-      tags:
-        - geoIntercommunalite
-      summary: 'Informations sur toutes les intercommunalités actives à la date donnée. Par défaut, c''est la date courante.'
-      operationId: 'getcogintercoliste'
-      parameters:
-        - $ref: '#/components/parameters/dateIntercommunalitesActives'
-        - $ref: '#/components/parameters/filtreNomIntercommunalite'
-      responses:
-        '200':
-          $ref: '#/components/responses/IntercommunalitesListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1622,19 +1707,18 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/iris/{code}/ascendants:
+  /geo/iris:
     get:
       tags:
         - geoIris
-      summary: 'Informations concernant les territoires qui contiennent l''Iris'
-      operationId: 'getcogirisasc'
+      summary: 'Informations sur tous les iris actifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogirislist'
       parameters:
-        - $ref: '#/components/parameters/codeIrisInPath'
-        - $ref: '#/components/parameters/dateIrisActif'
-        - $ref: '#/components/parameters/typeTerritoireAscendantIris'
+        - $ref: '#/components/parameters/dateIrisListActifs'
+        - $ref: '#/components/parameters/com'
       responses:
         '200':
-          $ref: '#/components/responses/IrisListeAscendants200'
+          $ref: '#/components/responses/IrisListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1665,18 +1749,39 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/iris:
+  /geo/iris/{code}/ascendants:
     get:
       tags:
         - geoIris
-      summary: 'Informations sur tous les iris actifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogirislist'
+      summary: 'Informations concernant les territoires qui contiennent l''Iris'
+      operationId: 'getcogirisasc'
       parameters:
-        - $ref: '#/components/parameters/dateIrisListActifs'
-        - $ref: '#/components/parameters/com'
+        - $ref: '#/components/parameters/codeIrisInPath'
+        - $ref: '#/components/parameters/dateIrisActif'
+        - $ref: '#/components/parameters/typeTerritoireAscendantIris'
       responses:
         '200':
-          $ref: '#/components/responses/IrisListe200'
+          $ref: '#/components/responses/IrisListeAscendants200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /geo/pays:
+    get:
+      tags:
+        - geoPays
+      summary: 'Informations sur tous les pays actifs à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogpayslist'
+      parameters:
+        - $ref: '#/components/parameters/datePaysListActifs'
+      responses:
+        '200':
+          $ref: '#/components/responses/PaysListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1729,26 +1834,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/pays:
-    get:
-      tags:
-        - geoPays
-      summary: 'Informations sur tous les pays actifs à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogpayslist'
-      parameters:
-        - $ref: '#/components/parameters/datePaysListActifs'
-      responses:
-        '200':
-          $ref: '#/components/responses/PaysListe200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
   /geo/pays/{code}/precedents:
     get:
       tags:
@@ -1791,6 +1876,26 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024:
+    get:
+      tags:
+        - geoQuartierPrioritaireDeLaPolitiqueDeLaVille
+      summary: 'Informations sur tous les quartiers prioritaires de la politique de la ville 2024 actifs à la date donnée. Par défaut, c''est la date courante.'
+      operationId: 'getcogqpvliste'
+      parameters:
+        - $ref: '#/components/parameters/dateQPV2024Actifs'
+      responses:
+        '200':
+          $ref: '#/components/responses/QuartiersPrioritairesDeLaPolitiqueDeLaVille2024Liste200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/{code}:
     get:
       tags:
@@ -1803,26 +1908,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/QuartierPrioritaireDeLaPolitiqueDeLaVille2024_200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024:
-    get:
-      tags:
-        - geoQuartierPrioritaireDeLaPolitiqueDeLaVille
-      summary: 'Informations sur tous les quartiers prioritaires de la politique de la ville 2024 actifs à la date donnée. Par défaut, c''est la date courante.'
-      operationId: 'getcogqpvliste'
-      parameters:
-        - $ref: '#/components/parameters/dateQPV2024Actifs'
-      responses:
-        '200':
-          $ref: '#/components/responses/QuartiersPrioritairesDeLaPolitiqueDeLaVille2024Liste200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1845,6 +1930,26 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/QuartierPrioritaireDeLaPolitiqueDeLaVille2024ListeTerritoiresLies200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /geo/regions:
+    get:
+      tags:
+        - geoRegion
+      summary: 'Informations sur toutes les régions actives à la date donnée. Par défaut, c''est la date courante.'
+      operationId: 'getcogregliste'
+      parameters:
+        - $ref: '#/components/parameters/dateRegionsActives'
+      responses:
+        '200':
+          $ref: '#/components/responses/RegionsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1889,26 +1994,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/RegionListeDescendants200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /geo/regions:
-    get:
-      tags:
-        - geoRegion
-      summary: 'Informations sur toutes les régions actives à la date donnée. Par défaut, c''est la date courante.'
-      operationId: 'getcogregliste'
-      parameters:
-        - $ref: '#/components/parameters/dateRegionsActives'
-      responses:
-        '200':
-          $ref: '#/components/responses/RegionsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -1982,6 +2067,26 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /geo/unitesUrbaines2020:
+    get:
+      tags:
+        - geoUniteUrbaine
+      summary: 'Informations sur toutes les unités urbaines 2020 actives à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcoguuliste'
+      parameters:
+        - $ref: '#/components/parameters/dateUnitesUrbaines2020Actives'
+      responses:
+        '200':
+          $ref: '#/components/responses/UnitesUrbaines2020Liste200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /geo/uniteUrbaine2020/{code}:
     get:
       tags:
@@ -2025,17 +2130,17 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/unitesUrbaines2020:
+  /geo/zonesDEmploi2020:
     get:
       tags:
-        - geoUniteUrbaine
-      summary: 'Informations sur toutes les unités urbaines 2020 actives à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcoguuliste'
+        - geoZoneDEmploi
+      summary: 'Informations sur toutes les zones d''emploi 2020 actives à la date donnée. Par défaut, c’est la date courante.'
+      operationId: 'getcogzeliste'
       parameters:
-        - $ref: '#/components/parameters/dateUnitesUrbaines2020Actives'
+        - $ref: '#/components/parameters/dateZonesDEmploi2020Actives'
       responses:
         '200':
-          $ref: '#/components/responses/UnitesUrbaines2020Liste200'
+          $ref: '#/components/responses/ZonesDEmploi2020Liste200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -2088,81 +2193,14 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /geo/zonesDEmploi2020:
+  # -- Jeux de données
+
+  /datasets/list:
     get:
       tags:
-        - geoZoneDEmploi
-      summary: 'Informations sur toutes les zones d''emploi 2020 actives à la date donnée. Par défaut, c’est la date courante.'
-      operationId: 'getcogzeliste'
-      parameters:
-        - $ref: '#/components/parameters/dateZonesDEmploi2020Actives'
-      responses:
-        '200':
-          $ref: '#/components/responses/ZonesDEmploi2020Liste200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  # -- Nomenclatures
-
-  /codes/{nomenclature}/{niveau}/{code}:
-    get:
-      tags:
-        - nomenclatures
-      summary: Informations sur une nomenclature d'un certain niveau identifiée par son code
-      operationId: getClassificationByCode
-      parameters:
-        - $ref: '#/components/parameters/nomenclature'
-        - $ref: '#/components/parameters/niveauNomenclature'
-        - $ref: '#/components/parameters/codeNomenclature'
-      responses:
-        '200':
-          $ref: '#/components/responses/ClassificationByCode200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  # -- Opérations
-
-  /operations/rapportQualite/{id}:
-    get:
-      tags:
-        - operations
-      summary: Documentation d''une opération, d''un indicateur ou d''une série
-      operationId: 'getRapportQualiteByCode'
-      parameters:
-        - $ref: '#/components/parameters/idDocumentation'
-      responses:
-        '200':
-          $ref: '#/components/responses/RapportQualiteByCode200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  # ============================================
-  # SERIES / OPERATIONS
-  # ============================================
-  /operations/series:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get all series
-      operationId: getAllSeries
+        - Jeux de donnees
+      summary: Get list of datasets
+      operationId: getListDatasets
       parameters:
         - name: dateMiseAJour
           in: query
@@ -2172,7 +2210,7 @@ paths:
             type: string
       responses:
         '200':
-          $ref: '#/components/responses/SeriesListe200'
+          $ref: '#/components/responses/DatasetsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':
@@ -2182,90 +2220,11 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-
-
-
-  /operations/serie/{id}:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get one serie
-      operationId: getSerieById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Serie200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/operation/{id}:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get operation by code
-      operationId: getOperationByCode
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Operation200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/indicateur/{id}:
-    get:
-      tags:
-        - Series-Operations
-      summary: Get one indicator
-      operationId: getIndicatorById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Indicateur200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-
-  # ============================================
-  # DATASETS
-  # ============================================
 
   /dataset/{id}:
     get:
       tags:
-        - Datasets
+        - Jeux de donnees
       summary: Get one dataset
       operationId: getDataSetById
       parameters:
@@ -2289,7 +2248,7 @@ paths:
   /dataset/{id}/distributions:
     get:
       tags:
-        - Datasets
+        - Jeux de donnees
       summary: Get dataset distributions
       operationId: getDataSetDistributionsById
       parameters:
@@ -2301,32 +2260,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DistributionsListe200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-
-  /datasets/list:
-    get:
-      tags:
-        - Datasets
-      summary: Get list of datasets
-      operationId: getListDatasets
-      parameters:
-        - name: dateMiseAJour
-          in: query
-          description: 'Date of last update. Example: 2023-01-31'
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/DatasetsListe200'
         '400':
           $ref: '#/components/responses/IncorrectRequest'
         '404':

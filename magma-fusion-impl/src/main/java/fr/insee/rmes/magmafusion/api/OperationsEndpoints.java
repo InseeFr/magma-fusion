@@ -1,28 +1,85 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
+import fr.insee.rmes.magmafusion.model.Indicateur;
+import fr.insee.rmes.magmafusion.model.Operation;
 import fr.insee.rmes.magmafusion.model.RapportQualite;
+import fr.insee.rmes.magmafusion.model.Serie;
+import fr.insee.rmes.magmafusion.queries.parameters.IndicateurRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationRubriquesRequestParametizer;
-import fr.insee.rmes.magmafusion.services.RapportQualiteService;
-import fr.insee.rmes.magmafusion.utils.RapportQualiteDTO;
-import fr.insee.rmes.magmafusion.utils.RubriqueDTO;
-import fr.insee.rmes.magmafusion.utils.EndpointsUtils;
+import fr.insee.rmes.magmafusion.queries.parameters.SeriesOperationsRequestParametizer;
+import fr.insee.rmes.magmafusion.services.OperationsService;
+import fr.insee.rmes.magmafusion.utils.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 @RestController
 public class OperationsEndpoints implements OperationsApi {
 
     private final RequestProcessor requestProcessor;
-    private final RapportQualiteService rapportQualiteService;
+    private final OperationsService seriesOperationsService;
 
-    public OperationsEndpoints(RequestProcessor requestProcessor, RapportQualiteService rapportQualiteService) {
+    public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService) {
         this.requestProcessor = requestProcessor;
-        this.rapportQualiteService = rapportQualiteService;
+        this.seriesOperationsService = seriesOperationsService;
     }
 
+    @Override
+    public ResponseEntity<List<Serie>> getAllSeries(String dateMiseAJour) {
+        String date = dateMiseAJour != null ? dateMiseAJour : "none";
+        List<SeriesDTO> dtos = requestProcessor.queryToFindAllSeries()
+                .with(new SeriesOperationsRequestParametizer(null, null, date))
+                .executeQuery()
+                .listResult(SeriesDTO.class)
+                .result();
+        List<Serie> series = seriesOperationsService.convertSeriesDTOsToSeries(dtos);
+        return ResponseEntity.ok(series);
+    }
+
+    @Override
+    public ResponseEntity<Serie> getSerieById(String id) {
+        SeriesDTO seriesDTO = requestProcessor.queryToFindSerieById()
+                .with(new SeriesOperationsRequestParametizer(id, null))
+                .executeQuery()
+                .singleResult(SeriesDTO.class)
+                .result();
+        if (seriesDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Serie serieById = seriesOperationsService.convertSeriesDTOToSerieById(seriesDTO);
+        return EndpointsUtils.toResponseEntity(serieById);
+    }
+
+    @Override
+    public ResponseEntity<Operation> getOperationByCode(String id) {
+        OperationDTO operationDTO = requestProcessor.queryToFindOperationByCode()
+                .with(new SeriesOperationsRequestParametizer(null, id))
+                .executeQuery()
+                .singleResult(OperationDTO.class)
+                .result();
+        if (operationDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Operation operation = seriesOperationsService.convertOperationDTOToOperation(operationDTO);
+        return EndpointsUtils.toResponseEntity(operation);
+    }
+
+    @Override
+    public ResponseEntity<Indicateur> getIndicatorById(String id) {
+        IndicateurDTO indicateurDTO = requestProcessor.queryToFindIndicatorById()
+                .with(new IndicateurRequestParametizer(id))
+                .executeQuery()
+                .singleResult(IndicateurDTO.class)
+                .result();
+        if (indicateurDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Indicateur indicateur = seriesOperationsService.convertIndicateurDTOToIndicateur(indicateurDTO);
+        return EndpointsUtils.toResponseEntity(indicateur);
+    }
 
     @Override
     public ResponseEntity<RapportQualite> getRapportQualiteByCode(String idSims) {
@@ -47,14 +104,11 @@ public class OperationsEndpoints implements OperationsApi {
         rapportQualiteDTO = rapportQualiteDTO.withRubriqueDTOList(rubriqueList);
 
 
-
-        RapportQualite rapportQualite = rapportQualiteService.convertDTOToRapportQualite(rapportQualiteDTO);
+        RapportQualite rapportQualite = seriesOperationsService.convertDTOToRapportQualite(rapportQualiteDTO);
 
         return EndpointsUtils.toResponseEntity(rapportQualite);
-
-        }
 
     }
 
 
-
+}

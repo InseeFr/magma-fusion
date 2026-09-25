@@ -20,12 +20,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class RapportQualiteServiceImplTest {
-    private RapportQualiteServiceImpl service;
+    private OperationsServiceImpl service;
     private RequestProcessor requestProcessor;
 
     @BeforeEach
     void setUp() {
-        service = new RapportQualiteServiceImpl(requestProcessor);
+        service = new OperationsServiceImpl(requestProcessor);
     }
 
     @Test
@@ -305,7 +305,7 @@ class RapportQualiteServiceImplTest {
                 .thenReturn(List.of(doc1En));
         //Double thenReturn chaîné : le premier appel à findDocuments (pour "fr") retourne 2 documents, le second (pour "en") en retourne 1.
 
-        RapportQualiteServiceImpl serviceWithDocs = new RapportQualiteServiceImpl(mockProcessor);
+        OperationsServiceImpl serviceWithDocs = new OperationsServiceImpl(mockProcessor);
 
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-rich", "RICH_TEXT");
