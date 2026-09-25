@@ -13,14 +13,14 @@
     <name>Implementation of the RMéS metadata API</name>
     <version>${revision}</version>
     <properties>
-        <revision>3.0.0-rc5</revision>
+        <revision>3.0.0-rc6</revision>
         <java.version>25</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <jakarta.version>6.2.0-M2</jakarta.version>
         <swagger.version>2.2.52</swagger.version>
         <jersey.version>5.0.0-M1</jersey.version>
         <log.version>2.23.1</log.version>
-        <freemarker.version>2.3.34</freemarker.version>
+        <freemarker.version>2.3.35</freemarker.version>
         <openapitools-generator.version>7.17.0</openapitools-generator.version>
         <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
         <jakarta-ws-rs.version>3.1.0</jakarta-ws-rs.version>
