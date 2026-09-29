@@ -1436,7 +1436,7 @@ paths:
   /geo/intercommunalites:
     get:
       tags:
-        - geoIntercommunalite
+        - Geographie
       summary: 'Informations sur toutes les intercommunalités actives à la date donnée. Par défaut, c''est la date courante.'
       operationId: 'getcogintercoliste'
       parameters:
@@ -1457,7 +1457,7 @@ paths:
   /geo/intercommunalite/{code}:
     get:
       tags:
-        - geoIntercommunalite
+        - Geographie
       summary: 'Informations sur une intercommunalité identifiée par son code (neuf caractères)'
       operationId: 'getcoginterco'
       parameters:
@@ -1478,7 +1478,7 @@ paths:
   /geo/intercommunalite/{code}/descendants:
     get:
       tags:
-        - geoIntercommunalite
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans l''intercommunalité'
       operationId: 'getcogintercodes'
       parameters:
@@ -1500,7 +1500,7 @@ paths:
   /geo/intercommunalite/{code}/precedents:
     get:
       tags:
-        - geoIntercommunalite
+        - Geographie
       summary: 'Informations concernant les intercommunalités qui précèdent l''intercommunalité'
       operationId: 'getcogintercoprec'
       parameters:
@@ -1521,7 +1521,7 @@ paths:
   /geo/intercommunalite/{code}/projetes:
     get:
       tags:
-        - geoIntercommunalite
+        - Geographie
       summary: 'Informations concernant les intercommunalités qui résultent de la projection de l''intercommunalité à la date passée en paramètre.'
       operationId: 'getcogintercoproj'
       parameters:
@@ -1543,7 +1543,7 @@ paths:
   /geo/intercommunalite/{code}/suivants:
     get:
       tags:
-        - geoIntercommunalite
+        - Geographie
       summary: 'Informations concernant les intercommunalités qui succèdent à l''intercommunalité'
       operationId: 'getcogintercosuiv'
       parameters:
@@ -1564,7 +1564,7 @@ paths:
   /geo/iris:
     get:
       tags:
-        - geoIris
+        - Geographie
       summary: 'Informations sur tous les iris actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogirislist'
       parameters:
@@ -1585,7 +1585,7 @@ paths:
   /geo/iris/{code}:
     get:
       tags:
-        - geoIris
+        - Geographie
       summary: 'Informations sur un Iris identifié par son code (neuf chiffres pour la métropole ou 2A/2B plus 7 chiffres pour la Corse)'
       operationId: 'getcogiris'
       parameters:
@@ -1606,7 +1606,7 @@ paths:
   /geo/iris/{code}/ascendants:
     get:
       tags:
-        - geoIris
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent l''Iris'
       operationId: 'getcogirisasc'
       parameters:
@@ -1628,7 +1628,7 @@ paths:
   /geo/pays:
     get:
       tags:
-        - geoPays
+        - Geographie
       summary: 'Informations sur tous les pays actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogpayslist'
       parameters:
@@ -1648,7 +1648,7 @@ paths:
   /geo/pays/{code}:
     get:
       tags:
-        - geoPays
+        - Geographie
       summary: 'Informations sur un pays identifié par son code (cinq chiffres, les deux premiers étant 99)'
       operationId: 'getcogpays'
       parameters:
@@ -1691,7 +1691,7 @@ paths:
   /geo/pays/{code}/precedents:
     get:
       tags:
-        - geoPays
+        - Geographie
       summary: 'Informations concernant les pays qui précèdent le pays'
       operationId: 'getcogpaysprec'
       parameters:
@@ -1712,7 +1712,7 @@ paths:
   /geo/pays/{code}/suivants:
     get:
       tags:
-        - geoPays
+        - Geographie
       summary: 'Informations concernant les pays qui succèdent au pays'
       operationId: 'getcogpayssuiv'
       parameters:

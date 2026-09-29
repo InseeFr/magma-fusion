@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
+import static fr.insee.rmes.magmafusion.utils.EndpointsUtils.toResponseEntity;
+
 @RestController
 public class GeographieController implements GeographieApi {
 
@@ -24,9 +26,11 @@ public class GeographieController implements GeographieApi {
     public final GeoCommuneDelegueeHandler communeDelegueeHandler;
     public final GeoDepartementHandler departementHandler;
     public final GeoDistrictHandler districHandler;
+    public final GeoIntercommunaliteHandler intercommunaliteHandler;
+    public final GeoIrisHandler irisHandler;
 
     public GeographieController(GeoAireDAttractionDesVillesHandler aireDAttractionHandler,
-                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler, GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler, GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler, GeoCommuneHandler communeHandler, GeoCommuneAssocieeHandler communeAssocieeHandlerHandler, GeoCommuneDelegueeHandler communeDelegueeHandlerHandler, GeoCommuneAssocieeHandler communeAssocieeHandler, GeoCommuneDelegueeHandler communeDelegueeHandler, GeoDepartementHandler departementHandler, GeoDistrictHandler districHandler) {
+                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler, GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler, GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler, GeoCommuneHandler communeHandler, GeoCommuneAssocieeHandler communeAssocieeHandlerHandler, GeoCommuneDelegueeHandler communeDelegueeHandlerHandler, GeoCommuneAssocieeHandler communeAssocieeHandler, GeoCommuneDelegueeHandler communeDelegueeHandler, GeoDepartementHandler departementHandler, GeoDistrictHandler districHandler, GeoIntercommunaliteHandler intercommunaliteHandler, GeoIrisHandler irisHandler) {
         this.aireDAttractionHandler = aireDAttractionHandler;
         this.arrondissementHandler = arrondissementHandler;
         this.arrondissementMunicipalHandler = arrondissementMunicipalHandler;
@@ -40,6 +44,8 @@ public class GeographieController implements GeographieApi {
         this.communeDelegueeHandler = communeDelegueeHandler;
         this.departementHandler = departementHandler;
         this.districHandler = districHandler;
+        this.intercommunaliteHandler = intercommunaliteHandler;
+        this.irisHandler = irisHandler;
     }
 
     /*Aires d'attraction des villes*/
@@ -322,6 +328,48 @@ public class GeographieController implements GeographieApi {
 
     public ResponseEntity<District> getcogdis(String code, LocalDate date) {
         return districHandler.get(code, date);
+    }
+
+    /*intercommunalités*/
+    public ResponseEntity<Intercommunalite> getcoginterco(String code, LocalDate date) {
+        return intercommunaliteHandler.get(code,date);
+    }
+
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercodes(String code, LocalDate date, TypeEnumDescendantsIntercommunalite type) {
+        return intercommunaliteHandler.descendants(code,date,type);
+    }
+
+
+    public ResponseEntity<List<Intercommunalite>> getcogintercoliste(String date, String filtreNom) {
+         return intercommunaliteHandler.liste(date,filtreNom);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercoprec(String code, LocalDate date) {
+        return intercommunaliteHandler.precedents(code,date);
+    }
+
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercoproj(String code, LocalDate dateProjection, LocalDate date) {
+        return intercommunaliteHandler.projetes(code,dateProjection,date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercosuiv(String code, LocalDate date) {
+        return intercommunaliteHandler.suivants(code,date);
+    }
+
+    /*iris*/
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogirisasc (String code, LocalDate date, TypeEnumAscendantsIris type) {
+        return irisHandler.ascendants(code,date,type);
+    }
+
+    public ResponseEntity<Iris> getcogiris(String code, LocalDate date) {
+        return irisHandler.get(code,date);
+    }
+
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogirislist (LocalDate date, Boolean com) {
+        return irisHandler.liste(date, com);
     }
 
 }
