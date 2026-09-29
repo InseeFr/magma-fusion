@@ -15,14 +15,16 @@ public class GeographieController implements GeographieApi {
     private final GeoArrondissementMunicipalHandler arrondissementMunicipalHandler;
     private final GeoBassinDeVieHandler bassinDeVieHandler;
     private final GeoCantonHandler cantonHandler;
+    private final GeoCantonOuVilleHandler cantonOuVilleHandler;
 
     public GeographieController(GeoAireDAttractionDesVillesHandler aireDAttractionHandler,
-                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler) {
+                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler) {
         this.aireDAttractionHandler = aireDAttractionHandler;
         this.arrondissementHandler = arrondissementHandler;
         this.arrondissementMunicipalHandler = arrondissementMunicipalHandler;
         this.bassinDeVieHandler = bassinDeVieHandler;
         this.cantonHandler = cantonHandler;
+        this.cantonOuVilleHandler = cantonOuVilleHandler;
     }
 
     /*Aires d'attraction des villes*/
@@ -150,5 +152,33 @@ public class GeographieController implements GeographieApi {
         return cantonHandler.intersections(code, date, type);
     }
 
+    /*canton ou ville*/
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanvilasc(String code, LocalDate date, TypeEnumAscendantsCantonOuVille type) {
+        return cantonOuVilleHandler.ascendants(code,date,type);
+    }
+
+    public ResponseEntity<CantonOuVille> getcogcanvil(String code, LocalDate date) {
+        return cantonOuVilleHandler.get(code,date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanvildes(String code, LocalDate date, TypeEnumDescendantsCantonOuVille type, String filtreNom) {
+        return cantonOuVilleHandler.descendants(code,date,type,filtreNom);
+    }
+
+    public ResponseEntity<List<CantonOuVille>> getcogcanvilliste(String date) {
+        return cantonOuVilleHandler.liste(date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanvilprec(String code, LocalDate date) {
+        return cantonOuVilleHandler.precedents(code, date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanvilproj(String code, LocalDate dateProjection, LocalDate date) {
+        return cantonOuVilleHandler.projetes(code,dateProjection,date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanvilsuiv(String code, LocalDate date) {
+        return cantonOuVilleHandler.suivants(code,date);
+    }
 
 }

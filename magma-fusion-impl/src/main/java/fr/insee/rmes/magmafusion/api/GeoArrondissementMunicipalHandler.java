@@ -1,10 +1,10 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
-import fr.insee.rmes.magmafusion.queries.parameters.*;
 import fr.insee.rmes.magmafusion.model.ArrondissementMunicipal;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsArrondissementMunicipal;
+import fr.insee.rmes.magmafusion.queries.parameters.*;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
