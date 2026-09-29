@@ -495,7 +495,7 @@ paths:
   /geo/cantons:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Informations sur tous les cantons actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogcanliste'
       parameters:
@@ -515,7 +515,7 @@ paths:
   /geo/canton/{code}:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Informations sur un canton identifié par son code (quatre chiffres pour la Métropole ou cinq chiffres pour les DOM ou 2A/2B plus 2 chiffres pour la Corse)'
       operationId: 'getcogcan'
       parameters:
@@ -536,7 +536,7 @@ paths:
   /geo/canton/{code}/ascendants:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent le canton'
       operationId: 'getcogcanasc'
       parameters:
@@ -558,7 +558,7 @@ paths:
   /geo/canton/{code}/precedents:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Informations concernant les cantons qui précèdent le canton'
       operationId: 'getcogcanprec'
       parameters:
@@ -579,7 +579,7 @@ paths:
   /geo/canton/{code}/projetes:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Informations concernant les cantons qui résultent de la projection du canton à la date passée en paramètre.'
       operationId: 'getcogcanproj'
       parameters:
@@ -601,7 +601,7 @@ paths:
   /geo/canton/{code}/suivants:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Informations concernant les cantons qui succèdent au canton'
       operationId: 'getcogcansuiv'
       parameters:
@@ -622,7 +622,7 @@ paths:
   /geo/canton/{code}/communes:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Récupérer les informations concernant les communes qui ont un territoire commun avec le canton {code}'
       operationId: 'getcogcancom'
       parameters:
@@ -643,7 +643,7 @@ paths:
   /geo/canton/{code}/intersections:
     get:
       tags:
-        - geoCanton
+        - Geographie
       summary: 'Informations concernant les territoires directement liés au canton'
       operationId: 'getcogcanintersect'
       parameters:

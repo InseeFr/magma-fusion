@@ -14,13 +14,15 @@ public class GeographieController implements GeographieApi {
     private final GeoArrondissementHandler arrondissementHandler;
     private final GeoArrondissementMunicipalHandler arrondissementMunicipalHandler;
     private final GeoBassinDeVieHandler bassinDeVieHandler;
+    private final GeoCantonHandler cantonHandler;
 
     public GeographieController(GeoAireDAttractionDesVillesHandler aireDAttractionHandler,
-                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler) {
+                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler) {
         this.aireDAttractionHandler = aireDAttractionHandler;
         this.arrondissementHandler = arrondissementHandler;
         this.arrondissementMunicipalHandler = arrondissementMunicipalHandler;
         this.bassinDeVieHandler = bassinDeVieHandler;
+        this.cantonHandler = cantonHandler;
     }
 
     /*Aires d'attraction des villes*/
@@ -114,5 +116,39 @@ public class GeographieController implements GeographieApi {
     public ResponseEntity<List<BassinDeVie2022>> getcogbassliste (String date, String filtreNom) {
         return bassinDeVieHandler.liste(date, filtreNom);
     }
+
+    /*cantons*/
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanasc(String code, LocalDate date, TypeEnumAscendantsCanton type) {
+        return cantonHandler.ascendants(code, date, type);
+    }
+
+    public ResponseEntity<Canton> getcogcan(String code, LocalDate date) {
+        return cantonHandler.get(code, date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcancom(String code, LocalDate date) {
+        return cantonHandler.listeCommunes(code, date);
+    }
+
+    public ResponseEntity<List<Canton>> getcogcanliste(String date) {
+        return cantonHandler.liste(date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanprec(String code, LocalDate date) {
+        return cantonHandler.precedents(code, date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanproj(String code, LocalDate dateProjection, LocalDate date) {
+        return cantonHandler.projetes(code, dateProjection,date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcansuiv(String code, LocalDate date) {
+        return cantonHandler.suivants(code, date);
+    }
+
+    public ResponseEntity<List<TerritoireBaseRelation>> getcogcanintersect (String code, LocalDate date, TypeEnum type) {
+        return cantonHandler.intersections(code, date, type);
+    }
+
 
 }
