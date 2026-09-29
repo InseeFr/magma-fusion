@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class DatasetsEndpoints implements DatasetsApi {
+public class DatasetsEndpoints implements JeuxDeDonneesApi {
 
     private final RequestProcessor requestProcessor;
     private final DatasetsService datasetsService;

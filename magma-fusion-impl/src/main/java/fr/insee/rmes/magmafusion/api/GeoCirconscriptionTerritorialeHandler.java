@@ -8,26 +8,25 @@ import fr.insee.rmes.magmafusion.queries.parameters.AscendantsDescendantsRequest
 import fr.insee.rmes.magmafusion.queries.parameters.TerritoireRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
-@RestController
-public class GeoCirconscriptionTerritorialeEndpoints implements GeoCirconscriptionTerritorialeApi{
+@Component
+public class GeoCirconscriptionTerritorialeHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoCirconscriptionTerritorialeEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoCirconscriptionTerritorialeHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>>  getcogcirasc (String code, LocalDate date, TypeEnumAscendantsCirconscriptionTerritoriale type) {
+    public ResponseEntity<List<TerritoireTousAttributs>>  ascendants(String code, LocalDate date, TypeEnumAscendantsCirconscriptionTerritoriale type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, CirconscriptionTerritoriale.class, true))
@@ -36,8 +35,7 @@ public class GeoCirconscriptionTerritorialeEndpoints implements GeoCirconscripti
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<CirconscriptionTerritoriale> getcogcir(String code, LocalDate date) {
+    public ResponseEntity<CirconscriptionTerritoriale> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
                 .with(new TerritoireRequestParametizer(code, date, CirconscriptionTerritoriale.class, "none"))
                 .executeQuery()

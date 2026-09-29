@@ -1,30 +1,29 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
-import fr.insee.rmes.magmafusion.queries.parameters.*;
 import fr.insee.rmes.magmafusion.model.Intercommunalite;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsIntercommunalite;
+import fr.insee.rmes.magmafusion.queries.parameters.*;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
-@RestController
-public class GeoIntercommunaliteEndpoints implements GeoIntercommunaliteApi {
+@Component
+public class GeoIntercommunaliteHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
-    public GeoIntercommunaliteEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoIntercommunaliteHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
-    @Override
-    public ResponseEntity<Intercommunalite> getcoginterco(String code, LocalDate date) {
+    public ResponseEntity<Intercommunalite> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
                 .with(new TerritoireRequestParametizer(code, date, Intercommunalite.class, "none"))
                 .executeQuery()
@@ -32,8 +31,7 @@ public class GeoIntercommunaliteEndpoints implements GeoIntercommunaliteApi {
     }
 
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercodes(String code, LocalDate date, TypeEnumDescendantsIntercommunalite type) {
+    public ResponseEntity<List<TerritoireTousAttributs>> descendants(String code, LocalDate date, TypeEnumDescendantsIntercommunalite type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, Intercommunalite.class, false))
@@ -43,8 +41,7 @@ public class GeoIntercommunaliteEndpoints implements GeoIntercommunaliteApi {
     }
 
 
-    @Override
-    public ResponseEntity<List<Intercommunalite>> getcogintercoliste(String date, String filtreNom) {
+    public ResponseEntity<List<Intercommunalite>> liste(String date, String filtreNom) {
         String finalFiltreNom = filtreNom == null ? "*" : filtreNom;
         if (date==null) {
             date = LocalDate.now().toString();
@@ -57,8 +54,7 @@ public class GeoIntercommunaliteEndpoints implements GeoIntercommunaliteApi {
 
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercoprec(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> precedents(String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
                 .with(new PrecedentsSuivantsRequestParametizer(code, date, Intercommunalite.class, true))
                 .executeQuery()
@@ -67,8 +63,7 @@ public class GeoIntercommunaliteEndpoints implements GeoIntercommunaliteApi {
     }
 
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercoproj(String code, LocalDate dateProjection, LocalDate date) {
+     public ResponseEntity<List<TerritoireTousAttributs>> projetes(String code, LocalDate dateProjection, LocalDate date) {
         //The Boolean previous is based on the dateProjection parameter (required parameter) and on the date parameter set to today's date if absent
         // (optional). Setting the date to today's date in ParameterValueDecoder is not retained outside the method
         // => must set the date here as well
@@ -83,8 +78,7 @@ public class GeoIntercommunaliteEndpoints implements GeoIntercommunaliteApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogintercosuiv(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> suivants(String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
                 .with(new PrecedentsSuivantsRequestParametizer(code, date, Intercommunalite.class, false))
                 .executeQuery()

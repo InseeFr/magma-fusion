@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoCollectiviteDOutreMerEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoCollectiviteDOutreMerHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCollectiviteDOutreMer;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
 
     @Autowired
-    GeoCollectiviteDOutreMerEndpoints endpoints;
+    GeoCollectiviteDOutreMerHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcoll 986, returns COM 986")
         void should_return_com_986_when_getcogcoll_986() throws Exception {
-            var response = endpoints.getcogcoll("986", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("986", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -71,7 +71,7 @@ class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcolldes 986 type null, returns 2 descendants (CT 98601, district 98610)")
         void should_return_2_descendants_when_getcogcolldes_986_type_null() throws Exception {
-            var response = endpoints.getcogcolldes("986", LocalDate.of(2025, 1, 1), null, null);
+            var response = endpoints.descendants("986", LocalDate.of(2025, 1, 1), null, null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -88,7 +88,7 @@ class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcolldes 986 type CirconscriptionTerritoriale, returns 1 descendant (CT 98601)")
         void should_return_1_descendant_when_getcogcolldes_986_type_circonscriptionTerritoriale() throws Exception {
-            var response = endpoints.getcogcolldes("986", LocalDate.of(2025, 1, 1), TypeEnumDescendantsCollectiviteDOutreMer.CIRCONSCRIPTION_TERRITORIALE, null);
+            var response = endpoints.descendants("986", LocalDate.of(2025, 1, 1), TypeEnumDescendantsCollectiviteDOutreMer.CIRCONSCRIPTION_TERRITORIALE, null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -110,7 +110,7 @@ class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcollliste date=2025-01-01, returns 1 COM active (986)")
         void should_return_1_com_when_getcogcollliste_date() throws Exception {
-            var response = endpoints.getcogcollliste("2025-01-01");
+            var response = endpoints.liste("2025-01-01");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -127,7 +127,7 @@ class GeoCollectiviteDOutreMerQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcollliste date=*, returns 2 COMs (986, 987)")
         void should_return_2_coms_when_getcogcollliste_etoile() throws Exception {
-            var response = endpoints.getcogcollliste("*");
+            var response = endpoints.liste("*");
             var result = response.getBody();
 
             assertNotNull(result);

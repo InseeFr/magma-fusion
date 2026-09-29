@@ -1,83 +1,78 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
-import fr.insee.rmes.magmafusion.queries.parameters.*;
-import fr.insee.rmes.magmafusion.model.Arrondissement;
+import fr.insee.rmes.magmafusion.model.CantonOuVille;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
-import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsArrondissement;
-import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsArrondissement;
+import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCantonOuVille;
+import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCantonOuVille;
+import fr.insee.rmes.magmafusion.queries.parameters.*;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController
-public class GeoArrondissementEndpoints implements GeoArrondissementApi {
+
+@Component
+public class GeoCantonOuVilleHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoArrondissementEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoCantonOuVilleHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
-
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrasc(String code, LocalDate date, TypeEnumAscendantsArrondissement type) {
+    public ResponseEntity<List<TerritoireTousAttributs>> ascendants(String code, LocalDate date, TypeEnumAscendantsCantonOuVille type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
-                .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, Arrondissement.class, true))
+                .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, CantonOuVille.class, true))
                 .executeQuery()
                 .listResult(TerritoireTousAttributs.class)
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<Arrondissement> getcogarr(String code, LocalDate date) {
+    public ResponseEntity<CantonOuVille> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
-                .with(new TerritoireRequestParametizer(code, date, Arrondissement.class, "sousPrefecture"))
+                .with(new TerritoireRequestParametizer(code, date, CantonOuVille.class, "none"))
                 .executeQuery()
-                .singleResult(Arrondissement.class).toResponseEntity();
+                .singleResult(CantonOuVille.class)
+                .toResponseEntity();
+
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrdes(String code, LocalDate date, TypeEnumDescendantsArrondissement type) {
+    public ResponseEntity<List<TerritoireTousAttributs>> descendants(String code, LocalDate date, TypeEnumDescendantsCantonOuVille type, String filtreNom) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
-                .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, Arrondissement.class, false))
+                .with(new AscendantsDescendantsRequestParametizer(code, date, filtreNom, territoriesFilter, CantonOuVille.class))
                 .executeQuery()
                 .listResult(TerritoireTousAttributs.class)
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<Arrondissement>> getcogarrliste(String date) {
+    public ResponseEntity<List<CantonOuVille>> liste(String date) {
         if (date==null) {
             date = LocalDate.now().toString();
         }
         return requestProcessor.queryforFindTerritoire()
-                .with(new TerritoireEtoileRequestParametizer(date, Arrondissement.class, "sousPrefecture"))
+                .with(new TerritoireEtoileRequestParametizer(date, CantonOuVille.class, "none"))
                 .executeQuery()
-                .listResult(Arrondissement.class)
+                .listResult(CantonOuVille.class)
                 .toResponseEntity();
 
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrprec(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> precedents(String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
-                .with(new PrecedentsSuivantsRequestParametizer(code, date, Arrondissement.class, true))
+                .with(new PrecedentsSuivantsRequestParametizer(code, date, CantonOuVille.class, true))
                 .executeQuery()
                 .listResult(TerritoireTousAttributs.class)
                 .toResponseEntity();
     }
 
-
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrproj(String code, LocalDate dateProjection, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> projetes(String code, LocalDate dateProjection, LocalDate date) {
         //The Boolean previous is based on the dateProjection parameter (required parameter) and on the date parameter set to today's date if absent
         // (optional). Setting the date to today's date in ParameterValueDecoder is not retained outside the method
         // => must set the date here as well
@@ -86,20 +81,17 @@ public class GeoArrondissementEndpoints implements GeoArrondissementApi {
         }
         boolean previous = !dateProjection.isAfter(date);
         return requestProcessor.queryforFindProjetes()
-                .with(new ProjetesRequestParametizer(code, dateProjection, date, Arrondissement.class, previous))
+                .with(new ProjetesRequestParametizer(code, dateProjection, date, CantonOuVille.class, previous))
                 .executeQuery()
                 .listResult(TerritoireTousAttributs.class)
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrsuiv(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> suivants(String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
-                .with(new PrecedentsSuivantsRequestParametizer(code, date, Arrondissement.class, false))
+                .with(new PrecedentsSuivantsRequestParametizer(code, date, CantonOuVille.class, false))
                 .executeQuery()
                 .listResult(TerritoireTousAttributs.class)
                 .toResponseEntity();
     }
-
 }
-

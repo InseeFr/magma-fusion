@@ -11,27 +11,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-public class GeoCommuneEndpoints implements GeoCommuneApi {
+public class GeoCommuneHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoCommuneEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoCommuneHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
 
-    @Override
-    public ResponseEntity<Commune> getcogcom(String code, LocalDate date) {
+    public ResponseEntity<Commune> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
                 .with(new TerritoireRequestParametizer(code, date, Commune.class, "none"))
                 .executeQuery()
                 .singleResult(Commune.class).toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<Canton>> getcogcomcan (String code, LocalDate date) {
+    public ResponseEntity<List<Canton>> listeCantons(String code, LocalDate date) {
         return requestProcessor.queryToFindCantonsOfCommune()
                 .with(new TerritoireRequestParametizer(code, date, Commune.class, "none"))
                 .executeQuery()
@@ -39,8 +37,7 @@ public class GeoCommuneEndpoints implements GeoCommuneApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireBase>> getcogcomliste(String date, String filtreNom, Boolean com) {
+    public ResponseEntity<List<TerritoireBase>> liste(String date, String filtreNom, Boolean com) {
         String finalFiltreNom = filtreNom == null ? "*" : filtreNom;
         boolean finalcom = (com != null) && com;
         if (date==null) {
@@ -54,8 +51,7 @@ public class GeoCommuneEndpoints implements GeoCommuneApi {
 
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomdesc( String code, LocalDate date, TypeEnumDescendantsCommune type) {
+    public ResponseEntity<List<TerritoireTousAttributs>> descendants( String code, LocalDate date, TypeEnumDescendantsCommune type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, Commune.class, false))
@@ -64,8 +60,7 @@ public class GeoCommuneEndpoints implements GeoCommuneApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomasc( String code, LocalDate date, TypeEnumAscendantsCommune type) {
+    public ResponseEntity<List<TerritoireTousAttributs>> ascendants( String code, LocalDate date, TypeEnumAscendantsCommune type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, Commune.class, true))
@@ -74,8 +69,7 @@ public class GeoCommuneEndpoints implements GeoCommuneApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireBase>> getcogcomprec( String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireBase>> precedents( String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
                 .with(new PrecedentsSuivantsRequestParametizer(code, date, Commune.class, true))
                 .executeQuery()
@@ -83,8 +77,7 @@ public class GeoCommuneEndpoints implements GeoCommuneApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireBase>> getcogcomproj( String code, LocalDate dateProjection, LocalDate date) {
+    public ResponseEntity<List<TerritoireBase>> projetes( String code, LocalDate dateProjection, LocalDate date) {
         //The Boolean previous is based on the dateProjection parameter (required parameter) and on the date parameter set to today's date if absent
         // (optional). Setting the date to today's date in ParameterValueDecoder is not retained outside the method
         // => must set the date here as well//
@@ -99,8 +92,7 @@ public class GeoCommuneEndpoints implements GeoCommuneApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireBase>>  getcogcomsuiv(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireBase>>  suivants(String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
                 .with(new PrecedentsSuivantsRequestParametizer(code, date, Commune.class, false))
                 .executeQuery()
@@ -108,8 +100,7 @@ public class GeoCommuneEndpoints implements GeoCommuneApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireBaseRelation>>  getcogcomintersect (String code, LocalDate date, TypeEnum type) {
+    public ResponseEntity<List<TerritoireBaseRelation>>  intersections (String code, LocalDate date, TypeEnum type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryToFindIntersections()
                 .with(new TerritoiresLiesRequestParametizer(code, date, territoriesFilter, Commune.class))

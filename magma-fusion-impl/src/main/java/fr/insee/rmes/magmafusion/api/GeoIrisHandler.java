@@ -9,27 +9,26 @@ import fr.insee.rmes.magmafusion.queries.parameters.AscendantsDescendantsRequest
 import fr.insee.rmes.magmafusion.queries.parameters.TerritoireRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.EndpointsUtils.toResponseEntity;
 
-@RestController
-public class GeoIrisEndpoints implements GeoIrisApi {
+@Component
+public class GeoIrisHandler {
 
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoIrisEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoIrisHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogirisasc (String code, LocalDate date, TypeEnumAscendantsIris type) {
+    public ResponseEntity<List<TerritoireTousAttributs>> ascendants(String code, LocalDate date, TypeEnumAscendantsIris type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         if (code.matches("^.{5}0000$")) {
             return requestProcessor.queryToFindAscendantsFauxIris()
@@ -47,8 +46,7 @@ public class GeoIrisEndpoints implements GeoIrisApi {
         }
     }
 
-    @Override
-    public ResponseEntity<Iris> getcogiris(String code, LocalDate date) {
+    public ResponseEntity<Iris> get(String code, LocalDate date) {
         String codeCommune = code.substring(0, 5);
         boolean comHasIrisDescendant = requestProcessor.queryToFindIrisDescendantsCommune()
                 .with(new TerritoireRequestParametizer(codeCommune, date))
@@ -82,8 +80,7 @@ public class GeoIrisEndpoints implements GeoIrisApi {
     }
 
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogirislist (LocalDate date, Boolean com) {
+    public ResponseEntity<List<TerritoireTousAttributs>> liste(LocalDate date, Boolean com) {
         boolean finalcom = (com != null) && com;
         return requestProcessor.queryToFindIrisList()
                 .with(new TerritoireRequestParametizer(date, finalcom))

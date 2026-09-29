@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoAireDAttractionDesVillesEndpoints;
+import fr.insee.rmes.magmafusion.api.GeographieController;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsAireDAttractionDesVilles;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class GeoAireDAttractionDesVillesQueriesTest extends TestContainer {
 
     @Autowired
-    GeoAireDAttractionDesVillesEndpoints endpoints;
+    GeographieController endpoints;
     @Autowired
     private ObjectMapper objectMapper;
 

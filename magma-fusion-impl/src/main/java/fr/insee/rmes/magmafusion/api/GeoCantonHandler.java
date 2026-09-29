@@ -5,25 +5,24 @@ import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.queries.parameters.*;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController
-public class GeoCantonEndpoints implements GeoCantonApi {
+@Component
+public class GeoCantonHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoCantonEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoCantonHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanasc(String code, LocalDate date, TypeEnumAscendantsCanton type) {
+    public ResponseEntity<List<TerritoireTousAttributs>> ascendants(String code, LocalDate date, TypeEnumAscendantsCanton type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, Canton.class, true))
@@ -32,16 +31,14 @@ public class GeoCantonEndpoints implements GeoCantonApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<Canton> getcogcan(String code, LocalDate date) {
+    public ResponseEntity<Canton> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
                 .with(new TerritoireRequestParametizer(code, date, Canton.class, "bureauCentralisateur"))
                 .executeQuery()
                 .singleResult(Canton.class).toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcancom(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> listeCommunes(String code, LocalDate date) {
         return requestProcessor.queryToFindCommunesOfCanton()
                 .with(new TerritoireRequestParametizer(code, date, TerritoireTousAttributs.class, "*"))
                 .executeQuery()
@@ -49,8 +46,7 @@ public class GeoCantonEndpoints implements GeoCantonApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<Canton>> getcogcanliste(String date) {
+    public ResponseEntity<List<Canton>> liste(String date) {
         if (date==null) {
             date = LocalDate.now().toString();
         }
@@ -61,8 +57,7 @@ public class GeoCantonEndpoints implements GeoCantonApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanprec(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> precedents(String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
                 .with(new PrecedentsSuivantsRequestParametizer(code, date, Canton.class, true))
                 .executeQuery()
@@ -70,8 +65,7 @@ public class GeoCantonEndpoints implements GeoCantonApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcanproj(String code, LocalDate dateProjection, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> projetes(String code, LocalDate dateProjection, LocalDate date) {
         //The Boolean previous is based on the dateProjection parameter (required parameter) and on the date parameter set to today's date if absent
         // (optional). Setting the date to today's date in ParameterValueDecoder is not retained outside the method
         // => must set the date here as well
@@ -86,8 +80,7 @@ public class GeoCantonEndpoints implements GeoCantonApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcansuiv(String code, LocalDate date) {
+    public ResponseEntity<List<TerritoireTousAttributs>> suivants(String code, LocalDate date) {
         return requestProcessor.queryforFindPrecedentsSuivants()
                 .with(new PrecedentsSuivantsRequestParametizer(code, date, Canton.class, false))
                 .executeQuery()
@@ -95,8 +88,7 @@ public class GeoCantonEndpoints implements GeoCantonApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireBaseRelation>> getcogcanintersect (String code, LocalDate date, TypeEnum type) {
+    public ResponseEntity<List<TerritoireBaseRelation>> intersections (String code, LocalDate date, TypeEnum type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryToFindIntersections()
                 .with(new TerritoiresLiesRequestParametizer(code, date, territoriesFilter, Canton.class))

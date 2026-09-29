@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoDepartementEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoDepartementHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsDepartement;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsDepartement;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoDepartementQueriesTest extends TestContainer {
 
     @Autowired
-    GeoDepartementEndpoints endpoints;
+    GeoDepartementHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -44,7 +44,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepasc 10 type null, returns 1 ascendant (Region 99)")
         void should_return_1_region_when_getcogdepasc_10_type_null() throws Exception {
-            var response = endpoints.getcogdepasc("10", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.ascendants("10", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -61,7 +61,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepasc 10 type Region, returns 1 ascendant (Region 99)")
         void should_return_1_region_when_getcogdepasc_10_type_region() throws Exception {
-            var response = endpoints.getcogdepasc("10", LocalDate.of(2025, 1, 1), TypeEnumAscendantsDepartement.REGION);
+            var response = endpoints.ascendants("10", LocalDate.of(2025, 1, 1), TypeEnumAscendantsDepartement.REGION);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -83,7 +83,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdep 10, returns departement 10")
         void should_return_departement_10_when_getcogdep_10() throws Exception {
-            var response = endpoints.getcogdep("10", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("10", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -100,7 +100,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdep 00 (inexistant), returns 404")
         void should_return_404_when_getcogdep_00_inexistant() {
-            var response = endpoints.getcogdep("00", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("00", LocalDate.of(2025, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
     }
@@ -112,7 +112,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepdesc 10 type Commune filtreNom='Commune test 1', returns 1 commune")
         void should_return_1_commune_when_getcogdepdesc_10_type_commune_filtreNom() throws Exception {
-            var response = endpoints.getcogdepdesc("10", LocalDate.of(2025, 1, 1), TypeEnumDescendantsDepartement.COMMUNE, "Commune test 1");
+            var response = endpoints.descendants("10", LocalDate.of(2025, 1, 1), TypeEnumDescendantsDepartement.COMMUNE, "Commune test 1");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -129,7 +129,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepdesc 10 type null, returns 16 descendants (3 arr + 1 arrmu + 2 can + 2 cov + 3 com + 1 comas + 2 comdel + 1 iris + 1 qpv)")
         void should_return_16_descendants_when_getcogdepdesc_10_type_null() throws Exception {
-            var response = endpoints.getcogdepdesc("10", LocalDate.of(2025, 1, 1), null, null);
+            var response = endpoints.descendants("10", LocalDate.of(2025, 1, 1), null, null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -151,7 +151,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepts date=2025-01-01, returns 1 departement actif")
         void should_return_1_departement_when_getcogdepts_date() throws Exception {
-            var response = endpoints.getcogdepts("2025-01-01");
+            var response = endpoints.liste("2025-01-01");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -168,7 +168,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepts date=*, returns 2 departements (actif + supprime)")
         void should_return_2_departements_when_getcogdepts_etoile() throws Exception {
-            var response = endpoints.getcogdepts("*");
+            var response = endpoints.liste("*");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -190,7 +190,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepprec 10, returns 1 precedent (dept 11)")
         void should_return_1_precedent_when_getcogdepprec_10() throws Exception {
-            var response = endpoints.getcogdepprec("10", LocalDate.of(2025, 1, 1));
+            var response = endpoints.precedents("10", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -207,7 +207,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepprec 11 (no precedents), returns 404")
         void should_return_404_when_getcogdepprec_11_no_precedents() {
-            var response = endpoints.getcogdepprec("11", LocalDate.of(1995, 1, 1));
+            var response = endpoints.precedents("11", LocalDate.of(1995, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
     }
@@ -236,7 +236,7 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepproj 10 dateProjection=1995-01-01, returns projection (dept 11)")
         void should_return_1_projete_when_getcogdepproj_10() throws Exception {
-            var response = endpoints.getcogdepproj("10", LocalDate.of(1995, 1, 1), LocalDate.of(2025, 1, 1));
+            var response = endpoints.projetes("10", LocalDate.of(1995, 1, 1), LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -258,14 +258,14 @@ class GeoDepartementQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdepsuiv 10 (actif, pas de suivant), returns 404")
         void should_return_404_when_getcogdepsuiv_10_no_suivants() {
-            var response = endpoints.getcogdepsuiv("10", LocalDate.of(2025, 1, 1));
+            var response = endpoints.suivants("10", LocalDate.of(2025, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
 
         @Test
         @DisplayName("When getcogdepsuiv 11, returns 1 suivant (dept 10)")
         void should_return_1_suivant_when_getcogdepsuiv_11() throws Exception {
-            var response = endpoints.getcogdepsuiv("11", LocalDate.of(1995, 1, 1));
+            var response = endpoints.suivants("11", LocalDate.of(1995, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);

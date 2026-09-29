@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoUniteUrbaineEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoUniteUrbaineHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsUniteUrbaine;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoUniteUrbaineQueriesTest extends TestContainer {
 
     @Autowired
-    GeoUniteUrbaineEndpoints endpoints;
+    GeoUniteUrbaineHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoUniteUrbaineQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcoguu 99101, returns unite urbaine 99101")
         void should_return_uu_99101_when_getcoguu_99101() throws Exception {
-            var response = endpoints.getcoguu("99101", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("99101", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -71,7 +71,7 @@ class GeoUniteUrbaineQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcoguudes 99101 type null, returns 2 descendants")
         void should_return_2_descendants_when_getcoguudes_99101_type_null() throws Exception {
-            var response = endpoints.getcoguudes("99101", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.descendants("99101", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -88,7 +88,7 @@ class GeoUniteUrbaineQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcoguudes 99101 type Commune, returns 2 communes")
         void should_return_2_communes_when_getcoguudes_99101_type_commune() throws Exception {
-            var response = endpoints.getcoguudes("99101", LocalDate.of(2025, 1, 1), TypeEnumDescendantsUniteUrbaine.COMMUNE);
+            var response = endpoints.descendants("99101", LocalDate.of(2025, 1, 1), TypeEnumDescendantsUniteUrbaine.COMMUNE);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -110,7 +110,7 @@ class GeoUniteUrbaineQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcoguuliste date 2025-01-01, returns 1 unite urbaine")
         void should_return_1_uu_when_getcoguuliste_date() throws Exception {
-            var response = endpoints.getcoguuliste("2025-01-01");
+            var response = endpoints.liste("2025-01-01");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -127,7 +127,7 @@ class GeoUniteUrbaineQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcoguuliste date *, returns 1 unite urbaine")
         void should_return_1_uu_when_getcoguuliste_date_etoile() throws Exception {
-            var response = endpoints.getcoguuliste("*");
+            var response = endpoints.liste("*");
             var result = response.getBody();
 
             assertNotNull(result);

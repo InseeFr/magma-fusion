@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoIntercommunaliteEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoIntercommunaliteHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsIntercommunalite;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoIntercommunaliteQueriesTest extends TestContainer {
 
     @Autowired
-    GeoIntercommunaliteEndpoints endpoints;
+    GeoIntercommunaliteHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcoginterco 999000001, returns intercommunalite 999000001")
         void should_return_intercommunalite_999000001_when_getcoginterco() throws Exception {
-            var response = endpoints.getcoginterco("999000001", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("999000001", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -58,7 +58,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcoginterco 999000099 (inexistant), returns 404")
         void should_return_404_when_getcoginterco_999000099_inexistant() {
-            var response = endpoints.getcoginterco("999000099", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("999000099", LocalDate.of(2025, 1, 1));
             assertNotNull(response);
             assert response.getStatusCode().value() == 404;
         }
@@ -71,7 +71,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogintercodes 999000001 type null, returns 2 descendants (2 communes)")
         void should_return_2_descendants_when_getcogintercodes_999000001_type_null() throws Exception {
-            var response = endpoints.getcogintercodes("999000001", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.descendants("999000001", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -88,7 +88,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogintercodes 999000001 type Commune, returns 2 communes")
         void should_return_2_communes_when_getcogintercodes_999000001_type_commune() throws Exception {
-            var response = endpoints.getcogintercodes("999000001", LocalDate.of(2025, 1, 1), TypeEnumDescendantsIntercommunalite.COMMUNE);
+            var response = endpoints.descendants("999000001", LocalDate.of(2025, 1, 1), TypeEnumDescendantsIntercommunalite.COMMUNE);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -110,7 +110,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogintercoliste date=2025-01-01 filtreNom='Intercommunalite test 1', returns 1 intercommunalite")
         void should_return_1_intercommunalite_when_getcogintercoliste_date_filtreNom() throws Exception {
-            var response = endpoints.getcogintercoliste("2025-01-01", "Intercommunalite test 1");
+            var response = endpoints.liste("2025-01-01", "Intercommunalite test 1");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -127,7 +127,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogintercoliste date=* filtreNom='Intercommunalite test', returns 2 intercommunalites (historique)")
         void should_return_2_intercommunalites_when_getcogintercoliste_etoile_filtreNom() throws Exception {
-            var response = endpoints.getcogintercoliste("*", "Intercommunalite test");
+            var response = endpoints.liste("*", "Intercommunalite test");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -149,7 +149,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogintercoprec 999000001, returns 1 precedent (999000002)")
         void should_return_1_precedent_when_getcogintercoprec_999000001() throws Exception {
-            var response = endpoints.getcogintercoprec("999000001", LocalDate.of(2025, 1, 1));
+            var response = endpoints.precedents("999000001", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -171,7 +171,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogintercosuiv 999000002, returns 1 suivant (999000001)")
         void should_return_1_suivant_when_getcogintercosuiv_999000002() throws Exception {
-            var response = endpoints.getcogintercosuiv("999000002", LocalDate.of(2005, 1, 1));
+            var response = endpoints.suivants("999000002", LocalDate.of(2005, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -193,7 +193,7 @@ class GeoIntercommunaliteQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogintercoproj 999000001 dateProjection=2005-01-01, returns 1 projete (999000002)")
         void should_return_1_projete_when_getcogintercoproj_999000001() throws Exception {
-            var response = endpoints.getcogintercoproj("999000001", LocalDate.of(2005, 1, 1), LocalDate.of(2025, 1, 1));
+            var response = endpoints.projetes("999000001", LocalDate.of(2005, 1, 1), LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);

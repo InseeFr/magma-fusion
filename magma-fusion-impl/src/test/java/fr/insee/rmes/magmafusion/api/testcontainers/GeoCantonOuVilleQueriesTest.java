@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoCantonOuVilleEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoCantonOuVilleHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCantonOuVille;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsCantonOuVille;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoCantonOuVilleQueriesTest extends TestContainer {
 
     @Autowired
-    GeoCantonOuVilleEndpoints endpoints;
+    GeoCantonOuVilleHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -44,7 +44,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvil 7701, returns canton-ou-ville 7701")
         void should_return_cov_7701_when_getcogcanvil_7701() throws Exception {
-            var response = endpoints.getcogcanvil("7701", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("7701", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -61,7 +61,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvil 7700 (inexistant), returns 404")
         void should_return_404_when_getcogcanvil_7700_inexistant() {
-            var response = endpoints.getcogcanvil("7700", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("7700", LocalDate.of(2025, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
     }
@@ -73,7 +73,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilasc 7701 type null, returns 2 ascendants (dept 10, region 99)")
         void should_return_2_ascendants_when_getcogcanvilasc_7701_type_null() throws Exception {
-            var response = endpoints.getcogcanvilasc("7701", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.ascendants("7701", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -90,7 +90,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilasc 7701 type Region, returns 1 region")
         void should_return_1_region_when_getcogcanvilasc_7701_type_region() throws Exception {
-            var response = endpoints.getcogcanvilasc("7701", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCantonOuVille.REGION);
+            var response = endpoints.ascendants("7701", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCantonOuVille.REGION);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -112,7 +112,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvildes 7701 type null, returns 4 descendants (2 communes + 2 comdel)")
         void should_return_4_descendants_when_getcogcanvildes_7701_type_null() throws Exception {
-            var response = endpoints.getcogcanvildes("7701", LocalDate.of(2025, 1, 1), null, null);
+            var response = endpoints.descendants("7701", LocalDate.of(2025, 1, 1), null, null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -129,7 +129,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvildes 7701 type Commune filtreNom='Commune test 3', returns 1 commune")
         void should_return_1_commune_when_getcogcanvildes_7701_type_commune_filtreNom() throws Exception {
-            var response = endpoints.getcogcanvildes("7701", LocalDate.of(2025, 1, 1), TypeEnumDescendantsCantonOuVille.COMMUNE, "Commune test 3");
+            var response = endpoints.descendants("7701", LocalDate.of(2025, 1, 1), TypeEnumDescendantsCantonOuVille.COMMUNE, "Commune test 3");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -151,7 +151,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilliste date=2025-01-01, returns 2 cantons-ou-villes actifs")
         void should_return_2_cov_when_getcogcanvilliste_date() throws Exception {
-            var response = endpoints.getcogcanvilliste("2025-01-01");
+            var response = endpoints.liste("2025-01-01");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -168,7 +168,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilliste date=*, returns 3 cantons-ou-villes")
         void should_return_3_cov_when_getcogcanvilliste_etoile() throws Exception {
-            var response = endpoints.getcogcanvilliste("*");
+            var response = endpoints.liste("*");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -190,7 +190,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilprec 7701, returns 1 precedent (7703)")
         void should_return_1_precedent_when_getcogcanvilprec_7701() throws Exception {
-            var response = endpoints.getcogcanvilprec("7701", LocalDate.of(2025, 1, 1));
+            var response = endpoints.precedents("7701", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -207,7 +207,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilprec 7702 (no precedents), returns 404")
         void should_return_404_when_getcogcanvilprec_7702_no_precedents() {
-            var response = endpoints.getcogcanvilprec("7702", LocalDate.of(2025, 1, 1));
+            var response = endpoints.precedents("7702", LocalDate.of(2025, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
     }
@@ -236,7 +236,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilproj 7701 dateProjection=2010-01-01, returns projection (7703)")
         void should_return_1_projete_when_getcogcanvilproj_7701() throws Exception {
-            var response = endpoints.getcogcanvilproj("7701", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
+            var response = endpoints.projetes("7701", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -258,7 +258,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilsuiv 7703, returns 1 suivant (7701)")
         void should_return_1_suivant_when_getcogcanvilsuiv_7703() throws Exception {
-            var response = endpoints.getcogcanvilsuiv("7703", LocalDate.of(2000, 1, 1));
+            var response = endpoints.suivants("7703", LocalDate.of(2000, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -275,7 +275,7 @@ class GeoCantonOuVilleQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanvilsuiv 7701 (actif, pas de suivant), returns 404")
         void should_return_404_when_getcogcanvilsuiv_7701_no_suivants() {
-            var response = endpoints.getcogcanvilsuiv("7701", LocalDate.of(2025, 1, 1));
+            var response = endpoints.suivants("7701", LocalDate.of(2025, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
     }

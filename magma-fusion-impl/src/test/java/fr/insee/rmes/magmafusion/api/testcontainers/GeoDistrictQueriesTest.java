@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoDistrictEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoDistrictHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsDistrict;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoDistrictQueriesTest extends TestContainer {
 
     @Autowired
-    GeoDistrictEndpoints endpoints;
+    GeoDistrictHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoDistrictQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdis 98610, returns district 98610")
         void should_return_district_98610_when_getcogdis_98610() throws Exception {
-            var response = endpoints.getcogdis("98610", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("98610", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -71,7 +71,7 @@ class GeoDistrictQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdisasc 98610 type null, returns 1 ascendant (COM 986)")
         void should_return_1_ascendant_when_getcogdisasc_98610_type_null() throws Exception {
-            var response = endpoints.getcogdisasc("98610", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.ascendants("98610", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -88,7 +88,7 @@ class GeoDistrictQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogdisasc 98610 type CollectiviteDOutreMer, returns 1 COM")
         void should_return_1_com_when_getcogdisasc_98610_type_collectiviteDOutreMer() throws Exception {
-            var response = endpoints.getcogdisasc("98610", LocalDate.of(2025, 1, 1), TypeEnumAscendantsDistrict.COLLECTIVITE_D_OUTRE_MER);
+            var response = endpoints.ascendants("98610", LocalDate.of(2025, 1, 1), TypeEnumAscendantsDistrict.COLLECTIVITE_D_OUTRE_MER);
             var result = response.getBody();
 
             assertNotNull(result);

@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestContainer {
 
     @Autowired
-    GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleEndpoints endpoints;
+    GeoQuartierPrioritaireDeLaPolitiqueDeLaVilleHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestContainer {
         @Test
         @DisplayName("When getcogqpv QN01001M, returns QPV QN01001M")
         void should_return_qpv_QN01001M_when_getcogqpv_QN01001M() throws Exception {
-            var response = endpoints.getcogqpv("QN01001M", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("QN01001M", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -79,7 +79,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestContainer {
         @Test
         @DisplayName("When getcogqpvliste date=2025-01-01, returns 1 QPV")
         void should_return_1_qpv_when_getcogqpvliste_date() throws Exception {
-            var response = endpoints.getcogqpvliste(LocalDate.of(2025, 1, 1));
+            var response = endpoints.liste(LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -101,7 +101,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestContainer {
         @Test
         @DisplayName("When getcogqpvintersect QN01001M type null, returns 1 intersection (commune 99001)")
         void should_return_1_intersection_when_getcogqpvintersect_QN01001M_type_null() throws Exception {
-            var response = endpoints.getcogqpvintersect("QN01001M", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.intersections("QN01001M", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -118,7 +118,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends TestContainer {
         @Test
         @DisplayName("When getcogqpvintersect QN01001M type Commune, returns 1 commune")
         void should_return_1_commune_when_getcogqpvintersect_QN01001M_type_commune() throws Exception {
-            var response = endpoints.getcogqpvintersect("QN01001M", LocalDate.of(2025, 1, 1), TypeEnum.COMMUNE);
+            var response = endpoints.intersections("QN01001M", LocalDate.of(2025, 1, 1), TypeEnum.COMMUNE);
             var result = response.getBody();
 
             assertNotNull(result);
