@@ -20,10 +20,6 @@ tags:
   - name: Definitions
     description: API Concepts
 
-  # -- Opérations
-  - name: Operations
-    description: Consultation des séries, opérations et rapports qualité
-
   # -- Nomenclatures
   - name: Nomenclatures
     description: API Nomenclatures
@@ -31,6 +27,10 @@ tags:
   # -- Géographie
   - name: Geographie
     description: API Géographie
+
+  # -- Opérations
+  - name: Operations
+    description: Consultation des séries, opérations et rapports qualité
 
   # -- Datasets
   - name: Jeux de donnees
@@ -85,158 +85,13 @@ paths:
           $ref: '#/components/responses/ServerError'
 
 
-  # -- Opérations
-
-  /operations/series:
-    get:
-      tags:
-        - Operations
-      summary: Get all series
-      operationId: getAllSeries
-      parameters:
-        - name: dateMiseAJour
-          in: query
-          description: 'Date of last update. Example: 2023-01-31'
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/SeriesListe200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/serie/{id}:
-    get:
-      tags:
-        - Operations
-      summary: Get one serie
-      operationId: getSerieById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Serie200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/operation/{id}:
-    get:
-      tags:
-        - Operations
-      summary: Get operation by code
-      operationId: getOperationByCode
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Operation200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/indicateur/{id}:
-    get:
-      tags:
-        - Operations
-      summary: Get one indicator
-      operationId: getIndicatorById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          $ref: '#/components/responses/Indicateur200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /operations/rapportQualite/{id}:
-    get:
-      tags:
-        - Operations
-      summary: Documentation d''une opération, d''un indicateur ou d''une série
-      operationId: 'getRapportQualiteByCode'
-      parameters:
-        - $ref: '#/components/parameters/idDocumentation'
-      responses:
-        '200':
-          $ref: '#/components/responses/RapportQualiteByCode200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-
-  # -- Nomenclatures
-
-  /codes/{nomenclature}/{niveau}/{code}:
-    get:
-      tags:
-        - Nomenclatures
-      summary: Informations sur une nomenclature d'un certain niveau identifiée par son code
-      operationId: getClassificationByCode
-      parameters:
-        - $ref: '#/components/parameters/nomenclature'
-        - $ref: '#/components/parameters/niveauNomenclature'
-        - $ref: '#/components/parameters/codeNomenclature'
-      responses:
-        '200':
-          $ref: '#/components/responses/ClassificationByCode200'
-        '400':
-          $ref: '#/components/responses/IncorrectRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '406':
-          $ref: '#/components/responses/NotAcceptable'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-
 
   # -- Géographie
 
   /geo/airesDAttractionDesVilles2020:
     get:
       tags:
-        - geoAireDAttractionDesVilles
+        - Geographie
       summary: 'Informations sur toutes les aires d''attraction 2020 actives à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogaavliste'
       parameters:
@@ -256,7 +111,7 @@ paths:
   /geo/aireDAttractionDesVilles2020/{code}:
     get:
       tags:
-        - geoAireDAttractionDesVilles
+        - Geographie
       summary: 'Informations sur une aire d''attraction 2020 française identifiée par son code (trois caractères)'
       operationId: 'getcogaav'
       parameters:
@@ -277,7 +132,7 @@ paths:
   /geo/aireDAttractionDesVilles2020/{code}/descendants:
     get:
       tags:
-        - geoAireDAttractionDesVilles
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans l''aire d''attraction 2020'
       operationId: 'getcogaavdesc'
       parameters:
@@ -299,7 +154,7 @@ paths:
   /geo/arrondissements:
     get:
       tags:
-        - geoArrondissement
+        - Geographie
       summary: 'Informations sur tous les arrondissements atifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogarrliste'
       parameters:
@@ -319,7 +174,7 @@ paths:
   /geo/arrondissement/{code}:
     get:
       tags:
-        - geoArrondissement
+        - Geographie
       summary: 'Informations sur un arrondissement identifié par son code (trois ou quatre caractères)'
       operationId: 'getcogarr'
       parameters:
@@ -340,7 +195,7 @@ paths:
   /geo/arrondissement/{code}/descendants:
     get:
       tags:
-        - geoArrondissement
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans l''arrondissement'
       operationId: 'getcogarrdes'
       parameters:
@@ -362,7 +217,7 @@ paths:
   /geo/arrondissement/{code}/ascendants:
     get:
       tags:
-        - geoArrondissement
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent l''arrondissement'
       operationId: 'getcogarrasc'
       parameters:
@@ -384,7 +239,7 @@ paths:
   /geo/arrondissement/{code}/precedents:
     get:
       tags:
-        - geoArrondissement
+        - Geographie
       summary: 'Informations concernant les arrondissements qui précèdent l''arrondissement'
       operationId: 'getcogarrprec'
       parameters:
@@ -405,7 +260,7 @@ paths:
   /geo/arrondissement/{code}/projetes:
     get:
       tags:
-        - geoArrondissement
+        - Geographie
       summary: 'Informations concernant les arrondissements qui résultent de la projection de l''arrondissement à la date passée en paramètre.'
       operationId: 'getcogarrproj'
       parameters:
@@ -427,7 +282,7 @@ paths:
   /geo/arrondissement/{code}/suivants:
     get:
       tags:
-        - geoArrondissement
+        - Geographie
       summary: 'Informations concernant les arrondissements qui succèdent à l''arrondissement'
       operationId: 'getcogarrsuiv'
       parameters:
@@ -2192,6 +2047,153 @@ paths:
           $ref: '#/components/responses/NotAcceptable'
         '500':
           $ref: '#/components/responses/ServerError'
+
+
+  # -- Opérations
+
+  /operations/series:
+    get:
+      tags:
+        - Operations
+      summary: Get all series
+      operationId: getAllSeries
+      parameters:
+        - name: dateMiseAJour
+          in: query
+          description: 'Date of last update. Example: 2023-01-31'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SeriesListe200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/serie/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get one serie
+      operationId: getSerieById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Serie200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/operation/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get operation by code
+      operationId: getOperationByCode
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Operation200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/indicateur/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Get one indicator
+      operationId: getIndicatorById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Indicateur200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/rapportQualite/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Documentation d''une opération, d''un indicateur ou d''une série
+      operationId: 'getRapportQualiteByCode'
+      parameters:
+        - $ref: '#/components/parameters/idDocumentation'
+      responses:
+        '200':
+          $ref: '#/components/responses/RapportQualiteByCode200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+  # -- Nomenclatures
+
+  /codes/{nomenclature}/{niveau}/{code}:
+    get:
+      tags:
+        - Nomenclatures
+      summary: Informations sur une nomenclature d'un certain niveau identifiée par son code
+      operationId: getClassificationByCode
+      parameters:
+        - $ref: '#/components/parameters/nomenclature'
+        - $ref: '#/components/parameters/niveauNomenclature'
+        - $ref: '#/components/parameters/codeNomenclature'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClassificationByCode200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
 
   # -- Jeux de données
 
@@ -7014,7 +7016,6 @@ components:
         - intituleSansArticle
         - typeArticle
         - intitule
-
       xml:
         name: TerritoireBase
       properties:
