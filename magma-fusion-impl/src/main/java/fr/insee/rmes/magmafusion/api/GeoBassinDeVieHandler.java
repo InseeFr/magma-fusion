@@ -9,13 +9,14 @@ import fr.insee.rmes.magmafusion.queries.parameters.TerritoireEtoileRequestParam
 import fr.insee.rmes.magmafusion.queries.parameters.TerritoireRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
-@RestController
+@Component
 public class GeoBassinDeVieHandler {
 
     private final RequestProcessor requestProcessor;

@@ -1117,7 +1117,7 @@ paths:
   /geo/communesAssociees:
     get:
       tags:
-        - geoCommuneAssociee
+        - Geographie
       summary: 'Informations sur toutes les communes associées actives à la date donnée. Par défaut, c''est la date courante.'
       operationId: 'getcogcomaliste'
       parameters:
@@ -1137,7 +1137,7 @@ paths:
   /geo/communeAssociee/{code}:
     get:
       tags:
-        - geoCommuneAssociee
+        - Geographie
       summary: 'Informations sur une commune associée identifiée par son code (cinq caractères)'
       operationId: 'getcogcoma'
       parameters:
@@ -1158,7 +1158,7 @@ paths:
   /geo/communeAssociee/{code}/ascendants:
     get:
       tags:
-        - geoCommuneAssociee
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent la commune associée'
       operationId: 'getcogcomaasc'
       parameters:
@@ -1180,7 +1180,7 @@ paths:
   /geo/communesDeleguees:
     get:
       tags:
-        - geoCommuneDeleguee
+        - Geographie
       summary: 'Informations sur toutes les communes déléguées actives à la date donnée. Par défaut, c''est la date courante.'
       operationId: 'getcogcomdliste'
       parameters:
@@ -1200,7 +1200,7 @@ paths:
   /geo/communeDeleguee/{code}:
     get:
       tags:
-        - geoCommuneDeleguee
+        - Geographie
       summary: 'Informations sur une commune déléguée identifiée par son code (cinq caractères)'
       operationId: 'getcogcomd'
       parameters:
@@ -1221,7 +1221,7 @@ paths:
   /geo/communeDeleguee/{code}/ascendants:
     get:
       tags:
-        - geoCommuneDeleguee
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent la commune déléguée'
       operationId: 'getcogcomdasc'
       parameters:

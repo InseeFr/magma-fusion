@@ -19,9 +19,11 @@ public class GeographieController implements GeographieApi {
     public final GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler;
     public final GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler;
     public final GeoCommuneHandler communeHandler;
+    public final GeoCommuneAssocieeHandler communeAssocieeHandler;
+    public final GeoCommuneDelegueeHandler communeDelegueeHandler;
 
     public GeographieController(GeoAireDAttractionDesVillesHandler aireDAttractionHandler,
-                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler, GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler, GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler, GeoCommuneHandler communeHandler) {
+                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler, GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler, GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler, GeoCommuneHandler communeHandler, GeoCommuneAssocieeHandler communeAssocieeHandlerHandler, GeoCommuneDelegueeHandler communeDelegueeHandlerHandler, GeoCommuneAssocieeHandler communeAssocieeHandler, GeoCommuneDelegueeHandler communeDelegueeHandler) {
         this.aireDAttractionHandler = aireDAttractionHandler;
         this.arrondissementHandler = arrondissementHandler;
         this.arrondissementMunicipalHandler = arrondissementMunicipalHandler;
@@ -31,6 +33,8 @@ public class GeographieController implements GeographieApi {
         this.circonscriptionTerritorialeHandler = circonscriptionTerritorialeHandler;
         this.collectiviteDOutreMerHandler = collectiviteDOutreMerHandler;
         this.communeHandler = communeHandler;
+        this.communeAssocieeHandler = communeAssocieeHandler;
+        this.communeDelegueeHandler = communeDelegueeHandler;
     }
 
     /*Aires d'attraction des villes*/
@@ -244,6 +248,32 @@ public class GeographieController implements GeographieApi {
 
     public ResponseEntity<List<TerritoireBaseRelation>>  getcogcomintersect (String code, LocalDate date, TypeEnum type) {
         return communeHandler.intersections(code,date,type);
+    }
+
+    /*communes associées*/
+    public ResponseEntity<List<TerritoireTousAttributs>>  getcogcomaasc (String code, LocalDate date, TypeEnumAscendantsCommuneAssociee type) {
+        return communeAssocieeHandler.ascendants(code,date,type);
+    }
+
+    public ResponseEntity<CommuneAssociee> getcogcoma(String code, LocalDate date) {
+        return communeAssocieeHandler.get(code,date);
+    }
+
+    public ResponseEntity<List<CommuneAssociee>> getcogcomaliste (String date) {
+        return communeAssocieeHandler.liste(date);
+    }
+
+        /*communes déléguées*/
+    public ResponseEntity<List<TerritoireTousAttributs>>  getcogcomdasc (String code, LocalDate date, TypeEnumAscendantsCommuneDeleguee type) {
+        return communeDelegueeHandler.ascendants(code,date,type);
+    }
+
+    public ResponseEntity<CommuneDeleguee> getcogcomd (String code, LocalDate date) {
+        return communeDelegueeHandler.get(code,date);
+    }
+
+    public ResponseEntity<List<CommuneDeleguee>> getcogcomdliste (String date) {
+        return communeDelegueeHandler.liste(date);
     }
 
 }

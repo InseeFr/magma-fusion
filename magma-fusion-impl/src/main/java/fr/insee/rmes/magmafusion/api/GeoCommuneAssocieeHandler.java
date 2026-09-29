@@ -9,26 +9,25 @@ import fr.insee.rmes.magmafusion.queries.parameters.TerritoireEtoileRequestParam
 import fr.insee.rmes.magmafusion.queries.parameters.TerritoireRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
-@RestController
-public class GeoCommuneAssocieeEndpoints implements GeoCommuneAssocieeApi{
+@Component
+public class GeoCommuneAssocieeHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoCommuneAssocieeEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoCommuneAssocieeHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>>  getcogcomaasc (String code, LocalDate date, TypeEnumAscendantsCommuneAssociee type) {
+    public ResponseEntity<List<TerritoireTousAttributs>>  ascendants(String code, LocalDate date, TypeEnumAscendantsCommuneAssociee type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, CommuneAssociee.class, true))
@@ -37,8 +36,8 @@ public class GeoCommuneAssocieeEndpoints implements GeoCommuneAssocieeApi{
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<CommuneAssociee> getcogcoma(String code, LocalDate date) {
+
+    public ResponseEntity<CommuneAssociee> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
                 .with(new TerritoireRequestParametizer(code, date, CommuneAssociee.class, "none"))
                 .executeQuery()
@@ -47,8 +46,7 @@ public class GeoCommuneAssocieeEndpoints implements GeoCommuneAssocieeApi{
 
     }
 
-    @Override
-    public ResponseEntity<List<CommuneAssociee>> getcogcomaliste (String date) {
+    public ResponseEntity<List<CommuneAssociee>> liste(String date) {
         if (date==null) {
             date = LocalDate.now().toString();
         }
@@ -59,7 +57,5 @@ public class GeoCommuneAssocieeEndpoints implements GeoCommuneAssocieeApi{
                 .toResponseEntity();
 
     }
-
-
 
 }
