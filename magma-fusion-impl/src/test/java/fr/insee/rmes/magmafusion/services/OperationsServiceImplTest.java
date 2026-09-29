@@ -414,13 +414,11 @@ public class OperationsServiceImplTest {
     }
 
     private RapportQualiteDTO createBasicDTO() {
-        RapportQualiteDTO dto = new RapportQualiteDTO("rubrique-test","http://example.com/rubrique-test","Test rapport","Test report",null,null,null,null,null);
-        return dto;
+        return new RapportQualiteDTO("rubrique-test","http://example.com/rubrique-test","Test rapport","Test report",null,null,null,null,null);
     }
 
     private RubriqueDTO createRubriqueDTO(String id, String type) {
-        RubriqueDTO dto = new RubriqueDTO(id,"http://example.com/" + id, null, type, null,null,null,null,null,null,null,false,false,null,null,null,null);
-        return dto;
+        return new RubriqueDTO(id,"http://example.com/" + id, null, type, null,null,null,null,null,null,null,false,false,null,null,null,null);
     }
 
 

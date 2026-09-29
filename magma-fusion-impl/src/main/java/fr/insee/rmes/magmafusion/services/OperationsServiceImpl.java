@@ -308,7 +308,7 @@ public class OperationsServiceImpl implements OperationsService {
         }
         try {
             return URI.create(uriString);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return null;
         }
     }
