@@ -1243,7 +1243,7 @@ paths:
   /geo/departements:
     get:
       tags:
-        - geoDepartement
+        - Geographie
       summary: 'Informations sur tous les départements actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogdepts'
       parameters:
@@ -1263,7 +1263,7 @@ paths:
   /geo/departement/{code}:
     get:
       tags:
-        - geoDepartement
+        - Geographie
       summary: 'Informations sur un departement identifié par son code (deux ou trois caractères)'
       operationId: 'getcogdep'
       parameters:
@@ -1284,7 +1284,7 @@ paths:
   /geo/departement/{code}/descendants:
     get:
       tags:
-        - geoDepartement
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans le departement'
       operationId: 'getcogdepdesc'
       parameters:
@@ -1307,7 +1307,7 @@ paths:
   /geo/departement/{code}/ascendants:
     get:
       tags:
-        - geoDepartement
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent le departement'
       operationId: 'getcogdepasc'
       parameters:
@@ -1329,7 +1329,7 @@ paths:
   /geo/departement/{code}/precedents:
     get:
       tags:
-        - geoDepartement
+        - Geographie
       summary: 'Informations concernant les departements qui précèdent le departement'
       operationId: 'getcogdepprec'
       parameters:
@@ -1350,7 +1350,7 @@ paths:
   /geo/departement/{code}/projetes:
     get:
       tags:
-        - geoDepartement
+        - Geographie
       summary: 'Informations concernant les départements qui résultent de la projection du département à la date passée en paramètre.'
       operationId: 'getcogdepproj'
       parameters:
@@ -1372,7 +1372,7 @@ paths:
   /geo/departement/{code}/suivants:
     get:
       tags:
-        - geoDepartement
+        - Geographie
       summary: 'Informations concernant les départements qui succèdent au département'
       operationId: 'getcogdepsuiv'
       parameters:
@@ -1393,7 +1393,7 @@ paths:
   /geo/district/{code}:
     get:
       tags:
-        - geoDistrict
+        - Geographie
       summary: 'Informations sur un district identifié par son code (cinq caractères)'
       operationId: 'getcogdis'
       parameters:
@@ -1414,7 +1414,7 @@ paths:
   /geo/district/{code}/ascendants:
     get:
       tags:
-        - geoDistrict
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent le district'
       operationId: 'getcogdisasc'
       parameters:

@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.model.*;
+import fr.insee.rmes.magmafusion.queries.parameters.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,9 +22,11 @@ public class GeographieController implements GeographieApi {
     public final GeoCommuneHandler communeHandler;
     public final GeoCommuneAssocieeHandler communeAssocieeHandler;
     public final GeoCommuneDelegueeHandler communeDelegueeHandler;
+    public final GeoDepartementHandler departementHandler;
+    public final GeoDistrictHandler districHandler;
 
     public GeographieController(GeoAireDAttractionDesVillesHandler aireDAttractionHandler,
-                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler, GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler, GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler, GeoCommuneHandler communeHandler, GeoCommuneAssocieeHandler communeAssocieeHandlerHandler, GeoCommuneDelegueeHandler communeDelegueeHandlerHandler, GeoCommuneAssocieeHandler communeAssocieeHandler, GeoCommuneDelegueeHandler communeDelegueeHandler) {
+                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler, GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler, GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler, GeoCommuneHandler communeHandler, GeoCommuneAssocieeHandler communeAssocieeHandlerHandler, GeoCommuneDelegueeHandler communeDelegueeHandlerHandler, GeoCommuneAssocieeHandler communeAssocieeHandler, GeoCommuneDelegueeHandler communeDelegueeHandler, GeoDepartementHandler departementHandler, GeoDistrictHandler districHandler) {
         this.aireDAttractionHandler = aireDAttractionHandler;
         this.arrondissementHandler = arrondissementHandler;
         this.arrondissementMunicipalHandler = arrondissementMunicipalHandler;
@@ -35,6 +38,8 @@ public class GeographieController implements GeographieApi {
         this.communeHandler = communeHandler;
         this.communeAssocieeHandler = communeAssocieeHandler;
         this.communeDelegueeHandler = communeDelegueeHandler;
+        this.departementHandler = departementHandler;
+        this.districHandler = districHandler;
     }
 
     /*Aires d'attraction des villes*/
@@ -218,62 +223,105 @@ public class GeographieController implements GeographieApi {
         return communeHandler.get(code, date);
     }
 
-    public ResponseEntity<List<Canton>> getcogcomcan (String code, LocalDate date) {
-    return communeHandler.listeCantons(code,date);
+    public ResponseEntity<List<Canton>> getcogcomcan(String code, LocalDate date) {
+        return communeHandler.listeCantons(code, date);
     }
 
     public ResponseEntity<List<TerritoireBase>> getcogcomliste(String date, String filtreNom, Boolean com) {
-        return communeHandler.liste(date,filtreNom,com);
+        return communeHandler.liste(date, filtreNom, com);
     }
 
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomdesc( String code, LocalDate date, TypeEnumDescendantsCommune type) {
-        return communeHandler.descendants(code,date,type);
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomdesc(String code, LocalDate date, TypeEnumDescendantsCommune type) {
+        return communeHandler.descendants(code, date, type);
     }
 
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomasc( String code, LocalDate date, TypeEnumAscendantsCommune type) {
-        return communeHandler.ascendants(code,date,type);
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomasc(String code, LocalDate date, TypeEnumAscendantsCommune type) {
+        return communeHandler.ascendants(code, date, type);
     }
 
-    public ResponseEntity<List<TerritoireBase>> getcogcomprec( String code, LocalDate date) {
-        return communeHandler.precedents(code,date);
+    public ResponseEntity<List<TerritoireBase>> getcogcomprec(String code, LocalDate date) {
+        return communeHandler.precedents(code, date);
     }
 
-    public ResponseEntity<List<TerritoireBase>> getcogcomproj( String code, LocalDate dateProjection, LocalDate date) {
-        return communeHandler.projetes(code,dateProjection,date);
+    public ResponseEntity<List<TerritoireBase>> getcogcomproj(String code, LocalDate dateProjection, LocalDate date) {
+        return communeHandler.projetes(code, dateProjection, date);
     }
 
-    public ResponseEntity<List<TerritoireBase>>  getcogcomsuiv(String code, LocalDate date) {
-        return communeHandler.suivants(code,date);
+    public ResponseEntity<List<TerritoireBase>> getcogcomsuiv(String code, LocalDate date) {
+        return communeHandler.suivants(code, date);
     }
 
-    public ResponseEntity<List<TerritoireBaseRelation>>  getcogcomintersect (String code, LocalDate date, TypeEnum type) {
-        return communeHandler.intersections(code,date,type);
+    public ResponseEntity<List<TerritoireBaseRelation>> getcogcomintersect(String code, LocalDate date, TypeEnum type) {
+        return communeHandler.intersections(code, date, type);
     }
 
     /*communes associées*/
-    public ResponseEntity<List<TerritoireTousAttributs>>  getcogcomaasc (String code, LocalDate date, TypeEnumAscendantsCommuneAssociee type) {
-        return communeAssocieeHandler.ascendants(code,date,type);
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomaasc(String code, LocalDate date, TypeEnumAscendantsCommuneAssociee type) {
+        return communeAssocieeHandler.ascendants(code, date, type);
     }
 
     public ResponseEntity<CommuneAssociee> getcogcoma(String code, LocalDate date) {
-        return communeAssocieeHandler.get(code,date);
+        return communeAssocieeHandler.get(code, date);
     }
 
-    public ResponseEntity<List<CommuneAssociee>> getcogcomaliste (String date) {
+    public ResponseEntity<List<CommuneAssociee>> getcogcomaliste(String date) {
         return communeAssocieeHandler.liste(date);
     }
 
-        /*communes déléguées*/
-    public ResponseEntity<List<TerritoireTousAttributs>>  getcogcomdasc (String code, LocalDate date, TypeEnumAscendantsCommuneDeleguee type) {
-        return communeDelegueeHandler.ascendants(code,date,type);
+    /*communes déléguées*/
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcomdasc(String code, LocalDate date, TypeEnumAscendantsCommuneDeleguee type) {
+        return communeDelegueeHandler.ascendants(code, date, type);
     }
 
-    public ResponseEntity<CommuneDeleguee> getcogcomd (String code, LocalDate date) {
-        return communeDelegueeHandler.get(code,date);
+    public ResponseEntity<CommuneDeleguee> getcogcomd(String code, LocalDate date) {
+        return communeDelegueeHandler.get(code, date);
     }
 
-    public ResponseEntity<List<CommuneDeleguee>> getcogcomdliste (String date) {
+    public ResponseEntity<List<CommuneDeleguee>> getcogcomdliste(String date) {
         return communeDelegueeHandler.liste(date);
+    }
+
+    /*departements*/
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogdepdesc(String code, LocalDate date, TypeEnumDescendantsDepartement type, String filtreNom) {
+        return departementHandler.descendants(code, date, type,filtreNom);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogdepasc(String code, LocalDate date, TypeEnumAscendantsDepartement type) {
+        return departementHandler.ascendants(code, date, type);
+    }
+
+    public ResponseEntity<List<TerritoireBaseChefLieu>> getcogdepprec(String code, LocalDate date) {
+        return departementHandler.precedents(code, date);
+    }
+
+
+    public ResponseEntity<List<TerritoireBaseChefLieu>> getcogdepproj(String code, LocalDate dateProjection, LocalDate date) {
+        return departementHandler.projetes(code, dateProjection, date);
+    }
+
+    @Override
+    public ResponseEntity<List<TerritoireBaseChefLieu>> getcogdepsuiv(String code, LocalDate date) {
+        return departementHandler.suivants(code, date);
+    }
+
+
+    public ResponseEntity<Departement> getcogdep(String code, LocalDate date) {
+        return departementHandler.get(code, date);
+    }
+
+
+    public ResponseEntity<List<TerritoireBaseChefLieu>> getcogdepts(String date) {
+        return departementHandler.liste(date);
+    }
+
+    /*districts*/
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogdisasc(String code, LocalDate date, TypeEnumAscendantsDistrict type) {
+        return districHandler.ascendants(code, date, type);
+    }
+
+    public ResponseEntity<District> getcogdis(String code, LocalDate date) {
+        return districHandler.get(code, date);
     }
 
 }
