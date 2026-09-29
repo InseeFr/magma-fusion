@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoZoneDEmploiEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoZoneDEmploiHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsZoneDEmploi;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoZoneDEmploiQueriesTest extends TestContainer {
 
     @Autowired
-    GeoZoneDEmploiEndpoints endpoints;
+    GeoZoneDEmploiHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoZoneDEmploiQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogze 9901, returns zone d'emploi 9901")
         void should_return_ze_9901_when_getcogze_9901() throws Exception {
-            var response = endpoints.getcogze("9901", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("9901", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -71,7 +71,7 @@ class GeoZoneDEmploiQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogzedesc 9901 type null, returns 2 descendants")
         void should_return_2_descendants_when_getcogzedesc_9901_type_null() throws Exception {
-            var response = endpoints.getcogzedesc("9901", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.descendants("9901", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -88,7 +88,7 @@ class GeoZoneDEmploiQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogzedesc 9901 type Commune, returns 2 communes")
         void should_return_2_communes_when_getcogzedesc_9901_type_commune() throws Exception {
-            var response = endpoints.getcogzedesc("9901", LocalDate.of(2025, 1, 1), TypeEnumDescendantsZoneDEmploi.COMMUNE);
+            var response = endpoints.descendants("9901", LocalDate.of(2025, 1, 1), TypeEnumDescendantsZoneDEmploi.COMMUNE);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -110,7 +110,7 @@ class GeoZoneDEmploiQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogzeliste date 2025-01-01, returns 1 zone d'emploi")
         void should_return_1_ze_when_getcogzeliste_date() throws Exception {
-            var response = endpoints.getcogzeliste("2025-01-01");
+            var response = endpoints.liste("2025-01-01");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -127,7 +127,7 @@ class GeoZoneDEmploiQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogzeliste date *, returns 1 zone d'emploi")
         void should_return_1_ze_when_getcogzeliste_date_etoile() throws Exception {
-            var response = endpoints.getcogzeliste("*");
+            var response = endpoints.liste("*");
             var result = response.getBody();
 
             assertNotNull(result);

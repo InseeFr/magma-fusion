@@ -1669,7 +1669,7 @@ paths:
   /geo/pays/{code}/descendants:
     get:
       tags:
-        - geoPays
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans le pays'
       operationId: 'getcogpaysdesc'
       parameters:
@@ -1733,7 +1733,7 @@ paths:
   /geo/quartiersPrioritairesDeLaPolitiqueDeLaVille2024:
     get:
       tags:
-        - geoQuartierPrioritaireDeLaPolitiqueDeLaVille
+        - Geographie
       summary: 'Informations sur tous les quartiers prioritaires de la politique de la ville 2024 actifs à la date donnée. Par défaut, c''est la date courante.'
       operationId: 'getcogqpvliste'
       parameters:
@@ -1753,7 +1753,7 @@ paths:
   /geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/{code}:
     get:
       tags:
-        - geoQuartierPrioritaireDeLaPolitiqueDeLaVille
+        - Geographie
       summary: 'Informations sur un quartier prioritaire de la politique de la ville 2024 identifié par son code (deux chiffres)'
       operationId: 'getcogqpv'
       parameters:
@@ -1774,7 +1774,7 @@ paths:
   /geo/quartierPrioritaireDeLaPolitiqueDeLaVille2024/{code}/intersections:
     get:
       tags:
-        - geoQuartierPrioritaireDeLaPolitiqueDeLaVille
+        - Geographie
       summary: 'Informations concernant les territoires directement liés au quartier prioritaire de la politique de la ville 2024'
       operationId: 'getcogqpvintersect'
       parameters:
@@ -1796,7 +1796,7 @@ paths:
   /geo/regions:
     get:
       tags:
-        - geoRegion
+        - Geographie
       summary: 'Informations sur toutes les régions actives à la date donnée. Par défaut, c''est la date courante.'
       operationId: 'getcogregliste'
       parameters:
@@ -1816,7 +1816,7 @@ paths:
   /geo/region/{code}:
     get:
       tags:
-        - geoRegion
+        - Geographie
       summary: 'Informations sur une région identifiée par son code (deux chiffres)'
       operationId: 'getcogreg'
       parameters:
@@ -1837,7 +1837,7 @@ paths:
   /geo/region/{code}/descendants:
     get:
       tags:
-        - geoRegion
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans la région'
       operationId: 'getcogregdes'
       parameters:
@@ -1860,7 +1860,7 @@ paths:
   /geo/region/{code}/precedents:
     get:
       tags:
-        - geoRegion
+        - Geographie
       summary: 'Informations concernant les régions qui précèdent la région'
       operationId: 'getcogregprec'
       parameters:
@@ -1881,7 +1881,7 @@ paths:
   /geo/region/{code}/projetes:
     get:
       tags:
-        - geoRegion
+        - Geographie
       summary: 'Informations concernant les régions qui résultent de la projection de la région à la date passée en paramètre.'
       operationId: 'getcogregproj'
       parameters:
@@ -1903,7 +1903,7 @@ paths:
   /geo/region/{code}/suivants:
     get:
       tags:
-        - geoRegion
+        - Geographie
       summary: 'Informations concernant les régions qui succèdent à la région'
       operationId: 'getcogregsuiv'
       parameters:
@@ -1924,7 +1924,7 @@ paths:
   /geo/unitesUrbaines2020:
     get:
       tags:
-        - geoUniteUrbaine
+        - Geographie
       summary: 'Informations sur toutes les unités urbaines 2020 actives à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcoguuliste'
       parameters:
@@ -1944,7 +1944,7 @@ paths:
   /geo/uniteUrbaine2020/{code}:
     get:
       tags:
-        - geoUniteUrbaine
+        - Geographie
       summary: 'Informations sur une unité urbaine 2020 identifiée par son code (cinq chiffres ou 1 chiffre, 1 lettre et 3 chiffres)'
       operationId: 'getcoguu'
       parameters:
@@ -1965,7 +1965,7 @@ paths:
   /geo/uniteUrbaine2020/{code}/descendants:
     get:
       tags:
-        - geoUniteUrbaine
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans l''unité urbaine 2020'
       operationId: 'getcoguudes'
       parameters:
@@ -1987,7 +1987,7 @@ paths:
   /geo/zonesDEmploi2020:
     get:
       tags:
-        - geoZoneDEmploi
+        - Geographie
       summary: 'Informations sur toutes les zones d''emploi 2020 actives à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogzeliste'
       parameters:
@@ -2007,7 +2007,7 @@ paths:
   /geo/zoneDEmploi2020/{code}:
     get:
       tags:
-        - geoZoneDEmploi
+        - Geographie
       summary: 'Informations sur une zone d''emploi 2020 française identifiée par son code (quatre chiffres)'
       operationId: 'getcogze'
       parameters:
@@ -2028,7 +2028,7 @@ paths:
   /geo/zoneDEmploi2020/{code}/descendants:
     get:
       tags:
-        - geoZoneDEmploi
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans la zone d''emploi'
       operationId: 'getcogzedesc'
       parameters:
