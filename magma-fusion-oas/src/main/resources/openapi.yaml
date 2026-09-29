@@ -303,7 +303,7 @@ paths:
   /geo/arrondissementsMunicipaux:
     get:
       tags:
-        - geoArrondissementMunicipal
+        - Geographie
       summary: 'Informations sur tous les arrondissements municipaux actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogarrmuliste'
       parameters:
@@ -323,7 +323,7 @@ paths:
   /geo/arrondissementMunicipal/{code}:
     get:
       tags:
-        - geoArrondissementMunicipal
+        - Geographie
       summary: 'Informations sur un arrondissement municipal identifié par son code (cinq caractères)'
       operationId: 'getcogarrmu'
       parameters:
@@ -344,7 +344,7 @@ paths:
   /geo/arrondissementMunicipal/{code}/ascendants:
     get:
       tags:
-        - geoArrondissementMunicipal
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent l''arrondissement municipal'
       operationId: 'getcogarrmuasc'
       parameters:
@@ -367,7 +367,7 @@ paths:
   /geo/arrondissementMunicipal/{code}/precedents:
     get:
       tags:
-        - geoArrondissementMunicipal
+        - Geographie
       summary: 'Informations concernant les arrondissements municipaux qui précèdent l''arrondissement municipal'
       operationId: 'getcogarrmuprec'
       parameters:
@@ -388,7 +388,7 @@ paths:
   /geo/arrondissementMunicipal/{code}/projetes:
     get:
       tags:
-        - geoArrondissementMunicipal
+        - Geographie
       summary: 'Informations concernant les arrondissements municipaux qui résultent de la projection de l''arrondissement municipal à la date passée en paramètre.'
       operationId: 'getcogarrmuproj'
       parameters:
@@ -410,7 +410,7 @@ paths:
   /geo/arrondissementMunicipal/{code}/suivants:
     get:
       tags:
-        - geoArrondissementMunicipal
+        - Geographie
       summary: 'Informations concernant les arrondissements municipaux qui succèdent à l''arrondissement municipal'
       operationId: 'getcogarrmusuiv'
       parameters:
@@ -431,7 +431,7 @@ paths:
   /geo/bassinsDeVie2022:
     get:
       tags:
-        - geoBassinDeVie
+        - Geographie
       summary: 'Informations sur tous les bassins de vie 2022 actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogbassliste'
       parameters:
@@ -452,7 +452,7 @@ paths:
   /geo/bassinDeVie2022/{code}:
     get:
       tags:
-        - geoBassinDeVie
+        - Geographie
       summary: 'Informations sur un bassin de vie 2022 identifié par son code (neuf caractères)'
       operationId: 'getcogbass'
       parameters:
@@ -473,7 +473,7 @@ paths:
   /geo/bassinDeVie2022/{code}/descendants:
     get:
       tags:
-        - geoBassinDeVie
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans le bassin de vie 2022'
       operationId: 'getcogbassdes'
       parameters:

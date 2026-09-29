@@ -16,26 +16,24 @@ import java.util.List;
 
 
 @RestController
-public class GeoBassinDeVieEndpoints implements GeoBassinDeVieApi {
+public class GeoBassinDeVieHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoBassinDeVieEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoBassinDeVieHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
-    @Override
-    public ResponseEntity<BassinDeVie2022> getcogbass(String code, LocalDate date) {
+    public ResponseEntity<BassinDeVie2022> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
                 .with(new TerritoireRequestParametizer(code, date, BassinDeVie2022.class, "none"))
                 .executeQuery()
                 .singleResult(BassinDeVie2022.class).toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>>  getcogbassdes (String code, LocalDate date, TypeEnumDescendantsBassinDeVie type) {
+    public ResponseEntity<List<TerritoireTousAttributs>>  descendants(String code, LocalDate date, TypeEnumDescendantsBassinDeVie type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, BassinDeVie2022.class, false))
@@ -44,8 +42,7 @@ public class GeoBassinDeVieEndpoints implements GeoBassinDeVieApi {
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<BassinDeVie2022>> getcogbassliste (String date, String filtreNom) {
+    public ResponseEntity<List<BassinDeVie2022>> liste(String date, String filtreNom) {
         String finalFiltreNom = filtreNom == null ? "*" : filtreNom;
         if (date==null) {
             date = LocalDate.now().toString();

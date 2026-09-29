@@ -12,12 +12,18 @@ public class GeographieController implements GeographieApi {
 
     private final GeoAireDAttractionDesVillesHandler aireDAttractionHandler;
     private final GeoArrondissementHandler arrondissementHandler;
+    private final GeoArrondissementMunicipalHandler arrondissementMunicipalHandler;
+    private final GeoBassinDeVieHandler bassinDeVieHandler;
 
     public GeographieController(GeoAireDAttractionDesVillesHandler aireDAttractionHandler,
-                                GeoArrondissementHandler arrondissementHandler) {
+                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler) {
         this.aireDAttractionHandler = aireDAttractionHandler;
         this.arrondissementHandler = arrondissementHandler;
+        this.arrondissementMunicipalHandler = arrondissementMunicipalHandler;
+        this.bassinDeVieHandler = bassinDeVieHandler;
     }
+
+    /*Aires d'attraction des villes*/
 
     @Override
     public ResponseEntity<AireDAttractionDesVilles2020> getcogaav(String code, LocalDate date) {
@@ -34,19 +40,21 @@ public class GeographieController implements GeographieApi {
         return aireDAttractionHandler.liste(date);
     }
 
+    /*Arrondissements*/
+
     @Override
     public ResponseEntity<List<TerritoireTousAttributs>> getcogarrasc(String code, LocalDate date, TypeEnumAscendantsArrondissement type) {
-        return arrondissementHandler.ascendants(code, date, type);
+        return arrondissementHandler.ascendants(code,date,type);
     }
 
     @Override
     public ResponseEntity<Arrondissement> getcogarr(String code, LocalDate date) {
-        return arrondissementHandler.get(code, date);
+        return arrondissementHandler.get(code,date);
     }
 
     @Override
     public ResponseEntity<List<TerritoireTousAttributs>> getcogarrdes(String code, LocalDate date, TypeEnumDescendantsArrondissement type) {
-        return arrondissementHandler.descendants(code, date, type);
+        return arrondissementHandler.descendants(code,date,type);
     }
 
     @Override
@@ -56,16 +64,55 @@ public class GeographieController implements GeographieApi {
 
     @Override
     public ResponseEntity<List<TerritoireTousAttributs>> getcogarrprec(String code, LocalDate date) {
-        return arrondissementHandler.precedents(code, date);
+        return arrondissementHandler.precedents(code,date);
     }
 
     @Override
     public ResponseEntity<List<TerritoireTousAttributs>> getcogarrproj(String code, LocalDate dateProjection, LocalDate date) {
-        return arrondissementHandler.projetes(code, dateProjection, date);
+        return arrondissementHandler.projetes(code,dateProjection,date);
     }
 
     @Override
     public ResponseEntity<List<TerritoireTousAttributs>> getcogarrsuiv(String code, LocalDate date) {
-        return arrondissementHandler.suivants(code, date);
+        return arrondissementHandler.suivants(code,date);
     }
+
+    /*Arrondissements municipaux*/
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrmuasc(String code, LocalDate date, TypeEnumAscendantsArrondissementMunicipal type) {
+        return arrondissementMunicipalHandler.ascendants(code,date,type);
+    }
+
+    public ResponseEntity<ArrondissementMunicipal> getcogarrmu(String code, LocalDate date) {
+        return arrondissementMunicipalHandler.get(code, date);
+    }
+
+    public ResponseEntity<List<ArrondissementMunicipal>> getcogarrmuliste(String date) {
+        return arrondissementMunicipalHandler.liste(date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrmuprec(String code, LocalDate date) {
+        return arrondissementMunicipalHandler.precedents(code,date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrmuproj(String code, LocalDate dateProjection, LocalDate date) {
+        return arrondissementMunicipalHandler.projetes(code, dateProjection, date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogarrmusuiv(String code, LocalDate date) {
+        return arrondissementMunicipalHandler.suivants(code, date);
+    }
+
+    /*bassins de vie*/
+    public ResponseEntity<BassinDeVie2022> getcogbass(String code, LocalDate date) {
+        return bassinDeVieHandler.get(code, date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>>  getcogbassdes (String code, LocalDate date, TypeEnumDescendantsBassinDeVie type) {
+        return bassinDeVieHandler.descendants(code, date, type);
+    }
+
+    public ResponseEntity<List<BassinDeVie2022>> getcogbassliste (String date, String filtreNom) {
+        return bassinDeVieHandler.liste(date, filtreNom);
+    }
+
 }
