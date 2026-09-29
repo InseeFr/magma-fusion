@@ -665,7 +665,7 @@ paths:
   /geo/cantonsEtVilles:
     get:
       tags:
-        - geoCantonOuVille
+        - Geographie
       summary: 'Informations sur tous les cantons et villes actifs à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogcanvilliste'
       parameters:
@@ -685,7 +685,7 @@ paths:
   /geo/cantonOuVille/{code}:
     get:
       tags:
-        - geoCantonOuVille
+        - Geographie
       summary: 'Informations sur un canton-ou-ville identifié par son code (quatre chiffres pour la Métropole ou cinq pour les DOM)'
       operationId: 'getcogcanvil'
       parameters:
@@ -706,7 +706,7 @@ paths:
   /geo/cantonOuVille/{code}/descendants:
     get:
       tags:
-        - geoCantonOuVille
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans le canton-ou-ville'
       operationId: 'getcogcanvildes'
       parameters:
@@ -729,7 +729,7 @@ paths:
   /geo/cantonOuVille/{code}/ascendants:
     get:
       tags:
-        - geoCantonOuVille
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent le canton-ou-ville'
       operationId: 'getcogcanvilasc'
       parameters:
@@ -751,7 +751,7 @@ paths:
   /geo/cantonOuVille/{code}/precedents:
     get:
       tags:
-        - geoCantonOuVille
+        - Geographie
       summary: 'Informations concernant les cantons-ou-villes qui précèdent le canton-ou-ville'
       operationId: 'getcogcanvilprec'
       parameters:
@@ -772,7 +772,7 @@ paths:
   /geo/cantonOuVille/{code}/projetes:
     get:
       tags:
-        - geoCantonOuVille
+        - Geographie
       summary: 'Informations concernant les cantons-ou-villes qui résultent de la projection du canton-ou-ville à la date passée en paramètre.'
       operationId: 'getcogcanvilproj'
       parameters:
@@ -794,7 +794,7 @@ paths:
   /geo/cantonOuVille/{code}/suivants:
     get:
       tags:
-        - geoCantonOuVille
+        - Geographie
       summary: 'Informations concernant les cantons-ou-villes qui succèdent au canton-ou-ville'
       operationId: 'getcogcanvilsuiv'
       parameters:
@@ -811,7 +811,6 @@ paths:
           $ref: '#/components/responses/NotAcceptable'
         '500':
           $ref: '#/components/responses/ServerError'
-
 
 
   /geo/circonscriptionTerritoriale/{code}:
