@@ -16,15 +16,19 @@ public class GeographieController implements GeographieApi {
     private final GeoBassinDeVieHandler bassinDeVieHandler;
     private final GeoCantonHandler cantonHandler;
     private final GeoCantonOuVilleHandler cantonOuVilleHandler;
+    public final GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler;
+    public final GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler;
 
     public GeographieController(GeoAireDAttractionDesVillesHandler aireDAttractionHandler,
-                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler) {
+                                GeoArrondissementHandler arrondissementHandler, GeoArrondissementMunicipalHandler arrondissementMunicipalHandler, GeoBassinDeVieHandler bassinDeVieHandler, GeoCantonHandler cantonHandler, GeoCantonOuVilleHandler cantonOuVilleHandler, GeoCirconscriptionTerritorialeHandler circonscriptionTerritorialeHandler, GeoCollectiviteDOutreMerHandler collectiviteDOutreMerHandler) {
         this.aireDAttractionHandler = aireDAttractionHandler;
         this.arrondissementHandler = arrondissementHandler;
         this.arrondissementMunicipalHandler = arrondissementMunicipalHandler;
         this.bassinDeVieHandler = bassinDeVieHandler;
         this.cantonHandler = cantonHandler;
         this.cantonOuVilleHandler = cantonOuVilleHandler;
+        this.circonscriptionTerritorialeHandler = circonscriptionTerritorialeHandler;
+        this.collectiviteDOutreMerHandler = collectiviteDOutreMerHandler;
     }
 
     /*Aires d'attraction des villes*/
@@ -179,6 +183,29 @@ public class GeographieController implements GeographieApi {
 
     public ResponseEntity<List<TerritoireTousAttributs>> getcogcanvilsuiv(String code, LocalDate date) {
         return cantonOuVilleHandler.suivants(code,date);
+    }
+
+    /*circonscription territoriale*/
+
+    public ResponseEntity<List<TerritoireTousAttributs>>  getcogcirasc (String code, LocalDate date, TypeEnumAscendantsCirconscriptionTerritoriale type) {
+        return circonscriptionTerritorialeHandler.ascendants(code,date,type);
+    }
+
+    public ResponseEntity<CirconscriptionTerritoriale> getcogcir(String code, LocalDate date) {
+        return circonscriptionTerritorialeHandler.get(code,date);
+    }
+
+    /*collectivité d'outre-mer*/
+    public ResponseEntity<CollectiviteDOutreMer> getcogcoll(String code, LocalDate date) {
+        return collectiviteDOutreMerHandler.get(code,date);
+    }
+
+    public ResponseEntity<List<TerritoireTousAttributs>> getcogcolldes(String code, LocalDate date, TypeEnumDescendantsCollectiviteDOutreMer type, String filtreNom) {
+        return collectiviteDOutreMerHandler.descendants(code,date,type,filtreNom);
+    }
+
+    public ResponseEntity<List<CollectiviteDOutreMer>> getcogcollliste(String date) {
+        return collectiviteDOutreMerHandler.liste(date);
     }
 
 }

@@ -816,7 +816,7 @@ paths:
   /geo/circonscriptionTerritoriale/{code}:
     get:
       tags:
-        - geoCirconscriptionTerritoriale
+        - Geographie
       summary: 'Informations sur une circonscription territoriale identifiée par son code (cinq caractères)'
       operationId: 'getcogcir'
       parameters:
@@ -837,7 +837,7 @@ paths:
   /geo/circonscriptionTerritoriale/{code}/ascendants:
     get:
       tags:
-        - geoCirconscriptionTerritoriale
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent la circonscription territoriale'
       operationId: 'getcogcirasc'
       parameters:
@@ -859,7 +859,7 @@ paths:
   /geo/collectivitesDOutreMer:
     get:
       tags:
-        - geoCollectiviteDOutreMer
+        - Geographie
       summary: 'Informations sur toutes les collectivités d''outre-mer actives à la date donnée. Par défaut, c’est la date courante.'
       operationId: 'getcogcollliste'
       parameters:
@@ -879,7 +879,7 @@ paths:
   /geo/collectiviteDOutreMer/{code}:
     get:
       tags:
-        - geoCollectiviteDOutreMer
+        - Geographie
       summary: 'Informations sur une collectivité d''outre-mer identifiée par son code (trois caractères)'
       operationId: 'getcogcoll'
       parameters:
@@ -900,7 +900,7 @@ paths:
   /geo/collectiviteDOutreMer/{code}/descendants:
     get:
       tags:
-        - geoCollectiviteDOutreMer
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans la collectivité d''outre-mer'
       operationId: 'getcogcolldes'
       parameters:
@@ -923,7 +923,7 @@ paths:
   /geo/communes:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: Informations sur toutes les communes actives à la date donnée. Par défaut, c'est la date courante.
       operationId: 'getcogcomliste'
       parameters:
@@ -945,7 +945,7 @@ paths:
   /geo/commune/{code}:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Informations sur une commune française identifiée par son code (cinq caractères)'
       operationId: getcogcom
       parameters:
@@ -966,7 +966,7 @@ paths:
   /geo/commune/{code}/descendants:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Informations concernant les territoires inclus dans la commune'
       operationId: 'getcogcomdesc'
       parameters:
@@ -988,7 +988,7 @@ paths:
   /geo/commune/{code}/ascendants:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Informations concernant les territoires qui contiennent la commune'
       operationId: 'getcogcomasc'
       parameters:
@@ -1010,7 +1010,7 @@ paths:
   /geo/commune/{code}/precedents:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Informations concernant les departements qui précèdent la commune'
       operationId: 'getcogcomprec'
       parameters:
@@ -1031,7 +1031,7 @@ paths:
   /geo/commune/{code}/projetes:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Informations concernant les communes qui résultent de la projection de la commune à la date passée en paramètre.'
       operationId: 'getcogcomproj'
       parameters:
@@ -1053,7 +1053,7 @@ paths:
   /geo/commune/{code}/suivants:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Informations concernant les communes qui succèdent à la commune'
       operationId: 'getcogcomsuiv'
       parameters:
@@ -1074,7 +1074,7 @@ paths:
   /geo/commune/{code}/cantons:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Information sur le(s) canton(s) associé(s) à la commune identifiée par son code (cinq caractères)'
       operationId: getcogcomcan
       parameters:
@@ -1095,7 +1095,7 @@ paths:
   /geo/commune/{code}/intersections:
     get:
       tags:
-        - geoCommune
+        - Geographie
       summary: 'Informations concernant les territoires directement liés avec la commune'
       operationId: 'getcogcomintersect'
       parameters:

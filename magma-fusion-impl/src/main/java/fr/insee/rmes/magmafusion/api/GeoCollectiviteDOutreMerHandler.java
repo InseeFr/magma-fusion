@@ -9,25 +9,24 @@ import fr.insee.rmes.magmafusion.queries.parameters.TerritoireEtoileRequestParam
 import fr.insee.rmes.magmafusion.queries.parameters.TerritoireRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
-@RestController
-public class GeoCollectiviteDOutreMerEndpoints implements GeoCollectiviteDOutreMerApi {
+@Component
+public class GeoCollectiviteDOutreMerHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoCollectiviteDOutreMerEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoCollectiviteDOutreMerHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
-    @Override
-    public ResponseEntity<CollectiviteDOutreMer> getcogcoll(String code, LocalDate date) {
+    public ResponseEntity<CollectiviteDOutreMer> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
                 .with(new TerritoireRequestParametizer(code, date, CollectiviteDOutreMer.class, "none"))
                 .executeQuery()
@@ -36,8 +35,7 @@ public class GeoCollectiviteDOutreMerEndpoints implements GeoCollectiviteDOutreM
     }
 
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>> getcogcolldes(String code, LocalDate date, TypeEnumDescendantsCollectiviteDOutreMer type, String filtreNom) {
+    public ResponseEntity<List<TerritoireTousAttributs>> descendants(String code, LocalDate date, TypeEnumDescendantsCollectiviteDOutreMer type, String filtreNom) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
                 .with(new AscendantsDescendantsRequestParametizer(code, date, filtreNom, territoriesFilter, CollectiviteDOutreMer.class))
@@ -47,8 +45,7 @@ public class GeoCollectiviteDOutreMerEndpoints implements GeoCollectiviteDOutreM
     }
 
 
-    @Override
-    public ResponseEntity<List<CollectiviteDOutreMer>> getcogcollliste(String date) {
+    public ResponseEntity<List<CollectiviteDOutreMer>> liste(String date) {
         if (date==null) {
             date = LocalDate.now().toString();
         }
