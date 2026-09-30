@@ -12,8 +12,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createList;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
 @Service
 public class SeriesOperationsServiceImpl implements SeriesOperationsService {

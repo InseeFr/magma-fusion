@@ -17,8 +17,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createList;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
 @Service
 @Slf4j

@@ -1,6 +1,5 @@
 package fr.insee.rmes.magmafusion.services;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
 import fr.insee.rmes.magmafusion.utils.DatasetDTO;
@@ -10,7 +9,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.*;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
 
 @Service
 public class DatasetsServiceImpl implements DatasetsService {

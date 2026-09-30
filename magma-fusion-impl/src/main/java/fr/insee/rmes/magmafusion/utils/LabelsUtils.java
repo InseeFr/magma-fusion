@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class LocalisedLabelUtils {
-    private LocalisedLabelUtils() {
+public class LabelsUtils {
+    private LabelsUtils() {
         /* This utility class should not be instantiated */
     }
 
