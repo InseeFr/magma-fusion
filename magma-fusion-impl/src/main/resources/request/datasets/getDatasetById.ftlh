@@ -43,14 +43,13 @@ WHERE {
     ?dataset a dcat:Dataset ;
              dcterms:identifier "${id}" ;
              dcterms:identifier ?id ;
-             insee:validationState ?isValidated ;
              dcterms:title ?titleLg1 ;
              dcterms:title ?titleLg2 .
 
     BIND(IF(?isValidated = "Unpublished", "Provisoire, jamais publiée", "Publiée") AS ?statutValidation)
     FILTER (lang(?titleLg1) = '${LG1}')
     FILTER (lang(?titleLg2) = '${LG2}')
-
+    OPTIONAL { ?dataset insee:validationState ?isValidated .}
     OPTIONAL { ?dataset dcterms:modified ?modified }
     OPTIONAL { ?dataset dcterms:issued ?issued }
     OPTIONAL { ?dataset pav:version ?version }
