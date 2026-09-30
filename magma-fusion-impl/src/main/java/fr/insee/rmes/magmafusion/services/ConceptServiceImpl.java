@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
+import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createList;
 
 @Service
 @Slf4j
@@ -53,7 +53,7 @@ public class ConceptServiceImpl implements ConceptService{
 
         private static List<LocalisedContenu> buildLocalisedLabels(String frField, String enField) {
             if (frField == null && enField == null) return null;
-            return createListLangField(createLangField(frField, "fr"), createLangField(enField, "en"));
+            return createList(createLangField(frField, "fr"), createLangField(enField, "en"));
         }
 
 

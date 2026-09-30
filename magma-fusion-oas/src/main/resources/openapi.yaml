@@ -9136,13 +9136,13 @@ components:
         processStep:
           $ref: '#/components/schemas/ProcessStep'
         accrualPeriodicity:
-          $ref: 'langue-contenu.schema.json'
+          $ref: '#/components/schemas/IdLabel'
         temporal:
           $ref: '#/components/schemas/Temporal'
         temporalResolution:
           type: array
           items:
-            $ref: 'langue-contenu.schema.json'
+            $ref: '#/components/schemas/IdLabel'
         spatial:
           $ref: '#/components/schemas/IdLabel'
         spatialResolution:

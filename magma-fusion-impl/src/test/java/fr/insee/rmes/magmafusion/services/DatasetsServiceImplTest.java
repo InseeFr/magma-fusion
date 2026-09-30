@@ -367,8 +367,7 @@ class DatasetsServiceImplTest {
                 "http://ds/related1,http://ds/related2", // relations
                 "emploi,chômage", "employment",  // keywordLg1, keywordLg2
                 "http://archive/unit1",          // archiveUnits
-                null,                            // temporalResolutions
-                null                             // spatialResolutions
+                null, null   // temporalResolutions, spatialResolutions
         );
     }
 

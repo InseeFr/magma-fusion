@@ -1,5 +1,6 @@
 package fr.insee.rmes.magmafusion.services;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
 import fr.insee.rmes.magmafusion.utils.DatasetDTO;
@@ -64,7 +65,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setValidationState(dto.statutValidation());
         dataSet.setCatalogRecordCreated(dto.dateCreation() != null ? dto.dateCreation().toString() : null);
         dataSet.setCatalogRecordModified(dto.catalogRecordModified() != null ? dto.catalogRecordModified().toString() : null);
-        dataSet.setTitle(createListLangField(
+        dataSet.setTitle(createList(
                 createLangField(dto.titreLg1(),"fr"),
                 createLangField(dto.titreLg2(),"en")));
         return dataSet;
@@ -133,32 +134,32 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
 
         if (StringUtils.hasText(dto.titleLg1()) ) {
-            dataSet.setTitle(createListLangField(
+            dataSet.setTitle(createList(
                     createLangField(dto.titleLg1(), "fr"),
                     createLangField(dto.titleLg2(), "en")));
         }
         if (StringUtils.hasText(dto.subtitleLg1())) {
-            dataSet.setSubtitle(createListLangField(
+            dataSet.setSubtitle(createList(
                     createLangField(dto.subtitleLg1(),"fr"),
                     createLangField(dto.subtitleLg2(),"en")));
         }
         if (StringUtils.hasText(dto.abstractLg1())){
-            dataSet.setAbstract(createListLangField(
+            dataSet.setAbstract(createList(
                     createLangField(dto.abstractLg1(),"fr"),
                     createLangField(dto.abstractLg2(),"en")));
         }
         if (StringUtils.hasText(dto.descriptionLg1())){
-            dataSet.setDescription(createListLangField(
+            dataSet.setDescription(createList(
                     createLangField(dto.descriptionLg1(),"fr"),
                     createLangField(dto.descriptionLg2(),"en")));
         }
         if (StringUtils.hasText(dto.scopeNoteLg1())) {
-            dataSet.setScopeNote(createListLangField(
+            dataSet.setScopeNote(createList(
                     createLangField(dto.scopeNoteLg1(), "fr"),
                     createLangField(dto.scopeNoteLg2(), "en")));
         }
         if (StringUtils.hasText(dto.landingPageLg1())) {
-            dataSet.setLandingPage(createListLangField(
+            dataSet.setLandingPage(createList(
                     new LocalisedUrl().lang("fr").url(dto.landingPageLg1()),
                     new LocalisedUrl().lang("en").url(dto.landingPageLg2())));
         }
@@ -170,32 +171,53 @@ public class DatasetsServiceImpl implements DatasetsService {
         if (StringUtils.hasText(dto.idPublisher())) {
             dataSet.setPublisher(new IdLabel()
                     .id(dto.idPublisher())
-                    .label(createListLangField(
+                    .label(createList(
                             createLangField(dto.labelPublisherLg1(),"fr"),
                             createLangField(dto.labelPublisherLg2(),"en"))));
         }
 
         if (StringUtils.hasText(dto.labeltypeLg1())) {
-            dataSet.setType(createListLangField(
+            dataSet.setType(createList(
                     createLangField(dto.labeltypeLg1(),"fr"),
                     createLangField(dto.labeltypeLg2(),"en")));
         }
         if (StringUtils.hasText(dto.labelaccessRightsLg1())) {
-            dataSet.setAccessRights(createListLangField(
+            dataSet.setAccessRights(createList(
                     createLangField(dto.labelaccessRightsLg1(),"fr"),
                     createLangField(dto.labelaccessRightsLg2(),"en")));
         }
         if (StringUtils.hasText(dto.labelconfidentialityStatusLg1())) {
-            dataSet.setConfidentialityStatus(createListLangField(
+            dataSet.setConfidentialityStatus(createList(
                     createLangField(dto.labelconfidentialityStatusLg1(),"fr"),
                     createLangField(dto.labelconfidentialityStatusLg2(),"en")));
         }
+
+        if (StringUtils.hasText(dto.labelaccrualPeriodicityLg1())) {
+            List<LocalisedContenu> accrualPeriodicityListTitle = createList(
+                    createLangField(dto.labelaccrualPeriodicityLg1(),"fr"),
+                    createLangField(dto.labelaccrualPeriodicityLg2(),"en")
+            );
+            IdLabel accrualPeriodicityIdLabel = new IdLabel();
+            accrualPeriodicityIdLabel.setId(null);
+            accrualPeriodicityIdLabel.setLabel(accrualPeriodicityListTitle);
+            dataSet.setAccrualPeriodicity(accrualPeriodicityIdLabel);
+
+        }
+
+        //récupération de temporalResolution
+//        if (StringUtils.hasText(dto.temporalResolutions).isEmpty()) {
+//            List<String> uristemporalResolution = List.of(codes_result.getString("temporalResolutions").split(","));
+//            List<Label> temporalResolutionList = getTemporalResolution(uristemporalResolution);
+//            reponse.setTemporalResolution(temporalResolutionList);
+//        }
+
+
 
 
         if (StringUtils.hasText(dto.spatialId())) {
             dataSet.setSpatial(new IdLabel()
                     .id(dto.spatialId())
-                    .label(createListLangField(
+                    .label(createList(
                             createLangField(dto.labelspatialLg1(),"fr"),
                             createLangField(dto.labelspatialLg2(),"en"))));
         }
@@ -205,6 +227,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .startPeriod(dto.startPeriod())
                     .endPeriod(dto.endPeriod()));
         }
+
 
         if (StringUtils.hasText(dto.structureUri())) {
             dataSet.setStructure(new Structure()
@@ -220,7 +243,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                         String[] parts = raw.split("\\$", -1);
                         return new IdLabel()
                                 .id(parts.length > 0 ? parts[0] : null)
-                                .label(createListLangField(
+                                .label(createList(
                                         createLangField(parts.length > 1 ? parts[1] : null, "fr"),
                                         createLangField(parts.length > 2 ? parts[2] : null, "en")));
                     })
@@ -260,12 +283,12 @@ public class DatasetsServiceImpl implements DatasetsService {
                             .filter(s -> !s.isBlank())
                             .toList());
             if (StringUtils.hasText(dto.derivedDescriptionLg1())) {
-                wasDerivedFrom.setDescription(createListLangField(
+                wasDerivedFrom.setDescription(createList(
                         createLangField(dto.derivedDescriptionLg1(),"fr"),
                         createLangField(dto.derivedDescriptionLg2(), "en")));
             }
             if (dto.derivedDescriptionLg1() != null && dto.derivedDescriptionLg1().isBlank()) {
-                wasDerivedFrom.setDescription(createListLangField(
+                wasDerivedFrom.setDescription(createList(
                         createLangField(dto.derivedDescriptionLg1(),"fr"),
                         createLangField("", "en")));
             }
@@ -296,12 +319,12 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .distinct()
                     .toList());
             if (StringUtils.hasText(first.titleLg1())) {
-                d.setTitle(createListLangField(
+                d.setTitle(createList(
                         createLangField(first.titleLg1(), "fr"),
                         createLangField(first.titleLg2(), "en")));
             }
             if (StringUtils.hasText(first.descriptionLg1())) {
-                d.setDescription(createListLangField(
+                d.setDescription(createList(
                         createLangField(first.descriptionLg1(), "fr"),
                         createLangField(first.descriptionLg2(), "en")));
             }
