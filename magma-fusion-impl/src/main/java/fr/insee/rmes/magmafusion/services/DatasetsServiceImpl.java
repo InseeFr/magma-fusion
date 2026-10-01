@@ -1,18 +1,28 @@
 package fr.insee.rmes.magmafusion.services;
 
+import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.*;
+import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
 import fr.insee.rmes.magmafusion.utils.DatasetDTO;
 import fr.insee.rmes.magmafusion.utils.DistributionDTO;
+import fr.insee.rmes.magmafusion.utils.TemporalResolutionDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
 
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
 @Service
 public class DatasetsServiceImpl implements DatasetsService {
+
+    private final RequestProcessor requestProcessor;
+    public DatasetsServiceImpl(RequestProcessor requestProcessor) {
+        this.requestProcessor = requestProcessor;
+    }
+
 
     @Override
     public List<Dataset> convertDatasetDTOsToDataSets(List<DatasetDTO> dtos) {
@@ -203,15 +213,11 @@ public class DatasetsServiceImpl implements DatasetsService {
 
         }
 
-        //récupération de temporalResolution
-//        if (StringUtils.hasText(dto.temporalResolutions).isEmpty()) {
-//            List<String> uristemporalResolution = List.of(codes_result.getString("temporalResolutions").split(","));
-//            List<Label> temporalResolutionList = getTemporalResolution(uristemporalResolution);
-//            reponse.setTemporalResolution(temporalResolutionList);
-//        }
-
-
-
+        if (StringUtils.hasText(dto.temporalResolutions())) {
+            List<String> uristemporalResolution = List.of(dto.temporalResolutions().split(","));
+            List<IdLabel> temporalResolutionList = getTemporalResolution(uristemporalResolution);
+            dataSet.setTemporalResolution(temporalResolutionList);
+            }
 
         if (StringUtils.hasText(dto.spatialId())) {
             dataSet.setSpatial(new IdLabel()
@@ -297,8 +303,28 @@ public class DatasetsServiceImpl implements DatasetsService {
         return dataSet;
     }
 
-    @Override
-    public List<Distribution> convertDistributionDTOsToDistributions(List<DistributionDTO> dtos) {
+    List<IdLabel> getTemporalResolution(List<String> uristemporalResolution) {
+        List<IdLabel> temporalResolution = new ArrayList<>();
+        for (String uri : uristemporalResolution) {
+            TemporalResolutionDTO temporalResolutionContenu = this.requestProcessor.queryToFindTemporalResolutionContenu()
+                    .with(DatasetsRequestParametizer.ofUri(uri))
+                    .executeQuery()
+                    .singleResult(TemporalResolutionDTO.class)
+                    .result();
+            List<LocalisedContenu> temporalResolutionTitles = createList(
+                    createLangField(temporalResolutionContenu.labeltemporalResolutionLg1(),"fr"),
+                    createLangField(temporalResolutionContenu.labeltemporalResolutionLg2(),"en")
+            );
+            IdLabel temporalResolutionLabel = new IdLabel();
+            temporalResolutionLabel.setLabel(temporalResolutionTitles);
+            temporalResolution.add(temporalResolutionLabel);
+        }
+        return temporalResolution;
+    }
+
+
+     @Override
+     public List<Distribution> convertDistributionDTOsToDistributions(List<DistributionDTO> dtos) {
         Map<String, List<DistributionDTO>> grouped = new LinkedHashMap<>();
         for (DistributionDTO dto : dtos) {
             grouped.computeIfAbsent(dto.identifier(), k -> new ArrayList<>()).add(dto);

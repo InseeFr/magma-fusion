@@ -1,22 +1,30 @@
 package fr.insee.rmes.magmafusion.services;
 
+import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
+import fr.insee.rmes.magmafusion.model.IdLabel;
+import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
 import fr.insee.rmes.magmafusion.utils.DatasetDTO;
+import fr.insee.rmes.magmafusion.utils.TemporalResolutionDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class DatasetsServiceImplTest {
 
     private DatasetsServiceImpl service;
+    private RequestProcessor requestProcessor;
 
     @BeforeEach
     void setUp() {
-        service = new DatasetsServiceImpl();
+        service = new DatasetsServiceImpl(requestProcessor);
     }
 
     // =========================================================
@@ -324,6 +332,151 @@ class DatasetsServiceImplTest {
 
 
     // =========================================================
+    //   getTemporalResolution
+    // =========================================================
+
+    @Test
+    void getTemporalResolution_shouldReturnIdLabelsWithLocalisedTitles() {
+        // Given
+        // 1. Crée les DTOs de résolution temporelle attendus (sans URI, juste les labels)
+        TemporalResolutionDTO annualDto = new TemporalResolutionDTO(
+                "Annuelle",  // labeltemporalResolutionLg1
+                "Annual"     // labeltemporalResolutionLg2
+        );
+
+        TemporalResolutionDTO monthlyDto = new TemporalResolutionDTO(
+                "Mensuelle",  // labeltemporalResolutionLg1
+                "Monthly"     // labeltemporalResolutionLg2
+        );
+
+        // 2. Mock le RequestProcessor avec RETURNS_DEEP_STUBS
+        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+
+        // 3. Configure le comportement : premier appel → annualDto, second appel → monthlyDto
+        when(mockProcessor.queryToFindTemporalResolutionContenu()
+                .with(any(DatasetsRequestParametizer.class))
+                .executeQuery()
+                .singleResult(TemporalResolutionDTO.class)
+                .result())
+                .thenReturn(annualDto)  // Premier appel (pour "http://bauhaus/codes/frequence/A")
+                .thenReturn(monthlyDto); // Second appel (pour "http://bauhaus/codes/frequence/M")
+
+        // 4. Crée le service avec le mock
+        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+
+        // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getTemporalResolution reçoit des URIs en entrée)
+        List<String> uris = List.of(
+                "http://bauhaus/codes/frequence/A",
+                "http://bauhaus/codes/frequence/M"
+        );
+
+        // When
+        List<IdLabel> result = service.getTemporalResolution(uris);
+
+        // Then
+        assertThat(result).hasSize(2);
+
+        // Vérifie le premier IdLabel (pour "A")
+        IdLabel annualResolution = result.get(0);
+        assertThat(annualResolution.getLabel()).hasSize(2);
+        assertThat(annualResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(annualResolution.getLabel().get(0).getContenu()).isEqualTo("Annuelle");
+        assertThat(annualResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(annualResolution.getLabel().get(1).getContenu()).isEqualTo("Annual");
+
+        // Vérifie le second IdLabel (pour "M")
+        IdLabel monthlyResolution = result.get(1);
+        assertThat(monthlyResolution.getLabel()).hasSize(2);
+        assertThat(monthlyResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(monthlyResolution.getLabel().get(0).getContenu()).isEqualTo("Mensuelle");
+        assertThat(monthlyResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(monthlyResolution.getLabel().get(1).getContenu()).isEqualTo("Monthly");
+    }
+
+    @Test
+    void getTemporalResolution_shouldReturnEmptyListForEmptyInput() {
+        // Given
+        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        List<String> uris = List.of();
+
+        // When
+        List<IdLabel> result = service.getTemporalResolution(uris);
+
+        // Then
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void getTemporalResolution_shouldHandleNullLabelsInDTO() {
+        // Given
+        // DTO avec des labels null
+        TemporalResolutionDTO dtoWithNullLabels = new TemporalResolutionDTO(
+                null,  // labeltemporalResolutionLg1 = null
+                null   // labeltemporalResolutionLg2 = null
+        );
+
+        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+        when(mockProcessor.queryToFindTemporalResolutionContenu()
+                .with(any(DatasetsRequestParametizer.class))
+                .executeQuery()
+                .singleResult(TemporalResolutionDTO.class)
+                .result())
+                .thenReturn(dtoWithNullLabels);
+
+        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        List<String> uris = List.of("http://bauhaus/codes/frequence/A");
+
+        // When
+        List<IdLabel> result = service.getTemporalResolution(uris);
+
+        // Then
+        assertThat(result).hasSize(1);
+        IdLabel resolution = result.get(0);
+        assertThat(resolution.getLabel()).hasSize(2);
+        assertThat(resolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(resolution.getLabel().get(0).getContenu()).isNull();
+        assertThat(resolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(resolution.getLabel().get(1).getContenu()).isNull();
+    }
+
+    @Test
+    void getTemporalResolution_shouldHandleMissingLabelsInDTO() {
+        // Given
+        // DTO avec un label null et un label vide
+        TemporalResolutionDTO dtoWithMissingLabels = new TemporalResolutionDTO(
+                "",    // labeltemporalResolutionLg1 = vide
+                null   // labeltemporalResolutionLg2 = null
+        );
+
+        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+        when(mockProcessor.queryToFindTemporalResolutionContenu()
+                .with(any(DatasetsRequestParametizer.class))
+                .executeQuery()
+                .singleResult(TemporalResolutionDTO.class)
+                .result())
+                .thenReturn(dtoWithMissingLabels);
+
+        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        List<String> uris = List.of("http://bauhaus/codes/frequence/A");
+
+        // When
+        List<IdLabel> result = service.getTemporalResolution(uris);
+
+        // Then
+        assertThat(result).hasSize(1);
+        IdLabel resolution = result.get(0);
+        assertThat(resolution.getLabel()).hasSize(2);
+        assertThat(resolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(resolution.getLabel().get(0).getContenu()).isEmpty();
+        assertThat(resolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(resolution.getLabel().get(1).getContenu()).isNull();
+    }
+
+
+
+
+    // =========================================================
     //   Fixtures
     // =========================================================
 
@@ -367,7 +520,8 @@ class DatasetsServiceImplTest {
                 "http://ds/related1,http://ds/related2", // relations
                 "emploi,chômage", "employment",  // keywordLg1, keywordLg2
                 "http://archive/unit1",          // archiveUnits
-                null, null   // temporalResolutions, spatialResolutions
+                null,
+                null   // temporalResolutions, spatialResolutions
         );
     }
 

@@ -42,6 +42,10 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(DATASET_BY_ID, this, unmarshaller);
     }
 
+    public ExecutableQueryBuilder queryToFindTemporalResolutionContenu() {
+        return new ExecutableQueryBuilder(DATASET_TEMPORAL_RESOLUTION, this, unmarshaller);
+    }
+
     public ExecutableQueryBuilder queryToFindDistributionsByDatasetId() {
         return new ExecutableQueryBuilder(DISTRIBUTIONS_BY_DATASET_ID, this, unmarshaller);
     }
