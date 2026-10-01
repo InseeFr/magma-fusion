@@ -218,6 +218,8 @@
         insee:validationState "Unpublished" ;
         prov:wasGeneratedBy <http://bauhaus/operations/serie/idSerieGeneratrice> ;
         adms:identifier <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest/ident> ;
+        dcat:temporalResolution <http://bauhaus/codes/frequence/A>;
+        dcat:temporalResolution <http://bauhaus/codes/frequence/M>;
         dcat:distribution <http://bauhaus/catalogues/distribution/idDistributionTest> .
 
     <http://bauhaus/catalogues/distribution/idDistributionTest>
@@ -411,6 +413,18 @@
         skos:inScheme <http://id.insee.fr/codes/conceptScheme/modeCollecteTest> ;
         skos:prefLabel "Par telephone"@fr ;
         skos:prefLabel "By phone"@en .
+
+    <http://bauhaus/codes/frequence/A>
+            skos:notation "A" ;
+            skos:inScheme <http://bauhaus/codes/frequences> ;
+            skos:prefLabel "temporalResolution1 du dataset test"@fr ;
+            skos:prefLabel "temporalResolution1 of test dataset"@en .
+
+    <http://bauhaus/codes/frequence/M>
+                skos:notation "M" ;
+                skos:inScheme <http://bauhaus/codes/frequences> ;
+                skos:prefLabel "temporalResolution2 du dataset test"@fr ;
+                skos:prefLabel "temporalResolution2 of test dataset"@en .
 }
 
 <http://rdf.insee.fr/graphes/qualite/territoires> {
