@@ -12,8 +12,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LocalisedLabelUtils.createListLangField;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
 @Service
 public class SeriesOperationsServiceImpl implements SeriesOperationsService {
@@ -34,19 +34,19 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         serieById.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
         serieById.setStatutValidation(dto.validationState());
 
-        serieById.setLabel(createListLangField(
+        serieById.setLabel(createList(
                 createLangField(dto.seriesLabelLg1(), lg1),
                 createLangField(dto.seriesLabelLg2(), lg2)));
 
-        serieById.setAltLabel(createListLangField(
+        serieById.setAltLabel(createList(
                 createLangField(dto.seriesAltLabelLg1(), lg1),
                 createLangField(dto.seriesAltLabelLg2(), lg2)));
 
-        serieById.setResume(createListLangField(
+        serieById.setResume(createList(
                 createLangField(dto.seriesAbstractLg1(), lg1),
                 createLangField(dto.seriesAbstractLg2(), lg2)));
 
-        serieById.setNoteHistorique(createListLangField(
+        serieById.setNoteHistorique(createList(
                 createLangField(dto.seriesHistoryNoteLg1(), lg1),
                 createLangField(dto.seriesHistoryNoteLg2(), lg2)));
 
@@ -54,7 +54,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
             IdUriLabel type = new IdUriLabel();
             type.setId(dto.typeID());
             type.setUri(URI.create(dto.type()));
-            type.setLabel(createListLangField(
+            type.setLabel(createList(
                     createLangField(dto.typeLabelLg1(), lg1),
                     createLangField(dto.typeLabelLg2(), lg2)));
             serieById.setType(type);
@@ -64,7 +64,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
             IdUriLabel frequence = new IdUriLabel();
             frequence.setId(dto.periodicityId());
             frequence.setUri(URI.create(dto.periodicity()));
-            frequence.setLabel(createListLangField(
+            frequence.setLabel(createList(
                     createLangField(dto.periodicityLabelLg1(), lg1),
                     createLangField(dto.periodicityLabelLg2(), lg2)));
             serieById.setFrequenceCollecte(frequence);
@@ -105,11 +105,11 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         operation.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
         operation.setStatutValidation(dto.validationState());
 
-        operation.setLabel(createListLangField(
+        operation.setLabel(createList(
                 createLangField(dto.operationLabelLg1(), lg1),
                 createLangField(dto.operationLabelLg2(), lg2)));
 
-        operation.setAltLabel(createListLangField(
+        operation.setAltLabel(createList(
                 createLangField(dto.operationAltLabelLg1(), lg1),
                 createLangField(dto.operationAltLabelLg2(), lg2)));
 
@@ -117,7 +117,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
             SerieRef serie = new SerieRef();
             serie.setId(dto.seriesId());
             serie.setUri(dto.series());
-            serie.setLabel(createListLangField(
+            serie.setLabel(createList(
                     createLangField(dto.seriesLabelLg1(), lg1),
                     createLangField(dto.seriesLabelLg2(), lg2)));
             operation.setSerie(serie);
@@ -155,7 +155,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         serieById.setServicesCollecteurs(null);
         serieById.setSeriesId(dto.seriesId());
         serieById.setUri(dto.series());
-        serieById.setLabel(createListLangField(
+        serieById.setLabel(createList(
                 createLangField(dto.seriesLabelLg1(), lg1),
                 createLangField(dto.seriesLabelLg2(), lg2)));
         return serieById;
@@ -170,7 +170,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         famille.setId(parts.length > 0 ? parts[0] : null);
         String uriStr = parts.length > 1 ? parts[1] : null;
         famille.setUri(StringUtils.hasText(uriStr) ? URI.create(uriStr) : null);
-        famille.setLabel(createListLangField(
+        famille.setLabel(createList(
                 createLangField(parts.length > 2 ? parts[2] : null, lg1),
                 createLangField(parts.length > 3 ? parts[3] : null, lg2)));
         return famille;
@@ -185,7 +185,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         ref.setId(parts.length > 0 ? parts[0] : null);
         String uriStr = parts.length > 1 ? parts[1] : null;
         ref.setUri(StringUtils.hasText(uriStr) ? URI.create(uriStr) : null);
-        ref.setLabel(createListLangField(
+        ref.setLabel(createList(
                 createLangField(parts.length > 2 ? parts[2] : null, lg1),
                 createLangField(parts.length > 3 ? parts[3] : null, lg2)));
         return ref;
@@ -231,26 +231,26 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         indicateur.setDateMiseAJour(dto.modified() != null ? dto.modified().toString() : null);
         indicateur.setStatuValidation(dto.validationState());
 
-        indicateur.setLabel(createListLangField(
+        indicateur.setLabel(createList(
                 createLangField(dto.indicatorLabelLg1(), lg1),
                 createLangField(dto.indicatorLabelLg2(), lg2)));
 
-        indicateur.setAltLabel(createListLangField(
+        indicateur.setAltLabel(createList(
                 createLangField(dto.indicatorAltLabelLg1(), lg1),
                 createLangField(dto.indicatorAltLabelLg2(), lg2)));
 
-        indicateur.setResume(createListLangField(
+        indicateur.setResume(createList(
                 createLangField(dto.indicatorAbstractLg1(), lg1),
                 createLangField(dto.indicatorAbstractLg2(), lg2)));
 
-        indicateur.setNoteHistorique(createListLangField(
+        indicateur.setNoteHistorique(createList(
                 createLangField(dto.indicatorHistoryNoteLg1(), lg1),
                 createLangField(dto.indicatorHistoryNoteLg2(), lg2)));
 
         if (dto.periodicity() != null && !dto.periodicity().isBlank()) {
             IdUriLabel frequence = new IdUriLabel(dto.periodicityId());
             frequence.setUri(toUri(dto.periodicity()));
-            frequence.setLabel(createListLangField(
+            frequence.setLabel(createList(
                     createLangField(dto.periodicityLabelLg1(), lg1),
                     createLangField(dto.periodicityLabelLg2(), lg2)));
             indicateur.setFrequenceCollecte(frequence);
@@ -288,7 +288,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
             if (parts.length > 1 && !parts[1].isBlank()) {
                 ref.setUri(toUri(parts[1]));
             }
-            ref.setLabel(createListLangField(
+            ref.setLabel(createList(
                     createLangField(parts.length > 2 ? parts[2] : null, lg1),
                     createLangField(parts.length > 3 ? parts[3] : null, lg2)));
             list.add(ref);

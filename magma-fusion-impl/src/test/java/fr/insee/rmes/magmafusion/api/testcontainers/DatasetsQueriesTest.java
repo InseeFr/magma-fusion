@@ -27,9 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DatasetsQueriesTest extends TestContainer {
 
     static final String DATASET_ID = "idDatasetTest";
-    static final String DATASET_URI = "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest";
     static final String DATASET_ID_2 = "idDatasetTest2";
-    static final String DATASET_URI_2 = "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest2";
 
     @Autowired
     DatasetsEndpoints endpoints;

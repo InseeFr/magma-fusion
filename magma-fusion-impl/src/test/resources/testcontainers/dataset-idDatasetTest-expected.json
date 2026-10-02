@@ -11,6 +11,16 @@
     {"langue": "fr", "contenu": "Titre du dataset test"},
     {"langue": "en", "contenu": "Dataset Test Title"}
   ],
+  "temporalResolution": [
+    {"label": [
+      {"langue": "fr", "contenu": "temporalResolution1 du dataset test"},
+      {"langue": "en", "contenu": "temporalResolution1 of test dataset"}
+    ]},
+    {"label": [
+      {"langue": "fr", "contenu": "temporalResolution2 du dataset test"},
+      {"langue": "en", "contenu": "temporalResolution2 of test dataset"}
+    ]}
+  ],
   "abstract": [
     {"langue": "fr", "contenu": "Résumé du dataset test"},
     {"langue": "en"}
