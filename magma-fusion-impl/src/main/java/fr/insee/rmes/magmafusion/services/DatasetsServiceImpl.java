@@ -215,7 +215,7 @@ public class DatasetsServiceImpl implements DatasetsService {
 
         if (StringUtils.hasText(dto.temporalResolutions())) {
             List<String> uristemporalResolution = List.of(dto.temporalResolutions().split(","));
-            List<IdLabel> temporalResolutionList = getTemporalResolution(uristemporalResolution);
+            List<Label> temporalResolutionList = getTemporalResolution(uristemporalResolution);
             dataSet.setTemporalResolution(temporalResolutionList);
             }
 
@@ -303,8 +303,8 @@ public class DatasetsServiceImpl implements DatasetsService {
         return dataSet;
     }
 
-    List<IdLabel> getTemporalResolution(List<String> uristemporalResolution) {
-        List<IdLabel> temporalResolution = new ArrayList<>();
+    List<Label> getTemporalResolution(List<String> uristemporalResolution) {
+        List<Label> temporalResolution = new ArrayList<>();
         for (String uri : uristemporalResolution) {
             TemporalResolutionDTO temporalResolutionContenu = this.requestProcessor.queryToFindTemporalResolutionContenu()
                     .with(DatasetsRequestParametizer.ofUri(uri))
@@ -315,7 +315,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                     createLangField(temporalResolutionContenu.labeltemporalResolutionLg1(),"fr"),
                     createLangField(temporalResolutionContenu.labeltemporalResolutionLg2(),"en")
             );
-            IdLabel temporalResolutionLabel = new IdLabel();
+            Label temporalResolutionLabel = new Label();
             temporalResolutionLabel.setLabel(temporalResolutionTitles);
             temporalResolution.add(temporalResolutionLabel);
         }

@@ -2,6 +2,7 @@ package fr.insee.rmes.magmafusion.services;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.IdLabel;
+import fr.insee.rmes.magmafusion.model.Label;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
 import fr.insee.rmes.magmafusion.utils.DatasetDTO;
@@ -371,13 +372,13 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<IdLabel> result = service.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
         // Vérifie le premier IdLabel (pour "A")
-        IdLabel annualResolution = result.get(0);
+        Label annualResolution = result.get(0);
         assertThat(annualResolution.getLabel()).hasSize(2);
         assertThat(annualResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
         assertThat(annualResolution.getLabel().get(0).getContenu()).isEqualTo("Annuelle");
@@ -385,7 +386,7 @@ class DatasetsServiceImplTest {
         assertThat(annualResolution.getLabel().get(1).getContenu()).isEqualTo("Annual");
 
         // Vérifie le second IdLabel (pour "M")
-        IdLabel monthlyResolution = result.get(1);
+        Label monthlyResolution = result.get(1);
         assertThat(monthlyResolution.getLabel()).hasSize(2);
         assertThat(monthlyResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
         assertThat(monthlyResolution.getLabel().get(0).getContenu()).isEqualTo("Mensuelle");
@@ -401,7 +402,7 @@ class DatasetsServiceImplTest {
         List<String> uris = List.of();
 
         // When
-        List<IdLabel> result = service.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).isEmpty();
@@ -428,11 +429,11 @@ class DatasetsServiceImplTest {
         List<String> uris = List.of("http://bauhaus/codes/frequence/A");
 
         // When
-        List<IdLabel> result = service.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(1);
-        IdLabel resolution = result.get(0);
+        Label resolution = result.get(0);
         assertThat(resolution.getLabel()).hasSize(2);
         assertThat(resolution.getLabel().get(0).getLangue()).isEqualTo("fr");
         assertThat(resolution.getLabel().get(0).getContenu()).isNull();
@@ -461,11 +462,11 @@ class DatasetsServiceImplTest {
         List<String> uris = List.of("http://bauhaus/codes/frequence/A");
 
         // When
-        List<IdLabel> result = service.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(1);
-        IdLabel resolution = result.get(0);
+        Label resolution = result.get(0);
         assertThat(resolution.getLabel()).hasSize(2);
         assertThat(resolution.getLabel().get(0).getLangue()).isEqualTo("fr");
         assertThat(resolution.getLabel().get(0).getContenu()).isEmpty();
