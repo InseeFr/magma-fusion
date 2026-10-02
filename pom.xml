@@ -48,11 +48,12 @@
         <version.maven-war-plugins>3.5.1</version.maven-war-plugins>
         <version.maven-jacoco>0.8.15</version.maven-jacoco>
         <argLine>-Xms256m -Xmx512m -ea -Dfile.encoding=UTF-8</argLine>
-
+<!--        surcharges Springboot-->
+        <jackson-2-bom.version>2.22.3</jackson-2-bom.version>
+        <jackson-bom.version>3.2.3</jackson-bom.version>
+<!--        fin surcharges Springboot-->
     </properties>
-
     <dependencyManagement>
-
         <dependencies>
             <!-- Modules de Magma -->
             <dependency>
@@ -65,7 +66,6 @@
                 <artifactId>magma-fusion-interface</artifactId>
                 <version>${revision}</version>
             </dependency>
-
             <dependency>
                 <groupId>fr.insee.rmes</groupId>
                 <artifactId>magma-fusion-oas</artifactId>
