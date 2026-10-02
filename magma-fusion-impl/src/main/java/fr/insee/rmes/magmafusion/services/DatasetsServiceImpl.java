@@ -3,10 +3,8 @@ package fr.insee.rmes.magmafusion.services;
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
-import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
-import fr.insee.rmes.magmafusion.utils.DatasetDTO;
-import fr.insee.rmes.magmafusion.utils.DistributionDTO;
-import fr.insee.rmes.magmafusion.utils.TemporalResolutionDTO;
+import fr.insee.rmes.magmafusion.utils.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -214,10 +212,16 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
 
         if (StringUtils.hasText(dto.temporalResolutions())) {
-            List<String> uristemporalResolution = List.of(dto.temporalResolutions().split(","));
-            List<Label> temporalResolutionList = getTemporalResolution(uristemporalResolution);
+            List<String> urisTemporalResolution = List.of(dto.temporalResolutions().split(","));
+            List<Label> temporalResolutionList = getTemporalResolution(urisTemporalResolution);
             dataSet.setTemporalResolution(temporalResolutionList);
             }
+
+        if (StringUtils.hasText(dto.spatialResolutions())) {
+            List<String> urisSpatialResolution = List.of(dto.spatialResolutions().split(","));
+            List<IdLabel> spatialResolutionList = getSpatialResolution(urisSpatialResolution);
+            dataSet.setSpatialResolution(spatialResolutionList);
+        }
 
         if (StringUtils.hasText(dto.spatialId())) {
             dataSet.setSpatial(new IdLabel()
@@ -303,9 +307,9 @@ public class DatasetsServiceImpl implements DatasetsService {
         return dataSet;
     }
 
-    List<Label> getTemporalResolution(List<String> uristemporalResolution) {
+    List<Label> getTemporalResolution(List<String> urisTemporalResolution) {
         List<Label> temporalResolution = new ArrayList<>();
-        for (String uri : uristemporalResolution) {
+        for (String uri : urisTemporalResolution) {
             TemporalResolutionDTO temporalResolutionContenu = this.requestProcessor.queryToFindTemporalResolutionContenu()
                     .with(DatasetsRequestParametizer.ofUri(uri))
                     .executeQuery()
@@ -320,6 +324,26 @@ public class DatasetsServiceImpl implements DatasetsService {
             temporalResolution.add(temporalResolutionLabel);
         }
         return temporalResolution;
+    }
+
+    List<IdLabel> getSpatialResolution(List<String> urisSpatialResolution) {
+        List<IdLabel> spatialResolution = new ArrayList<>();
+        for (String uri : urisSpatialResolution) {
+            SpatialResolutionDTO spatialResolutionContenu = this.requestProcessor.queryToFindSpatialResolutionContenu()
+                    .with(DatasetsRequestParametizer.ofUri(uri))
+                    .executeQuery()
+                    .singleResult(SpatialResolutionDTO.class)
+                    .result();
+            List<LocalisedContenu> spatialResolutionTitles = createList(
+                    createLangField(spatialResolutionContenu.labelspatialResolutionLg1(),"fr"),
+                    createLangField(spatialResolutionContenu.labelspatialResolutionLg2(),"en")
+            );
+            IdLabel spatialResolutionLabel = new IdLabel();
+            spatialResolutionLabel.setLabel(spatialResolutionTitles);
+            spatialResolutionLabel.setId(spatialResolutionContenu.spatialResolutionId());
+            spatialResolution.add(spatialResolutionLabel);
+        }
+        return spatialResolution;
     }
 
 

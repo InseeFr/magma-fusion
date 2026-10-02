@@ -46,6 +46,10 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(DATASET_TEMPORAL_RESOLUTION, this, unmarshaller);
     }
 
+    public ExecutableQueryBuilder queryToFindSpatialResolutionContenu() {
+        return new ExecutableQueryBuilder(DATASET_SPATIAL_RESOLUTION, this, unmarshaller);
+    }
+
     public ExecutableQueryBuilder queryToFindDistributionsByDatasetId() {
         return new ExecutableQueryBuilder(DISTRIBUTIONS_BY_DATASET_ID, this, unmarshaller);
     }
