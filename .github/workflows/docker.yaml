@@ -18,7 +18,7 @@ jobs:
       - uses: InseeFr/rmes-githubactions-commons/.github/actions/docker-publish@main
         with:
           image: inseefr/magma-fusion
-          dockerfile: Dockerfile.bauhaus
+          dockerfile: Dockerfile.magma-fusion
           latest: 'true'
           dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
