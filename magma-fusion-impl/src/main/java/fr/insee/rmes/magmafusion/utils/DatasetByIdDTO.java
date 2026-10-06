@@ -61,6 +61,7 @@ public record DatasetByIdDTO(
         String archiveUnits,
         String temporalResolutions,
         String spatialResolutions,
-        String statisticalUnits
+        String statisticalUnits,
+        String themes
 ) {
 }

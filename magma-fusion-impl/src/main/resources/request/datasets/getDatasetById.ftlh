@@ -24,7 +24,7 @@ SELECT DISTINCT
     ?numObservations ?numSeries
     (GROUP_CONCAT(DISTINCT CONCAT(?idCreator, "$", COALESCE(STR(?creatorLabelLg1), ""), "$", COALESCE(STR(?creatorLabelLg2), "")); separator="|") AS ?creators)
     (GROUP_CONCAT(DISTINCT STR(?wasGeneratedBy); separator=",") AS ?operationStat)
-    (GROUP_CONCAT(DISTINCT STR(?theme); separator=",") AS ?names)
+    (GROUP_CONCAT(DISTINCT STR(?theme); separator=",") AS ?themes)
     (GROUP_CONCAT(DISTINCT ?wasDerivedFromId; separator=",") AS ?wasDerivedFromS)
     (GROUP_CONCAT(DISTINCT STR(?relation); separator=",") AS ?relations)
     (GROUP_CONCAT(DISTINCT ?kwLg1; separator=",") AS ?keywordLg1)

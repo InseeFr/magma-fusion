@@ -226,8 +226,12 @@ public class DatasetsServiceImpl implements DatasetsService {
             List<String> urisStatisticalUnits = List.of(dto.statisticalUnits().split(","));
             List<IdLabel> statisticalUnitList = getStatisticalUnits(urisStatisticalUnits);
             dataSet.setStatisticalUnit(statisticalUnitList);
+        }
 
-
+        if (StringUtils.hasText(dto.themes())) {
+            List<String> urisThemes = List.of(dto.themes().split(","));
+            List<Theme> themesList = getThemes(urisThemes);
+            dataSet.setTheme(themesList);
         }
 
         if (StringUtils.hasText(dto.spatialId())) {
@@ -314,7 +318,8 @@ public class DatasetsServiceImpl implements DatasetsService {
         return dataSet;
     }
 
-    List<Label> getTemporalResolution(List<String> urisTemporalResolution) {
+
+    protected List<Label> getTemporalResolution(List<String> urisTemporalResolution) {
         List<Label> temporalResolution = new ArrayList<>();
         for (String uri : urisTemporalResolution) {
             TemporalResolutionDTO temporalResolutionContenu = this.requestProcessor.queryToFindTemporalResolutionContenu()
@@ -333,7 +338,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         return temporalResolution;
     }
 
-    List<IdLabel> getSpatialResolution(List<String> urisSpatialResolution) {
+    protected List<IdLabel> getSpatialResolution(List<String> urisSpatialResolution) {
         List<IdLabel> spatialResolution = new ArrayList<>();
         for (String uri : urisSpatialResolution) {
             SpatialResolutionDTO spatialResolutionContenu = this.requestProcessor.queryToFindSpatialResolutionContenu()
@@ -353,7 +358,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         return spatialResolution;
     }
 
-    List<IdLabel> getStatisticalUnits(List<String> urisStatisticalUnits) {
+    protected List<IdLabel> getStatisticalUnits(List<String> urisStatisticalUnits) {
         List<IdLabel> statisticalUnits = new ArrayList<>();
         for (String uri : urisStatisticalUnits) {
             StatisticalUnitDTO statisticalUnitsContenu = this.requestProcessor.queryToFindStatisticalUnits()
@@ -373,6 +378,25 @@ public class DatasetsServiceImpl implements DatasetsService {
         return statisticalUnits;
     }
 
+    protected List<Theme> getThemes(List<String> urisThemes) {
+        List<Theme> themes = new ArrayList<>();
+        for (String uri : urisThemes) {
+            ThemeDTO themeDTO = this.requestProcessor.queryToFindThemes()
+                    .with(DatasetsRequestParametizer.ofUri(uri))
+                    .executeQuery()
+                    .singleResult(ThemeDTO.class)
+                    .result();
+            List<LocalisedContenu> themeTitles = createList(
+                    createLangField(themeDTO.labelThemeLg1(),"fr"),
+                    createLangField(themeDTO.labelThemeLg2(),"en")
+            );
+            Theme themeLabel = new Theme();
+            themeLabel.setLabel(themeTitles);
+            themeLabel.setUri(themeDTO.uri());
+            themes.add(themeLabel);
+        }
+        return themes;
+    }
 
      @Override
      public List<Distribution> convertDistributionDTOsToDistributions(List<DistributionDTO> dtos) {
