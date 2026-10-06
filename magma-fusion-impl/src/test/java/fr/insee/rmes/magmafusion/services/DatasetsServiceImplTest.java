@@ -1,10 +1,12 @@
 package fr.insee.rmes.magmafusion.services;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
+import fr.insee.rmes.magmafusion.model.IdLabel;
 import fr.insee.rmes.magmafusion.model.Label;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
 import fr.insee.rmes.magmafusion.utils.DatasetDTO;
+import fr.insee.rmes.magmafusion.utils.SpatialResolutionDTO;
 import fr.insee.rmes.magmafusion.utils.TemporalResolutionDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -336,7 +338,7 @@ class DatasetsServiceImplTest {
     // =========================================================
 
     @Test
-    void getTemporalResolution_shouldReturnIdLabelsWithLocalisedTitles() {
+    void getTemporalResolution_shouldReturnLabelsWithLocalisedTitles() {
         // Given
         // 1. Crée les DTOs de résolution temporelle attendus (sans URI, juste les labels)
         TemporalResolutionDTO annualDto = new TemporalResolutionDTO(
@@ -473,6 +475,70 @@ class DatasetsServiceImplTest {
         assertThat(resolution.getLabel().get(1).getContenu()).isNull();
     }
 
+
+    // =========================================================
+    //   getSpatialResolution
+    // =========================================================
+
+    @Test
+    void getSpatialResolution_shouldReturnIdLabelsWithLocalisedTitles() {
+        // Given
+        // 1. Crée les DTOs de résolution temporelle attendus (sans URI, juste les labels)
+        SpatialResolutionDTO spatialResolution1Dto = new SpatialResolutionDTO(
+                "SpatialResolution1Id" , //id
+                "labelSpatialResolution1Lg1",  // labelSpatialResolutionLg1
+                "labelSpatialResolution1Lg2"     // labelSpatialResolutionLg2
+        );
+
+        SpatialResolutionDTO spatialResolution2Dto = new SpatialResolutionDTO(
+                "SpatialResolution2Id", //id
+                "labelSpatialResolution2Lg1",  // labelSpatialResolutionLg1
+                "labelSpatialResolution2Lg2"     // labelSpatialResolutionLg2
+        );
+
+        // 2. Mock le RequestProcessor avec RETURNS_DEEP_STUBS
+        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+
+        // 3. Configure le comportement : premier appel → spatialResolution1Dto, second appel → spatialResolution2Dto
+        when(mockProcessor.queryToFindSpatialResolutionContenu()
+                .with(any(DatasetsRequestParametizer.class))
+                .executeQuery()
+                .singleResult(SpatialResolutionDTO.class)
+                .result())
+                .thenReturn(spatialResolution1Dto)
+                .thenReturn(spatialResolution2Dto);
+
+        // 4. Crée le service avec le mock
+        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+
+        // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getSpatialResolution reçoit des URIs en entrée)
+        List<String> uris = List.of(
+                "http://bauhaus/codes/frequence/A",
+                "http://bauhaus/codes/frequence/M"
+        );
+
+        // When
+        List<IdLabel> result = service.getSpatialResolution(uris);
+
+        // Then
+        assertThat(result).hasSize(2);
+
+        // Vérifie le premier IdLabel (pour "A")
+        IdLabel firstResolution = result.get(0);
+        assertThat(firstResolution.getLabel()).hasSize(2);
+        assertThat(firstResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(firstResolution.getLabel().get(0).getContenu()).isEqualTo("labelSpatialResolution1Lg1");
+        assertThat(firstResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(firstResolution.getLabel().get(1).getContenu()).isEqualTo("labelSpatialResolution1Lg2");
+
+        // Vérifie le second IdLabel (pour "M")
+        IdLabel secondResolution = result.get(1);
+        assertThat(secondResolution.getLabel()).hasSize(2);
+        assertThat(secondResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(secondResolution.getLabel().get(0).getContenu()).isEqualTo("labelSpatialResolution2Lg1");
+        assertThat(secondResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(secondResolution.getLabel().get(1).getContenu()).isEqualTo("labelSpatialResolution2Lg2");
+    }
 
 
 
