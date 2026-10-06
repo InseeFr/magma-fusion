@@ -1,11 +1,11 @@
 SELECT DISTINCT
-?spatialResolutionId ?labelspatialResolutionLg1 ?labelspatialResolutionLg2
+?spatialResolutionId ?labelSpatialResolutionLg1 ?labelSpatialResolutionLg2
 FROM <${CODELIST_GRAPH}>
 
 WHERE {
     <${uri}> skos:notation ?spatialResolutionId .
-    <${uri}> skos:prefLabel ?labelspatialResolutionLg1 .
-    FILTER (lang(?labelspatialResolutionLg1) = '${LG1}') .
-    <${uri}> skos:prefLabel ?labelspatialResolutionLg2 .
-    FILTER (lang(?labelspatialResolutionLg2) = '${LG2}') .
+    <${uri}> skos:prefLabel ?labelSpatialResolutionLg1 .
+    FILTER (lang(?labelSpatialResolutionLg1) = '${LG1}') .
+    <${uri}> skos:prefLabel ?labelSpatialResolutionLg2 .
+    FILTER (lang(?labelSpatialResolutionLg2) = '${LG2}') .
 }

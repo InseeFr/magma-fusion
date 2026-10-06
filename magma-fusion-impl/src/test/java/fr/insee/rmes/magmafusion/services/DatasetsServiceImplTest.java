@@ -588,7 +588,7 @@ class DatasetsServiceImplTest {
                 "http://archive/unit1",          // archiveUnits
                 null,
                 null,   // temporalResolutions, spatialResolutions
-                null,null
+                null
         );
     }
 
@@ -618,7 +618,7 @@ class DatasetsServiceImplTest {
                 null, null, null, null,
                 null, null, null,
                 null, null, null,
-                null,null
+                null
         );
     }
 
@@ -634,7 +634,7 @@ class DatasetsServiceImplTest {
                 null, null, null, null, null,
                 creators,
                 null, null, null, null, null, null, null, null, null,
-                null, null
+                null
         );
     }
 }

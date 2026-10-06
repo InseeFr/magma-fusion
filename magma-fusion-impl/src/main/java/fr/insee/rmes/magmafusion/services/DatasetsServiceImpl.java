@@ -342,8 +342,8 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .singleResult(SpatialResolutionDTO.class)
                     .result();
             List<LocalisedContenu> spatialResolutionTitles = createList(
-                    createLangField(spatialResolutionContenu.labelspatialResolutionLg1(),"fr"),
-                    createLangField(spatialResolutionContenu.labelspatialResolutionLg2(),"en")
+                    createLangField(spatialResolutionContenu.labelSpatialResolutionLg1(),"fr"),
+                    createLangField(spatialResolutionContenu.labelSpatialResolutionLg2(),"en")
             );
             IdLabel spatialResolutionLabel = new IdLabel();
             spatialResolutionLabel.setLabel(spatialResolutionTitles);

@@ -8,43 +8,43 @@
   "identifier": "DD_DATASET_TEST",
   "validationState": "Provisoire, jamais publiée",
   "title": [
-    {"langue": "fr", "contenu": "Titre du dataset test"},
-    {"langue": "en", "contenu": "Dataset Test Title"}
+    {"contenu": "Titre du dataset test","langue": "fr" },
+    {"contenu": "Dataset Test Title","langue": "en" }
   ],
   "temporalResolution": [
     {"label": [
-      {"langue": "fr", "contenu": "temporalResolution1 du dataset test"},
-      {"langue": "en", "contenu": "temporalResolution1 of test dataset"}
+      {"contenu": "temporalResolution1 du dataset test", "langue": "fr" },
+      {"contenu": "temporalResolution1 of test dataset", "langue": "en" }
     ]},
     {"label": [
-      {"langue": "fr", "contenu": "temporalResolution2 du dataset test"},
-      {"langue": "en", "contenu": "temporalResolution2 of test dataset"}
+      {"contenu": "temporalResolution2 du dataset test","langue": "fr" },
+      {"contenu": "temporalResolution2 of test dataset","langue": "en" }
     ]}
   ],
   "spatialResolution": [
     {
       "id": "SR1",
       "label": [
-      {"langue": "fr", "contenu": "spatialResolution1 du dataset test"},
-      {"langue": "en", "contenu": "spatialResolution1 of test dataset"}
+      {"contenu": "spatialResolution1 du dataset test","langue": "fr" },
+      {"contenu": "spatialResolution1 of test dataset", "langue": "en" }
     ]},
     {
       "id": "SR2",
       "label": [
-      {"langue": "fr", "contenu": "spatialResolution2 du dataset test"},
-      {"langue": "en", "contenu": "spatialResolution2 of test dataset"}
+      {"contenu": "spatialResolution2 du dataset test", "langue": "fr" },
+      {"contenu": "spatialResolution2 of test dataset", "langue": "en" }
     ]}
   ],
   "abstract": [
-    {"langue": "fr", "contenu": "Résumé du dataset test"},
+    {"contenu": "Résumé du dataset test", "langue": "fr" },
     {"langue": "en"}
   ],
   "description": [
-    {"langue": "fr", "contenu": "Description du dataset test"},
+    {"contenu": "Description du dataset test", "langue": "fr" },
     {"langue": "en"}
   ],
   "scopeNote": [
-    {"langue": "fr", "contenu": "Note de portée du dataset test"},
+    {"contenu": "Note de portée du dataset test", "langue": "fr" },
     {"langue": "en"}
   ],
   "wasGeneratedBy": [
