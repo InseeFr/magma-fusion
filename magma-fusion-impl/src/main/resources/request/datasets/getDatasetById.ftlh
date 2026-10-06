@@ -32,6 +32,7 @@ SELECT DISTINCT
     (GROUP_CONCAT(DISTINCT STR(?archiveUnit); separator=",") AS ?archiveUnits)
     (GROUP_CONCAT(DISTINCT STR(?temporalResolution); separator=",") AS ?temporalResolutions)
     (GROUP_CONCAT(DISTINCT STR(?spatialResolution); separator=",") AS ?spatialResolutions)
+    (GROUP_CONCAT(DISTINCT STR(?statisticalUnit); separator=",") AS ?statisticalUnits)
 FROM <${DATASETS_GRAPH}>
 FROM <${ORGANISATIONS_GRAPH}>
 FROM <${ORGANISATIONS_GRAPH}/insee>
@@ -70,6 +71,7 @@ WHERE {
     OPTIONAL { ?dataset insee:spatialResolution ?spatialResolution }
     OPTIONAL { ?dataset adms:identifier ?ident . ?ident skos:notation ?identifier }
     OPTIONAL { ?dataset insee:archiveUnit ?archiveUnit }
+	OPTIONAL { ?dataset insee:statisticalUnit ?statisticalUnit }
 
     OPTIONAL {
         ?dataset ^foaf:primaryTopic ?catalogRecord .
@@ -176,3 +178,4 @@ GROUP BY
     ?spatialId ?labelspatialLg1 ?labelspatialLg2
     ?codeProcessStep ?disseminationStatus ?identifier
     ?structureUri ?structureId ?dsd ?isDataStructureDefinition
+    ?statisticalUnit

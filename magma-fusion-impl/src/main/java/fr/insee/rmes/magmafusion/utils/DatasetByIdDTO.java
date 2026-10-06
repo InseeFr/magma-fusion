@@ -60,6 +60,7 @@ public record DatasetByIdDTO(
         String keywordLg2,
         String archiveUnits,
         String temporalResolutions,
-        String spatialResolutions
+        String spatialResolutions,
+        String statisticalUnits
 ) {
 }

@@ -4,7 +4,6 @@ import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -223,6 +222,14 @@ public class DatasetsServiceImpl implements DatasetsService {
             dataSet.setSpatialResolution(spatialResolutionList);
         }
 
+        if (StringUtils.hasText(dto.statisticalUnits())) {
+            List<String> urisStatisticalUnits = List.of(dto.statisticalUnits().split(","));
+            List<IdLabel> statisticalUnitList = getStatisticalUnits(urisStatisticalUnits);
+            dataSet.setStatisticalUnit(statisticalUnitList);
+
+
+        }
+
         if (StringUtils.hasText(dto.spatialId())) {
             dataSet.setSpatial(new IdLabel()
                     .id(dto.spatialId())
@@ -344,6 +351,26 @@ public class DatasetsServiceImpl implements DatasetsService {
             spatialResolution.add(spatialResolutionLabel);
         }
         return spatialResolution;
+    }
+
+    List<IdLabel> getStatisticalUnits(List<String> urisStatisticalUnits) {
+        List<IdLabel> statisticalUnits = new ArrayList<>();
+        for (String uri : urisStatisticalUnits) {
+            StatisticalUnitDTO statisticalUnitsContenu = this.requestProcessor.queryToFindStatisticalUnits()
+                    .with(DatasetsRequestParametizer.ofUri(uri))
+                    .executeQuery()
+                    .singleResult(StatisticalUnitDTO.class)
+                    .result();
+            List<LocalisedContenu> statisticalUnitTitles = createList(
+                    createLangField(statisticalUnitsContenu.labelStatisticalUnitLg1(),"fr"),
+                    createLangField(statisticalUnitsContenu.labelStatisticalUnitLg2(),"en")
+            );
+            IdLabel statisticalUnitLabel = new IdLabel();
+            statisticalUnitLabel.setLabel(statisticalUnitTitles);
+            statisticalUnitLabel.setId(statisticalUnitsContenu.statisticalUnitId());
+            statisticalUnits.add(statisticalUnitLabel);
+        }
+        return statisticalUnits;
     }
 
 

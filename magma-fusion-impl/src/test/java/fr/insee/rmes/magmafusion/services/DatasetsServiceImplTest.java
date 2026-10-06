@@ -587,7 +587,8 @@ class DatasetsServiceImplTest {
                 "emploi,chômage", "employment",  // keywordLg1, keywordLg2
                 "http://archive/unit1",          // archiveUnits
                 null,
-                null   // temporalResolutions, spatialResolutions
+                null,   // temporalResolutions, spatialResolutions
+                null,null
         );
     }
 
@@ -616,7 +617,8 @@ class DatasetsServiceImplTest {
                 null, null,
                 null, null, null, null,
                 null, null, null,
-                null, null, null
+                null, null, null,
+                null,null
         );
     }
 
@@ -631,7 +633,8 @@ class DatasetsServiceImplTest {
                 null, null, null, null, null, null, null, null,
                 null, null, null, null, null,
                 creators,
-                null, null, null, null, null, null, null, null, null
+                null, null, null, null, null, null, null, null, null,
+                null, null
         );
     }
 }
