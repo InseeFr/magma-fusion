@@ -27,13 +27,15 @@
       "label": [
       {"contenu": "spatialResolution1 du dataset test","langue": "fr" },
       {"contenu": "spatialResolution1 of test dataset", "langue": "en" }
-    ]},
+    ]
+    },
     {
       "id": "SR2",
       "label": [
       {"contenu": "spatialResolution2 du dataset test", "langue": "fr" },
       {"contenu": "spatialResolution2 of test dataset", "langue": "en" }
-    ]}
+    ]
+    }
   ],
   "statisticalUnit": [
     {
@@ -41,13 +43,31 @@
       "label": [
         {"contenu": "statisticalUnit1 du dataset test","langue": "fr" },
         {"contenu": "statisticalUnit1 of test dataset", "langue": "en" }
-      ]},
+      ]
+    },
     {
       "id": "SU2",
       "label": [
         {"contenu": "statisticalUnit2 du dataset test", "langue": "fr" },
         {"contenu": "statisticalUnit2 of test dataset", "langue": "en" }
-      ]}
+      ]
+    }
+  ],
+  "theme": [
+    {
+      "uri": "http://bauhaus/theme/1",
+      "label": [
+        {"contenu": "theme1 du dataset test","langue": "fr" },
+        {"contenu": "theme1 of test dataset", "langue": "en" }
+      ]
+    },
+    {
+      "uri": "http://bauhaus/theme/2",
+      "label": [
+        {"contenu": "theme2 du dataset test","langue": "fr" },
+        {"contenu": "theme2 of test dataset", "langue": "en" }
+        ]
+    }
   ],
   "abstract": [
     {"contenu": "Résumé du dataset test", "langue": "fr" },

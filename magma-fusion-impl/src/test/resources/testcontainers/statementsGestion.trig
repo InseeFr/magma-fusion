@@ -224,6 +224,8 @@
         insee:spatialResolution <http://bauhaus/spatialResolution/2>;
         insee:statisticalUnit <http://bauhaus/statisticalUnit/1>;
         insee:statisticalUnit <http://bauhaus/statisticalUnit/2>;
+        dcat:theme <http://bauhaus/theme/1>;
+        dcat:theme <http://bauhaus/theme/2>;
         dcat:distribution <http://bauhaus/catalogues/distribution/idDistributionTest> .
 
     <http://bauhaus/catalogues/distribution/idDistributionTest>
@@ -453,6 +455,19 @@
                 skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
                 skos:prefLabel "statisticalUnit2 du dataset test"@fr ;
                 skos:prefLabel "statisticalUnit2 of test dataset"@en .
+
+}
+
+<http://rdf.insee.fr/graphes/concepts> {
+    <http://bauhaus/theme/1>
+        skos:inScheme <http://bauhaus/concepts/themes> ;
+        skos:prefLabel "theme1 du dataset test"@fr ;
+        skos:prefLabel "theme1 of test dataset"@en .
+
+    <http://bauhaus/theme/2>
+         skos:inScheme <http://bauhaus/concepts/themes> ;
+         skos:prefLabel "theme2 du dataset test"@fr ;
+         skos:prefLabel "theme2 of test dataset"@en .
 }
 
 <http://rdf.insee.fr/graphes/qualite/territoires> {
