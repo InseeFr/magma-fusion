@@ -35,6 +35,20 @@
       {"contenu": "spatialResolution2 of test dataset", "langue": "en" }
     ]}
   ],
+  "statisticalUnit": [
+    {
+      "id": "SU1",
+      "label": [
+        {"contenu": "statisticalUnit1 du dataset test","langue": "fr" },
+        {"contenu": "statisticalUnit1 of test dataset", "langue": "en" }
+      ]},
+    {
+      "id": "SU2",
+      "label": [
+        {"contenu": "statisticalUnit2 du dataset test", "langue": "fr" },
+        {"contenu": "statisticalUnit2 of test dataset", "langue": "en" }
+      ]}
+  ],
   "abstract": [
     {"contenu": "Résumé du dataset test", "langue": "fr" },
     {"langue": "en"}

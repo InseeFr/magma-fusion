@@ -178,4 +178,3 @@ GROUP BY
     ?spatialId ?labelspatialLg1 ?labelspatialLg2
     ?codeProcessStep ?disseminationStatus ?identifier
     ?structureUri ?structureId ?dsd ?isDataStructureDefinition
-    ?statisticalUnit
