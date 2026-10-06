@@ -1,7 +1,6 @@
 package fr.insee.rmes.magmafusion.services;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
-import fr.insee.rmes.magmafusion.model.IdLabel;
 import fr.insee.rmes.magmafusion.model.Label;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;

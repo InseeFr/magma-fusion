@@ -21,6 +21,20 @@
       {"langue": "en", "contenu": "temporalResolution2 of test dataset"}
     ]}
   ],
+  "spatialResolution": [
+    {
+      "id": "SR1",
+      "label": [
+      {"langue": "fr", "contenu": "spatialResolution1 du dataset test"},
+      {"langue": "en", "contenu": "spatialResolution1 of test dataset"}
+    ]},
+    {
+      "id": "SR2",
+      "label": [
+      {"langue": "fr", "contenu": "spatialResolution2 du dataset test"},
+      {"langue": "en", "contenu": "spatialResolution2 of test dataset"}
+    ]}
+  ],
   "abstract": [
     {"langue": "fr", "contenu": "Résumé du dataset test"},
     {"langue": "en"}
