@@ -50,10 +50,6 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(DATASET_SPATIAL_RESOLUTION, this, unmarshaller);
     }
 
-//    public ExecutableQueryBuilder queryToFindStatisticalNames() {
-//        return new ExecutableQueryBuilder(DATASET_STATISTICAL_NAMES, this, unmarshaller);
-//    }
-
     public ExecutableQueryBuilder queryToFindStatisticalUnits() {
         return new ExecutableQueryBuilder(DATASET_DATASET_STATISTICAL, this, unmarshaller);
     }
