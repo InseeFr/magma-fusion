@@ -12,6 +12,10 @@ public record DatasetsRequestParametizer(String id, String uri, String date) imp
         return new DatasetsRequestParametizer(null, null, date);
     }
 
+    public static DatasetsRequestParametizer ofId(String id){
+        return new DatasetsRequestParametizer(id, null, null);
+    }
+
     // for getDatasetByIdTemporalResolution
     public static DatasetsRequestParametizer ofUri(String uri){
         return new DatasetsRequestParametizer(null, uri, null);
