@@ -1,7 +1,7 @@
 SELECT DISTINCT ?uri ?intituleFr ?intituleEn
 ?definitionFr ?definitionEn ?noteEditorialeFr ?noteEditorialeEn ?scopeNoteFr ?scopeNoteEn
  ?dateMiseAJour ?dateCreation ?dateFinDeValidite ?hasLink ?hasIntitulesAlternatifs ?id
-FROM <${CONCEPTS_GRAPH}>
+FROM <${CONCEPTS_DEFINITIONS_GRAPH}>
 WHERE {
 			BIND("${id}" AS ?id) .
 			?uri skos:inScheme ?uriScheme .

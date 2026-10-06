@@ -51,7 +51,11 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
     }
 
     public ExecutableQueryBuilder queryToFindStatisticalUnits() {
-        return new ExecutableQueryBuilder(DATASET_DATASET_STATISTICAL, this, unmarshaller);
+        return new ExecutableQueryBuilder(DATASET_STATISTICAL, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindThemes() {
+        return new ExecutableQueryBuilder(DATASET_THEMES, this, unmarshaller);
     }
 
     public ExecutableQueryBuilder queryToFindDistributionsByDatasetId() {

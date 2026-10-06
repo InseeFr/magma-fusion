@@ -24,7 +24,8 @@ public class MagmaConfig {
     public Configuration freemarkerConfiguration
             (@Value("${fr.insee.rmes.magmafusion.api.freemarker.locale-language:fr}") String localLanguage,
             @Value("${fr.insee.rmes.magmafusion.baseGraph:http://rdf.insee.fr/graphes/}") String baseGraph,
-             @Value("${fr.insee.rmes.magmafusion.concepts.graph:concepts}") String conceptsGraph,
+            @Value("${fr.insee.rmes.magmafusion.concepts.graph:concepts}") String conceptsDefinitionsGraph,
+            @Value("${fr.insee.rmes.magmafusion.concepts.baseURI:concepts}") String conceptsGraph,
             @Value("${fr.insee.rmes.magmafusion.codeLists.graph:codes}") String codeListsGraph,
             @Value("${fr.insee.rmes.magmafusion.structures.graph:structures}") String structuresGraph,
             @Value("${fr.insee.rmes.magmafusion.datasets.graph:datasets}") String datasetsGraph,
@@ -52,6 +53,7 @@ public class MagmaConfig {
 
         configuration.setWrapUncheckedExceptions(true);
 
+        configuration.setSharedVariable("CONCEPTS_DEFINITIONS_GRAPH", baseGraph + conceptsDefinitionsGraph);
         configuration.setSharedVariable("CONCEPTS_GRAPH", baseGraph + conceptsGraph);
         configuration.setSharedVariable("CODELIST_GRAPH", baseGraph + codeListsGraph);
         configuration.setSharedVariable("STRUCTURES_GRAPH", baseGraph + structuresGraph);
