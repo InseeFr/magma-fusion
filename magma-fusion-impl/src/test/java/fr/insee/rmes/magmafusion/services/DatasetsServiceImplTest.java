@@ -4,10 +4,7 @@ import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.IdLabel;
 import fr.insee.rmes.magmafusion.model.Label;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
-import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
-import fr.insee.rmes.magmafusion.utils.DatasetDTO;
-import fr.insee.rmes.magmafusion.utils.SpatialResolutionDTO;
-import fr.insee.rmes.magmafusion.utils.TemporalResolutionDTO;
+import fr.insee.rmes.magmafusion.utils.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -81,7 +78,35 @@ class DatasetsServiceImplTest {
                 () -> assertEquals("DG75-L201", result.getCatalogRecordCreator()),
                 () -> assertEquals("DG75-L201", result.getCatalogRecordContributor()),
                 () -> assertEquals("2024-12-09T12:00:00", result.getCatalogRecordCreated()),
-                () -> assertEquals("2024-12-09T12:00:00", result.getCatalogRecordModified())
+                () -> assertEquals("2024-12-09T12:00:00", result.getCatalogRecordModified()),
+
+                () -> assertEquals("label Type FR", result.getType().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getType().getFirst().getLangue()),
+                () -> assertEquals("label Type EN", result.getType().get(1).getContenu()),
+                () -> assertEquals("en", result.getType().get(1).getLangue()),
+
+                () -> assertEquals("label Access Rights FR", result.getAccessRights().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getAccessRights().getFirst().getLangue()),
+                () -> assertEquals("label Access Rights EN", result.getAccessRights().get(1).getContenu()),
+                () -> assertEquals("en", result.getAccessRights().get(1).getLangue()),
+
+                () -> assertEquals("label Condidentiality Status FR", result.getConfidentialityStatus().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getConfidentialityStatus().getFirst().getLangue()),
+                () -> assertEquals("label Condidentiality Status EN", result.getConfidentialityStatus().get(1).getContenu()),
+                () -> assertEquals("en", result.getConfidentialityStatus().get(1).getLangue()),
+
+                () -> assertEquals("label Accrual Periodicity FR", result.getAccrualPeriodicity().getLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getAccrualPeriodicity().getLabel().getFirst().getLangue()),
+                () -> assertEquals("label Accrual Periodicity EN", result.getAccrualPeriodicity().getLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getAccrualPeriodicity().getLabel().get(1).getLangue()),
+
+                () -> assertEquals("dissemination status", result.getDisseminationStatus()),
+
+                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
+                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
+                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
+                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
+                () -> assertEquals("2025-01-01", result.getSpatialTemporal())
         );
     }
 
@@ -483,7 +508,7 @@ class DatasetsServiceImplTest {
     @Test
     void getSpatialResolution_shouldReturnIdLabelsWithLocalisedTitles() {
         // Given
-        // 1. Crée les DTOs de résolution temporelle attendus (sans URI, juste les labels)
+        // 1. Crée les DTOs de résolution spatiale attendus (sans URI, juste les labels)
         SpatialResolutionDTO spatialResolution1Dto = new SpatialResolutionDTO(
                 "SpatialResolution1Id" , //id
                 "labelSpatialResolution1Lg1",  // labelSpatialResolutionLg1
@@ -540,6 +565,69 @@ class DatasetsServiceImplTest {
         assertThat(secondResolution.getLabel().get(1).getContenu()).isEqualTo("labelSpatialResolution2Lg2");
     }
 
+    // =========================================================
+    //   getStatistiaclUnits
+    // =========================================================
+
+    @Test
+    void getStaitsticalUnits_shouldReturnIdLabelsWithLocalisedTitles() {
+        // Given
+        // 1. Crée les DTOs de statistical units attendus (sans URI, juste les labels)
+        StatisticalUnitDTO statisticalUnit1DTO = new StatisticalUnitDTO(
+                "statisticalUnit1Id" , //id
+                "labelStatisticalUnit1Lg1",
+                "labelStatisticalUnit1Lg2"
+        );
+
+        StatisticalUnitDTO statisticalUnit2DTO = new StatisticalUnitDTO(
+                "statisticalUnit2DTO", //id
+                "labelStatisticalUnit2Lg1",
+                "labelStatisticalUnit2Lg2"
+        );
+
+        // 2. Mock le RequestProcessor avec RETURNS_DEEP_STUBS
+        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+
+        // 3. Configure le comportement : premier appel → statisticalUnit1DTO, second appel → statisticalUnit2DTO
+        when(mockProcessor.queryToFindStatisticalUnits()
+                .with(any(DatasetsRequestParametizer.class))
+                .executeQuery()
+                .singleResult(StatisticalUnitDTO.class)
+                .result())
+                .thenReturn(statisticalUnit1DTO)
+                .thenReturn(statisticalUnit2DTO);
+
+        // 4. Crée le service avec le mock
+        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+
+        // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getSpatialResolution reçoit des URIs en entrée)
+        List<String> uris = List.of(
+                "http://uriStatisticalUnit1",
+                "http://uriStatisticalUnit2"
+        );
+
+        // When
+        List<IdLabel> result = service.getStatisticalUnits(uris);
+
+        // Then
+        assertThat(result).hasSize(2);
+
+        // Vérifie le premier IdLabel (pour "A")
+        IdLabel firstStatiticalUnit = result.get(0);
+        assertThat(firstStatiticalUnit.getLabel()).hasSize(2);
+        assertThat(firstStatiticalUnit.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(firstStatiticalUnit.getLabel().get(0).getContenu()).isEqualTo("labelStatisticalUnit1Lg1");
+        assertThat(firstStatiticalUnit.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(firstStatiticalUnit.getLabel().get(1).getContenu()).isEqualTo("labelStatisticalUnit1Lg2");
+
+        // Vérifie le second IdLabel (pour "M")
+        IdLabel secondStatiticalUnit = result.get(1);
+        assertThat(secondStatiticalUnit.getLabel()).hasSize(2);
+        assertThat(secondStatiticalUnit.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(secondStatiticalUnit.getLabel().get(0).getContenu()).isEqualTo("labelStatisticalUnit2Lg1");
+        assertThat(secondStatiticalUnit.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(secondStatiticalUnit.getLabel().get(1).getContenu()).isEqualTo("labelStatisticalUnit2Lg2");
+    }
 
 
     // =========================================================
@@ -564,18 +652,18 @@ class DatasetsServiceImplTest {
                 "2024-11-01",                    // modified
                 "2023-05-15",                    // issued
                 "2.0",                           // version
-                null,                            // spatialTemporal
+                "2025-01-01",                            // spatialTemporal
                 "2010",                          // startPeriod
                 "2024",                          // endPeriod
                 "Dérivé de FR", "Derived from EN", // derivedDescriptionLg1, derivedDescriptionLg2
                 "DG75-F001", "Éditeur FR", "Publisher EN", // idPublisher, labelPublisherLg1, labelPublisherLg2
-                null, null,                      // labeltypeLg1, labeltypeLg2
-                null, null,                      // labelaccessRightsLg1, labelaccessRightsLg2
-                null, null,                      // labelconfidentialityStatusLg1, labelconfidentialityStatusLg2
-                null, null,                      // labelaccrualPeriodicityLg1, labelaccrualPeriodicityLg2
+                "label Type FR", "label Type EN",                      // labeltypeLg1, labeltypeLg2
+                "label Access Rights FR", "label Access Rights EN",                      // labelaccessRightsLg1, labelaccessRightsLg2
+                "label Condidentiality Status FR", "label Condidentiality Status EN",                      // labelconfidentialityStatusLg1, labelconfidentialityStatusLg2
+                "label Accrual Periodicity FR", "label Accrual Periodicity EN",                      // labelaccrualPeriodicityLg1, labelaccrualPeriodicityLg2
                 "France", "France métropolitaine", "Metropolitan France", // spatialId, labelspatialLg1, labelspatialLg2
-                null,                            // codeProcessStep
-                null,                            // disseminationStatus
+                "code process",                            // codeProcessStep
+                "dissemination status",                            // disseminationStatus
                 "DD_EEC_SERIES",                 // identifier
                 "http://bauhaus/dsd/dsd1000", "dsd1000", "DSD_1000", null, // structureUri, structureId, dsd, isDataStructureDefinition
                 "42000", "12",                   // numObservations, numSeries
@@ -586,9 +674,9 @@ class DatasetsServiceImplTest {
                 "http://ds/related1,http://ds/related2", // relations
                 "emploi,chômage", "employment",  // keywordLg1, keywordLg2
                 "http://archive/unit1",          // archiveUnits
-                null,
-                null,   // temporalResolutions, spatialResolutions
-                null
+                null, // temporalResolutions
+                null,   // spatialResolutions
+                null  //statiticalUnits
         );
     }
 
