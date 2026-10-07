@@ -43,7 +43,7 @@ class DatasetsServiceImplTest {
     // =========================================================
 
     @Test
-    void should_map_list_of_dtos_to_datasets() {
+    void should_map_list_of_dtos_to_datasets() throws IOException, JSONException {
         var dtos = List.of(
                 new DatasetDTO("id1", "http://bauhaus/ds/id1", "Titre 1 FR", "Title 1 EN",
                         LocalDate.of(2024, 1, 10), "Publiée", LocalDate.of(2023, 6, 1)),
@@ -53,22 +53,17 @@ class DatasetsServiceImplTest {
 
         var result = service.convertDatasetDTOsToDataSets(dtos);
 
-        assertAll(
-                () -> assertEquals(2, result.size()),
-                () -> assertEquals("id1", result.get(0).getId()),
-                () -> assertEquals("http://bauhaus/ds/id1", result.get(0).getUri()),
-                () -> assertEquals("Publiée", result.get(0).getValidationState()),
-                () -> assertEquals("2024-01-10", result.get(0).getCatalogRecordModified()),
-                () -> assertEquals("2023-06-01", result.get(0).getCatalogRecordCreated()),
-                () -> assertEquals(2, result.get(0).getTitle().size()),
-                () -> assertEquals("fr", result.get(0).getTitle().getFirst().getLangue()),
-                () -> assertEquals("Titre 1 FR", result.get(0).getTitle().getFirst().getContenu()),
-                () -> assertEquals("en", result.get(0).getTitle().get(1).getLangue()),
-                () -> assertEquals("Title 1 EN", result.get(0).getTitle().get(1).getContenu()),
-                () -> assertEquals("id2", result.get(1).getId()),
-                () -> assertNull(result.get(1).getCatalogRecordModified()),
-                () -> assertNull(result.get(1).getCatalogRecordCreated())
+        assertNotNull(result, "Result should not be null");
+
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("services/datasets-list-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, JSONCompareMode.LENIENT);
+
     }
 
     // =========================================================
@@ -83,38 +78,14 @@ class DatasetsServiceImplTest {
         String data = objectMapper.writeValueAsString(result);
         String expected = new String(
                 Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("services/dataset-expected.json"))
+                                .getResourceAsStream("services/full-dataset-expected.json"))
                         .readAllBytes(),
                 StandardCharsets.UTF_8
         );
         JSONAssert.assertEquals(expected, data, JSONCompareMode.LENIENT);
     }
 
-    @Test
-    void should_map_multilingual_labels() {
-        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
-
-        assertAll(
-                () -> assertEquals(2, result.getTitle().size()),
-                () -> assertEquals("fr", result.getTitle().getFirst().getLangue()),
-                () -> assertEquals("Titre FR", result.getTitle().getFirst().getContenu()),
-                () -> assertEquals("en", result.getTitle().get(1).getLangue()),
-                () -> assertEquals("Title EN", result.getTitle().get(1).getContenu()),
-
-                () -> assertEquals("Sous-titre FR", result.getSubtitle().getFirst().getContenu()),
-                () -> assertEquals("Subtitle EN", result.getSubtitle().get(1).getContenu()),
-
-                () -> assertEquals("Résumé FR", result.getAbstract().getFirst().getContenu()),
-                () -> assertEquals("Abstract EN", result.getAbstract().get(1).getContenu()),
-
-                () -> assertEquals("Description FR", result.getDescription().getFirst().getContenu()),
-                () -> assertEquals("Description EN", result.getDescription().get(1).getContenu()),
-
-                () -> assertEquals("Note FR", result.getScopeNote().getFirst().getContenu()),
-                () -> assertEquals("Note EN", result.getScopeNote().get(1).getContenu())
-        );
-    }
-
+   
     @Test
     void should_map_landingPage_when_present() {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
