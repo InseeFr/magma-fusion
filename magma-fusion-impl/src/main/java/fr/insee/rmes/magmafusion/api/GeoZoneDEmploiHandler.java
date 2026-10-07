@@ -1,59 +1,58 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
-import fr.insee.rmes.magmafusion.model.BassinDeVie2022;
 import fr.insee.rmes.magmafusion.model.TerritoireTousAttributs;
-import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsBassinDeVie;
+import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsZoneDEmploi;
+import fr.insee.rmes.magmafusion.model.ZoneDEmploi2020;
 import fr.insee.rmes.magmafusion.queries.parameters.AscendantsDescendantsRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.TerritoireEtoileRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.TerritoireRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.TerritoriesFilterUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
-@RestController
-public class GeoBassinDeVieEndpoints implements GeoBassinDeVieApi {
+@Component
+public class GeoZoneDEmploiHandler {
 
     private final RequestProcessor requestProcessor;
     private final TerritoriesFilterUtils territoriesFilterUtils;
 
-    public GeoBassinDeVieEndpoints(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
+    public GeoZoneDEmploiHandler(RequestProcessor requestProcessor, TerritoriesFilterUtils territoriesFilterUtils) {
         this.requestProcessor = requestProcessor;
         this.territoriesFilterUtils = territoriesFilterUtils;
     }
 
-    @Override
-    public ResponseEntity<BassinDeVie2022> getcogbass(String code, LocalDate date) {
+    public ResponseEntity<ZoneDEmploi2020> get(String code, LocalDate date) {
         return requestProcessor.queryforFindTerritoire()
-                .with(new TerritoireRequestParametizer(code, date, BassinDeVie2022.class, "none"))
+                .with(new TerritoireRequestParametizer(code, date, ZoneDEmploi2020.class, "none"))
                 .executeQuery()
-                .singleResult(BassinDeVie2022.class).toResponseEntity();
+                .singleResult(ZoneDEmploi2020.class)
+                .toResponseEntity();
+
     }
 
-    @Override
-    public ResponseEntity<List<TerritoireTousAttributs>>  getcogbassdes (String code, LocalDate date, TypeEnumDescendantsBassinDeVie type) {
+
+    public ResponseEntity<List<TerritoireTousAttributs>>  descendants(String code, LocalDate date, TypeEnumDescendantsZoneDEmploi type) {
         String territoriesFilter = this.territoriesFilterUtils.defineTerritoriesFilter(type);
         return requestProcessor.queryforFindAscendantsDescendants()
-                .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, BassinDeVie2022.class, false))
+                .with(new AscendantsDescendantsRequestParametizer(code, date, territoriesFilter, ZoneDEmploi2020.class, false))
                 .executeQuery()
                 .listResult(TerritoireTousAttributs.class)
                 .toResponseEntity();
     }
 
-    @Override
-    public ResponseEntity<List<BassinDeVie2022>> getcogbassliste (String date, String filtreNom) {
-        String finalFiltreNom = filtreNom == null ? "*" : filtreNom;
+    public ResponseEntity<List<ZoneDEmploi2020>> liste(String date) {
         if (date==null) {
             date = LocalDate.now().toString();
         }
         return requestProcessor.queryforFindTerritoire()
-                .with(new TerritoireEtoileRequestParametizer(date, BassinDeVie2022.class, finalFiltreNom,"none", true))
+                .with(new TerritoireEtoileRequestParametizer(date, ZoneDEmploi2020.class, "none"))
                 .executeQuery()
-                .listResult(BassinDeVie2022.class)
+                .listResult(ZoneDEmploi2020.class)
                 .toResponseEntity();
 
     }

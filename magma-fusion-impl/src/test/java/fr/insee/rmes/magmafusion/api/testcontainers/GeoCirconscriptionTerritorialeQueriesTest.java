@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoCirconscriptionTerritorialeEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoCirconscriptionTerritorialeHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCirconscriptionTerritoriale;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoCirconscriptionTerritorialeQueriesTest extends TestContainer {
 
     @Autowired
-    GeoCirconscriptionTerritorialeEndpoints endpoints;
+    GeoCirconscriptionTerritorialeHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoCirconscriptionTerritorialeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcir 98601, returns CT 98601")
         void should_return_ct_98601_when_getcogcir_98601() throws Exception {
-            var response = endpoints.getcogcir("98601", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("98601", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -71,7 +71,7 @@ class GeoCirconscriptionTerritorialeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcirasc 98601 type null, returns 1 ascendant (COM 986)")
         void should_return_1_ascendant_when_getcogcirasc_98601_type_null() throws Exception {
-            var response = endpoints.getcogcirasc("98601", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.ascendants("98601", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -88,7 +88,7 @@ class GeoCirconscriptionTerritorialeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcirasc 98601 type CollectiviteDOutreMer, returns 1 ascendant (COM 986)")
         void should_return_1_ascendant_when_getcogcirasc_98601_type_collectiviteDOutreMer() throws Exception {
-            var response = endpoints.getcogcirasc("98601", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCirconscriptionTerritoriale.COLLECTIVITE_D_OUTRE_MER);
+            var response = endpoints.ascendants("98601", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCirconscriptionTerritoriale.COLLECTIVITE_D_OUTRE_MER);
             var result = response.getBody();
 
             assertNotNull(result);

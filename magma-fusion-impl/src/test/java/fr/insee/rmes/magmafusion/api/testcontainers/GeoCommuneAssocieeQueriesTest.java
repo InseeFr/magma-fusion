@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoCommuneAssocieeEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoCommuneAssocieeHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCommuneAssociee;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoCommuneAssocieeQueriesTest extends TestContainer {
 
     @Autowired
-    GeoCommuneAssocieeEndpoints endpoints;
+    GeoCommuneAssocieeHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -41,7 +41,7 @@ class GeoCommuneAssocieeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcoma 99101, returns commune associee 99101")
         void should_return_commune_associee_99101_when_getcogcoma_99101() throws Exception {
-            var response = endpoints.getcogcoma("99101", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("99101", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -71,7 +71,7 @@ class GeoCommuneAssocieeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomaasc 99101 type null, returns 5 ascendants (aav T01, arr 991, com 99001, dep 10, reg 99)")
         void should_return_5_ascendants_when_getcogcomaasc_99101_type_null() throws Exception {
-            var response = endpoints.getcogcomaasc("99101", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.ascendants("99101", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -88,7 +88,7 @@ class GeoCommuneAssocieeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomaasc 99101 type Departement, returns 1 departement")
         void should_return_1_departement_when_getcogcomaasc_99101_type_departement() throws Exception {
-            var response = endpoints.getcogcomaasc("99101", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommuneAssociee.DEPARTEMENT);
+            var response = endpoints.ascendants("99101", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommuneAssociee.DEPARTEMENT);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -110,7 +110,7 @@ class GeoCommuneAssocieeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomaliste date=2025-01-01, returns 1 commune associee active (99101)")
         void should_return_1_commune_associee_when_getcogcomaliste_date() throws Exception {
-            var response = endpoints.getcogcomaliste("2025-01-01");
+            var response = endpoints.liste("2025-01-01");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -127,7 +127,7 @@ class GeoCommuneAssocieeQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomaliste date=*, returns 2 communes associees (99101, 99102)")
         void should_return_2_communes_associees_when_getcogcomaliste_etoile() throws Exception {
-            var response = endpoints.getcogcomaliste("*");
+            var response = endpoints.liste("*");
             var result = response.getBody();
 
             assertNotNull(result);

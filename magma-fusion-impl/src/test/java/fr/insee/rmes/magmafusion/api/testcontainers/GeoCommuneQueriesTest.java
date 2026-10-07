@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoCommuneEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoCommuneHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCommune;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoCommuneQueriesTest extends TestContainer {
 
     @Autowired
-    GeoCommuneEndpoints endpoints;
+    GeoCommuneHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -43,7 +43,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomasc 99001 type null, returns 4 ascendants (arr, dept, region, aav)")
         void should_return_4_ascendants_when_getcogcomasc_99001_type_null() throws Exception {
-            var response = endpoints.getcogcomasc("99001", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.ascendants("99001", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -60,7 +60,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomasc 99001 type Departement, returns 1 ascendant (dept)")
         void should_return_1_departement_when_getcogcomasc_99001_type_departement() throws Exception {
-            var response = endpoints.getcogcomasc("99001", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommune.DEPARTEMENT);
+            var response = endpoints.ascendants("99001", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCommune.DEPARTEMENT);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -91,7 +91,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcom 99001, returns commune 99001")
         void should_return_commune_99001_when_getcogcom_99001() throws Exception {
-            var response = endpoints.getcogcom("99001", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("99001", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -121,7 +121,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomcan 99001, returns 2 cantons (9901, 9902)")
         void should_return_2_cantons_when_getcogcomcan_99001() throws Exception {
-            var response = endpoints.getcogcomcan("99001", LocalDate.of(2025, 1, 1));
+            var response = endpoints.listeCantons("99001", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -143,7 +143,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomdesc 99001 type null, returns 4 descendants (1 arrmu + 1 comas + 1 iris + 1 qpv)")
         void should_return_4_descendants_when_getcogcomdesc_99001_type_null() throws Exception {
-            var response = endpoints.getcogcomdesc("99001", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.descendants("99001", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -174,7 +174,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomliste filtreNom='Commune test', returns 3 communes actives")
         void should_return_3_communes_when_getcogcomliste_filtreNom() throws Exception {
-            var response = endpoints.getcogcomliste("2025-01-01", "Commune test", false);
+            var response = endpoints.liste("2025-01-01", "Commune test", false);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -191,7 +191,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomliste date=*, returns 5 communes (actives + supprimees)")
         void should_return_5_communes_when_getcogcomliste_etoile() throws Exception {
-            var response = endpoints.getcogcomliste("*", null, null);
+            var response = endpoints.liste("*", null, null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -213,7 +213,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomprec 99003, returns 2 precedents (99004, 99005)")
         void should_return_2_precedents_when_getcogcomprec_99003() throws Exception {
-            var response = endpoints.getcogcomprec("99003", LocalDate.of(2025, 1, 1));
+            var response = endpoints.precedents("99003", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -243,7 +243,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomproj 99003 dateProjection=2010-01-01, returns 2 projetes (99004, 99005)")
         void should_return_2_projetes_when_getcogcomproj_99003() throws Exception {
-            var response = endpoints.getcogcomproj("99003", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
+            var response = endpoints.projetes("99003", LocalDate.of(2010, 1, 1), LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -282,7 +282,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomsuiv 99004, returns 1 suivant (99003)")
         void should_return_1_suivant_when_getcogcomsuiv_99004() throws Exception {
-            var response = endpoints.getcogcomsuiv("99004", LocalDate.of(2010, 1, 1));
+            var response = endpoints.suivants("99004", LocalDate.of(2010, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -312,7 +312,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomintersect 99001 type null, returns 8 intersections")
         void should_return_8_intersections_when_getcogcomintersect_99001_type_null() throws Exception {
-            var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.intersections("99001", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -329,7 +329,7 @@ class GeoCommuneQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcomintersect 99001 type Canton, returns 2 cantons")
         void should_return_2_cantons_when_getcogcomintersect_99001_type_canton() throws Exception {
-            var response = endpoints.getcogcomintersect("99001", LocalDate.of(2025, 1, 1), TypeEnum.CANTON);
+            var response = endpoints.intersections("99001", LocalDate.of(2025, 1, 1), TypeEnum.CANTON);
             var result = response.getBody();
 
             assertNotNull(result);
