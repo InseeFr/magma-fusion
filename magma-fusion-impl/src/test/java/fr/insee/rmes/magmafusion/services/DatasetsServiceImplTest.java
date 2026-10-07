@@ -1,25 +1,37 @@
 package fr.insee.rmes.magmafusion.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.IdLabel;
 import fr.insee.rmes.magmafusion.model.Label;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+
+@ExtendWith(MockitoExtension.class)
 class DatasetsServiceImplTest {
 
     private DatasetsServiceImpl service;
     private RequestProcessor requestProcessor;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
@@ -64,50 +76,18 @@ class DatasetsServiceImplTest {
     // =========================================================
 
     @Test
-    void should_map_basic_fields() {
+    void should_map_basic_fields() throws IOException, JSONException {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
+        assertNotNull(result, "Result should not be null");
 
-        assertAll(
-                () -> assertEquals("25baaf1f", result.getId()),
-                () -> assertEquals("http://bauhaus/ds/25baaf1f", result.getUri()),
-                () -> assertEquals("Provisoire, jamais publiée", result.getValidationState()),
-                () -> assertEquals("2024-11-01", result.getModified()),
-                () -> assertEquals("2023-05-15", result.getIssued()),
-                () -> assertEquals("2.0", result.getVersion()),
-                () -> assertEquals("DD_EEC_SERIES", result.getIdentifier()),
-                () -> assertEquals("DG75-L201", result.getCatalogRecordCreator()),
-                () -> assertEquals("DG75-L201", result.getCatalogRecordContributor()),
-                () -> assertEquals("2024-12-09T12:00:00", result.getCatalogRecordCreated()),
-                () -> assertEquals("2024-12-09T12:00:00", result.getCatalogRecordModified()),
-
-                () -> assertEquals("label Type FR", result.getType().getFirst().getContenu()),
-                () -> assertEquals("fr", result.getType().getFirst().getLangue()),
-                () -> assertEquals("label Type EN", result.getType().get(1).getContenu()),
-                () -> assertEquals("en", result.getType().get(1).getLangue()),
-
-                () -> assertEquals("label Access Rights FR", result.getAccessRights().getFirst().getContenu()),
-                () -> assertEquals("fr", result.getAccessRights().getFirst().getLangue()),
-                () -> assertEquals("label Access Rights EN", result.getAccessRights().get(1).getContenu()),
-                () -> assertEquals("en", result.getAccessRights().get(1).getLangue()),
-
-                () -> assertEquals("label Condidentiality Status FR", result.getConfidentialityStatus().getFirst().getContenu()),
-                () -> assertEquals("fr", result.getConfidentialityStatus().getFirst().getLangue()),
-                () -> assertEquals("label Condidentiality Status EN", result.getConfidentialityStatus().get(1).getContenu()),
-                () -> assertEquals("en", result.getConfidentialityStatus().get(1).getLangue()),
-
-                () -> assertEquals("label Accrual Periodicity FR", result.getAccrualPeriodicity().getLabel().getFirst().getContenu()),
-                () -> assertEquals("fr", result.getAccrualPeriodicity().getLabel().getFirst().getLangue()),
-                () -> assertEquals("label Accrual Periodicity EN", result.getAccrualPeriodicity().getLabel().get(1).getContenu()),
-                () -> assertEquals("en", result.getAccrualPeriodicity().getLabel().get(1).getLangue()),
-
-                () -> assertEquals("dissemination status", result.getDisseminationStatus()),
-
-                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
-                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
-                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
-                () -> assertEquals("2025-01-01", result.getSpatialTemporal()),
-                () -> assertEquals("2025-01-01", result.getSpatialTemporal())
+        String data = objectMapper.writeValueAsString(result);
+        String expected = new String(
+                Objects.requireNonNull(getClass().getClassLoader()
+                                .getResourceAsStream("services/dataset-expected.json"))
+                        .readAllBytes(),
+                StandardCharsets.UTF_8
         );
+        JSONAssert.assertEquals(expected, data, JSONCompareMode.LENIENT);
     }
 
     @Test
@@ -389,7 +369,7 @@ class DatasetsServiceImplTest {
                 .thenReturn(monthlyDto); // Second appel (pour "http://bauhaus/codes/frequence/M")
 
         // 4. Crée le service avec le mock
-        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
 
         // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getTemporalResolution reçoit des URIs en entrée)
         List<String> uris = List.of(
@@ -398,7 +378,7 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<Label> result = service.getTemporalResolution(uris);
+        List<Label> result = datasetsService.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(2);
@@ -424,11 +404,11 @@ class DatasetsServiceImplTest {
     void getTemporalResolution_shouldReturnEmptyListForEmptyInput() {
         // Given
         RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
         List<String> uris = List.of();
 
         // When
-        List<Label> result = service.getTemporalResolution(uris);
+        List<Label> result = datasetsService.getTemporalResolution(uris);
 
         // Then
         assertThat(result).isEmpty();
@@ -451,11 +431,11 @@ class DatasetsServiceImplTest {
                 .result())
                 .thenReturn(dtoWithNullLabels);
 
-        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
         List<String> uris = List.of("http://bauhaus/codes/frequence/A");
 
         // When
-        List<Label> result = service.getTemporalResolution(uris);
+        List<Label> result = datasetsService.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(1);
@@ -484,11 +464,11 @@ class DatasetsServiceImplTest {
                 .result())
                 .thenReturn(dtoWithMissingLabels);
 
-        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
         List<String> uris = List.of("http://bauhaus/codes/frequence/A");
 
         // When
-        List<Label> result = service.getTemporalResolution(uris);
+        List<Label> result = datasetsService.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(1);
@@ -534,7 +514,7 @@ class DatasetsServiceImplTest {
                 .thenReturn(spatialResolution2Dto);
 
         // 4. Crée le service avec le mock
-        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
 
         // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getSpatialResolution reçoit des URIs en entrée)
         List<String> uris = List.of(
@@ -543,7 +523,7 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<IdLabel> result = service.getSpatialResolution(uris);
+        List<IdLabel> result = datasetsService.getSpatialResolution(uris);
 
         // Then
         assertThat(result).hasSize(2);
@@ -598,7 +578,7 @@ class DatasetsServiceImplTest {
                 .thenReturn(statisticalUnit2DTO);
 
         // 4. Crée le service avec le mock
-        DatasetsServiceImpl service = new DatasetsServiceImpl(mockProcessor);
+        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
 
         // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getSpatialResolution reçoit des URIs en entrée)
         List<String> uris = List.of(
@@ -607,7 +587,7 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<IdLabel> result = service.getStatisticalUnits(uris);
+        List<IdLabel> result = datasetsService.getStatisticalUnits(uris);
 
         // Then
         assertThat(result).hasSize(2);
