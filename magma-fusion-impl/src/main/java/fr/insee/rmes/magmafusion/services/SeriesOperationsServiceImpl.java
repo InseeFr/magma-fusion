@@ -302,7 +302,7 @@ public class SeriesOperationsServiceImpl implements SeriesOperationsService {
         }
         try {
             return URI.create(uriString);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return null;
         }
     }

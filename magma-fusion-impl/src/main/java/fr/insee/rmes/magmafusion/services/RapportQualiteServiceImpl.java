@@ -200,7 +200,6 @@ public class RapportQualiteServiceImpl implements RapportQualiteService {
                     .filter(Objects::nonNull) // We keep only not null rubrics, otherwise NullPointer Exception when r.getId()
                     .anyMatch(r -> r.getId().equals(rubriqueDTO.id()));
 
-//            if (rubriqueDTO.maxOccurs() != null && rubricExist) {
                 if (rubricExist) {
                 Rubrique existingRubric = rapportQualite.getRubriques().stream()
                         .filter(r -> r.getId().equals(rubriqueDTO.id()))
