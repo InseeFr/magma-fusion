@@ -13,7 +13,7 @@
     <name>Implementation of the RMéS metadata API</name>
     <version>${revision}</version>
     <properties>
-        <revision>3.0.0-rc7</revision>
+        <revision>3.0.2-rc0</revision>
         <java.version>25</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <jakarta.version>6.2.0-M2</jakarta.version>
@@ -48,11 +48,13 @@
         <version.maven-war-plugins>3.5.1</version.maven-war-plugins>
         <version.maven-jacoco>0.8.15</version.maven-jacoco>
         <argLine>-Xms256m -Xmx512m -ea -Dfile.encoding=UTF-8</argLine>
-
+<!--        surcharges Springboot-->
+        <tomcat.version>11.0.26</tomcat.version>
+        <jackson-2-bom.version>2.22.3</jackson-2-bom.version>
+        <jackson-bom.version>3.2.3</jackson-bom.version>
+<!--        fin surcharges Springboot-->
     </properties>
-
     <dependencyManagement>
-
         <dependencies>
             <!-- Modules de Magma -->
             <dependency>
@@ -65,7 +67,6 @@
                 <artifactId>magma-fusion-interface</artifactId>
                 <version>${revision}</version>
             </dependency>
-
             <dependency>
                 <groupId>fr.insee.rmes</groupId>
                 <artifactId>magma-fusion-oas</artifactId>

@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoCantonEndpoints;
+import fr.insee.rmes.magmafusion.api.GeoCantonHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnum;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsCanton;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoCantonQueriesTest extends TestContainer {
 
     @Autowired
-    GeoCantonEndpoints endpoints;
+    GeoCantonHandler endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -44,7 +44,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcan 9901, returns canton 9901")
         void should_return_canton_9901_when_getcogcan_9901() throws Exception {
-            var response = endpoints.getcogcan("9901", LocalDate.of(2025, 1, 1));
+            var response = endpoints.get("9901", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -74,7 +74,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanasc 9901 type null, returns 2 ascendants (dep 10, reg 99)")
         void should_return_2_ascendants_when_getcogcanasc_9901_type_null() throws Exception {
-            var response = endpoints.getcogcanasc("9901", LocalDate.of(2025, 1, 1), null);
+            var response = endpoints.ascendants("9901", LocalDate.of(2025, 1, 1), null);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -91,7 +91,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanasc 9901 type Departement, returns 1 departement")
         void should_return_1_departement_when_getcogcanasc_9901_type_departement() throws Exception {
-            var response = endpoints.getcogcanasc("9901", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCanton.DEPARTEMENT);
+            var response = endpoints.ascendants("9901", LocalDate.of(2025, 1, 1), TypeEnumAscendantsCanton.DEPARTEMENT);
             var result = response.getBody();
 
             assertNotNull(result);
@@ -113,7 +113,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcancom 9901, returns 2 communes (99001, 99002)")
         void should_return_2_communes_when_getcogcancom_9901() throws Exception {
-            var response = endpoints.getcogcancom("9901", LocalDate.of(2025, 1, 1));
+            var response = endpoints.listeCommunes("9901", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -135,7 +135,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanliste date=2025-01-01, returns 2 cantons actifs")
         void should_return_2_cantons_when_getcogcanliste_date() throws Exception {
-            var response = endpoints.getcogcanliste("2025-01-01");
+            var response = endpoints.liste("2025-01-01");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -152,7 +152,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanliste date=*, returns 3 cantons")
         void should_return_3_cantons_when_getcogcanliste_etoile() throws Exception {
-            var response = endpoints.getcogcanliste("*");
+            var response = endpoints.liste("*");
             var result = response.getBody();
 
             assertNotNull(result);
@@ -174,7 +174,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanprec 9901, returns 1 precedent (9903)")
         void should_return_1_precedent_when_getcogcanprec_9901() throws Exception {
-            var response = endpoints.getcogcanprec("9901", LocalDate.of(2025, 1, 1));
+            var response = endpoints.precedents("9901", LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -191,7 +191,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanprec 9902 (no precedents), returns 404")
         void should_return_404_when_getcogcanprec_9902_no_precedents() {
-            var response = endpoints.getcogcanprec("9902", LocalDate.of(2025, 1, 1));
+            var response = endpoints.precedents("9902", LocalDate.of(2025, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
     }
@@ -203,7 +203,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanproj 9901 dateProjection=1985-01-01, returns 1 projete (9903)")
         void should_return_1_projete_when_getcogcanproj_9901() throws Exception {
-            var response = endpoints.getcogcanproj("9901", LocalDate.of(1985, 1, 1), LocalDate.of(2025, 1, 1));
+            var response = endpoints.projetes("9901", LocalDate.of(1985, 1, 1), LocalDate.of(2025, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -242,7 +242,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcansuiv 9903, returns 1 suivant (9901)")
         void should_return_1_suivant_when_getcogcansuiv_9903() throws Exception {
-            var response = endpoints.getcogcansuiv("9903", LocalDate.of(1985, 1, 1));
+            var response = endpoints.suivants("9903", LocalDate.of(1985, 1, 1));
             var result = response.getBody();
 
             assertNotNull(result);
@@ -259,7 +259,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcansuiv 9901 (actif, pas de suivant), returns 404")
         void should_return_404_when_getcogcansuiv_9901_no_suivants() {
-            var response = endpoints.getcogcansuiv("9901", LocalDate.of(2025, 1, 1));
+            var response = endpoints.suivants("9901", LocalDate.of(2025, 1, 1));
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
     }
@@ -271,7 +271,7 @@ class GeoCantonQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getcogcanintersect 9901 type Commune, returns 2 communes")
         void should_return_2_communes_when_getcogcanintersect_9901_type_commune() throws Exception {
-            var response = endpoints.getcogcanintersect("9901", LocalDate.of(2025, 1, 1), TypeEnum.COMMUNE);
+            var response = endpoints.intersections("9901", LocalDate.of(2025, 1, 1), TypeEnum.COMMUNE);
             var result = response.getBody();
 
             assertNotNull(result);

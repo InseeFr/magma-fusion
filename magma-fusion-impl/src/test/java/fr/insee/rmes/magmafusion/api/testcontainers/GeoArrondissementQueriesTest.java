@@ -1,6 +1,6 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.GeoArrondissementEndpoints;
+import fr.insee.rmes.magmafusion.api.GeographieController;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
 import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsArrondissement;
 import fr.insee.rmes.magmafusion.model.TypeEnumDescendantsArrondissement;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GeoArrondissementQueriesTest extends TestContainer {
 
     @Autowired
-    GeoArrondissementEndpoints endpoints;
+    GeographieController endpoints;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
