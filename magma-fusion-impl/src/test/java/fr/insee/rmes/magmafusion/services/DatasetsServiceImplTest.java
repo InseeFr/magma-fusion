@@ -85,7 +85,7 @@ class DatasetsServiceImplTest {
         JSONAssert.assertEquals(expected, data, JSONCompareMode.LENIENT);
     }
 
-   
+
     @Test
     void should_map_landingPage_when_present() {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
@@ -596,8 +596,12 @@ class DatasetsServiceImplTest {
                 "Description FR", "Description EN", // descriptionLg1, descriptionLg2
                 "Note FR", "Note EN",            // scopeNoteLg1, scopeNoteLg2
                 "https://example.fr/page", "https://example.en/page", // landingPageLg1, landingPageLg2
-                "DG75-L201",                     // catalogRecordCreator
-                "DG75-L201",                     // catalogRecordContributor
+                "id catalogRecordCreator",
+                "catalogRecordCreatorLabelLg1",
+                "catalogRecordCreatorLabelLg2",// catalogRecordCreator
+                "id catalogRecordContributor",
+                "catalogRecordContributorLabelLg1",
+                "catalogRecordContributorLabelLg2",// catalogRecordContributor
                 "2024-12-09T12:00:00",           // catalogRecordModified
                 "2024-12-09T12:00:00",           // catalogRecordCreated
                 "2024-11-01",                    // modified
@@ -659,7 +663,8 @@ class DatasetsServiceImplTest {
                 null, null, null,
                 null, null, null,
                 null,
-                null
+                null,
+                null, null, null, null
         );
     }
 
@@ -673,10 +678,8 @@ class DatasetsServiceImplTest {
                 null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null,
                 null, null, null, null, null,
-                creators,
-                null, null, null, null, null, null, null, null, null,
-                null,
-                null
+                null, null, null, null, creators, null, null, null, null,
+                null,null, null, null, null, null, null
         );
     }
 }

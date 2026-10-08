@@ -129,8 +129,6 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setIdentifier(dto.identifier());
         dataSet.setCatalogRecordCreated(dto.catalogRecordCreated());
         dataSet.setCatalogRecordModified(dto.catalogRecordModified());
-        dataSet.setCatalogRecordCreator(dto.catalogRecordCreator());
-        dataSet.setCatalogRecordContributor(dto.catalogRecordContributor());
 
         if (StringUtils.hasText(dto.numObservations()) ) {
             dataSet.setNumObservations(Integer.parseInt(dto.numObservations()));
@@ -187,11 +185,13 @@ public class DatasetsServiceImpl implements DatasetsService {
                     createLangField(dto.labeltypeLg1(),"fr"),
                     createLangField(dto.labeltypeLg2(),"en")));
         }
+
         if (StringUtils.hasText(dto.labelaccessRightsLg1())) {
             dataSet.setAccessRights(createList(
                     createLangField(dto.labelaccessRightsLg1(),"fr"),
                     createLangField(dto.labelaccessRightsLg2(),"en")));
         }
+
         if (StringUtils.hasText(dto.labelconfidentialityStatusLg1())) {
             dataSet.setConfidentialityStatus(createList(
                     createLangField(dto.labelconfidentialityStatusLg1(),"fr"),
@@ -241,6 +241,23 @@ public class DatasetsServiceImpl implements DatasetsService {
                             createLangField(dto.labelspatialLg1(),"fr"),
                             createLangField(dto.labelspatialLg2(),"en"))));
         }
+
+        if (StringUtils.hasText(dto.idCatalogRecordCreator())) {
+            dataSet.setCatalogRecordCreator(new IdLabel()
+                    .id(dto.idCatalogRecordCreator())
+                    .label(createList(
+                            createLangField(dto.catalogRecordCreatorLabelLg1(),"fr"),
+                            createLangField(dto.catalogRecordCreatorLabelLg2(),"en"))));
+        }
+
+        if (StringUtils.hasText(dto.idCatalogRecordContributor())) {
+            dataSet.setCatalogRecordContributor(new IdLabel()
+                    .id(dto.idCatalogRecordContributor())
+                    .label(createList(
+                            createLangField(dto.catalogRecordContributorLabelLg1(),"fr"),
+                            createLangField(dto.catalogRecordContributorLabelLg2(),"en"))));
+        }
+
 
         if (StringUtils.hasText(dto.startPeriod())) {
             dataSet.setTemporal(new Temporal()

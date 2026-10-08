@@ -6,8 +6,34 @@
   "issued": "2023-05-15",
   "version": "2.0",
   "identifier": "DD_EEC_SERIES",
-  "catalogRecordCreator": "DG75-L201",
-  "catalogRecordContributor": "DG75-L201",
+  "catalogRecordCreator":
+  {
+    "id": "id catalogRecordCreator",
+    "label": [
+      {
+        "contenu": "catalogRecordCreatorLabelLg1",
+        "langue": "fr"
+      },
+      {
+        "contenu": "catalogRecordCreatorLabelLg2",
+        "langue": "en"
+      }
+    ]
+  },
+  "catalogRecordContributor":
+  {
+    "id": "id catalogRecordContributor",
+    "label": [
+      {
+        "contenu": "catalogRecordContributorLabelLg1",
+        "langue": "fr"
+      },
+      {
+        "contenu": "catalogRecordContributorLabelLg2",
+        "langue": "en"
+      }
+    ]
+  },
   "catalogRecordCreated": "2024-12-09T12:00:00",
   "catalogRecordModified": "2024-12-09T12:00:00",
   "type": [

@@ -8,7 +8,8 @@ SELECT DISTINCT
     ?descriptionLg1 ?descriptionLg2
     ?scopeNoteLg1 ?scopeNoteLg2
     ?landingPageLg1 ?landingPageLg2
-    ?catalogRecordCreator ?catalogRecordContributor
+    ?catalogRecordCreator ?idCatalogRecordCreator ?catalogRecordCreatorLabelLg1 ?catalogRecordCreatorLabelLg2
+    ?catalogRecordContributor ?idCatalogRecordContributor ?catalogRecordContributorLabelLg1 ?catalogRecordContributorLabelLg2
     ?catalogRecordModified ?catalogRecordCreated
     ?modified ?issued ?version ?spatialTemporal
     ?startPeriod ?endPeriod
@@ -73,13 +74,34 @@ WHERE {
     OPTIONAL { ?dataset insee:archiveUnit ?archiveUnit }
 	OPTIONAL { ?dataset insee:statisticalUnit ?statisticalUnit }
 
-    OPTIONAL {
-        ?dataset ^foaf:primaryTopic ?catalogRecord .
-        OPTIONAL { ?catalogRecord dc:creator ?catalogRecordCreator }
-        OPTIONAL { ?catalogRecord dc:contributor ?catalogRecordContributor }
-        OPTIONAL { ?catalogRecord dcterms:modified ?catalogRecordModified }
-        OPTIONAL { ?catalogRecord dcterms:created ?catalogRecordCreated }
+
+OPTIONAL {
+        ?dataset ^foaf:primaryTopic/dc:creator ?catalogRecordCreator .
+        ?catalogRecordCreator dcterms:identifier ?idCatalogRecordCreator .
+        ?catalogRecordCreator skos:prefLabel ?catalogRecordCreatorLabelLg1 .
+        FILTER (lang(?catalogRecordCreatorLabelLg1) = '${LG1}')
+        OPTIONAL {
+            ?catalogRecordCreator skos:prefLabel ?catalogRecordCreatorLabelLg2 .
+            FILTER (lang(?catalogRecordCreatorLabelLg2) = '${LG2}') }
+        }
+
+OPTIONAL {
+           ?dataset ^foaf:primaryTopic/dc:contributor ?catalogRecordContributor .
+           ?catalogRecordContributor dcterms:identifier ?idCatalogRecordContributor .
+           ?catalogRecordContributor skos:prefLabel ?catalogRecordContributorLabelLg1 .
+           FILTER (lang(?catalogRecordContributorLabelLg1) = '${LG1}')
+           OPTIONAL {
+              ?catalogRecordContributor skos:prefLabel ?catalogRecordContributorLabelLg2 .
+              FILTER (lang(?catalogRecordContributorLabelLg2) = '${LG2}') }
+           }
+
+OPTIONAL {
+             ?dataset
+
+             ^foaf:primaryTopic/dcterms:modified ?catalogRecordModified ;
+             ^foaf:primaryTopic/dcterms:created ?catalogRecordCreated .
     }
+
 
     OPTIONAL {
         ?dataset prov:wasDerivedFrom ?wasDerivedFrom .
@@ -167,7 +189,9 @@ GROUP BY
     ?titleLg1 ?titleLg2 ?subtitleLg1 ?subtitleLg2
     ?abstractLg1 ?abstractLg2 ?descriptionLg1 ?descriptionLg2
     ?scopeNoteLg1 ?scopeNoteLg2 ?landingPageLg1 ?landingPageLg2
-    ?catalogRecordCreator ?catalogRecordContributor ?catalogRecordModified ?catalogRecordCreated
+    ?catalogRecordCreator ?idCatalogRecordCreator ?catalogRecordCreatorLabelLg1 ?catalogRecordCreatorLabelLg2
+    ?catalogRecordContributor ?idCatalogRecordContributor ?catalogRecordContributorLabelLg1 ?catalogRecordContributorLabelLg2
+    ?catalogRecordModified ?catalogRecordCreated
     ?modified ?issued ?version ?numObservations ?numSeries ?spatialTemporal
     ?startPeriod ?endPeriod ?derivedDescriptionLg1 ?derivedDescriptionLg2
     ?idPublisher ?labelPublisherLg1 ?labelPublisherLg2

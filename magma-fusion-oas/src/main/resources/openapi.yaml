@@ -9074,9 +9074,9 @@ components:
         catalogRecordModified:
           type: string
         catalogRecordCreator:
-          type: string
+          $ref: '#/components/schemas/IdLabel'
         catalogRecordContributor:
-          type: string
+          $ref: '#/components/schemas/IdLabel'
         identifier:
           type: string
         issued:
