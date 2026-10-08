@@ -320,13 +320,13 @@ public class OperationsServiceImpl implements OperationsService {
         rapportQualite.setId(rapportQualiteDTO.id());
         rapportQualite.setUri(URI.create(rapportQualiteDTO.uri()));
         if (rapportQualiteDTO.labelLg1() != null && rapportQualiteDTO.labelLg2() != null) {
-            List<LocalisedContenu> label = createListLangField(
+            List<LocalisedContenu> label = createList(
                     createLangField(rapportQualiteDTO.labelLg1(), "fr"),
                     createLangField(rapportQualiteDTO.labelLg2(), "en"));
             rapportQualite.setLabel(label);
         }
         if (rapportQualiteDTO.labelLg1() != null && rapportQualiteDTO.labelLg2() == null) {
-            List<LocalisedContenu> label = createListLangField(
+            List<LocalisedContenu> label = createList(
                     createLangField(rapportQualiteDTO.labelLg1(), "fr"),
                     createLangField("", "en"));
             rapportQualite.setLabel(label);
@@ -349,7 +349,7 @@ public class OperationsServiceImpl implements OperationsService {
         Rubrique rubrique = createRubrique(rubriqueDTO);
 
         if (rubriqueDTO.titreLg1() != null && rubriqueDTO.titreLg2() != null) {
-            List<LocalisedContenu> titre = createListLangField(
+            List<LocalisedContenu> titre = createList(
                     createLangField(rubriqueDTO.titreLg1(), "fr"),
                     createLangField(rubriqueDTO.titreLg2(), "en"));
             rubrique.setTitre(titre);
@@ -366,7 +366,7 @@ public class OperationsServiceImpl implements OperationsService {
                 addRichText(rubriqueDTO, rubrique, rapportQualite);
                 break;
             case "TEXT":
-                List<LocalisedContenu> label = createListLangField(
+                List<LocalisedContenu> label = createList(
                         createLangField(rubriqueDTO.labelLg1(), "fr"),
                         createLangField(rubriqueDTO.labelLg2(), "en"));
                 rubrique.setLabel(label);
@@ -402,7 +402,7 @@ public class OperationsServiceImpl implements OperationsService {
         rubriqueWithIdUriLabel.setUri(URI.create(uri));
 
         if (rubriqueDTO.labelObjLg1() != null && rubriqueDTO.labelObjLg2() != null) {
-            List<LocalisedContenu> label = createListLangField(
+            List<LocalisedContenu> label = createList(
                     createLangField(rubriqueDTO.labelObjLg1(), "fr"),
                     createLangField(rubriqueDTO.labelObjLg2(), "en"));
             rubriqueWithIdUriLabel.setLabel(label);
@@ -461,14 +461,14 @@ public class OperationsServiceImpl implements OperationsService {
         for (DocumentDTO documentDTO : documentsDTO) {
             Document document = new Document();
             if (documentDTO.labelLg1() != null && documentDTO.labelLg2() != null) {
-                List<LocalisedContenu> label = createListLangField(
+                List<LocalisedContenu> label = createList(
                         createLangField(documentDTO.labelLg1(), "fr"),
                         createLangField(documentDTO.labelLg2(), "en"));
                 document.label(label);
             }
             if (documentDTO.labelLg1() != null && documentDTO.labelLg2() == null) {
                 LocalisedContenu labelsLg1 = createLangField(documentDTO.labelLg1(), "fr");
-                List<LocalisedContenu> label = createListLangField(labelsLg1, null);
+                List<LocalisedContenu> label = createList(labelsLg1, null);
                 document.label(label);
             }
             document.setDateMiseAJour(documentDTO.dateMiseAJour());
@@ -487,7 +487,7 @@ public class OperationsServiceImpl implements OperationsService {
             LocalisedContenu labelLg1 = createLangField(rubriqueDTO.labelObjLg1(), "fr");
             LocalisedContenu labelLg2 = rubriqueDTO.labelObjLg2() != null ?
                     createLangField(rubriqueDTO.labelObjLg2(), "en") : null;
-            rubriqueCodeList.setLabel(createListLangField(labelLg1, labelLg2));
+            rubriqueCodeList.setLabel(createList(labelLg1, labelLg2));
         }
 
         if (rapportQualite.getRubriques() != null) {
