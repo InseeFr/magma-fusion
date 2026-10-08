@@ -26,6 +26,7 @@ tags:
 
   # -- Géographie
   - name: Geographie
+    x-geo: true
     description: API Géographie
 
   # -- Opérations

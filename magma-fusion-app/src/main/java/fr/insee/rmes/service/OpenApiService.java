@@ -25,7 +25,7 @@ public class OpenApiService {
 
     private final BuildProperties buildProperties;
 
-    @Value("${fr.insee.rmes.magma.display.geo:true}")
+    @Value("${fr.insee.rmes.magmafusion.display.geo:true}")
     private boolean displayGeo;
 
     public OpenApiService(BuildProperties buildProperties) {
