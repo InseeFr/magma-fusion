@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -41,7 +40,7 @@ class DatasetsServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        requestProcessor = Mockito.mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+        requestProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
         service = new DatasetsServiceImpl(requestProcessor);
         ReflectionTestUtils.setField(service, "lg1", "fr");
         ReflectionTestUtils.setField(service, "lg2", "en");
