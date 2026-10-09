@@ -1,21 +1,31 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
+import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestTestClient
 @Tag("integration")
-class DatasetsQueriesTest extends TestContainer {
+class DatasetsQueriesTest extends BaseIntegrationTest {
 
-    static final String DATASET_ID = "idDatasetTest";
-    static final String DATASET_ID_2 = "idDatasetTest2";
+    @BeforeAll
+    static void setupContainer() {
+        GraphDBTestContainerConfig.startContainer();
+    }
+
+    @DynamicPropertySource
+    static void overrideSpringProperties(DynamicPropertyRegistry registry) {
+        GraphDBTestContainerConfig.overrideSpringProperties(registry);
+    }
+    private static final String DATASET_ID = "idDatasetTest";
+    private static final String DATASET_ID_2 = "idDatasetTest2";
 
     @Nested
     @DisplayName("dataset/{id}")

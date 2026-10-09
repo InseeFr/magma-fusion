@@ -1,16 +1,15 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
@@ -19,7 +18,17 @@ import java.net.URI;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class ConceptsQueriesTest extends TestContainer {
+class ConceptsQueriesTest extends BaseIntegrationTest {
+
+    @BeforeAll
+    static void setupContainer() {
+        GraphDBTestContainerConfig.startContainer();
+    }
+
+    @DynamicPropertySource
+    static void overrideSpringProperties(DynamicPropertyRegistry registry) {
+        GraphDBTestContainerConfig.overrideSpringProperties(registry);
+    }
 
     @Nested
     @DisplayName("concepts/definition/{id}")

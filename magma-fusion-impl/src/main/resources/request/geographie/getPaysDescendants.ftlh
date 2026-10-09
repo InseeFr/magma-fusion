@@ -11,7 +11,7 @@ igeo:codeINSEE '${code}' ;
 
 <#if typeEnumDescendantsPays != "none">
     ?ressource a ?typeRDF .
-    ?ressource a igeo:${type} ;
+    ?ressource a igeo:${typeEnumDescendantsPays} ;
 <#else>
     ?ressource a ?typeRDF ;
 </#if>

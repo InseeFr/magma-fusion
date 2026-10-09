@@ -1,16 +1,29 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
-@SpringBootTest(properties = "--spring.profiles.active=security.disabled")
+@SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestTestClient
 @Tag("integration")
-class OperationsQueriesTest extends TestContainer {
+class OperationsQueriesTest extends BaseIntegrationTest {
 
+    @BeforeAll
+    static void setupContainer() {
+        GraphDBTestContainerConfig.startContainer();
+    }
+
+    @DynamicPropertySource
+    static void overrideSpringProperties(DynamicPropertyRegistry registry) {
+        GraphDBTestContainerConfig.overrideSpringProperties(registry);
+    }
     @Nested
     @DisplayName("operations/rapportQualite/{id}")
     class GetOperation {
