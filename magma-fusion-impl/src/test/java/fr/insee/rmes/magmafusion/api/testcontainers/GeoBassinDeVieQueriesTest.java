@@ -1,8 +1,11 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.insee.rmes.magmafusion.api.GeoBassinDeVieHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -89,7 +92,6 @@ class GeoBassinDeVieQueriesTest extends BaseIntegrationTest {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
-
             JSONAssert.assertEquals(
                     loadExpectedJson("bassin-de-vie-88001-descendants-commune-expected.json"),
                     bodyAsString(body),

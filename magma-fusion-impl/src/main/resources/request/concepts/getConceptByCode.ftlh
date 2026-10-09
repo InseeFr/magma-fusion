@@ -1,7 +1,7 @@
-SELECT distinct ?uri ?intituleFr ?intituleEn 
+SELECT DISTINCT ?uri ?intituleFr ?intituleEn
 ?definitionFr ?definitionEn ?noteEditorialeFr ?noteEditorialeEn ?scopeNoteFr ?scopeNoteEn
  ?dateMiseAJour ?dateCreation ?dateFinDeValidite ?hasLink ?hasIntitulesAlternatifs ?id
-FROM <http://rdf.insee.fr/graphes/concepts/definitions>
+FROM <${CONCEPTS_DEFINITIONS_GRAPH}>
 WHERE {
 			BIND("${id}" AS ?id) .
 			?uri skos:inScheme ?uriScheme .

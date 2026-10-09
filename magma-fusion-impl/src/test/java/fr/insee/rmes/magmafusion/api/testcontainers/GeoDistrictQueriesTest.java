@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
+import fr.insee.rmes.magmafusion.model.TypeEnumAscendantsDistrict;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -9,11 +10,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
 class GeoDistrictQueriesTest extends BaseIntegrationTest {
+
 
     @BeforeAll
     static void setupContainer() {
@@ -81,6 +84,7 @@ class GeoDistrictQueriesTest extends BaseIntegrationTest {
         @Test
         @DisplayName("When getcogdisasc 98610 type CollectiviteDOutreMer, returns 1 COM")
         void should_return_1_com_when_getcogdisasc_98610_type_collectiviteDOutreMer() throws Exception {
+
             byte[] body = restTestClient.get()
                     .uri("/geo/district/{code}/ascendants?date={date}&type={type}",
                             "98610", "2025-01-01", "CollectiviteDOutreMer")

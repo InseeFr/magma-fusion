@@ -24,6 +24,7 @@ class DatasetsQueriesTest extends BaseIntegrationTest {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
+
     private static final String DATASET_ID = "idDatasetTest";
     private static final String DATASET_ID_2 = "idDatasetTest2";
 

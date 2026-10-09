@@ -9,11 +9,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
 class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
+
 
     @BeforeAll
     static void setupContainer() {
@@ -24,6 +26,7 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
+
     @Nested
     @DisplayName("geo/aireDAttractionDesVilles2020/{code}")
     class GetCogAav {

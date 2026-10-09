@@ -1,0 +1,72 @@
+FROM eclipse-temurin:25-jdk-jammy AS builder
+
+WORKDIR /opt/app
+
+COPY .mvn/ .mvn
+COPY mvnw mvnw
+
+COPY . .
+
+RUN chmod +x mvnw
+RUN ./mvnw -T 1C clean install -Dmaven.test.skip=true -X --no-transfer-progress --batch-mode --errors --fail-at-end --show-version
+
+# Éclate l'uber-jar dans la disposition « efficiente » recommandée par Spring Boot
+# (https://docs.spring.io/spring-boot/reference/packaging/efficient.html) : les dépendances
+# sont posées à plat dans lib/, et magma-fusion.jar ne contient plus que le code applicatif avec
+# un Class-Path qui référence lib/. On ne charge donc plus les classes depuis des jars
+# imbriqués, ce qui accélère le démarrage et rend l'image compatible avec le cache AOT.
+# --layers découpe la sortie en couches de volatilité croissante (dependencies, loader,
+# snapshot-dependencies, application), copiées ensuite une par une côté runtime.
+RUN cp magma-fusion-app/target/magma-fusion-app-*.jar magma-fusion.jar \
+ && java -Djarmode=tools -jar magma-fusion.jar extract --layers --destination extracted
+
+FROM eclipse-temurin:25-jre-jammy
+
+ARG ELASTIC_APM_VERSION=1.55.4
+
+RUN groupadd -g 10000 javagroup
+RUN useradd -u 10000 -g javagroup -s /usr/sbin/nologin javauser
+RUN mkdir /opt/app/
+RUN chown -R 10000:10000 /opt/app/
+
+ADD https://repo.maven.apache.org/maven2/co/elastic/apm/elastic-apm-agent/$ELASTIC_APM_VERSION/elastic-apm-agent-$ELASTIC_APM_VERSION.jar /opt/elastic_apm/java/elastic-apm-agent.jar
+RUN chown -R 10000:10000 /opt/elastic_apm/
+
+USER 10000
+WORKDIR /opt/app
+
+# Une couche Docker par couche du jar : les ~90 Mo de dépendances ne sont réécrits (et
+# repoussés au registry) que lorsqu'ils changent vraiment, pas à chaque livraison applicative.
+COPY --from=builder --chown=10000:10000 /opt/app/extracted/dependencies/ ./
+COPY --from=builder --chown=10000:10000 /opt/app/extracted/spring-boot-loader/ ./
+COPY --from=builder --chown=10000:10000 /opt/app/extracted/snapshot-dependencies/ ./
+COPY --from=builder --chown=10000:10000 /opt/app/extracted/application/ ./
+
+# Training run du cache AOT (Java 25+) : démarre le contexte Spring et sort juste après le
+# refresh (spring.context.exit=onRefresh). Aucun service externe n'est joignable à ce stade —
+# les échecs de connexion GraphDB/Colectica sont rattrapés et loggés, et les CommandLineRunner /
+# ApplicationReadyEvent (init des groupes Colectica, préchauffage du cache des codes mutualisés)
+# ne s'exécutent pas avant le refresh.
+#
+# default-contributor-check-enabled=false : DefaultContributorValidator est la seule exception,
+# son @PostConstruct interroge la base de gestion et fait échouer le refresh (donc le build) quand
+# GraphDB est injoignable. La vérification garde tout son sens au démarrage réel ; ici elle ne
+# ferait que constater l'absence d'un service que l'entraînement n'a pas vocation à joindre.
+#
+# --add-modules java.instrument : le cache n'est mappable que si le graphe de modules du
+# runtime est identique à celui de l'entraînement. Sans ce drapeau, injecter un -javaagent
+# (agent APM Elastic embarqué ci-dessus) via JAVA_TOOL_OPTIONS ferait échouer le mappage et
+# annulerait tout le gain. Avec, le même cache sert dans les deux cas.
+RUN java --add-modules java.instrument \
+         -XX:AOTCacheOutput=magma-fusion.aot \
+         -Dspring.context.exit=onRefresh \
+         -Dfr.insee.rmes.magma-fusion.default-contributor-check-enabled=false \
+         -jar magma-fusion.jar
+
+EXPOSE 8080
+
+# Chemins volontairement relatifs à WORKDIR : le cache mémorise la chaîne de classpath
+# telle quelle, un « -jar /opt/app/magma-fusion.jar » absolu ne le mapperait plus.
+# Si le cache ne peut pas être mappé (GC ZGC, autre version de JVM, classpath différent),
+# la JVM le signale sur la sortie d'erreur et démarre normalement sans lui.
+ENTRYPOINT ["java", "--add-modules", "java.instrument", "-XX:AOTCache=magma-fusion.aot", "-jar", "magma-fusion.jar"]

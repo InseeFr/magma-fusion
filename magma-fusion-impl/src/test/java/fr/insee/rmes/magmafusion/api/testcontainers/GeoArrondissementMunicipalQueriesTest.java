@@ -9,11 +9,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
 class GeoArrondissementMunicipalQueriesTest extends BaseIntegrationTest {
+
 
     @BeforeAll
     static void setupContainer() {
@@ -31,6 +33,7 @@ class GeoArrondissementMunicipalQueriesTest extends BaseIntegrationTest {
         @Test
         @DisplayName("When getcogarrmu 75101, returns ArrMun 75101")
         void should_return_arrmu_75101_when_getcogarrmu_75101() throws Exception {
+
             byte[] body = restTestClient.get()
                     .uri("/geo/arrondissementMunicipal/{code}?date={date}", "75101", "2025-01-01")
                     .exchange()
@@ -53,6 +56,7 @@ class GeoArrondissementMunicipalQueriesTest extends BaseIntegrationTest {
                     .uri("/geo/arrondissementMunicipal/{code}?date={date}", "75199", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
+
         }
     }
 
@@ -70,6 +74,7 @@ class GeoArrondissementMunicipalQueriesTest extends BaseIntegrationTest {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
+
 
             JSONAssert.assertEquals(
                     loadExpectedJson("arrondissement-municipal-75101-ascendants-expected.json"),
@@ -105,6 +110,7 @@ class GeoArrondissementMunicipalQueriesTest extends BaseIntegrationTest {
         @Test
         @DisplayName("When getcogarrmuliste date=2025-01-01, returns 1 ArrMun actif")
         void should_return_1_arrmu_when_getcogarrmuliste_date() throws Exception {
+
             byte[] body = restTestClient.get()
                     .uri("/geo/arrondissementsMunicipaux?date={date}", "2025-01-01")
                     .exchange()

@@ -15,10 +15,12 @@ import org.springframework.test.context.DynamicPropertySource;
 @Tag("integration")
 class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends BaseIntegrationTest {
 
+
     @BeforeAll
     static void setupContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
+
 
     @DynamicPropertySource
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {

@@ -1,0 +1,34 @@
+[
+  {
+    "id" : "id1",
+    "uri" : "http://bauhaus/ds/id1",
+    "catalogRecordCreated" : "2023-06-01",
+    "catalogRecordModified" : "2024-01-10",
+    "validationState" : "Publiée",
+    "title" : [
+      {
+        "contenu" : "Titre 1 FR",
+        "langue" : "fr"
+      },
+      {
+        "contenu" : "Title 1 EN",
+        "langue" : "en"
+      }
+    ]
+  },
+  {
+    "id" : "id2",
+    "uri" : "http://bauhaus/ds/id2",
+    "validationState" : "Provisoire, jamais publiée",
+    "title" : [
+      {
+        "contenu" : "Titre 2 FR",
+        "langue" : "fr"
+      },
+      {
+        "contenu" : "Title 2 EN",
+        "langue" : "en"
+      }
+    ]
+  }
+]

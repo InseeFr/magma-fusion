@@ -9,11 +9,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
 class GeoRegionQueriesTest extends BaseIntegrationTest {
+
 
     @BeforeAll
     static void setupContainer() {
@@ -24,6 +26,7 @@ class GeoRegionQueriesTest extends BaseIntegrationTest {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
+
     @Nested
     @DisplayName("geo/region/{code}")
     class GetCogReg {
@@ -169,79 +172,78 @@ class GeoRegionQueriesTest extends BaseIntegrationTest {
                     .exchange()
                     .expectStatus().isNotFound();
         }
-    }
 
-    @Nested
-    @DisplayName("geo/region/{code}/projetes")
-    class GetCogRegProj {
+        @Nested
+        @DisplayName("geo/region/{code}/projetes")
+        class GetCogRegProj {
 
-        @Test
-        @DisplayName("When getcogregproj dateProjection null, returns 400")
-        void should_return_400_when_getcogregproj_dateProjection_null() {
-            restTestClient.get()
-                    .uri("/geo/region/99/projetes?date={date}", "2025-01-01")
-                    .exchange()
-                    .expectStatus().isBadRequest();
+            @Test
+            @DisplayName("When getcogregproj dateProjection null, returns 400")
+            void should_return_400_when_getcogregproj_dateProjection_null() {
+                restTestClient.get()
+                        .uri("/geo/region/99/projetes?date={date}", "2025-01-01")
+                        .exchange()
+                        .expectStatus().isBadRequest();
+            }
+
+            @Test
+            @DisplayName("When getcogregproj dateProjection empty, returns 400")
+            void should_return_400_when_getcogregproj_dateProjection_empty() {
+                restTestClient.get()
+                        .uri("/geo/region/99/projetes?dateProjection=&date={date}", "2025-01-01")
+                        .exchange()
+                        .expectStatus().isBadRequest();
+            }
+
+            @Test
+            @DisplayName("When getcogregproj 99 dateProjection=1995-01-01, returns projection (region 88)")
+            void should_return_1_projete_when_getcogregproj_99() throws Exception {
+                byte[] body = restTestClient.get()
+                        .uri("/geo/region/{code}/projetes?dateProjection={dateProjection}&date={date}",
+                                "99", "1995-01-01", "2025-01-01")
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectBody()
+                        .returnResult()
+                        .getResponseBody();
+                JSONAssert.assertEquals(
+                        loadExpectedJson("region-99-projetes-expected.json"),
+                        bodyAsString(body),
+                        true
+                );
+            }
         }
 
-        @Test
-        @DisplayName("When getcogregproj dateProjection empty, returns 400")
-        void should_return_400_when_getcogregproj_dateProjection_empty() {
-            restTestClient.get()
-                    .uri("/geo/region/99/projetes?dateProjection=&date={date}", "2025-01-01")
-                    .exchange()
-                    .expectStatus().isBadRequest();
-        }
+        @Nested
+        @DisplayName("geo/region/{code}/suivants")
+        class GetCogRegSuiv {
 
-        @Test
-        @DisplayName("When getcogregproj 99 dateProjection=1995-01-01, returns projection (region 88)")
-        void should_return_1_projete_when_getcogregproj_99() throws Exception {
-            byte[] body = restTestClient.get()
-                    .uri("/geo/region/{code}/projetes?dateProjection={dateProjection}&date={date}",
-                            "99", "1995-01-01", "2025-01-01")
-                    .exchange()
-                    .expectStatus().isOk()
-                    .expectBody()
-                    .returnResult()
-                    .getResponseBody();
+            @Test
+            @DisplayName("When getcogregsuiv 99 (actif, pas de suivant), returns 404")
+            void should_return_404_when_getcogregsuiv_99_no_suivants() {
+                restTestClient.get()
+                        .uri("/geo/region/{code}/suivants?date={date}", "99", "2025-01-01")
+                        .exchange()
+                        .expectStatus().isNotFound();
+            }
 
-            JSONAssert.assertEquals(
-                    loadExpectedJson("region-99-projetes-expected.json"),
-                    bodyAsString(body),
-                    true
-            );
-        }
-    }
+            @Test
+            @DisplayName("When getcogregsuiv 88, returns 1 suivant (region 99)")
+            void should_return_1_suivant_when_getcogregsuiv_88() throws Exception {
+                byte[] body = restTestClient.get()
+                        .uri("/geo/region/{code}/suivants?date={date}", "88", "1995-01-01")
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectBody()
+                        .returnResult()
+                        .getResponseBody();
 
-    @Nested
-    @DisplayName("geo/region/{code}/suivants")
-    class GetCogRegSuiv {
-
-        @Test
-        @DisplayName("When getcogregsuiv 99 (actif, pas de suivant), returns 404")
-        void should_return_404_when_getcogregsuiv_99_no_suivants() {
-            restTestClient.get()
-                    .uri("/geo/region/{code}/suivants?date={date}", "99", "2025-01-01")
-                    .exchange()
-                    .expectStatus().isNotFound();
-        }
-
-        @Test
-        @DisplayName("When getcogregsuiv 88, returns 1 suivant (region 99)")
-        void should_return_1_suivant_when_getcogregsuiv_88() throws Exception {
-            byte[] body = restTestClient.get()
-                    .uri("/geo/region/{code}/suivants?date={date}", "88", "1995-01-01")
-                    .exchange()
-                    .expectStatus().isOk()
-                    .expectBody()
-                    .returnResult()
-                    .getResponseBody();
-
-            JSONAssert.assertEquals(
-                    loadExpectedJson("region-88-suivants-expected.json"),
-                    bodyAsString(body),
-                    true
-            );
+                JSONAssert.assertEquals(
+                        loadExpectedJson("region-88-suivants-expected.json"),
+                        bodyAsString(body),
+                        true
+                );
+            }
         }
     }
 }

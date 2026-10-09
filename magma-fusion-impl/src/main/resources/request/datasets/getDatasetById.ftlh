@@ -8,7 +8,8 @@ SELECT DISTINCT
     ?descriptionLg1 ?descriptionLg2
     ?scopeNoteLg1 ?scopeNoteLg2
     ?landingPageLg1 ?landingPageLg2
-    ?catalogRecordCreator ?catalogRecordContributor
+    ?catalogRecordCreator ?idCatalogRecordCreator ?catalogRecordCreatorLabelLg1 ?catalogRecordCreatorLabelLg2
+    ?catalogRecordContributor ?idCatalogRecordContributor ?catalogRecordContributorLabelLg1 ?catalogRecordContributorLabelLg2
     ?catalogRecordModified ?catalogRecordCreated
     ?modified ?issued ?version ?spatialTemporal
     ?startPeriod ?endPeriod
@@ -24,7 +25,7 @@ SELECT DISTINCT
     ?numObservations ?numSeries
     (GROUP_CONCAT(DISTINCT CONCAT(?idCreator, "$", COALESCE(STR(?creatorLabelLg1), ""), "$", COALESCE(STR(?creatorLabelLg2), "")); separator="|") AS ?creators)
     (GROUP_CONCAT(DISTINCT STR(?wasGeneratedBy); separator=",") AS ?operationStat)
-    (GROUP_CONCAT(DISTINCT STR(?theme); separator=",") AS ?names)
+    (GROUP_CONCAT(DISTINCT STR(?theme); separator=",") AS ?themes)
     (GROUP_CONCAT(DISTINCT ?wasDerivedFromId; separator=",") AS ?wasDerivedFromS)
     (GROUP_CONCAT(DISTINCT STR(?relation); separator=",") AS ?relations)
     (GROUP_CONCAT(DISTINCT ?kwLg1; separator=",") AS ?keywordLg1)
@@ -32,6 +33,7 @@ SELECT DISTINCT
     (GROUP_CONCAT(DISTINCT STR(?archiveUnit); separator=",") AS ?archiveUnits)
     (GROUP_CONCAT(DISTINCT STR(?temporalResolution); separator=",") AS ?temporalResolutions)
     (GROUP_CONCAT(DISTINCT STR(?spatialResolution); separator=",") AS ?spatialResolutions)
+    (GROUP_CONCAT(DISTINCT STR(?statisticalUnit); separator=",") AS ?statisticalUnits)
 FROM <${DATASETS_GRAPH}>
 FROM <${ORGANISATIONS_GRAPH}>
 FROM <${ORGANISATIONS_GRAPH}/insee>
@@ -43,10 +45,9 @@ WHERE {
     ?dataset a dcat:Dataset ;
              dcterms:identifier "${id}" ;
              dcterms:identifier ?id ;
-             insee:validationState ?isValidated ;
              dcterms:title ?titleLg1 ;
              dcterms:title ?titleLg2 .
-
+    OPTIONAL { ?dataset insee:validationState ?isValidated .}
     BIND(IF(?isValidated = "Unpublished", "Provisoire, jamais publiée", "Publiée") AS ?statutValidation)
     FILTER (lang(?titleLg1) = '${LG1}')
     FILTER (lang(?titleLg2) = '${LG2}')
@@ -71,14 +72,36 @@ WHERE {
     OPTIONAL { ?dataset insee:spatialResolution ?spatialResolution }
     OPTIONAL { ?dataset adms:identifier ?ident . ?ident skos:notation ?identifier }
     OPTIONAL { ?dataset insee:archiveUnit ?archiveUnit }
+	OPTIONAL { ?dataset insee:statisticalUnit ?statisticalUnit }
 
-    OPTIONAL {
-        ?dataset ^foaf:primaryTopic ?catalogRecord .
-        OPTIONAL { ?catalogRecord dc:creator ?catalogRecordCreator }
-        OPTIONAL { ?catalogRecord dc:contributor ?catalogRecordContributor }
-        OPTIONAL { ?catalogRecord dcterms:modified ?catalogRecordModified }
-        OPTIONAL { ?catalogRecord dcterms:created ?catalogRecordCreated }
+
+OPTIONAL {
+        ?dataset ^foaf:primaryTopic/dc:creator ?catalogRecordCreator .
+        ?catalogRecordCreator dcterms:identifier ?idCatalogRecordCreator .
+        ?catalogRecordCreator skos:prefLabel ?catalogRecordCreatorLabelLg1 .
+        FILTER (lang(?catalogRecordCreatorLabelLg1) = '${LG1}')
+        OPTIONAL {
+            ?catalogRecordCreator skos:prefLabel ?catalogRecordCreatorLabelLg2 .
+            FILTER (lang(?catalogRecordCreatorLabelLg2) = '${LG2}') }
+        }
+
+OPTIONAL {
+           ?dataset ^foaf:primaryTopic/dc:contributor ?catalogRecordContributor .
+           ?catalogRecordContributor dcterms:identifier ?idCatalogRecordContributor .
+           ?catalogRecordContributor skos:prefLabel ?catalogRecordContributorLabelLg1 .
+           FILTER (lang(?catalogRecordContributorLabelLg1) = '${LG1}')
+           OPTIONAL {
+              ?catalogRecordContributor skos:prefLabel ?catalogRecordContributorLabelLg2 .
+              FILTER (lang(?catalogRecordContributorLabelLg2) = '${LG2}') }
+           }
+
+OPTIONAL {
+             ?dataset
+
+             ^foaf:primaryTopic/dcterms:modified ?catalogRecordModified ;
+             ^foaf:primaryTopic/dcterms:created ?catalogRecordCreated .
     }
+
 
     OPTIONAL {
         ?dataset prov:wasDerivedFrom ?wasDerivedFrom .
@@ -166,7 +189,9 @@ GROUP BY
     ?titleLg1 ?titleLg2 ?subtitleLg1 ?subtitleLg2
     ?abstractLg1 ?abstractLg2 ?descriptionLg1 ?descriptionLg2
     ?scopeNoteLg1 ?scopeNoteLg2 ?landingPageLg1 ?landingPageLg2
-    ?catalogRecordCreator ?catalogRecordContributor ?catalogRecordModified ?catalogRecordCreated
+    ?catalogRecordCreator ?idCatalogRecordCreator ?catalogRecordCreatorLabelLg1 ?catalogRecordCreatorLabelLg2
+    ?catalogRecordContributor ?idCatalogRecordContributor ?catalogRecordContributorLabelLg1 ?catalogRecordContributorLabelLg2
+    ?catalogRecordModified ?catalogRecordCreated
     ?modified ?issued ?version ?numObservations ?numSeries ?spatialTemporal
     ?startPeriod ?endPeriod ?derivedDescriptionLg1 ?derivedDescriptionLg2
     ?idPublisher ?labelPublisherLg1 ?labelPublisherLg2

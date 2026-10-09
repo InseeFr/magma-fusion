@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://magma.insee/document.schema.json",
+  "$id": "https://magmafusion.insee/document.schema.json",
   "title": "Document",
   "description": "Document associé à un contenu",
   "type": "object",

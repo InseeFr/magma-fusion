@@ -12,11 +12,13 @@ import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
 class GeoIrisQueriesTest extends BaseIntegrationTest {
+
 
     @BeforeAll
     static void setupContainer() {

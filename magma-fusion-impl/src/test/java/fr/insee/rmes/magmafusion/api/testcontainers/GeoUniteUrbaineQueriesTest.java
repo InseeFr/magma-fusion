@@ -15,6 +15,7 @@ import org.springframework.test.context.DynamicPropertySource;
 @Tag("integration")
 class GeoUniteUrbaineQueriesTest extends BaseIntegrationTest {
 
+
     @BeforeAll
     static void setupContainer() {
         GraphDBTestContainerConfig.startContainer();
@@ -38,6 +39,7 @@ class GeoUniteUrbaineQueriesTest extends BaseIntegrationTest {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
+
 
             JSONAssert.assertEquals(
                     loadExpectedJson("unite-urbaine-99101-expected.json"),

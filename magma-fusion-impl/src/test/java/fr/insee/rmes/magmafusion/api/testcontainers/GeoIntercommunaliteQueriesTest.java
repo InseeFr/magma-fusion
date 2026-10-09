@@ -15,6 +15,7 @@ import org.springframework.test.context.DynamicPropertySource;
 @Tag("integration")
 class GeoIntercommunaliteQueriesTest extends BaseIntegrationTest {
 
+
     @BeforeAll
     static void setupContainer() {
         GraphDBTestContainerConfig.startContainer();
@@ -24,6 +25,7 @@ class GeoIntercommunaliteQueriesTest extends BaseIntegrationTest {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
+
     @Nested
     @DisplayName("geo/intercommunalite/{code}")
     class GetCogInterco {

@@ -27,6 +27,7 @@ class GeoCommuneQueriesTest extends BaseIntegrationTest {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
+
     @Nested
     @DisplayName("geo/commune/{code}/ascendants")
     class GetCogComAsc {
@@ -269,7 +270,6 @@ class GeoCommuneQueriesTest extends BaseIntegrationTest {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
-
             JSONAssert.assertEquals(
                     loadExpectedJson("commune-99003-projetes-expected.json"),
                     bodyAsString(body),

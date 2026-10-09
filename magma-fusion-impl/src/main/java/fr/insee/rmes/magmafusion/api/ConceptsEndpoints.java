@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class ConceptsEndpoints implements ConceptsApi {
+public class ConceptsEndpoints implements DefinitionsApi {
 
     private final RequestProcessor requestProcessor;
     private final ConceptService conceptService;

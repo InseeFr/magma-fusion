@@ -11,8 +11,7 @@ import fr.insee.rmes.magmafusion.unmarshaller.JacksonUnmarshaller;
 import fr.insee.rmes.magmafusion.unmarshaller.Unmarshaller;
 import org.springframework.stereotype.Component;
 
-import static fr.insee.rmes.magmafusion.queries.QueryPathListDiffusion.*;
-import static fr.insee.rmes.magmafusion.queries.QueryPathListGestion.*;
+import static fr.insee.rmes.magmafusion.queries.QueryPathList.*;
 
 @Component
 public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExecutor,
@@ -41,6 +40,22 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
 
     public ExecutableQueryBuilder queryToFindDatasetById() {
         return new ExecutableQueryBuilder(DATASET_BY_ID, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindTemporalResolutionContenu() {
+        return new ExecutableQueryBuilder(DATASET_TEMPORAL_RESOLUTION, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindSpatialResolutionContenu() {
+        return new ExecutableQueryBuilder(DATASET_SPATIAL_RESOLUTION, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindStatisticalUnits() {
+        return new ExecutableQueryBuilder(DATASET_STATISTICAL, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindThemes() {
+        return new ExecutableQueryBuilder(DATASET_THEMES, this, unmarshaller);
     }
 
     public ExecutableQueryBuilder queryToFindDistributionsByDatasetId() {
