@@ -10,9 +10,13 @@ import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -29,13 +33,19 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DatasetsServiceImplTest {
 
-    private DatasetsServiceImpl service;
     private RequestProcessor requestProcessor;
+
+    @InjectMocks
+    private DatasetsServiceImpl service;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
+        requestProcessor = Mockito.mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
         service = new DatasetsServiceImpl(requestProcessor);
+        ReflectionTestUtils.setField(service, "lg1", "fr");
+        ReflectionTestUtils.setField(service, "lg2", "en");
     }
 
     // =========================================================
@@ -222,7 +232,6 @@ class DatasetsServiceImplTest {
 
     @Test
     void should_not_set_creator_when_creators_is_null() {
-        // le service ne setCreator que si dto.creators() est non-null et non-blank
         var result = service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO());
         assertNull(result.getCreator());
     }
@@ -316,22 +325,17 @@ class DatasetsServiceImplTest {
     @Test
     void getTemporalResolution_shouldReturnLabelsWithLocalisedTitles() {
         // Given
-        // 1. Crée les DTOs de résolution temporelle attendus (sans URI, juste les labels)
         TemporalResolutionDTO annualDto = new TemporalResolutionDTO(
-                "Annuelle",  // labeltemporalResolutionLg1
-                "Annual"     // labeltemporalResolutionLg2
+                "Annuelle",
+                "Annual"
         );
 
         TemporalResolutionDTO monthlyDto = new TemporalResolutionDTO(
-                "Mensuelle",  // labeltemporalResolutionLg1
-                "Monthly"     // labeltemporalResolutionLg2
+                "Mensuelle",
+                "Monthly"
         );
 
-        // 2. Mock le RequestProcessor avec RETURNS_DEEP_STUBS
-        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-
-        // 3. Configure le comportement : premier appel → annualDto, second appel → monthlyDto
-        when(mockProcessor.queryToFindTemporalResolutionContenu()
+        when(requestProcessor.queryToFindTemporalResolutionContenu()
                 .with(any(DatasetsRequestParametizer.class))
                 .executeQuery()
                 .singleResult(TemporalResolutionDTO.class)
@@ -339,22 +343,17 @@ class DatasetsServiceImplTest {
                 .thenReturn(annualDto)  // Premier appel (pour "http://bauhaus/codes/frequence/A")
                 .thenReturn(monthlyDto); // Second appel (pour "http://bauhaus/codes/frequence/M")
 
-        // 4. Crée le service avec le mock
-        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
-
-        // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getTemporalResolution reçoit des URIs en entrée)
         List<String> uris = List.of(
                 "http://bauhaus/codes/frequence/A",
                 "http://bauhaus/codes/frequence/M"
         );
 
         // When
-        List<Label> result = datasetsService.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
-        // Vérifie le premier IdLabel (pour "A")
         Label annualResolution = result.get(0);
         assertThat(annualResolution.getLabel()).hasSize(2);
         assertThat(annualResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
@@ -362,7 +361,6 @@ class DatasetsServiceImplTest {
         assertThat(annualResolution.getLabel().get(1).getLangue()).isEqualTo("en");
         assertThat(annualResolution.getLabel().get(1).getContenu()).isEqualTo("Annual");
 
-        // Vérifie le second IdLabel (pour "M")
         Label monthlyResolution = result.get(1);
         assertThat(monthlyResolution.getLabel()).hasSize(2);
         assertThat(monthlyResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
@@ -388,25 +386,22 @@ class DatasetsServiceImplTest {
     @Test
     void getTemporalResolution_shouldHandleNullLabelsInDTO() {
         // Given
-        // DTO avec des labels null
         TemporalResolutionDTO dtoWithNullLabels = new TemporalResolutionDTO(
                 null,  // labeltemporalResolutionLg1 = null
                 null   // labeltemporalResolutionLg2 = null
         );
 
-        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-        when(mockProcessor.queryToFindTemporalResolutionContenu()
+          when(requestProcessor.queryToFindTemporalResolutionContenu()
                 .with(any(DatasetsRequestParametizer.class))
                 .executeQuery()
                 .singleResult(TemporalResolutionDTO.class)
                 .result())
                 .thenReturn(dtoWithNullLabels);
 
-        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
         List<String> uris = List.of("http://bauhaus/codes/frequence/A");
 
         // When
-        List<Label> result = datasetsService.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(1);
@@ -421,25 +416,22 @@ class DatasetsServiceImplTest {
     @Test
     void getTemporalResolution_shouldHandleMissingLabelsInDTO() {
         // Given
-        // DTO avec un label null et un label vide
         TemporalResolutionDTO dtoWithMissingLabels = new TemporalResolutionDTO(
                 "",    // labeltemporalResolutionLg1 = vide
                 null   // labeltemporalResolutionLg2 = null
         );
 
-        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-        when(mockProcessor.queryToFindTemporalResolutionContenu()
+        when(requestProcessor.queryToFindTemporalResolutionContenu()
                 .with(any(DatasetsRequestParametizer.class))
                 .executeQuery()
                 .singleResult(TemporalResolutionDTO.class)
                 .result())
                 .thenReturn(dtoWithMissingLabels);
 
-        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
         List<String> uris = List.of("http://bauhaus/codes/frequence/A");
 
         // When
-        List<Label> result = datasetsService.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).hasSize(1);
@@ -459,24 +451,19 @@ class DatasetsServiceImplTest {
     @Test
     void getSpatialResolution_shouldReturnIdLabelsWithLocalisedTitles() {
         // Given
-        // 1. Crée les DTOs de résolution spatiale attendus (sans URI, juste les labels)
         SpatialResolutionDTO spatialResolution1Dto = new SpatialResolutionDTO(
-                "SpatialResolution1Id" , //id
-                "labelSpatialResolution1Lg1",  // labelSpatialResolutionLg1
-                "labelSpatialResolution1Lg2"     // labelSpatialResolutionLg2
+                "SpatialResolution1Id" ,
+                "labelSpatialResolution1Lg1",
+                "labelSpatialResolution1Lg2"
         );
 
         SpatialResolutionDTO spatialResolution2Dto = new SpatialResolutionDTO(
-                "SpatialResolution2Id", //id
-                "labelSpatialResolution2Lg1",  // labelSpatialResolutionLg1
-                "labelSpatialResolution2Lg2"     // labelSpatialResolutionLg2
+                "SpatialResolution2Id",
+                "labelSpatialResolution2Lg1",
+                "labelSpatialResolution2Lg2"
         );
 
-        // 2. Mock le RequestProcessor avec RETURNS_DEEP_STUBS
-        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-
-        // 3. Configure le comportement : premier appel → spatialResolution1Dto, second appel → spatialResolution2Dto
-        when(mockProcessor.queryToFindSpatialResolutionContenu()
+        when(requestProcessor.queryToFindSpatialResolutionContenu()
                 .with(any(DatasetsRequestParametizer.class))
                 .executeQuery()
                 .singleResult(SpatialResolutionDTO.class)
@@ -484,22 +471,17 @@ class DatasetsServiceImplTest {
                 .thenReturn(spatialResolution1Dto)
                 .thenReturn(spatialResolution2Dto);
 
-        // 4. Crée le service avec le mock
-        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
-
-        // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getSpatialResolution reçoit des URIs en entrée)
         List<String> uris = List.of(
                 "http://bauhaus/codes/frequence/A",
                 "http://bauhaus/codes/frequence/M"
         );
 
         // When
-        List<IdLabel> result = datasetsService.getSpatialResolution(uris);
+        List<IdLabel> result = service.getSpatialResolution(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
-        // Vérifie le premier IdLabel (pour "A")
         IdLabel firstResolution = result.get(0);
         assertThat(firstResolution.getLabel()).hasSize(2);
         assertThat(firstResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
@@ -507,7 +489,6 @@ class DatasetsServiceImplTest {
         assertThat(firstResolution.getLabel().get(1).getLangue()).isEqualTo("en");
         assertThat(firstResolution.getLabel().get(1).getContenu()).isEqualTo("labelSpatialResolution1Lg2");
 
-        // Vérifie le second IdLabel (pour "M")
         IdLabel secondResolution = result.get(1);
         assertThat(secondResolution.getLabel()).hasSize(2);
         assertThat(secondResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
@@ -523,24 +504,19 @@ class DatasetsServiceImplTest {
     @Test
     void getStaitsticalUnits_shouldReturnIdLabelsWithLocalisedTitles() {
         // Given
-        // 1. Crée les DTOs de statistical units attendus (sans URI, juste les labels)
         StatisticalUnitDTO statisticalUnit1DTO = new StatisticalUnitDTO(
-                "statisticalUnit1Id" , //id
+                "statisticalUnit1Id" ,
                 "labelStatisticalUnit1Lg1",
                 "labelStatisticalUnit1Lg2"
         );
 
         StatisticalUnitDTO statisticalUnit2DTO = new StatisticalUnitDTO(
-                "statisticalUnit2DTO", //id
+                "statisticalUnit2DTO",
                 "labelStatisticalUnit2Lg1",
                 "labelStatisticalUnit2Lg2"
         );
 
-        // 2. Mock le RequestProcessor avec RETURNS_DEEP_STUBS
-        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-
-        // 3. Configure le comportement : premier appel → statisticalUnit1DTO, second appel → statisticalUnit2DTO
-        when(mockProcessor.queryToFindStatisticalUnits()
+        when(requestProcessor.queryToFindStatisticalUnits()
                 .with(any(DatasetsRequestParametizer.class))
                 .executeQuery()
                 .singleResult(StatisticalUnitDTO.class)
@@ -548,22 +524,17 @@ class DatasetsServiceImplTest {
                 .thenReturn(statisticalUnit1DTO)
                 .thenReturn(statisticalUnit2DTO);
 
-        // 4. Crée le service avec le mock
-        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
-
-        // 5. Liste des URIs à tester (même si le DTO ne contient plus l'URI, la méthode getSpatialResolution reçoit des URIs en entrée)
         List<String> uris = List.of(
                 "http://uriStatisticalUnit1",
                 "http://uriStatisticalUnit2"
         );
 
         // When
-        List<IdLabel> result = datasetsService.getStatisticalUnits(uris);
+        List<IdLabel> result = service.getStatisticalUnits(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
-        // Vérifie le premier IdLabel (pour "A")
         IdLabel firstStatiticalUnit = result.get(0);
         assertThat(firstStatiticalUnit.getLabel()).hasSize(2);
         assertThat(firstStatiticalUnit.getLabel().get(0).getLangue()).isEqualTo("fr");
@@ -571,7 +542,6 @@ class DatasetsServiceImplTest {
         assertThat(firstStatiticalUnit.getLabel().get(1).getLangue()).isEqualTo("en");
         assertThat(firstStatiticalUnit.getLabel().get(1).getContenu()).isEqualTo("labelStatisticalUnit1Lg2");
 
-        // Vérifie le second IdLabel (pour "M")
         IdLabel secondStatiticalUnit = result.get(1);
         assertThat(secondStatiticalUnit.getLabel()).hasSize(2);
         assertThat(secondStatiticalUnit.getLabel().get(0).getLangue()).isEqualTo("fr");
