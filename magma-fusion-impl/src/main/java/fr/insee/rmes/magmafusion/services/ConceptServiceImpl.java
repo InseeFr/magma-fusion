@@ -1,11 +1,13 @@
 package fr.insee.rmes.magmafusion.services;
 
+import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.Concept;
 import fr.insee.rmes.magmafusion.model.ConceptForList;
 import fr.insee.rmes.magmafusion.model.LocalisedContenu;
 import fr.insee.rmes.magmafusion.model.NearbyConcept;
 import fr.insee.rmes.magmafusion.utils.ConceptDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
@@ -24,7 +27,13 @@ import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 @Slf4j
 public class ConceptServiceImpl implements ConceptService{
 
-        public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
+    @Value("${fr.insee.rmes.magmafusion.lg1}")
+    private String lg1;
+
+    @Value("${fr.insee.rmes.magmafusion.lg2}")
+    private String lg2;
+
+    public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
             Concept concept = new Concept();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
@@ -51,9 +60,9 @@ public class ConceptServiceImpl implements ConceptService{
         }
 
 
-        private static List<LocalisedContenu> buildLocalisedLabels(String frField, String enField) {
+        private List<LocalisedContenu> buildLocalisedLabels(String frField, String enField) {
             if (frField == null && enField == null) return null;
-            return createList(createLangField(frField, "fr"), createLangField(enField, "en"));
+            return createList(createLangField(frField, lg1), createLangField(enField, lg2));
         }
 
 
@@ -66,7 +75,7 @@ public class ConceptServiceImpl implements ConceptService{
                 return Instant.parse(dateString)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate();
-            } catch (DateTimeParseException e1) {
+            } catch (DateTimeParseException _) {
                 // If failed, try to parse as LocalDateTime
                 try {
                     return LocalDateTime.parse(dateString).toLocalDate();
