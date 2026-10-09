@@ -26,6 +26,7 @@ tags:
 
   # -- Géographie
   - name: Geographie
+    x-geo: true
     description: API Géographie
 
   # -- Opérations
@@ -8674,6 +8675,16 @@ components:
           items:
             $ref: './langue-contenu.schema.json'
 
+    Label:
+      type: object
+      properties:
+        type:
+          type: string
+        label:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+
 
     # ============================================
     # SERIES / OPERATIONS SCHEMAS
@@ -8997,9 +9008,9 @@ components:
         catalogRecordModified:
           type: string
         catalogRecordCreator:
-          type: string
+          $ref: '#/components/schemas/IdLabel'
         catalogRecordContributor:
-          type: string
+          $ref: '#/components/schemas/IdLabel'
         identifier:
           type: string
         issued:
@@ -9069,13 +9080,13 @@ components:
         processStep:
           $ref: '#/components/schemas/ProcessStep'
         accrualPeriodicity:
-          $ref: 'langue-contenu.schema.json'
+          $ref: '#/components/schemas/IdLabel'
         temporal:
           $ref: '#/components/schemas/Temporal'
         temporalResolution:
           type: array
           items:
-            $ref: 'langue-contenu.schema.json'
+            $ref: '#/components/schemas/Label'
         spatial:
           $ref: '#/components/schemas/IdLabel'
         spatialResolution:

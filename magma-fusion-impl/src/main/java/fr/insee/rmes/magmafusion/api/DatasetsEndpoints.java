@@ -28,7 +28,7 @@ public class DatasetsEndpoints implements JeuxDeDonneesApi {
     @Override
     public ResponseEntity<List<Dataset>> getListDatasets(@Nullable String dateMiseAJour) {
         List<DatasetDTO> dtos = requestProcessor.queryToFindAllDatasets()
-                .with(new DatasetsRequestParametizer(dateMiseAJour))
+                .with(DatasetsRequestParametizer.ofDate(dateMiseAJour))
                 .executeQuery()
                 .listResult(DatasetDTO.class)
                 .result();
@@ -40,7 +40,7 @@ public class DatasetsEndpoints implements JeuxDeDonneesApi {
     @Override
     public ResponseEntity<Dataset> getDataSetById(String id) {
         DatasetByIdDTO dto = requestProcessor.queryToFindDatasetById()
-                .with(new DatasetsRequestParametizer(id, null))
+                .with(DatasetsRequestParametizer.ofId(id))
                 .executeQuery()
                 .singleResult(DatasetByIdDTO.class)
                 .result();
@@ -53,7 +53,7 @@ public class DatasetsEndpoints implements JeuxDeDonneesApi {
     @Override
     public ResponseEntity<List<Distribution>> getDataSetDistributionsById(String id) {
         List<DistributionDTO> dtos = requestProcessor.queryToFindDistributionsByDatasetId()
-                .with(new DatasetsRequestParametizer(id, null))
+                .with(DatasetsRequestParametizer.ofId(id))
                 .executeQuery()
                 .listResult(DistributionDTO.class)
                 .result();

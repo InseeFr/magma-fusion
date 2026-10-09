@@ -42,6 +42,22 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(DATASET_BY_ID, this, unmarshaller);
     }
 
+    public ExecutableQueryBuilder queryToFindTemporalResolutionContenu() {
+        return new ExecutableQueryBuilder(DATASET_TEMPORAL_RESOLUTION, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindSpatialResolutionContenu() {
+        return new ExecutableQueryBuilder(DATASET_SPATIAL_RESOLUTION, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindStatisticalUnits() {
+        return new ExecutableQueryBuilder(DATASET_STATISTICAL, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindThemes() {
+        return new ExecutableQueryBuilder(DATASET_THEMES, this, unmarshaller);
+    }
+
     public ExecutableQueryBuilder queryToFindDistributionsByDatasetId() {
         return new ExecutableQueryBuilder(DISTRIBUTIONS_BY_DATASET_ID, this, unmarshaller);
     }

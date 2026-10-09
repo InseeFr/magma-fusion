@@ -16,8 +16,12 @@ public record DatasetByIdDTO(
         String scopeNoteLg2,
         String landingPageLg1,
         String landingPageLg2,
-        String catalogRecordCreator,
-        String catalogRecordContributor,
+        String idCatalogRecordCreator,
+        String catalogRecordCreatorLabelLg1,
+        String catalogRecordCreatorLabelLg2,
+        String idCatalogRecordContributor,
+        String catalogRecordContributorLabelLg1,
+        String catalogRecordContributorLabelLg2,
         String catalogRecordModified,
         String catalogRecordCreated,
         String modified,
@@ -60,6 +64,8 @@ public record DatasetByIdDTO(
         String keywordLg2,
         String archiveUnits,
         String temporalResolutions,
-        String spatialResolutions
+        String spatialResolutions,
+        String statisticalUnits,
+        String themes
 ) {
 }

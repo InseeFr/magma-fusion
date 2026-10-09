@@ -9,7 +9,6 @@ public record ConceptsRequestParametizer(String id, String libelle, String colle
 
     public static ConceptsRequestParametizer ofUri(String uriConcept){
         return new ConceptsRequestParametizer("none", "none", "none", uriConcept);
-
     }
 
     public ConceptsRequestParametizer(String libelle, String collection){

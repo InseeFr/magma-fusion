@@ -1,0 +1,83 @@
+{
+  "id": "25baaf1f",
+  "uri": "http://bauhaus/ds/25baaf1f",
+  "validationState": "Provisoire, jamais publiée",
+  "modified": "2024-11-01",
+  "issued": "2023-05-15",
+  "version": "2.0",
+  "identifier": "DD_EEC_SERIES",
+  "catalogRecordCreator":
+  {
+    "id": "id catalogRecordCreator",
+    "label": [
+      {
+        "contenu": "catalogRecordCreatorLabelLg1",
+        "langue": "fr"
+      },
+      {
+        "contenu": "catalogRecordCreatorLabelLg2",
+        "langue": "en"
+      }
+    ]
+  },
+  "catalogRecordContributor":
+  {
+    "id": "id catalogRecordContributor",
+    "label": [
+      {
+        "contenu": "catalogRecordContributorLabelLg1",
+        "langue": "fr"
+      },
+      {
+        "contenu": "catalogRecordContributorLabelLg2",
+        "langue": "en"
+      }
+    ]
+  },
+  "catalogRecordCreated": "2024-12-09T12:00:00",
+  "catalogRecordModified": "2024-12-09T12:00:00",
+  "type": [
+    {
+      "contenu": "label Type FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "label Type EN",
+      "langue": "en"
+    }
+  ],
+  "accessRights": [
+    {
+      "contenu": "label Access Rights FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "label Access Rights EN",
+      "langue": "en"
+    }
+  ],
+  "confidentialityStatus": [
+    {
+      "contenu": "label Condidentiality Status FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "label Condidentiality Status EN",
+      "langue": "en"
+    }
+  ],
+  "accrualPeriodicity": {
+    "label": [
+      {
+        "contenu": "label Accrual Periodicity FR",
+        "langue": "fr"
+      },
+      {
+        "contenu": "label Accrual Periodicity EN",
+        "langue": "en"
+      }
+    ]
+  },
+  "disseminationStatus": "dissemination status",
+  "spatialTemporal": "2025-01-01"
+}

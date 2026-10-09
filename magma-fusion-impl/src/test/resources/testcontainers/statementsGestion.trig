@@ -216,9 +216,26 @@
         dcterms:description "Description du dataset test"@fr ;
         skos:scopeNote "Note de portée du dataset test"@fr ;
         insee:validationState "Unpublished" ;
+        foaf:primaryTopic <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest> ;
+        dc:creator <http://bauhaus/organisations/insee/ident_insee> ;
+        dc:contributor <http://bauhaus/organisations/insee/ident_insee> ;
         prov:wasGeneratedBy <http://bauhaus/operations/serie/idSerieGeneratrice> ;
         adms:identifier <http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest/ident> ;
+        dcat:temporalResolution <http://bauhaus/temporalResolution/1>;
+        dcat:temporalResolution <http://bauhaus/temporalResolution/2>;
+        insee:spatialResolution <http://bauhaus/spatialResolution/1>;
+        insee:spatialResolution <http://bauhaus/spatialResolution/2>;
+        insee:statisticalUnit <http://bauhaus/statisticalUnit/1>;
+        insee:statisticalUnit <http://bauhaus/statisticalUnit/2>;
+        dcat:theme <http://bauhaus/theme/1>;
+        dcat:theme <http://bauhaus/theme/2>;
         dcat:distribution <http://bauhaus/catalogues/distribution/idDistributionTest> .
+
+        <http://bauhaus/organisations/insee/ident_insee>
+            dcterms:identifier "id INSEE" ;
+            skos:prefLabel "Institut national de la statistique"@fr ;
+            skos:prefLabel "National Institute of Statistics"@en .
+
 
     <http://bauhaus/catalogues/distribution/idDistributionTest>
         rdf:type dcat:Distribution ;
@@ -411,6 +428,55 @@
         skos:inScheme <http://id.insee.fr/codes/conceptScheme/modeCollecteTest> ;
         skos:prefLabel "Par telephone"@fr ;
         skos:prefLabel "By phone"@en .
+
+    <http://bauhaus/temporalResolution/1>
+            skos:notation "TR1" ;
+            skos:inScheme <http://bauhaus/typeTemporalResol> ;
+            skos:prefLabel "temporalResolution1 du dataset test"@fr ;
+            skos:prefLabel "temporalResolution1 of test dataset"@en .
+
+    <http://bauhaus/temporalResolution/2>
+                skos:notation "TR2" ;
+                skos:inScheme <http://bauhaus/typeTemporalResol> ;
+                skos:prefLabel "temporalResolution2 du dataset test"@fr ;
+                skos:prefLabel "temporalResolution2 of test dataset"@en .
+
+        <http://bauhaus/spatialResolution/1>
+                skos:notation "SR1" ;
+                skos:inScheme <http://bauhaus/typeSpatialResol> ;
+                skos:prefLabel "spatialResolution1 du dataset test"@fr ;
+                skos:prefLabel "spatialResolution1 of test dataset"@en .
+
+        <http://bauhaus/spatialResolution/2>
+                skos:notation "SR2" ;
+                skos:inScheme <http://bauhaus/typeSpatialResol> ;
+                skos:prefLabel "spatialResolution2 du dataset test"@fr ;
+                skos:prefLabel "spatialResolution2 of test dataset"@en .
+
+        <http://bauhaus/statisticalUnit/1>
+                skos:notation "SU1" ;
+                skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
+                skos:prefLabel "statisticalUnit1 du dataset test"@fr ;
+                skos:prefLabel "statisticalUnit1 of test dataset"@en .
+
+        <http://bauhaus/statisticalUnit/2>
+                skos:notation "SU2" ;
+                skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
+                skos:prefLabel "statisticalUnit2 du dataset test"@fr ;
+                skos:prefLabel "statisticalUnit2 of test dataset"@en .
+
+}
+
+<http://rdf.insee.fr/graphes/concepts> {
+    <http://bauhaus/theme/1>
+        skos:inScheme <http://bauhaus/concepts/themes> ;
+        skos:prefLabel "theme1 du dataset test"@fr ;
+        skos:prefLabel "theme1 of test dataset"@en .
+
+    <http://bauhaus/theme/2>
+         skos:inScheme <http://bauhaus/concepts/themes> ;
+         skos:prefLabel "theme2 du dataset test"@fr ;
+         skos:prefLabel "theme2 of test dataset"@en .
 }
 
 <http://rdf.insee.fr/graphes/qualite/territoires> {

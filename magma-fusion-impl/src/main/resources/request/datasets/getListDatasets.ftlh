@@ -10,10 +10,11 @@ WHERE {
     OPTIONAL {
         ?uri dcterms:title ?titreLg2 .
         FILTER (LANG(?titreLg2) = '${LG2}')
+        ?uri insee:validationState ?statutValidation .
     }
     ?uriCatalogRecord dcterms:modified ?catalogRecordModified .
     ?uriCatalogRecord dcterms:created ?dateCreation .
-    ?uri insee:validationState ?statutValidation .
+
 <#if date?? && date?trim?has_content>
     FILTER (?catalogRecordModified > "${date}"^^xsd:dateTime)
 </#if>
