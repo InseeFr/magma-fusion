@@ -19,7 +19,7 @@ import java.net.URI;
 class GeoCommuneQueriesTest extends BaseIntegrationTest {
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

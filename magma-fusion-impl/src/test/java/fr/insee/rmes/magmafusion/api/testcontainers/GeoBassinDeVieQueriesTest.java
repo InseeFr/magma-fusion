@@ -1,11 +1,8 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.insee.rmes.magmafusion.api.GeoBassinDeVieHandler;
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -19,7 +16,7 @@ import org.springframework.test.context.DynamicPropertySource;
 class GeoBassinDeVieQueriesTest extends BaseIntegrationTest {
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

@@ -17,7 +17,7 @@ class GeoQuartiersPrioritairesDeLaPolitiqueDeLaVilleTest extends BaseIntegration
 
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

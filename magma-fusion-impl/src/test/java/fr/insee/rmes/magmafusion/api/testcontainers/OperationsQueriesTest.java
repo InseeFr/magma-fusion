@@ -16,7 +16,7 @@ import org.springframework.test.context.DynamicPropertySource;
 class OperationsQueriesTest extends BaseIntegrationTest {
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

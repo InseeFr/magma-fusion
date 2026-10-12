@@ -17,7 +17,7 @@ class GeoIntercommunaliteQueriesTest extends BaseIntegrationTest {
 
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

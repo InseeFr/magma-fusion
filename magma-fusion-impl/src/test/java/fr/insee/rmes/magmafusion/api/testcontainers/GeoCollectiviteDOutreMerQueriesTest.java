@@ -16,7 +16,7 @@ import org.springframework.test.context.DynamicPropertySource;
 class GeoCollectiviteDOutreMerQueriesTest extends BaseIntegrationTest {
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

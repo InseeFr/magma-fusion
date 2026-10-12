@@ -17,7 +17,7 @@ import org.springframework.test.context.DynamicPropertySource;
 class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

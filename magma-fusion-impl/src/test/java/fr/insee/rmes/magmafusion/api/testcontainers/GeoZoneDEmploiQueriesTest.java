@@ -18,7 +18,7 @@ class GeoZoneDEmploiQueriesTest extends BaseIntegrationTest {
 
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 

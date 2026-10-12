@@ -16,7 +16,7 @@ import org.springframework.test.context.DynamicPropertySource;
 class GeoCantonQueriesTest extends BaseIntegrationTest {
 
     @BeforeAll
-    static void setupContainer() {
+    static void installContainer() {
         GraphDBTestContainerConfig.startContainer();
     }
 
