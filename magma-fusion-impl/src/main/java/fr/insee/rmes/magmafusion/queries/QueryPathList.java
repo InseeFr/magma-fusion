@@ -41,4 +41,5 @@ public class QueryPathList {
     public static final String RUBRIQUES = "operations/getDocumentationRubricsByIdSimsQuery.ftlh";
     public static final String DOCUMENTS = "operations/getDocumentsQueryByIdSimsIdRubric.ftlh";
     public static final String NOMENCLATURE = "classifications/getClassificationByCode.ftlh";
+    public static final String NOMENCLATURES = "classifications/getListNomenclatures.ftlh";
 }
