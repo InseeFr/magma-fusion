@@ -38,7 +38,7 @@ public class NomenclaturesEndpoints implements NomenclaturesApi {
 
         return EndpointsUtils.toResponseEntity(nomenclatures);
 
-    };
+    }
 
     @Override
     public ResponseEntity<Nomenclature> getClassificationByCode(String nomenclature, String niveau, String code){
