@@ -1,39 +1,32 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
-import fr.insee.rmes.magmafusion.api.OperationsEndpoints;
-import fr.insee.rmes.magmafusion.api.testcontainers.config.TestContainer;
+import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.ObjectMapper;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@SpringBootTest(properties = "--spring.profiles.active=security.disabled")
+@SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestTestClient
 @Tag("integration")
+class OperationsQueriesTest extends BaseIntegrationTest {
 
-class OperationsQueriesTest extends TestContainer {
+    @BeforeAll
+    static void installContainer() {
+        GraphDBTestContainerConfig.startContainer();
+    }
 
-    @Autowired
-    OperationsEndpoints endpoints;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+    @DynamicPropertySource
+    static void overrideSpringProperties(DynamicPropertyRegistry registry) {
+        GraphDBTestContainerConfig.overrideSpringProperties(registry);
+    }
 
-    static final String SERIE_ID = "idSeriePrincipaleTest";
-    static final String OPERATION_ID = "idOperationTest";
+    private static final String SERIE_ID = "idSeriePrincipaleTest";
+    private static final String OPERATION_ID = "idOperationTest";
 
     @Nested
     @DisplayName("operations/serie/{id}")
@@ -42,28 +35,30 @@ class OperationsQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getSerieById (/operations/serie/{id} end-point), returns full serie")
         void should_return_serieById_idSeriePrincipaleTest_when_getSerieById_idSeriePrincipaleTest() throws Exception {
-            var response = endpoints.getSerieById(SERIE_ID);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/operations/serie/{id}", SERIE_ID)
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/serie-idSeriePrincipaleTest-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("serie-idSeriePrincipaleTest-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
 
         @Test
         @DisplayName("When getSerieById (/operations/serie/{id} end-point) with unknown id, returns 404")
-        void should_return_404_when_getSerieById_unknown_id() throws Exception {
-            mockMvc.perform(get("/operations/serie/serieInconnue"))
-                    .andExpect(status().isNotFound());
+        void should_return_404_when_getSerieById_unknown_id() {
+            restTestClient.get()
+                    .uri("/operations/serie/{id}", "serieInconnue")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
-
 
     @Nested
     @DisplayName("operations/operation/{id}")
@@ -72,25 +67,28 @@ class OperationsQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getOperationByCode (/operations/operation/{id} end-point), returns full operation")
         void should_return_operationById_idOperationTest_when_getOperationByCode_idOperationTest() throws Exception {
-            var response = endpoints.getOperationByCode(OPERATION_ID);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/operations/operation/{id}", OPERATION_ID)
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/operation-idOperationTest-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("operation-idOperationTest-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
 
         @Test
         @DisplayName("When getOperationByCode (/operations/serie/{id} end-point) with unknown id, returns 404")
-        void should_return_404_when_getOperationById_unknown_id() throws Exception {
-            mockMvc.perform(get("/operations/operation/serieInconnue"))
-                    .andExpect(status().isNotFound());
+        void should_return_404_when_getOperationById_unknown_id() {
+            restTestClient.get()
+                    .uri("/operations/operation/{id}", "serieInconnue")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 
@@ -98,57 +96,57 @@ class OperationsQueriesTest extends TestContainer {
     @DisplayName("operations/series")
     class GetSeries {
 
-
         @Test
         @DisplayName("When getAllSeries (/operations/series end-point) without date filter, returns all series")
         void should_return_all_series_when_getAllSeries_without_dateFilter() throws Exception {
-            var response = endpoints.getAllSeries(null);
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/operations/series")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/serie-list-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("serie-list-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getAllSeries (/operations/series end-point) with date 2025-01-01, returns 1 filtered serie")
         void should_return_filtered_series_when_getAllSeries_with_date_2025_01_01() {
-            var response = endpoints.getAllSeries("2025-01-01");
-            var result = response.getBody();
-
-            assertNotNull(result);
-            assertAll(
-                    () -> assertEquals(1, result.size()),
-                    () -> assertEquals("idSerieTest", result.getFirst().getSeriesId()),
-                    () -> assertEquals("http://bauhaus/operations/serie/idSerieTest", result.getFirst().getUri())
-            );
+            restTestClient.get()
+                    .uri("/operations/series?dateMiseAJour={dateMiseAJour}", "2025-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .jsonPath("$.length()").isEqualTo(1)
+                    .jsonPath("$[0].seriesId").isEqualTo("idSerieTest")
+                    .jsonPath("$[0].uri").isEqualTo("http://bauhaus/operations/serie/idSerieTest");
         }
 
         @Test
         @DisplayName("When getAllSeries (/operations/series end-point) with date 2024-01-01, returns 2 filtered series")
         void should_return_filtered_series_when_getAllSeries_with_date_2024_01_01() {
-            var response = endpoints.getAllSeries("2024-01-01");
-            var result = response.getBody();
-
-            assertNotNull(result);
-            assertAll(
-                    () -> assertEquals(2, result.size()),
-                    () -> assertEquals("idSeriePrincipaleTest", result.getFirst().getSeriesId()),
-                    () -> assertEquals("idSerieTest", result.get(1).getSeriesId())
-            );
+            restTestClient.get()
+                    .uri("/operations/series?dateMiseAJour={dateMiseAJour}", "2024-01-01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .jsonPath("$.length()").isEqualTo(2)
+                    .jsonPath("$[0].seriesId").isEqualTo("idSeriePrincipaleTest")
+                    .jsonPath("$[1].seriesId").isEqualTo("idSerieTest");
         }
 
         @Test
         @DisplayName("When getAllSeries (/operations/series end-point), returns 200")
-        void should_return_200_when_getAllSeries() throws Exception {
-            mockMvc.perform(get("/operations/series"))
-                    .andExpect(status().isOk());
+        void should_return_200_when_getAllSeries() {
+            restTestClient.get()
+                    .uri("/operations/series")
+                    .exchange()
+                    .expectStatus().isOk();
         }
     }
 
@@ -159,25 +157,28 @@ class OperationsQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getIndicatorById, returns full indicator")
         void should_return_full_indicateur_when_getIndicatorById_idIndicateurTest() throws Exception {
-            var response = endpoints.getIndicatorById("idIndicateurTest");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/operations/indicateur/{id}", "idIndicateurTest")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/indicateur-idIndicateurTest-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("indicateur-idIndicateurTest-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
 
         @Test
         @DisplayName("When getIndicatorById with unknown id, returns 404")
-        void should_return_404_when_getIndicatorById_unknown_id() throws Exception {
-            mockMvc.perform(get("/operations/indicateur/indicateurInconnu"))
-                    .andExpect(status().isNotFound());
+        void should_return_404_when_getIndicatorById_unknown_id() {
+            restTestClient.get()
+                    .uri("/operations/indicateur/{id}", "indicateurInconnu")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 
@@ -188,42 +189,46 @@ class OperationsQueriesTest extends TestContainer {
         @Test
         @DisplayName("When getRapportQualiteByCode, returns rapport with all rubrique types (TEXT, DATE, RICH_TEXT, GEOGRAPHY, ORGANIZATION, CODE_LIST)")
         void should_return_rapportQualite_with_all_rubrique_types() throws Exception {
-            var response = endpoints.getRapportQualiteByCode("9999");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/operations/rapportQualite/{id}", "9999")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/rapportQualite-9999-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("rapportQualite-9999-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
 
         @Test
         @DisplayName("When getRapportQualiteByCode for rapport without rubriques, returns rapport without rubriques")
         void should_return_rapportQualite_without_rubriques() throws Exception {
-            var response = endpoints.getRapportQualiteByCode("9998");
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/operations/rapportQualite/{id}", "9998")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/rapportQualite-9998-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("rapportQualite-9998-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, false);
         }
 
         @Test
         @DisplayName("When getRapportQualiteByCode with unknown id, returns 404")
-        void should_return_404_when_rapportQualite_inexistant() throws Exception {
-            mockMvc.perform(get("/operations/rapportQualite/0000"))
-                    .andExpect(status().isNotFound());
+        void should_return_404_when_rapportQualite_inexistant() {
+            restTestClient.get()
+                    .uri("/operations/rapportQualite/{id}", "0000")
+                    .exchange()
+                    .expectStatus().isNotFound();
         }
     }
 }
