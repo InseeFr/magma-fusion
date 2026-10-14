@@ -27,44 +27,7 @@ public class DatasetsServiceImpl implements DatasetsService {
     }
 
     private Dataset convertDatasetDTOToDataSet(DatasetDTO dto) {
-        Dataset dataSet = new Dataset();
-
-        dataSet.setPageAccueil(null);
-        dataSet.setDateMiseAJour(null);
-        dataSet.setDatePublication(null);
-        dataSet.setVersion(null);
-        dataSet.setSpatioTemporel(null);
-        dataSet.setDisseminationStatus(null);
-        dataSet.setIdentifier(null);
-        dataSet.setDateCreationEnregistrementCatalogue(null);
-        dataSet.setDateMiseAJourEnregistrementCatalogue(null);
-        dataSet.setCreateurEnregistrementCatalogue(null);
-        dataSet.setContributeurEnregistrementCatalogue(null);
-        dataSet.setNumObservations(null);
-        dataSet.setNumSeries(null);
-        dataSet.setSousTitre(null);
-        dataSet.setResume(null);
-        dataSet.setDescription(null);
-        dataSet.setNoteDePortee(null);
-        dataSet.setEditeur(null);
-        dataSet.setKeyword(null);
-        dataSet.setType(null);
-        dataSet.setAccessRights(null);
-        dataSet.setConfidentialityStatus(null);
-        dataSet.setCouvertureSpatiale(null);
-        dataSet.setPeriodeTemporelle(null);
-        dataSet.setStructure(null);
-        dataSet.setCreateur(null);
-        dataSet.setaEteGenerePar(null);
-        dataSet.setTheme(null);
-        dataSet.setRelations(null);
-        dataSet.setArchiveUnit(null);
-        dataSet.setWasDerivedFrom(null);
-        dataSet.setProcessStep(null);
-        dataSet.setPeriodiciteDeMiseAJour(null);
-        dataSet.setResolutionTemporelle(null);
-        dataSet.setResolutionSpatiale(null);
-        dataSet.setUniteStatistique(null);
+        Dataset dataSet = initDataset();
 
         dataSet.setId(dto.id());
         dataSet.setUri(dto.uri());
@@ -79,44 +42,7 @@ public class DatasetsServiceImpl implements DatasetsService {
 
     @Override
     public Dataset convertDatasetByIdDTOToDataSet(DatasetByIdDTO dto) {
-        Dataset dataSet = new Dataset();
-
-        dataSet.setPageAccueil(null);
-        dataSet.setDateMiseAJour(null);
-        dataSet.setDatePublication(null);
-        dataSet.setVersion(null);
-        dataSet.setSpatioTemporel(null);
-        dataSet.setDisseminationStatus(null);
-        dataSet.setIdentifier(null);
-        dataSet.setDateCreationEnregistrementCatalogue(null);
-        dataSet.setDateMiseAJourEnregistrementCatalogue(null);
-        dataSet.setCreateurEnregistrementCatalogue(null);
-        dataSet.setContributeurEnregistrementCatalogue(null);
-        dataSet.setNumObservations(null);
-        dataSet.setNumSeries(null);
-        dataSet.setSousTitre(null);
-        dataSet.setResume(null);
-        dataSet.setDescription(null);
-        dataSet.setNoteDePortee(null);
-        dataSet.setEditeur(null);
-        dataSet.setKeyword(null);
-        dataSet.setType(null);
-        dataSet.setAccessRights(null);
-        dataSet.setConfidentialityStatus(null);
-        dataSet.setSpatioTemporel(null);
-        dataSet.setPeriodeTemporelle(null);
-        dataSet.setStructure(null);
-        dataSet.setCreateur(null);
-        dataSet.setaEteGenerePar(null);
-        dataSet.setTheme(null);
-        dataSet.setRelations(null);
-        dataSet.setArchiveUnit(null);
-        dataSet.setWasDerivedFrom(null);
-        dataSet.setProcessStep(null);
-        dataSet.setPeriodiciteDeMiseAJour(null);
-        dataSet.setResolutionTemporelle(null);
-        dataSet.setResolutionSpatiale(null);
-        dataSet.setUniteStatistique(null);
+        Dataset dataSet = initDataset();
 
         dataSet.setId(dto.id());
         dataSet.setUri(dto.uri());
@@ -335,6 +261,47 @@ public class DatasetsServiceImpl implements DatasetsService {
         return dataSet;
     }
 
+
+    private Dataset initDataset(){
+        Dataset dataSet = new Dataset();
+        dataSet.setPageAccueil(null);
+        dataSet.setDateMiseAJour(null);
+        dataSet.setDatePublication(null);
+        dataSet.setVersion(null);
+        dataSet.setSpatioTemporel(null);
+        dataSet.setDisseminationStatus(null);
+        dataSet.setIdentifier(null);
+        dataSet.setDateCreationEnregistrementCatalogue(null);
+        dataSet.setDateMiseAJourEnregistrementCatalogue(null);
+        dataSet.setCreateurEnregistrementCatalogue(null);
+        dataSet.setContributeurEnregistrementCatalogue(null);
+        dataSet.setNumObservations(null);
+        dataSet.setNumSeries(null);
+        dataSet.setSousTitre(null);
+        dataSet.setResume(null);
+        dataSet.setDescription(null);
+        dataSet.setNoteDePortee(null);
+        dataSet.setEditeur(null);
+        dataSet.setKeyword(null);
+        dataSet.setType(null);
+        dataSet.setAccessRights(null);
+        dataSet.setConfidentialityStatus(null);
+        dataSet.setSpatioTemporel(null);
+        dataSet.setPeriodeTemporelle(null);
+        dataSet.setStructure(null);
+        dataSet.setCreateur(null);
+        dataSet.setaEteGenerePar(null);
+        dataSet.setTheme(null);
+        dataSet.setRelations(null);
+        dataSet.setArchiveUnit(null);
+        dataSet.setWasDerivedFrom(null);
+        dataSet.setProcessStep(null);
+        dataSet.setPeriodiciteDeMiseAJour(null);
+        dataSet.setResolutionTemporelle(null);
+        dataSet.setResolutionSpatiale(null);
+        dataSet.setUniteStatistique(null);
+        return dataSet;
+    }
 
     protected List<Label> getTemporalResolution(List<String> urisTemporalResolution) {
         List<Label> temporalResolution = new ArrayList<>();
