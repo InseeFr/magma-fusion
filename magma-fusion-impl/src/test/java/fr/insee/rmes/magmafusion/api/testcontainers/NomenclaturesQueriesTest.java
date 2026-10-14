@@ -32,6 +32,29 @@ class NomenclaturesQueriesTest extends TestContainer {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+    @Nested
+    @DisplayName("codes/nomenclatures")
+    class GetClassifications {
+
+        @Test
+        @DisplayName("When getNomenclaturesListe, returns 3 classifications")
+        void should_return_all_concepts_when_getConceptsList() throws Exception {
+            var response = endpoints.getnomenclliste();
+            var result = response.getBody();
+
+            assertNotNull(result);
+            String data = objectMapper.writeValueAsString(result);
+            String expected = new String(
+                    Objects.requireNonNull(getClass().getClassLoader()
+                                    .getResourceAsStream("testcontainers/nomenclatures-list-expected.json"))
+                            .readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+            JSONAssert.assertEquals(expected, data, true);
+        }
+    }
+
     @Nested
     @DisplayName("codes/{nomenclature}/{niveau}/{code}")
     class GetClassificationByCode {
