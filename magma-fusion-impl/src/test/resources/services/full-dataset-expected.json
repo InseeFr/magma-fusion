@@ -1,15 +1,15 @@
 {
   "id": "25baaf1f",
   "uri": "http://bauhaus/ds/25baaf1f",
-  "validationState": "Provisoire, jamais publiée",
-  "modified": "2024-11-01",
-  "issued": "2023-05-15",
+  "etatValidation": "Provisoire, jamais publiée",
+  "dateMiseAJour": "2024-11-01",
+  "datePublication": "2023-05-15",
   "version": "2.0",
   "identifier": "DD_EEC_SERIES",
-  "catalogRecordCreator":
+  "createurEnregistrementCatalogue":
   {
     "id": "id catalogRecordCreator",
-    "label": [
+    "libelle": [
       {
         "contenu": "catalogRecordCreatorLabelLg1",
         "langue": "fr"
@@ -20,10 +20,10 @@
       }
     ]
   },
-  "catalogRecordContributor":
+  "contributeurEnregistrementCatalogue":
   {
     "id": "id catalogRecordContributor",
-    "label": [
+    "libelle": [
       {
         "contenu": "catalogRecordContributorLabelLg1",
         "langue": "fr"
@@ -34,8 +34,8 @@
       }
     ]
   },
-  "catalogRecordCreated": "2024-12-09T12:00:00",
-  "catalogRecordModified": "2024-12-09T12:00:00",
+  "dateCreationEnregistrementCatalogue": "2024-12-09T12:00:00",
+  "dateMiseAJourEnregistrementCatalogue": "2024-12-09T12:00:00",
   "type": [
     {
       "contenu": "label Type FR",
@@ -66,8 +66,8 @@
       "langue": "en"
     }
   ],
-  "accrualPeriodicity": {
-    "label": [
+  "periodiciteDeMiseAJour": {
+    "libelle": [
       {
         "contenu": "label Accrual Periodicity FR",
         "langue": "fr"
@@ -79,5 +79,5 @@
     ]
   },
   "disseminationStatus": "dissemination status",
-  "spatialTemporal": "2025-01-01"
+  "spatioTemporel": "2025-01-01"
 }
