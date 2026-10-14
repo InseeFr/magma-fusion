@@ -33,18 +33,19 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
         @Test
         @DisplayName("When getNomenclaturesListe, returns 3 classifications")
         void should_return_all_concepts_when_getConceptsList() throws Exception {
-            var response = endpoints.getnomenclliste();
-            var result = response.getBody();
+            byte[] body = restTestClient.get()
+                    .uri("/codes/nomenclatures", "testclassif", "niveauA", "T01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
 
-            assertNotNull(result);
-            String data = objectMapper.writeValueAsString(result);
-            String expected = new String(
-                    Objects.requireNonNull(getClass().getClassLoader()
-                                    .getResourceAsStream("testcontainers/nomenclatures-list-expected.json"))
-                            .readAllBytes(),
-                    StandardCharsets.UTF_8
+            JSONAssert.assertEquals(
+                    loadExpectedJson("nomenclatures-list-expected.json"),
+                    bodyAsString(body),
+                    true
             );
-            JSONAssert.assertEquals(expected, data, true);
         }
     }
 
