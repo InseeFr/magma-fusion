@@ -22,6 +22,7 @@
     "uri": "http://id.insee.fr/geo/communeDeleguee/test-comdel-98003",
     "type": "CommuneDeleguee",
     "dateCreation": "1990-01-01",
+    "dateSuppression": "2010-01-01",
     "intituleSansArticle": "Commune deleguee ancienne",
     "typeArticle": "0",
     "intitule": "Commune deleguee ancienne"

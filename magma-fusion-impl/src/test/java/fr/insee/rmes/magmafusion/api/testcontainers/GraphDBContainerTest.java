@@ -1,5 +1,6 @@
-package fr.insee.rmes.magmafusion.api.testcontainers.config;
+package fr.insee.rmes.magmafusion.api.testcontainers;
 
+import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
