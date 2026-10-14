@@ -2,10 +2,10 @@
   {
     "id" : "id1",
     "uri" : "http://bauhaus/ds/id1",
-    "catalogRecordCreated" : "2023-06-01",
-    "catalogRecordModified" : "2024-01-10",
-    "validationState" : "Publiée",
-    "title" : [
+    "dateCreationEnregistrementCatalogue" : "2023-06-01",
+    "dateMiseAJourEnregistrementCatalogue" : "2024-01-10",
+    "etatValidation" : "Publiée",
+    "titre" : [
       {
         "contenu" : "Titre 1 FR",
         "langue" : "fr"
@@ -19,8 +19,8 @@
   {
     "id" : "id2",
     "uri" : "http://bauhaus/ds/id2",
-    "validationState" : "Provisoire, jamais publiée",
-    "title" : [
+    "etatValidation" : "Provisoire, jamais publiée",
+    "titre" : [
       {
         "contenu" : "Titre 2 FR",
         "langue" : "fr"

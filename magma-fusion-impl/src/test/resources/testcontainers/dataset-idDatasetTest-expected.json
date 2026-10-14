@@ -1,12 +1,12 @@
 {
   "id": "idDatasetTest",
   "uri": "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest",
-  "catalogRecordCreated": "2024-12-09T12:00:00.000",
-  "catalogRecordModified": "2024-12-09T12:00:00.000",
-  "catalogRecordCreator":
+  "dateCreationEnregistrementCatalogue": "2024-12-09T12:00:00.000",
+  "dateMiseAJourEnregistrementCatalogue": "2024-12-09T12:00:00.000",
+  "createurEnregistrementCatalogue":
     {
       "id": "id INSEE",
-      "label": [
+      "libelle": [
         {
           "contenu": "Institut national de la statistique",
           "langue": "fr"
@@ -17,10 +17,10 @@
         }
       ]
     },
-  "catalogRecordContributor":
+  "contributeurEnregistrementCatalogue":
   {
     "id": "id INSEE",
-    "label": [
+    "libelle": [
       {
         "contenu": "Institut national de la statistique",
         "langue": "fr"
@@ -32,48 +32,48 @@
     ]
   },
   "identifier": "DD_DATASET_TEST",
-  "validationState": "Provisoire, jamais publiée",
-  "title": [
+  "etatValidation": "Provisoire, jamais publiée",
+  "titre": [
     {"contenu": "Titre du dataset test","langue": "fr" },
     {"contenu": "Dataset Test Title","langue": "en" }
   ],
-  "temporalResolution": [
-    {"label": [
+  "resolutionTemporelle": [
+    {"libelle": [
       {"contenu": "temporalResolution1 du dataset test", "langue": "fr" },
       {"contenu": "temporalResolution1 of test dataset", "langue": "en" }
     ]},
-    {"label": [
+    {"libelle": [
       {"contenu": "temporalResolution2 du dataset test","langue": "fr" },
       {"contenu": "temporalResolution2 of test dataset","langue": "en" }
     ]}
   ],
-  "spatialResolution": [
+  "resolutionSpatiale": [
     {
       "id": "SR1",
-      "label": [
+      "libelle": [
       {"contenu": "spatialResolution1 du dataset test","langue": "fr" },
       {"contenu": "spatialResolution1 of test dataset", "langue": "en" }
     ]
     },
     {
       "id": "SR2",
-      "label": [
+      "libelle": [
       {"contenu": "spatialResolution2 du dataset test", "langue": "fr" },
       {"contenu": "spatialResolution2 of test dataset", "langue": "en" }
     ]
     }
   ],
-  "statisticalUnit": [
+  "uniteStatistique": [
     {
       "id": "SU1",
-      "label": [
+      "libelle": [
         {"contenu": "statisticalUnit1 du dataset test","langue": "fr" },
         {"contenu": "statisticalUnit1 of test dataset", "langue": "en" }
       ]
     },
     {
       "id": "SU2",
-      "label": [
+      "libelle": [
         {"contenu": "statisticalUnit2 du dataset test", "langue": "fr" },
         {"contenu": "statisticalUnit2 of test dataset", "langue": "en" }
       ]
@@ -82,20 +82,20 @@
   "theme": [
     {
       "uri": "http://bauhaus/theme/1",
-      "label": [
+      "libelle": [
         {"contenu": "theme1 du dataset test","langue": "fr" },
         {"contenu": "theme1 of test dataset", "langue": "en" }
       ]
     },
     {
       "uri": "http://bauhaus/theme/2",
-      "label": [
+      "libelle": [
         {"contenu": "theme2 du dataset test","langue": "fr" },
         {"contenu": "theme2 of test dataset", "langue": "en" }
         ]
     }
   ],
-  "abstract": [
+  "resume": [
     {"contenu": "Résumé du dataset test", "langue": "fr" },
     {"langue": "en"}
   ],
@@ -103,11 +103,11 @@
     {"contenu": "Description du dataset test", "langue": "fr" },
     {"langue": "en"}
   ],
-  "scopeNote": [
+  "noteDePortee": [
     {"contenu": "Note de portée du dataset test", "langue": "fr" },
     {"langue": "en"}
   ],
-  "wasGeneratedBy": [
-    {"id": "http://bauhaus/operations/serie/idSerieGeneratrice", "label": []}
+  "aEteGenerePar": [
+    {"id": "http://bauhaus/operations/serie/idSerieGeneratrice", "libelle": []}
   ]
 }
