@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
+import fr.insee.rmes.magmafusion.model.NomenclatureByCode;
 import fr.insee.rmes.magmafusion.model.NomenclatureForList;
 import fr.insee.rmes.magmafusion.model.Nomenclature;
 import fr.insee.rmes.magmafusion.queries.parameters.NomenclaturesRequestParametizer;
@@ -41,11 +42,11 @@ public class NomenclaturesEndpoints implements NomenclaturesApi {
     }
 
     @Override
-    public ResponseEntity<Nomenclature> getClassificationByCode(String nomenclature, String niveau, String code){
+    public ResponseEntity<NomenclatureByCode> getClassificationByCode(String nomenclature, String niveau, String code){
         return requestProcessor.queryToFindClassification()
                 .with(new NomenclaturesRequestParametizer(nomenclature, niveau, code))
                 .executeQuery()
-                .singleResult(Nomenclature.class)
+                .singleResult(NomenclatureByCode.class)
                 .toResponseEntity();
     }
 }
