@@ -32,3 +32,43 @@
     skos:notation "A01" ;
     skos:prefLabel "Classification test deux"@fr .
 }
+
+
+<http://rdf.insee.fr/graphes/codes/testnaf> {
+    # Définition des niveaux
+    <http://id.insee.fr/codes/naf1/naf/level1> a xkos:Level .
+    <http://id.insee.fr/codes/naf2/naf/level1> a xkos:Level .
+    <http://id.insee.fr/codes/naf3/naf/level1> a xkos:Level .
+
+    # Nomenclature 1
+    <http://id.insee.fr/codes/naf1/naf> a skos:ConceptScheme ;
+        dcterms:issued "2023-01-01"^^xsd:date ;
+        skos:prefLabel "Classification 1 FR"@fr ;
+        skos:prefLabel "Classification 1 EN"@en ;
+        xkos:levels [
+            a rdf:List ;
+            rdf:first <http://id.insee.fr/codes/naf1/naf/level1> ;
+            rdf:rest rdf:nil
+        ] .
+
+    # Nomenclature 2
+    <http://id.insee.fr/codes/naf2/naf> a skos:ConceptScheme ;
+        dcterms:issued "2023-01-01"^^xsd:date ;
+        skos:prefLabel "Classification 2 FR"@fr ;
+        skos:prefLabel "Classification 2 EN"@en ;
+        xkos:levels [
+            a rdf:List ;
+            rdf:first <http://id.insee.fr/codes/naf2/naf/level1> ;
+            rdf:rest rdf:nil
+        ] .
+
+    # Nomenclature 3
+    <http://id.insee.fr/codes/naf3/naf> a skos:ConceptScheme ;
+        dcterms:issued "2023-01-01"^^xsd:date ;
+        skos:prefLabel "Classification 3"@fr ;
+        xkos:levels [
+            a rdf:List ;
+            rdf:first <http://id.insee.fr/codes/naf3/naf/level1> ;
+            rdf:rest rdf:nil
+        ] .
+}

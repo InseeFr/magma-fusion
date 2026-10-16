@@ -25,6 +25,30 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
 
+
+    @Nested
+    @DisplayName("codes/nomenclatures")
+    class GetClassifications {
+
+        @Test
+        @DisplayName("When getNomenclaturesListe, returns 3 classifications")
+        void should_return_all_concepts_when_getConceptsList() throws Exception {
+            byte[] body = restTestClient.get()
+                    .uri("/codes/nomenclatures", "testclassif", "niveauA", "T01")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
+
+            JSONAssert.assertEquals(
+                    loadExpectedJson("nomenclatures-list-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
+        }
+    }
+
     @Nested
     @DisplayName("codes/{nomenclature}/{niveau}/{code}")
     class GetClassificationByCode {

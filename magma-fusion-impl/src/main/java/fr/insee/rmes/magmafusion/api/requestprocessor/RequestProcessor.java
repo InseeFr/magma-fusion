@@ -62,6 +62,10 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(DISTRIBUTIONS_BY_DATASET_ID, this, unmarshaller);
     }
 
+    public ExecutableQueryBuilder queryToFindClassifications() {
+        return new ExecutableQueryBuilder(NOMENCLATURES, this, unmarshaller);
+    }
+
     public ExecutableQueryBuilder queryToFindClassification() {
         return new ExecutableQueryBuilder(NOMENCLATURE, this, unmarshaller);
     }
@@ -200,7 +204,7 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
             return new ExecutableQuery(requestProcessor.queryBuilder().build(p.toParameters(), queryPath), requestProcessor, unmarshaller);
         }
 
-        public ExecutableQuery with(ClassificationRequestParametizer p) {
+        public ExecutableQuery with(NomenclaturesRequestParametizer p) {
             return new ExecutableQuery(requestProcessor.queryBuilder().build(p.toParameters(), queryPath), requestProcessor, unmarshaller);
         }
 

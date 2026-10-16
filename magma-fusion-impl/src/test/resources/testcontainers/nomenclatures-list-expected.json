@@ -1,0 +1,30 @@
+[ {
+  "nomenclature" : "naf1",
+  "uri" : "http://id.insee.fr/codes/naf1/naf",
+  "intitule" : [ {
+    "contenu" : "Classification 1 FR",
+    "langue" : "fr"
+  }, {
+    "contenu" : "Classification 1 EN",
+    "langue" : "en"
+  } ]
+}, {
+  "nomenclature" : "naf2",
+  "uri" : "http://id.insee.fr/codes/naf2/naf",
+  "intitule" : [ {
+    "contenu" : "Classification 2 FR",
+    "langue" : "fr"
+  }, {
+    "contenu" : "Classification 2 EN",
+    "langue" : "en"
+  } ]
+}, {
+  "nomenclature" : "naf3",
+  "uri" : "http://id.insee.fr/codes/naf3/naf",
+  "intitule" : [ {
+    "contenu" : "Classification 3",
+    "langue" : "fr"
+  }, {
+    "langue" : "en"
+  } ]
+} ]
