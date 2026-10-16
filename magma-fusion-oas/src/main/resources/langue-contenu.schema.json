@@ -1,6 +1,6 @@
 {
 "$schema": "https://json-schema.org/draft/2020-12/schema",
-"$id": "https://magma.insee/langue-contenu.schema.json",
+"$id": "https://magma-fusion.insee/langue-contenu.schema.json",
 "title": "LocalisedContenu",
 "description": "Contenu avec langue",
 "type": "object",

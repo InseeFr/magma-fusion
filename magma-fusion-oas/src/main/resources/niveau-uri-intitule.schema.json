@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://magmafusion.insee/nomenclature.schema.json",
+  "$id": "https://magma-fusion.insee/niveau-uri-intitule.schema.json",
   "title": "IdUriLabel",
   "description": "Ensemble de propriétés communes à Territoire, CodeListe et Organisme",
   "type": "object",
