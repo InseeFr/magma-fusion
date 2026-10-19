@@ -19,6 +19,17 @@
     "langue" : "en"
   } ]
 }, {
+  "nomenclature" : "naf2025",
+  "uri" : "http://id.insee.fr/codes/naf2025/naf",
+  "intitule" : [ {
+    "contenu" : "Nomenclature d'activités française - Edition 2025",
+    "langue" : "fr"
+  }, {
+    "contenu" : "French nomenclature of activities - Edition 2025",
+    "langue" : "en"
+  } ]
+},
+  {
   "nomenclature" : "naf3",
   "uri" : "http://id.insee.fr/codes/naf3/naf",
   "intitule" : [ {
