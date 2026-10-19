@@ -1,9 +1,6 @@
 package fr.insee.rmes.magmafusion.services;
 
-import fr.insee.rmes.magmafusion.model.IdUriLabel;
-import fr.insee.rmes.magmafusion.model.LocalisedContenu;
-import fr.insee.rmes.magmafusion.model.Nomenclature;
-import fr.insee.rmes.magmafusion.model.NomenclatureForList;
+import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.utils.NiveauDTO;
 import fr.insee.rmes.magmafusion.utils.NomenclatureDTO;
 import fr.insee.rmes.magmafusion.utils.NomenclatureForListDTO;
@@ -71,6 +68,8 @@ public class NomenclatureServiceImpl implements NomenclatureService {
                     createLangField(nomenclatureDTO.descriptionLg1(), lg1))
             );
         }
+        nomenclature.setDatePublication(nomenclatureDTO.issued());
+        nomenclature.setDateMiseAJour((nomenclatureDTO.lastRefreshedOn()));
         addNiveaux(niveauxDTO,nomenclature);
         return nomenclature;
     }
@@ -80,23 +79,23 @@ public class NomenclatureServiceImpl implements NomenclatureService {
             return;
         }
         for (NiveauDTO niveauDTO : niveauxDTO) {
-                IdUriLabel niveau = new IdUriLabel();
-                niveau.setId(niveauDTO.idLevel());
-                niveau.setUri(URI.create(niveauDTO.level()));
-                if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) && StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
-                    niveau.setLabel(createList(
-                        createLangField(niveauDTO.prefLabelLevelLg1(), lg1),
-                        createLangField(niveauDTO.prefLabelLevelLg2(), lg2)
-                            )
-                        );
-                };
-                if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) & !StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
-                    niveau.setLabel(createList(
-                        createLangField(niveauDTO.prefLabelLevelLg1(), lg1)
-                        )
-                    );
-                };
-                nomenclature.addNiveauxItem(niveau);
+            NiveauUriIntitule niveau = new NiveauUriIntitule();
+            niveau.setNiveau(niveauDTO.idLevel());
+            niveau.setUri(URI.create(niveauDTO.level()));
+            if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) && StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
+                niveau.setIntitule(createList(
+                    createLangField(niveauDTO.prefLabelLevelLg1(), lg1),
+                    createLangField(niveauDTO.prefLabelLevelLg2(), lg2)
+                    )
+                );
+            };
+            if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) & !StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
+                niveau.setIntitule(createList(
+                    createLangField(niveauDTO.prefLabelLevelLg1(), lg1)
+                    )
+                );
+            };
+            nomenclature.addNiveauxItem(niveau);
         }
     }
 
