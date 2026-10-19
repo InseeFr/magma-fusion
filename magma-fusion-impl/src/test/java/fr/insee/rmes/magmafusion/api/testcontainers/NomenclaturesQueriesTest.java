@@ -32,17 +32,45 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
 
         @Test
         @DisplayName("When getNomenclaturesListe, returns 3 classifications")
-        void should_return_all_concepts_when_getConceptsList() throws Exception {
+        void should_return_all_concepts_when_getNomenclaturesList() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/codes/nomenclatures", "testclassif", "niveauA", "T01")
+                    .uri("/codes/nomenclatures")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
 
+            String responseBody = bodyAsString(body);
+
             JSONAssert.assertEquals(
                     loadExpectedJson("nomenclatures-list-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("codes/{nomenclature}")
+    class GetClassification {
+
+        @Test
+        @DisplayName("When getNomenclature, returns full classifications")
+        void should_return_all_concepts_when_getNomenclature() throws Exception {
+            byte[] body = restTestClient.get()
+                    .uri("/codes/naf2025")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
+
+            //help for debug
+            //String responseBody = bodyAsString(body);
+
+            JSONAssert.assertEquals(
+                    loadExpectedJson("nomenclature-naf2025-expected.json"),
                     bodyAsString(body),
                     true
             );
@@ -54,7 +82,7 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
     class GetClassificationByCode {
 
         @Test
-        @DisplayName("When testclassif/niveauA/T01, returns concept T01")
+        @DisplayName("When testclassif/niveauA/T01, returns code T01")
         void should_return_concept_T01_when_testclassif_niveauA_T01() throws Exception {
             byte[] body = restTestClient.get()
                     .uri("/codes/{nomenclature}/{niveau}/{code}", "testclassif", "niveauA", "T01")
@@ -72,7 +100,7 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
         }
 
         @Test
-        @DisplayName("When testclassif2/niveauB/A01, returns concept A01")
+        @DisplayName("When testclassif2/niveauB/A01, returns code A01")
         void should_return_concept_A01_when_testclassif2_niveauB_A01() throws Exception {
             byte[] body = restTestClient.get()
                     .uri("/codes/{nomenclature}/{niveau}/{code}", "testclassif2", "niveauB", "A01")

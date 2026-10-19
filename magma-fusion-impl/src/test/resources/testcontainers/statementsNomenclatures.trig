@@ -1,6 +1,10 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xkos: <http://rdf-vocabulary.ddialliance.org/xkos#> .
+@prefix dc:<http://purl.org/dc/elements/1.1/> .
+@prefix dcterms:<http://purl.org/dc/terms/> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <http://rdf.insee.fr/graphes/codes/testclassif> {
 
@@ -72,3 +76,68 @@
             rdf:rest rdf:nil
         ] .
 }
+
+
+  # =========================================================
+  #   Nomenclature naf2025 pour test codes/{nomenclature}
+  # =========================================================
+
+
+# Nomenclature NAF2025
+<http://id.insee.fr/codes/naf2025/naf> a skos:ConceptScheme ;
+    dcterms:issued "2026-05-11"^^xsd:date ;
+    pav:lastRefreshedOn "2025-05-14"^^xsd:date ;
+
+    # Intitulés
+    skos:prefLabel "Nomenclature d'activités française - Edition 2025"@fr ,
+                   "French nomenclature of activities - Edition 2025"@en ;
+
+    # Intitulés alternatifs
+    skos:altLabel "NAF 2025"@fr ;
+
+    # Descriptions
+    dc:description "Les nomenclatures d'activités et de produits ont été élaborées principalement en vue de faciliter l'organisation de l'information économique et sociale. Leur finalité est essentiellement statistique. La NAF, nomenclature d'activités française, est une nomenclature des activités économiques productives. Elle a une structure arborescente à 5 niveaux emboîtés."@fr ,
+                 "The activities and products classifications have been developed mainly to facilitate the organization of economic and social information. Their purpose is essentially statistical. The French nomenclature of activities (NAF), is a classification of productive economic activities. It has a tree structure with 5 nested levels."@en ;
+
+    # Niveaux (xkos:levels)
+    xkos:levels [
+        rdf:first <http://id.insee.fr/codes/naf2025/sections> ;
+        rdf:rest [
+            rdf:first <http://id.insee.fr/codes/naf2025/divisions> ;
+            rdf:rest [
+                rdf:first <http://id.insee.fr/codes/naf2025/groupes> ;
+                rdf:rest [
+                    rdf:first <http://id.insee.fr/codes/naf2025/classes> ;
+                    rdf:rest [
+                        rdf:first <http://id.insee.fr/codes/naf2025/sousClasses> ;
+                        rdf:rest rdf:nil
+                    ]
+                ]
+            ]
+        ]
+    ] .
+
+# Niveau 1 - Sections
+<http://id.insee.fr/codes/naf2025/sections> a skos:Concept ;
+    xkos:depth 1 ;
+    skos:prefLabel "NAF 2025 - Niveau 1 - Sections"@fr .
+
+# Niveau 2 - Divisions
+<http://id.insee.fr/codes/naf2025/divisions> a skos:Concept ;
+    xkos:depth 2 ;
+    skos:prefLabel "NAF 2025 - Niveau 2 - Divisions"@fr .
+
+# Niveau 3 - Groupes
+<http://id.insee.fr/codes/naf2025/groupes> a skos:Concept ;
+    xkos:depth 3 ;
+    skos:prefLabel "NAF 2025 - Niveau 3 - Groupes"@fr .
+
+# Niveau 4 - Classes
+<http://id.insee.fr/codes/naf2025/classes> a skos:Concept ;
+    xkos:depth 4 ;
+    skos:prefLabel "NAF 2025 - Niveau 4 - Classes"@fr .
+
+# Niveau 5 - Sous-classes
+<http://id.insee.fr/codes/naf2025/sousClasses> a skos:Concept ;
+    xkos:depth 5 ;
+    skos:prefLabel "NAF 2025 - Niveau 5 - Sous-classes"@fr .

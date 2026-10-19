@@ -1,0 +1,84 @@
+{
+  "nomenclature": "naf2025",
+  "uri": "http://id.insee.fr/codes/naf2025/naf",
+  "intitule": [
+    {
+      "contenu": "Nomenclature d'activités française - Edition 2025",
+      "langue": "fr"
+    },
+    {
+      "contenu": "French nomenclature of activities - Edition 2025",
+      "langue": "en"
+    }
+  ],
+  "intitule_alternatif": [
+    {
+      "contenu": "NAF 2025",
+      "langue": "fr"
+    }
+  ],
+  "description": [
+    {
+      "contenu": "Les nomenclatures d'activités et de produits ont été élaborées principalement en vue de faciliter l'organisation de l'information économique et sociale. Leur finalité est essentiellement statistique. La NAF, nomenclature d'activités française, est une nomenclature des activités économiques productives. Elle a une structure arborescente à 5 niveaux emboîtés.",
+      "langue": "fr"
+    },
+    {
+      "contenu": "The activities and products classifications have been developed mainly to facilitate the organization of economic and social information. Their purpose is essentially statistical. The French nomenclature of activities (NAF), is a classification of productive economic activities. It has a tree structure with 5 nested levels.",
+      "langue": "en"
+    }
+  ],
+  "datePublication": "2026-05-11",
+  "dateMiseAJour": "2025-05-14",
+  "niveaux": [
+    {
+      "niveau": "sections",
+      "uri": "http://id.insee.fr/codes/naf2025/sections",
+      "intitule": [
+        {
+          "contenu": "NAF 2025 - Niveau 1 - Sections",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "divisions",
+      "uri": "http://id.insee.fr/codes/naf2025/divisions",
+      "intitule": [
+        {
+          "contenu": "NAF 2025 - Niveau 2 - Divisions",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "groupes",
+      "uri": "http://id.insee.fr/codes/naf2025/groupes",
+      "intitule": [
+        {
+          "contenu": "NAF 2025 - Niveau 3 - Groupes",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "classes",
+      "uri": "http://id.insee.fr/codes/naf2025/classes",
+      "intitule": [
+        {
+          "contenu": "NAF 2025 - Niveau 4 - Classes",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "sousClasses",
+      "uri": "http://id.insee.fr/codes/naf2025/sousClasses",
+      "intitule": [
+        {
+          "contenu": "NAF 2025 - Niveau 5 - Sous-classes",
+          "langue": "fr"
+        }
+      ]
+    }
+  ]
+}
