@@ -125,7 +125,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
                     )
                 );
             };
-            if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) & !StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
+            if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) && !StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
                 niveau.setIntitule(createList(
                     createLangField(niveauDTO.prefLabelLevelLg1(), lg1)
                     )
@@ -133,15 +133,6 @@ public class NomenclatureServiceImpl implements NomenclatureService {
             };
             nomenclature.addNiveauxItem(niveau);
         }
-    }
-
-    private List<LocalisedContenu> getAltLabels (List<String> altLabels,String lang){
-        List<LocalisedContenu> altLabelList = new ArrayList<>();
-        for (String altLabel: altLabels) {
-            LocalisedContenu intituleAlternatif = createLangField(altLabel, lang);
-            altLabelList.add(intituleAlternatif);
-        }
-        return altLabelList;
     }
 
 }

@@ -41,8 +41,6 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
                     .returnResult()
                     .getResponseBody();
 
-            String responseBody = bodyAsString(body);
-
             JSONAssert.assertEquals(
                     loadExpectedJson("nomenclatures-list-expected.json"),
                     bodyAsString(body),
@@ -65,9 +63,6 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
-
-            //help for debug
-//            String responseBody = bodyAsString(body);
 
             JSONAssert.assertEquals(
                     loadExpectedJson("nomenclature-naf4-expected.json"),
