@@ -46,7 +46,7 @@
 
     # Nomenclature 1
     <http://id.insee.fr/codes/naf1/naf> a skos:ConceptScheme ;
-        dcterms:issued "2023-01-01"^^xsd:date ;
+        dcterms:issued "2023-01-01T00:00:00.000+01:00"^^xsd:date ;
         skos:prefLabel "Classification 1 FR"@fr ;
         skos:prefLabel "Classification 1 EN"@en ;
         xkos:levels [
@@ -57,7 +57,7 @@
 
     # Nomenclature 2
     <http://id.insee.fr/codes/naf2/naf> a skos:ConceptScheme ;
-        dcterms:issued "2023-01-01"^^xsd:date ;
+        dcterms:issued "2023-01-01T00:00:00.000+01:00"^^xsd:date ;
         skos:prefLabel "Classification 2 FR"@fr ;
         skos:prefLabel "Classification 2 EN"@en ;
         xkos:levels [
@@ -68,7 +68,7 @@
 
     # Nomenclature 3
     <http://id.insee.fr/codes/naf3/naf> a skos:ConceptScheme ;
-        dcterms:issued "2023-01-01"^^xsd:date ;
+        dcterms:issued "2023-01-01T00:00:00.000+01:00"^^xsd:date ;
         skos:prefLabel "Classification 3"@fr ;
         xkos:levels [
             a rdf:List ;
@@ -85,8 +85,8 @@
 
 # Nomenclature NAF4
 <http://id.insee.fr/codes/naf4/naf> a skos:ConceptScheme ;
-    dcterms:issued "2026-05-11"^^xsd:date ;
-    pav:lastRefreshedOn "2025-05-14"^^xsd:date ;
+    dcterms:issued "2026-05-11T00:00:00.000+01:00"^^xsd:date ;
+    pav:lastRefreshedOn "2025-05-14T00:00:00.000+01:00"^^xsd:date ;
 
     # Intitulés
     skos:prefLabel "Nomenclature d'activités française - Edition 2025"@fr ,

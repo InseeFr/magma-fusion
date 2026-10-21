@@ -7228,8 +7228,10 @@ components:
             $ref: './langue-contenu.schema.json'
         datePublication:
           type: string
+          format: date
         dateMiseAJour:
           type: string
+          format: date
         niveaux:
           type: array
           items:

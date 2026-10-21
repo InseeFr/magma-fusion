@@ -29,20 +29,13 @@ class NomenclatureServiceImplTest {
     private NiveauDTO niveauDTO;
 
     @InjectMocks
-    private NomenclatureServiceImpl service; // Remplacez par la classe qui contient convertNomenclatureDto
+    private NomenclatureServiceImpl service;
 
     private static final String LG1 = "fr";
     private static final String LG2 = "en";
 
     @BeforeEach
     void setUp() {
-        // Initialisation commune
-        when(nomenclatureDTO.id()).thenReturn("nomenclature-123");
-        when(nomenclatureDTO.classification()).thenReturn("http://example.com/classification");
-        when(nomenclatureDTO.prefLabelLg1()).thenReturn("Libellé FR");
-        when(nomenclatureDTO.prefLabelLg2()).thenReturn("Label EN");
-        when(nomenclatureDTO.issued()).thenReturn(String.valueOf(LocalDate.of(2023, 1, 1)));
-        when(nomenclatureDTO.lastRefreshedOn()).thenReturn(String.valueOf(LocalDate.of(2023, 6, 15)));
         ReflectionTestUtils.setField(service, "lg1", "fr");
         ReflectionTestUtils.setField(service, "lg2", "en");
     }
@@ -50,6 +43,13 @@ class NomenclatureServiceImplTest {
     @Test
     void convertNomenclatureDto_WithAllFields_ShouldReturnCompleteNomenclature() {
         // Given
+        when(nomenclatureDTO.classification()).thenReturn("http://example.com/classification");
+        when(nomenclatureDTO.prefLabelLg1()).thenReturn("Libellé FR");
+        when(nomenclatureDTO.prefLabelLg2()).thenReturn("Label EN");
+        when(nomenclatureDTO.issued()).thenReturn("2023-01-01T00:00:00.000+01:00");
+        when(nomenclatureDTO.lastRefreshedOn()).thenReturn("2023-06-15T00:00:00.000+01:00");
+
+        when(nomenclatureDTO.id()).thenReturn("nomenclature-123");
         when(nomenclatureDTO.altLabelsLg1()).thenReturn("alt1,alt2,alt3");
         when(nomenclatureDTO.altLabelsLg2()).thenReturn("altA,altB");
         when(nomenclatureDTO.descriptionLg1()).thenReturn("Description FR");
@@ -67,6 +67,7 @@ class NomenclatureServiceImplTest {
         // Then
         assertNotNull(result);
         assertEquals("nomenclature-123", result.getNomenclature());
+
         assertEquals("http://example.com/classification", result.getUri());
         assertEquals(2, result.getIntitule().size());
         assertEquals("Libellé FR", result.getIntitule().get(0).getContenu());
@@ -83,8 +84,8 @@ class NomenclatureServiceImplTest {
         assertEquals(2, result.getDescription().size());
 
         // Vérification des dates
-        assertEquals(String.valueOf(LocalDate.of(2023, 1, 1)), result.getDatePublication());
-        assertEquals(String.valueOf(LocalDate.of(2023, 6, 15)), result.getDateMiseAJour());
+        assertEquals(LocalDate.of(2023, 1, 1), result.getDatePublication());
+        assertEquals(LocalDate.of(2023, 6, 15), result.getDateMiseAJour());
 
         // Vérification des niveaux
         assertNotNull(result.getNiveaux());
@@ -113,21 +114,28 @@ class NomenclatureServiceImplTest {
     void convertNomenclatureDto_WithOnlyLg2AltLabels_ShouldSetAltLabels() {
         // Given
         when(nomenclatureDTO.altLabelsLg1()).thenReturn(null);
-        when(nomenclatureDTO.altLabelsLg2()).thenReturn("altA,altB");
+        when(nomenclatureDTO.altLabelsLg2()).thenReturn("altA, altB, altC");
 
         // When
         Nomenclature result = service.convertNomenclatureDto(nomenclatureDTO, new ArrayList<>());
 
         // Then
         assertNotNull(result.getIntituleAlternatif());
-        assertEquals(2, result.getIntituleAlternatif().size());
+        assertEquals(3, result.getIntituleAlternatif().size());
         assertEquals("altA", result.getIntituleAlternatif().get(0).getContenu());
         assertEquals(LG2, result.getIntituleAlternatif().get(0).getLangue());
     }
 
+
     @Test
     void convertNomenclatureDto_WithNoAltLabels_ShouldNotSetAltLabels() {
         // Given
+        when(nomenclatureDTO.id()).thenReturn("nomenclature-123");
+        when(nomenclatureDTO.classification()).thenReturn("http://example.com/classification");
+        when(nomenclatureDTO.prefLabelLg1()).thenReturn("Libellé FR");
+        when(nomenclatureDTO.prefLabelLg2()).thenReturn("Label EN");
+        when(nomenclatureDTO.issued()).thenReturn(String.valueOf(LocalDate.of(2023, 1, 1)));
+        when(nomenclatureDTO.lastRefreshedOn()).thenReturn(String.valueOf(LocalDate.of(2023, 6, 15)));
         when(nomenclatureDTO.altLabelsLg1()).thenReturn(null);
         when(nomenclatureDTO.altLabelsLg2()).thenReturn(null);
 
