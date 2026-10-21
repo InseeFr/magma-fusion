@@ -40,6 +40,8 @@ public class QueryPathList {
     public static final String RAPPORT_QUALITE = "operations/getDocumentationTitleByIdSimsQuery.ftlh";
     public static final String RUBRIQUES = "operations/getDocumentationRubricsByIdSimsQuery.ftlh";
     public static final String DOCUMENTS = "operations/getDocumentsQueryByIdSimsIdRubric.ftlh";
-    public static final String NOMENCLATURE = "classifications/getClassificationByCode.ftlh";
+    public static final String NOMENCLATURE = "classifications/getClassification.ftlh";
+    public static final String NOMENCLATURE_NIVEAUX = "classifications/getLevelsClassification.ftlh";
+    public static final String NOMENCLATURE_BY_CODE = "classifications/getClassificationByCode.ftlh";
     public static final String NOMENCLATURES = "classifications/getListNomenclatures.ftlh";
 }
