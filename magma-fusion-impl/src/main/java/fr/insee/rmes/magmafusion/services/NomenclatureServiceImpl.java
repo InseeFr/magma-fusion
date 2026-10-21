@@ -118,22 +118,17 @@ public class NomenclatureServiceImpl implements NomenclatureService {
             NiveauUriIntitule niveau = new NiveauUriIntitule();
             niveau.setNiveau(niveauDTO.idLevel());
             niveau.setUri(URI.create(niveauDTO.level()));
-            if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) && StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
-                niveau.setIntitule(createList(
-                    createLangField(niveauDTO.prefLabelLevelLg1(), lg1),
-                    createLangField(niveauDTO.prefLabelLevelLg2(), lg2)
-                    )
-                );
-            };
-            if (StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) && !StringUtils.hasText(niveauDTO.prefLabelLevelLg2())) {
-                niveau.setIntitule(createList(
-                    createLangField(niveauDTO.prefLabelLevelLg1(), lg1)
-                    )
-                );
-            };
-            nomenclature.addNiveauxItem(niveau);
+            niveau.setIntitule(
+                createList(
+                    StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) ? createLangField(niveauDTO.prefLabelLevelLg1(), lg1) : null,
+                    StringUtils.hasText(niveauDTO.prefLabelLevelLg2()) ? createLangField(niveauDTO.prefLabelLevelLg2(), lg2) : null
+                )
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList())
+            );
+        nomenclature.addNiveauxItem(niveau);
         }
     }
-
 }
 
