@@ -50,13 +50,17 @@ public class NomenclaturesEndpoints implements NomenclaturesApi {
                 .executeQuery()
                 .singleResult(NomenclatureDTO.class)
                 .result();
-        List<NiveauDTO> niveauxDTO = requestProcessor.queryToFindLevelsClassification()
-                .with(new NomenclaturesRequestParametizer(nomenclature))
-                .executeQuery()
-                .listResult(NiveauDTO.class)
-                .result();
-        Nomenclature nomencl = nomenclatureService.convertNomenclatureDto(nomenclatureDTO,niveauxDTO);
-        return EndpointsUtils.toResponseEntity(nomencl);
+        if (nomenclatureDTO != null) {
+            List<NiveauDTO> niveauxDTO = requestProcessor.queryToFindLevelsClassification()
+                    .with(new NomenclaturesRequestParametizer(nomenclature))
+                    .executeQuery()
+                    .listResult(NiveauDTO.class)
+                    .result();
+            Nomenclature nomencl = nomenclatureService.convertNomenclatureDto(nomenclatureDTO, niveauxDTO);
+            return EndpointsUtils.toResponseEntity(nomencl);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Override
