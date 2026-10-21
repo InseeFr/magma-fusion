@@ -29,7 +29,7 @@ public class LabelsUtils {
     public static IdLabel createIdLabelField(String id, List<LocalisedContenu> labels) {
         IdLabel idLabel = new IdLabel();
         idLabel.setId(id);
-        idLabel.setLabel(labels);
+        idLabel.setLibelle(labels);
         return idLabel;
     }
 }
