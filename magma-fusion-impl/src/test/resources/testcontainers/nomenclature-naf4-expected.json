@@ -1,6 +1,6 @@
 {
-  "nomenclature": "naf2025",
-  "uri": "http://id.insee.fr/codes/naf2025/naf",
+  "nomenclature": "naf4",
+  "uri": "http://id.insee.fr/codes/naf4/naf",
   "intitule": [
     {
       "contenu": "Nomenclature d'activités française - Edition 2025",
@@ -13,7 +13,7 @@
   ],
   "intitule_alternatif": [
     {
-      "contenu": "NAF 2025",
+      "contenu": "NAF 4",
       "langue": "fr"
     }
   ],
@@ -32,50 +32,50 @@
   "niveaux": [
     {
       "niveau": "sections",
-      "uri": "http://id.insee.fr/codes/naf2025/sections",
+      "uri": "http://id.insee.fr/codes/naf4/sections",
       "intitule": [
         {
-          "contenu": "NAF 2025 - Niveau 1 - Sections",
+          "contenu": "NAF 4 - Niveau 1 - Sections",
           "langue": "fr"
         }
       ]
     },
     {
       "niveau": "divisions",
-      "uri": "http://id.insee.fr/codes/naf2025/divisions",
+      "uri": "http://id.insee.fr/codes/naf4/divisions",
       "intitule": [
         {
-          "contenu": "NAF 2025 - Niveau 2 - Divisions",
+          "contenu": "NAF 4 - Niveau 2 - Divisions",
           "langue": "fr"
         }
       ]
     },
     {
       "niveau": "groupes",
-      "uri": "http://id.insee.fr/codes/naf2025/groupes",
+      "uri": "http://id.insee.fr/codes/naf4/groupes",
       "intitule": [
         {
-          "contenu": "NAF 2025 - Niveau 3 - Groupes",
+          "contenu": "NAF 4 - Niveau 3 - Groupes",
           "langue": "fr"
         }
       ]
     },
     {
       "niveau": "classes",
-      "uri": "http://id.insee.fr/codes/naf2025/classes",
+      "uri": "http://id.insee.fr/codes/naf4/classes",
       "intitule": [
         {
-          "contenu": "NAF 2025 - Niveau 4 - Classes",
+          "contenu": "NAF 4 - Niveau 4 - Classes",
           "langue": "fr"
         }
       ]
     },
     {
       "niveau": "sousClasses",
-      "uri": "http://id.insee.fr/codes/naf2025/sousClasses",
+      "uri": "http://id.insee.fr/codes/naf4/sousClasses",
       "intitule": [
         {
-          "contenu": "NAF 2025 - Niveau 5 - Sous-classes",
+          "contenu": "NAF 4 - Niveau 5 - Sous-classes",
           "langue": "fr"
         }
       ]

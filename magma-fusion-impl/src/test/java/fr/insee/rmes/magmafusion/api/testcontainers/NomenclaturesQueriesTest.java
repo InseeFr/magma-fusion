@@ -59,7 +59,7 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
         @DisplayName("When getNomenclature, returns full classifications")
         void should_return_all_concepts_when_getNomenclature() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/codes/naf2025")
+                    .uri("/codes/naf4")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -67,14 +67,25 @@ class NomenclaturesQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             //help for debug
-            //String responseBody = bodyAsString(body);
+//            String responseBody = bodyAsString(body);
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("nomenclature-naf2025-expected.json"),
+                    loadExpectedJson("nomenclature-naf4-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
+
+
+        @Test
+        @DisplayName("When getNomenclature with unknown nomenclature, returns 404")
+        void should_return_404_when_getNomenclature_unknown_nomenclature() {
+            restTestClient.get()
+                    .uri("/codes/naf9999")
+                    .exchange()
+                    .expectStatus().isNotFound();
+        }
+
     }
 
     @Nested
