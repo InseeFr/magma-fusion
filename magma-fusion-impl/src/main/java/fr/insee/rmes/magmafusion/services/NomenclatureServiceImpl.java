@@ -49,14 +49,21 @@ public class NomenclatureServiceImpl implements NomenclatureService {
         );
         if (StringUtils.hasText(nomenclatureDTO.altLabelsLg1())) {
             List<String> altLabelsLg1 = List.of(nomenclatureDTO.altLabelsLg1().split(","));
-            List<LocalisedContenu> altLabelsLg1List = getAltLabels(altLabelsLg1, lg1);
-            nomenclature.setIntituleAlternatif(altLabelsLg1List);
+            List<LocalisedContenu> altLabelList = new ArrayList<>();
+            for (String altLabel: altLabelsLg1) {
+                LocalisedContenu intituleAlternatif = createLangField(altLabel, lg1);
+                altLabelList.add(intituleAlternatif);
+            }
+            if (StringUtils.hasText(nomenclatureDTO.altLabelsLg2())) {
+                List<String> altLabelsLg2 = List.of(nomenclatureDTO.altLabelsLg2().split(","));
+                for (String altLabel : altLabelsLg2) {
+                    LocalisedContenu intituleAlternatif = createLangField(altLabel, lg2);
+                    altLabelList.add(intituleAlternatif);
+                }
+            }
+            nomenclature.setIntituleAlternatif(altLabelList);
         }
-        if (StringUtils.hasText(nomenclatureDTO.altLabelsLg2())) {
-            List<String> altLabelsLg2 = List.of(nomenclatureDTO.altLabelsLg2().split(","));
-            List<LocalisedContenu> altLabelsLg2List = getAltLabels(altLabelsLg2, lg2);
-            nomenclature.setIntituleAlternatif(altLabelsLg2List);
-        }
+
         if (StringUtils.hasText(nomenclatureDTO.descriptionLg1()) && StringUtils.hasText(nomenclatureDTO.descriptionLg2())) {
             nomenclature.setDescription(createList(
                     createLangField(nomenclatureDTO.descriptionLg1(), lg1),
@@ -74,7 +81,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
         return nomenclature;
     }
 
-    private void addNiveaux(List<NiveauDTO> niveauxDTO, Nomenclature nomenclature) {
+    protected void addNiveaux(List<NiveauDTO> niveauxDTO, Nomenclature nomenclature) {
         if (niveauxDTO == null || nomenclature == null) {
             return;
         }
@@ -100,12 +107,13 @@ public class NomenclatureServiceImpl implements NomenclatureService {
     }
 
     private List<LocalisedContenu> getAltLabels (List<String> altLabels,String lang){
-            List<LocalisedContenu> altLabelList = new ArrayList<>();
-            for (String altLabel: altLabels) {
-                LocalisedContenu intituleAlternatif = createLangField(altLabel, lang);
-                altLabelList.add(intituleAlternatif);
-            }
-            return altLabelList;
+        List<LocalisedContenu> altLabelList = new ArrayList<>();
+        for (String altLabel: altLabels) {
+            LocalisedContenu intituleAlternatif = createLangField(altLabel, lang);
+            altLabelList.add(intituleAlternatif);
         }
+        return altLabelList;
     }
+
+}
 
