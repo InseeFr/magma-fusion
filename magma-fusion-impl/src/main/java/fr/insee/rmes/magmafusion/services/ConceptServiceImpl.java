@@ -7,6 +7,7 @@ import fr.insee.rmes.magmafusion.model.NearbyConcept;
 import fr.insee.rmes.magmafusion.utils.ConceptDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.net.URI;
 import java.time.Instant;
@@ -16,6 +17,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
@@ -28,11 +31,27 @@ public class ConceptServiceImpl implements ConceptService{
             Concept concept = new Concept();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
-
-            concept.setIntitule(buildLocalisedLabels(conceptDTO.intituleFr(), conceptDTO.intituleEn()));
-            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionFr(), conceptDTO.definitionEn()));
-            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteFr(), conceptDTO.scopeNoteEn()));
-            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeFr(), conceptDTO.noteEditorialeEn()));
+            concept.setIntitule(null);
+            concept.setDateMiseAJour(null);
+            concept.setDateCreation(null);
+            concept.setDateFinDeValidite(null);
+            concept.setDefinition(null);
+            concept.setDefinitionCourte(null);
+            concept.setNoteEditoriale(null);
+            if (StringUtils.hasText(conceptDTO.intituleLg1()) | StringUtils.hasText(conceptDTO.intituleLg2())) {
+                concept.setIntitule(
+                        createList(
+                                StringUtils.hasText(conceptDTO.intituleLg1()) ? createLangField(conceptDTO.intituleLg1(), "fr") : null,
+                                StringUtils.hasText(conceptDTO.intituleLg2()) ? createLangField(conceptDTO.intituleLg2(), "en") : null
+                        )
+                                .stream()
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList())
+                );
+            }
+            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionLg1(), conceptDTO.definitionLg2()));
+            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteLg1(), conceptDTO.scopeNoteLg2()));
+            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeLg1(), conceptDTO.noteEditorialeLg2()));
 
 
             if (Boolean.TRUE.equals(conceptDTO.hasIntitulesAlternatifs())) {
@@ -145,7 +164,7 @@ public class ConceptServiceImpl implements ConceptService{
             ConceptForList concept = new ConceptForList();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
-            concept.setIntitule(conceptDTO.intituleFr());
+            concept.setIntitule(conceptDTO.intituleLg1());
 
             addNearByConcepts(conceptDTO, concept);
 

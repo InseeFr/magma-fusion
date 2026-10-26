@@ -68,7 +68,7 @@ class ConceptServiceImplTest {
         // Given
         ConceptDTO dto = new ConceptDTO(
                 "c001", "http://id.insee.fr/concepts/c001",
-                "Population", "Population EN",
+                "Population FR", "Population EN",
                 null, null, null, null, null, null,
                 null, null, null, false, false, null, null);
 
@@ -78,17 +78,17 @@ class ConceptServiceImplTest {
         // Then
         assertThat(result.getIntitule()).hasSize(2);
         assertThat(result.getIntitule().get(0).getLangue()).isEqualTo("fr");
-        assertThat(result.getIntitule().get(0).getContenu()).isEqualTo("Population");
+        assertThat(result.getIntitule().get(0).getContenu()).isEqualTo("Population FR");
         assertThat(result.getIntitule().get(1).getLangue()).isEqualTo("en");
         assertThat(result.getIntitule().get(1).getContenu()).isEqualTo("Population EN");
     }
 
     @Test
-    void convertConceptDTOToConcept_shouldMapIntituleFrOnly() {
+    void convertConceptDTOToConcept_shouldMapIntituleEnOnly() {
         // Given
         ConceptDTO dto = new ConceptDTO(
                 "c001", "http://id.insee.fr/concepts/c001",
-                "Population", null,
+                null, "Population EN",
                 null, null, null, null, null, null,
                 null, null, null, false, false, null, null);
 
@@ -96,7 +96,25 @@ class ConceptServiceImplTest {
         Concept result = service.convertConceptDTOToConcept(dto);
 
         // Then
-        assertThat(result.getIntitule().getFirst().getContenu()).isEqualTo("Population");
+        assertThat(result.getIntitule()).hasSize(1);
+        assertThat(result.getIntitule().get(0).getLangue()).isEqualTo("en");
+        assertThat(result.getIntitule().get(0).getContenu()).isEqualTo("Population EN");
+    }
+
+    @Test
+    void convertConceptDTOToConcept_shouldMapIntituleFrOnly() {
+        // Given
+        ConceptDTO dto = new ConceptDTO(
+                "c001", "http://id.insee.fr/concepts/c001",
+                "Population FR", null,
+                null, null, null, null, null, null,
+                null, null, null, false, false, null, null);
+
+        // When
+        Concept result = service.convertConceptDTOToConcept(dto);
+
+        // Then
+        assertThat(result.getIntitule().getFirst().getContenu()).isEqualTo("Population FR");
         assertThat(result.getIntitule().getFirst().getLangue()).isEqualTo("fr");
     }
 
@@ -441,5 +459,26 @@ class ConceptServiceImplTest {
         assertThat(result.getIntitulesAlternatifs().get(0).getContenu()).isEqualTo("Pop.");
         assertThat(result.getIntitulesAlternatifs().get(0).getLangue()).isEqualTo("fr");
         assertThat(result.getIntitulesAlternatifs().get(1).getLangue()).isEqualTo("en");
+    }
+
+    @Test
+    void convertConceptDTOToConcept_shouldMapIntitulesAlternatifsEnOnly() {
+        // Given
+        LocalisedContenu labelEn = new LocalisedContenu().contenu("Pop.").langue("en");
+
+        ConceptDTO dto = new ConceptDTO(
+                "c001", "http://id.insee.fr/concepts/c001",
+                null, null, null, null, null, null, null, null,
+                null, null, null,
+                false, true,
+                null, List.of(labelEn));
+
+        // When
+        Concept result = service.convertConceptDTOToConcept(dto);
+
+        // Then
+        assertThat(result.getIntitulesAlternatifs()).hasSize(1);
+        assertThat(result.getIntitulesAlternatifs().get(0).getContenu()).isEqualTo("Pop.");
+        assertThat(result.getIntitulesAlternatifs().get(0).getLangue()).isEqualTo("en");
     }
 }
