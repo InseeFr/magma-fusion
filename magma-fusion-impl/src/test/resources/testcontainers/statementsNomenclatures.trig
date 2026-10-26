@@ -89,15 +89,15 @@
     pav:lastRefreshedOn "2025-05-14T00:00:00.000+01:00"^^xsd:date ;
 
     # Intitulés
-    skos:prefLabel "Nomenclature d'activités française - Edition 2025"@fr ,
-                   "French nomenclature of activities - Edition 2025"@en ;
+    skos:prefLabel "Description de la NAF4 pour intitulés - Edition 4"@fr ,
+                   "NAF4 description for untitles - Edition 4"@en ;
 
     # Intitulés alternatifs
-    skos:altLabel "NAF 4"@fr ;
+    skos:altLabel "NAF 4 pour intitulé alternatif"@fr ;
 
     # Descriptions
-    dc:description "Les nomenclatures d'activités et de produits ont été élaborées principalement en vue de faciliter l'organisation de l'information économique et sociale. Leur finalité est essentiellement statistique. La NAF, nomenclature d'activités française, est une nomenclature des activités économiques productives. Elle a une structure arborescente à 5 niveaux emboîtés."@fr ,
-                 "The activities and products classifications have been developed mainly to facilitate the organization of economic and social information. Their purpose is essentially statistical. The French nomenclature of activities (NAF), is a classification of productive economic activities. It has a tree structure with 5 nested levels."@en ;
+    dc:description "Description littérale de la NAF4"@fr ,
+                 "NAF4 literal description"@en ;
 
     # Niveaux (xkos:levels)
     xkos:levels [

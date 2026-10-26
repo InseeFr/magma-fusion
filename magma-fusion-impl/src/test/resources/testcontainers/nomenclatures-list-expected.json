@@ -32,10 +32,10 @@
   "nomenclature" : "naf4",
   "uri" : "http://id.insee.fr/codes/naf4/naf",
   "intitule" : [ {
-    "contenu" : "Nomenclature d'activités française - Edition 2025",
+    "contenu" : "Description de la NAF4 pour intitulés - Edition 4",
     "langue" : "fr"
   }, {
-    "contenu" : "French nomenclature of activities - Edition 2025",
+    "contenu" : "NAF4 description for untitles - Edition 4",
     "langue" : "en"
   } ]
 }
