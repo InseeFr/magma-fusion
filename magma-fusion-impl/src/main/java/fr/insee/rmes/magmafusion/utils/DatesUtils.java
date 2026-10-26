@@ -22,7 +22,7 @@ public class DatesUtils {
             return Instant.parse(dateString)
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
-        } catch (DateTimeParseException e1) {
+        } catch (DateTimeParseException _) {
             // If failed, try to parse as LocalDateTime
             try {
                 return LocalDateTime.parse(dateString).toLocalDate();
