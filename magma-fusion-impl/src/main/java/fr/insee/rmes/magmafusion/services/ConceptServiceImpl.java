@@ -6,6 +6,7 @@ import fr.insee.rmes.magmafusion.model.LocalisedContenu;
 import fr.insee.rmes.magmafusion.model.NearbyConcept;
 import fr.insee.rmes.magmafusion.utils.ConceptDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -24,14 +25,25 @@ import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
 @Slf4j
 public class ConceptServiceImpl implements ConceptService{
 
-        public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
+    private final String lg1;
+    private final String lg2;
+
+    public ConceptServiceImpl(
+            @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
+            @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2
+    ) {
+        this.lg1 = lg1;
+        this.lg2 = lg2;
+    }
+
+    public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
             Concept concept = new Concept();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
-            concept.setIntitule(buildLocalisedLabels(conceptDTO.intituleLg1(),conceptDTO.intituleLg2()));
-            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionLg1(), conceptDTO.definitionLg2()));
-            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteLg1(), conceptDTO.scopeNoteLg2()));
-            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeLg1(), conceptDTO.noteEditorialeLg2()));
+            concept.setIntitule(buildLocalisedLabels(conceptDTO.intituleLg1(),conceptDTO.intituleLg2(), this.lg1, this.lg2));
+            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionLg1(), conceptDTO.definitionLg2(),this.lg1, this.lg2));
+            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteLg1(), conceptDTO.scopeNoteLg2(),this.lg1, this.lg2));
+            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeLg1(), conceptDTO.noteEditorialeLg2(),this.lg1, this.lg2));
 
             if (Boolean.TRUE.equals(conceptDTO.hasIntitulesAlternatifs())) {
                 addIntitulesAlternatifs(conceptDTO,concept);

@@ -6,6 +6,8 @@ import fr.insee.rmes.magmafusion.model.NearbyConcept;
 import fr.insee.rmes.magmafusion.utils.ConceptDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -19,7 +21,7 @@ class ConceptServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new ConceptServiceImpl();
+        service = new ConceptServiceImpl("fr","en");
     }
 
 
