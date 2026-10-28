@@ -15,7 +15,7 @@ WHERE {
 
   ?uri skos:notation ?id .
   ?uri skos:prefLabel ?intitule .
-  FILTER(lang(?intitule) = 'fr')
+  FILTER(lang(?intitule) = '${LG1}')
   FILTER(CONTAINS(LCASE(STR(?intitule)), LCASE("${libelle}")))
   BIND(STR(?intitule) AS ?intituleLg1)
   BIND(EXISTS{?uri (skos:broader|skos:narrower|skos:related|dcterms:replaces|dcterms:isReplacedBy|skos:closeMatch|dcterms:references) ?repl } AS ?hasLink)

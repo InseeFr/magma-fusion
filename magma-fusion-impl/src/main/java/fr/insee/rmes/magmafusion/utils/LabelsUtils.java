@@ -2,6 +2,7 @@ package fr.insee.rmes.magmafusion.utils;
 
 import fr.insee.rmes.magmafusion.model.IdLabel;
 import fr.insee.rmes.magmafusion.model.LocalisedContenu;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,5 +32,15 @@ public class LabelsUtils {
         idLabel.setId(id);
         idLabel.setLabel(labels);
         return idLabel;
+    }
+
+    public static List<LocalisedContenu> buildLocalisedLabels(String lg1Field, String lg2Field) {
+        if (lg1Field != null | lg2Field != null){
+            return createList(
+                    StringUtils.hasText(lg1Field) ? createLangField(lg1Field, "fr") : null,
+                    StringUtils.hasText(lg2Field) ? createLangField(lg2Field, "en") : null
+            );
+        }
+        else return null;
     }
 }
