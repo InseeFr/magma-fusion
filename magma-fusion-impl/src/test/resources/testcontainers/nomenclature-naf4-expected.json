@@ -1,0 +1,84 @@
+{
+  "nomenclature": "naf4",
+  "uri": "http://id.insee.fr/codes/naf4/naf",
+  "intitule": [
+    {
+      "contenu": "Description de la NAF4 pour intitulés - Edition 4",
+      "langue": "fr"
+    },
+    {
+      "contenu": "NAF4 description for untitles - Edition 4",
+      "langue": "en"
+    }
+  ],
+  "intitule_alternatif": [
+    {
+      "contenu": "NAF 4 pour intitulé alternatif",
+      "langue": "fr"
+    }
+  ],
+  "description": [
+    {
+      "contenu": "Description littérale de la NAF4",
+      "langue": "fr"
+    },
+    {
+      "contenu": "NAF4 literal description",
+      "langue": "en"
+    }
+  ],
+  "datePublication": "2026-05-11",
+  "dateMiseAJour": "2025-05-14",
+  "niveaux": [
+    {
+      "niveau": "sections",
+      "uri": "http://id.insee.fr/codes/naf4/sections",
+      "intitule": [
+        {
+          "contenu": "NAF 4 - Niveau 1 - Sections",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "divisions",
+      "uri": "http://id.insee.fr/codes/naf4/divisions",
+      "intitule": [
+        {
+          "contenu": "NAF 4 - Niveau 2 - Divisions",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "groupes",
+      "uri": "http://id.insee.fr/codes/naf4/groupes",
+      "intitule": [
+        {
+          "contenu": "NAF 4 - Niveau 3 - Groupes",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "classes",
+      "uri": "http://id.insee.fr/codes/naf4/classes",
+      "intitule": [
+        {
+          "contenu": "NAF 4 - Niveau 4 - Classes",
+          "langue": "fr"
+        }
+      ]
+    },
+    {
+      "niveau": "sousClasses",
+      "uri": "http://id.insee.fr/codes/naf4/sousClasses",
+      "intitule": [
+        {
+          "contenu": "NAF 4 - Niveau 5 - Sous-classes",
+          "langue": "fr"
+        }
+      ]
+    }
+  ]
+}

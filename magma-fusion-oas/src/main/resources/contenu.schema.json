@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://magma.insee/contenus.schema.json",
+  "$id": "https://magma-fusion.insee/contenu.schema.json",
   "title": "Contenu",
   "description": "Contenus d'une rubrique de type RICH_TEXT",
   "type": "object",

@@ -9,14 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
@@ -56,26 +52,6 @@ public class ConceptServiceImpl implements ConceptService{
             return createList(createLangField(frField, "fr"), createLangField(enField, "en"));
         }
 
-
-        private static LocalDate tryParseDateToLocalDate(String dateString) {
-            if (dateString == null || dateString.isEmpty()) {
-                return null;
-            }
-            // Try first to parse as Instant
-            try {
-                return Instant.parse(dateString)
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-            } catch (DateTimeParseException e1) {
-                // If failed, try to parse as LocalDateTime
-                try {
-                    return LocalDateTime.parse(dateString).toLocalDate();
-                } catch (DateTimeParseException e2) {
-                    log.error("IMPOSSIBLE TO PARSE THE DATE '{}' : {}", dateString, e2.getMessage());
-                    return null;
-                }
-            }
-        }
 
 
     private void addNearByConcepts(ConceptDTO conceptDTO, Concept concept) {

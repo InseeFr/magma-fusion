@@ -106,6 +106,27 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+
+  /codes/{nomenclature}:
+    get:
+      tags:
+        - Nomenclatures
+      summary: Description d'une nomenclature avec en particulier la liste des niveaux qui la composent
+      operationId: getClassification
+      parameters:
+        - $ref: '#/components/parameters/nomenclature'
+      responses:
+        '200':
+          $ref: '#/components/responses/Classification200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /codes/{nomenclature}/{niveau}/{code}:
     get:
       tags:
@@ -130,7 +151,7 @@ paths:
 
 
 
-  # -- Géographie
+  # -- Geographie
 
   /geo/airesDAttractionDesVilles2020:
     get:
@@ -2358,7 +2379,7 @@ components:
             défaut:
               $ref: '#/components/examples/ListeNomenclatures'
 
-    ClassificationByCode200:
+    Classification200:
       description: 'Opération réussie'
       content:
         application/json:
@@ -2374,7 +2395,24 @@ components:
             défaut:
               $ref: '#/components/examples/Nomenclature'
 
-    # -- Nomenclatures
+
+    ClassificationByCode200:
+      description: 'Opération réussie'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NomenclatureByCode'
+          examples:
+            défaut:
+              $ref: '#/components/examples/NomenclatureByCode'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/NomenclatureByCode'
+          examples:
+            défaut:
+              $ref: '#/components/examples/NomenclatureByCode'
+
+    # -- Geographie
 
     AireDAttractionDesVilles2020_200:
       description: 'Opération réussie pour l''aire d''attraction'
@@ -6603,9 +6641,55 @@ components:
 
     Nomenclature:
       value:
-        - code: '10'
-          uri: 'http://id.insee.fr/codes/cj/n2/10'
-          intitule: 'Entrepreneur individuel'
+        nomenclature: 'naf2025'
+        uri: 'http://id.insee.fr/codes/naf2025/naf'
+        intitule:
+          - contenu: 'Nomenclature d''activités française - Edition 2025'
+            langue: 'fr'
+          - contenu: 'French nomenclature of activities - Edition 2025'
+            langue: 'en'
+        intitule_alternatif:
+          - contenu: 'NAF 2025'
+            langue: 'fr'
+        description:
+          - contenu: 'Les nomenclatures d''activités et de produits ont été élaborées principalement en vue de faciliter l''organisation de l''information économique et sociale. Leur finalité est essentiellement statistique. La NAF, nomenclature d''activités française, est une nomenclature des activités économiques productives. Elle a une structure arborescente à 5 niveaux emboîtés.'
+            langue: 'fr'
+          - contenu: 'The activities and products classifications have been developed mainly to facilitate the organization of economic and social information. Their purpose is essentially statistical. The French nomenclature of activities (NAF), is a classification of productive economic activities. It has a tree structure with 5 nested levels.'
+            langue: 'en'
+        datePublication: '2026-05-11'
+        dateMiseAJour: '2025-05-14'
+        niveaux:
+          - niveau: 'sections"'
+            uri: 'http://id.insee.fr/codes/nafr2/sections'
+            intitule:
+              - contenu: 'NAF 2025 - Niveau 1 - Sections'
+                langue: 'fr'
+          - niveau: 'divisions"'
+            uri: 'http://id.insee.fr/codes/naf2025/divisions'
+            intitule:
+              - contenu: 'NAF 2025 - Niveau 2 - Divisions'
+                langue: 'fr'
+          - niveau: 'groupes"'
+            uri: 'http://id.insee.fr/codes/naf2025/groupes'
+            intitule:
+              - contenu: 'NAF 2025 - Niveau 3 - Groupes'
+                langue: 'fr'
+          - niveau: 'classes"'
+            uri: 'http://id.insee.fr/codes/naf2025/classes'
+            intitule:
+              - contenu: 'NAF 2025 - Niveau 4 - Classes'
+                langue: 'fr'
+          - niveau: 'sousClasses"'
+            uri: 'http://id.insee.fr/codes/naf2025/sousClasses'
+            intitule:
+              - contenu: 'NAF 2025 - Niveau 5 - Sous-classes'
+                langue: 'fr'
+
+    NomenclatureByCode:
+      value:
+        code: '10'
+        uri: 'http://id.insee.fr/codes/cj/n2/10'
+        intitule: 'Entrepreneur individuel'
 
     # -- Opérations
 
@@ -7124,6 +7208,36 @@ components:
       example: 'cj'
 
     Nomenclature:
+      type: object
+      properties:
+        nomenclature:
+          type: string
+        uri:
+          type: string
+        intitule:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+        intitule_alternatif:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+        description:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+        datePublication:
+          type: string
+          format: date
+        dateMiseAJour:
+          type: string
+          format: date
+        niveaux:
+          type: array
+          items:
+            $ref: './niveau-uri-intitule.schema.json'
+
+    NomenclatureByCode:
       type: object
       properties:
         code:

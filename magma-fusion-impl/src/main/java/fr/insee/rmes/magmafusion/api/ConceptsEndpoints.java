@@ -55,7 +55,6 @@ public class ConceptsEndpoints implements DefinitionsApi {
 
         } else {
             return ResponseEntity.notFound().build();
-
         }
     }
 

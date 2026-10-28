@@ -18,13 +18,25 @@
     "contenu" : "Classification 2 EN",
     "langue" : "en"
   } ]
-}, {
-  "nomenclature" : "naf3",
-  "uri" : "http://id.insee.fr/codes/naf3/naf",
+},
+  {
+    "nomenclature" : "naf3",
+    "uri" : "http://id.insee.fr/codes/naf3/naf",
+    "intitule" : [ {
+      "contenu" : "Classification 3",
+      "langue" : "fr"
+    }, {
+      "langue" : "en"
+    } ]
+  },{
+  "nomenclature" : "naf4",
+  "uri" : "http://id.insee.fr/codes/naf4/naf",
   "intitule" : [ {
-    "contenu" : "Classification 3",
+    "contenu" : "Description de la NAF4 pour intitulés - Edition 4",
     "langue" : "fr"
   }, {
+    "contenu" : "NAF4 description for untitles - Edition 4",
     "langue" : "en"
   } ]
-} ]
+}
+]
