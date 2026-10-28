@@ -362,12 +362,12 @@ public class OperationsServiceImpl implements OperationsService {
     private Rubrique convertRubrique(RubriqueDTO rubriqueDTO, RapportQualite rapportQualite) {
         Rubrique rubrique = createRubrique(rubriqueDTO);
 
-        if (rubriqueDTO.titreLg1() != null && rubriqueDTO.titreLg2() != null) {
-            List<LocalisedContenu> titre = createList(
-                    createLangField(rubriqueDTO.titreLg1(), "fr"),
-                    createLangField(rubriqueDTO.titreLg2(), "en"));
-            rubrique.setTitre(titre);
-        }
+        List<LocalisedContenu> titre = buildLocalisedLabels(
+                rubriqueDTO.titreLg1(),
+                rubriqueDTO.titreLg2(),
+                lg1,lg2);
+        rubrique.setTitre(titre);
+
 
         switch (rubriqueDTO.type()) {
             case "DATE":
@@ -380,9 +380,10 @@ public class OperationsServiceImpl implements OperationsService {
                 addRichText(rubriqueDTO, rubrique, rapportQualite);
                 break;
             case "TEXT":
-                List<LocalisedContenu> label = createList(
-                        createLangField(rubriqueDTO.labelLg1(), "fr"),
-                        createLangField(rubriqueDTO.labelLg2(), "en"));
+                List<LocalisedContenu> label = buildLocalisedLabels(
+                        rubriqueDTO.labelLg1(),
+                        rubriqueDTO.labelLg2(),
+                        lg1,lg2);
                 rubrique.setLabel(label);
                 break;
             case "GEOGRAPHY":
@@ -483,12 +484,10 @@ public class OperationsServiceImpl implements OperationsService {
         IdUriLabel rubriqueCodeList = new IdUriLabel();
         rubriqueCodeList.setId(rubriqueDTO.valeurSimple());
         rubriqueCodeList.setUri(URI.create(rubriqueDTO.codeUri()));
-        if (rubriqueDTO.labelObjLg1() != null) {
-            LocalisedContenu labelLg1 = createLangField(rubriqueDTO.labelObjLg1(), lg1);
-            LocalisedContenu labelLg2 = rubriqueDTO.labelObjLg2() != null ?
-                    createLangField(rubriqueDTO.labelObjLg2(), lg2) : null;
-            rubriqueCodeList.setLabel(createList(labelLg1, labelLg2));
-        }
+        rubriqueCodeList.setLabel(buildLocalisedLabels(
+                rubriqueDTO.labelObjLg1(),
+                rubriqueDTO.labelObjLg2(),
+                lg1,lg2));
 
         if (rapportQualite.getRubriques() != null) {
             boolean rubricExist = rapportQualite.getRubriques().stream()

@@ -99,7 +99,7 @@ class ConceptsQueriesTest extends BaseIntegrationTest {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
-          
+
             JSONAssert.assertEquals(
                     loadExpectedJson(expectedFile),
                     bodyAsString(body),
