@@ -231,10 +231,6 @@ public class OperationsServiceImpl implements OperationsService {
     public Indicateur convertIndicateurDTOToIndicateur(IndicateurDTO dto) {
         Indicateur indicateur = new Indicateur();
 
-        indicateur.setAltLabel(null);
-        indicateur.setResume(null);
-        indicateur.setNoteHistorique(null);
-        indicateur.setFrequenceCollecte(null);
         indicateur.setRapportQualite(null);
         indicateur.setSeriesContributrices(null);
         indicateur.setSeriesLiees(null);
@@ -244,7 +240,6 @@ public class OperationsServiceImpl implements OperationsService {
         indicateur.setProprietaires(null);
         indicateur.setOrganismesResponsables(null);
         indicateur.setPartenaires(null);
-
         indicateur.setId(dto.indicatorId());
         indicateur.setUri(dto.indicator());
         indicateur.setDateCreation(dto.created() != null ? dto.created().toString() : null);

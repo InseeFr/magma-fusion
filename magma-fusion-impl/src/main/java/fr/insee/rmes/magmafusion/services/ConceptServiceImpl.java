@@ -40,10 +40,10 @@ public class ConceptServiceImpl implements ConceptService{
             Concept concept = new Concept();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
-            concept.setIntitule(buildLocalisedLabels(conceptDTO.intituleLg1(),conceptDTO.intituleLg2(), this.lg1, this.lg2));
-            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionLg1(), conceptDTO.definitionLg2(),this.lg1, this.lg2));
-            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteLg1(), conceptDTO.scopeNoteLg2(),this.lg1, this.lg2));
-            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeLg1(), conceptDTO.noteEditorialeLg2(),this.lg1, this.lg2));
+            concept.setIntitule(buildLocalisedLabels(conceptDTO.intituleLg1(),conceptDTO.intituleLg2(), lg1, lg2));
+            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionLg1(), conceptDTO.definitionLg2(),lg1, lg2));
+            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteLg1(), conceptDTO.scopeNoteLg2(),lg1, lg2));
+            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeLg1(), conceptDTO.noteEditorialeLg2(),lg1, lg2));
 
             if (Boolean.TRUE.equals(conceptDTO.hasIntitulesAlternatifs())) {
                 addIntitulesAlternatifs(conceptDTO,concept);
