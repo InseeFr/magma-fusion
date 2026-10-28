@@ -27,13 +27,6 @@ public class LabelsUtils {
         return langueContenu;
     }
 
-    public static IdLabel createIdLabelField(String id, List<LocalisedContenu> labels) {
-        IdLabel idLabel = new IdLabel();
-        idLabel.setId(id);
-        idLabel.setLabel(labels);
-        return idLabel;
-    }
-
     public static List<LocalisedContenu> buildLocalisedLabels(String lg1Field, String lg2Field) {
         if (lg1Field != null | lg2Field != null){
             return createList(
