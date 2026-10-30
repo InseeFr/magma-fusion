@@ -1,5 +1,6 @@
 package fr.insee.rmes.magmafusion.services;
 
+import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.Concept;
 import fr.insee.rmes.magmafusion.model.ConceptForList;
 import fr.insee.rmes.magmafusion.model.LocalisedContenu;
@@ -16,25 +17,22 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.buildLocalisedLabels;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
 @Service
 @Slf4j
 public class ConceptServiceImpl implements ConceptService{
 
-    private final String lg1;
-    private final String lg2;
+    @Value("${fr.insee.rmes.magmafusion.lg1}")
+    private String lg1;
 
-    public ConceptServiceImpl(
-            @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
-            @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2
-    ) {
-        this.lg1 = lg1;
-        this.lg2 = lg2;
-    }
+    @Value("${fr.insee.rmes.magmafusion.lg2}")
+    private String lg2;
 
     public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
             Concept concept = new Concept();
@@ -69,7 +67,7 @@ public class ConceptServiceImpl implements ConceptService{
                 return Instant.parse(dateString)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate();
-            } catch (DateTimeParseException e1) {
+            } catch (DateTimeParseException _) {
                 // If failed, try to parse as LocalDateTime
                 try {
                     return LocalDateTime.parse(dateString).toLocalDate();

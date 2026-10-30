@@ -6,6 +6,10 @@ import fr.insee.rmes.magmafusion.model.NearbyConcept;
 import fr.insee.rmes.magmafusion.utils.ConceptDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,13 +19,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 class ConceptServiceImplTest {
 
+    @InjectMocks
     private ConceptServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        service = new ConceptServiceImpl("fr","en");
+        ReflectionTestUtils.setField(service, "lg1", "fr");
+        ReflectionTestUtils.setField(service, "lg2", "en");
     }
 
 
