@@ -1,6 +1,5 @@
 package fr.insee.rmes.magmafusion.services;
 
-import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.Concept;
 import fr.insee.rmes.magmafusion.model.ConceptForList;
 import fr.insee.rmes.magmafusion.model.LocalisedContenu;
@@ -17,12 +16,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.buildLocalisedLabels;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
 @Service
 @Slf4j
