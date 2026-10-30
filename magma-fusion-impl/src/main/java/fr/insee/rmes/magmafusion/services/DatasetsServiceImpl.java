@@ -16,16 +16,21 @@ import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 @Service
 public class DatasetsServiceImpl implements DatasetsService {
 
+    private final String lg1;
+    private final String lg2;
     private final RequestProcessor requestProcessor;
-    public DatasetsServiceImpl(RequestProcessor requestProcessor) {
+
+    public DatasetsServiceImpl(
+            @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
+            @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2,
+            RequestProcessor requestProcessor
+    ) {
+        this.lg1 = lg1;
+        this.lg2 = lg2;
         this.requestProcessor = requestProcessor;
     }
 
-    @Value("${fr.insee.rmes.magmafusion.lg1}")
-    private String lg1;
 
-    @Value("${fr.insee.rmes.magmafusion.lg2}")
-    private String lg2;
 
     @Override
     public List<Dataset> convertDatasetDTOsToDataSets(List<DatasetDTO> dtos) {

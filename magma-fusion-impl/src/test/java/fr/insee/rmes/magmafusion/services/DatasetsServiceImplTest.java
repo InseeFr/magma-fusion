@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,22 +27,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class DatasetsServiceImplTest {
 
     private RequestProcessor requestProcessor;
 
-    @InjectMocks
     private DatasetsServiceImpl service;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+
     @BeforeEach
     void setUp() {
         requestProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-        service = new DatasetsServiceImpl(requestProcessor);
-        ReflectionTestUtils.setField(service, "lg1", "fr");
-        ReflectionTestUtils.setField(service, "lg2", "en");
+        service = new DatasetsServiceImpl("fr", "en", requestProcessor);
     }
 
     // =========================================================
@@ -371,11 +367,10 @@ class DatasetsServiceImplTest {
     void getTemporalResolution_shouldReturnEmptyListForEmptyInput() {
         // Given
         RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
         List<String> uris = List.of();
 
         // When
-        List<Label> result = datasetsService.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).isEmpty();

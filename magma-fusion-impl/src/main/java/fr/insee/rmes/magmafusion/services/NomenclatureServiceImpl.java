@@ -14,11 +14,16 @@ import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 @Slf4j
 public class NomenclatureServiceImpl implements NomenclatureService{
 
-    @Value("${fr.insee.rmes.magmafusion.lg1}")
-    private String lg1;
+    private final String lg1;
+    private final String lg2;
 
-    @Value("${fr.insee.rmes.magmafusion.lg2}")
-    private String lg2;
+    public NomenclatureServiceImpl(
+            @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
+            @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2
+    ) {
+        this.lg1 = lg1;
+        this.lg2 = lg2;
+    }
 
     public NomenclatureForList convertNomenclatureDtoforList(NomenclatureForListDTO nomenclatureForListDTO){
         NomenclatureForList nomenclatureForList = new NomenclatureForList();
