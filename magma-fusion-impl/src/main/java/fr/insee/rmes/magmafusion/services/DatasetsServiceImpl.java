@@ -32,12 +32,12 @@ public class DatasetsServiceImpl implements DatasetsService {
 
 
     @Override
-    public List<Dataset> convertDatasetDTOsToDataSets(List<DatasetDTO> dtos) {
+    public List<DatasetForList> convertDatasetDTOsToDataSets(List<DatasetForListDTO> dtos) {
         return dtos.stream().map(this::convertDatasetDTOToDataSetForList).toList();
     }
 
-    private Dataset convertDatasetDTOToDataSetForList(DatasetDTO dto) {
-        Dataset dataSet = initDataset();
+    private DatasetForList convertDatasetDTOToDataSetForList(DatasetForListDTO dto) {
+        DatasetForList dataSet = new DatasetForList();
 
         dataSet.setId(dto.id());
         dataSet.setUri(dto.uri());
@@ -119,38 +119,29 @@ public class DatasetsServiceImpl implements DatasetsService {
             );
         }
 
-        if (StringUtils.hasText(dto.labeltypeLg1())) {
-            dataSet.setType(buildLocalisedLabels(
-                    dto.labeltypeLg1(),
-                    dto.labeltypeLg2(),
-                    lg1, lg2));
-        }
+        dataSet.setType(buildLocalisedLabels(
+            dto.labeltypeLg1(),
+            dto.labeltypeLg2(),
+            lg1, lg2));
 
-        if (StringUtils.hasText(dto.labelaccessRightsLg1())) {
-            dataSet.setAccessRights(buildLocalisedLabels(
-                    dto.labelaccessRightsLg1(),
-                    dto.labelaccessRightsLg2(),
-                    lg1, lg2));
-        }
+        dataSet.setAccessRights(buildLocalisedLabels(
+            dto.labelaccessRightsLg1(),
+            dto.labelaccessRightsLg2(),
+            lg1, lg2));
 
-        if (StringUtils.hasText(dto.labelconfidentialityStatusLg1())) {
-            dataSet.setConfidentialityStatus(buildLocalisedLabels(
-                    dto.labelconfidentialityStatusLg1(),
-                    dto.labelconfidentialityStatusLg2(),
-                    lg1,lg2));
-        }
+        dataSet.setConfidentialityStatus(buildLocalisedLabels(
+            dto.labelconfidentialityStatusLg1(),
+            dto.labelconfidentialityStatusLg2(),
+            lg1,lg2));
 
-        if (StringUtils.hasText(dto.labelaccrualPeriodicityLg1())) {
-            List<LocalisedContenu> accrualPeriodicityListTitle = buildLocalisedLabels(
-                    dto.labelaccrualPeriodicityLg1(),
-                    dto.labelaccrualPeriodicityLg2(),
-                    lg1, lg2);
-            IdLabel accrualPeriodicityIdLabel = new IdLabel();
-            accrualPeriodicityIdLabel.setId(null);
-            accrualPeriodicityIdLabel.setLibelle(accrualPeriodicityListTitle);
-            dataSet.setPeriodiciteDeMiseAJour(accrualPeriodicityIdLabel);
-
-        }
+        List<LocalisedContenu> accrualPeriodicityListTitle = buildLocalisedLabels(
+            dto.labelaccrualPeriodicityLg1(),
+            dto.labelaccrualPeriodicityLg2(),
+            lg1, lg2);
+        IdLabel accrualPeriodicityIdLabel = new IdLabel();
+        accrualPeriodicityIdLabel.setId(null);
+        accrualPeriodicityIdLabel.setLibelle(accrualPeriodicityListTitle);
+        dataSet.setPeriodiciteDeMiseAJour(accrualPeriodicityIdLabel);
 
         if (StringUtils.hasText(dto.temporalResolutions())) {
             List<String> urisTemporalResolution = List.of(dto.temporalResolutions().split(","));
@@ -296,6 +287,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setUniteStatistique(null);
         return dataSet;
     }
+
 
     protected List<Label> getTemporalResolution(List<String> urisTemporalResolution) {
         List<Label> temporalResolution = new ArrayList<>();

@@ -46,9 +46,9 @@ class DatasetsServiceImplTest {
     @Test
     void should_map_list_of_dtos_to_datasets() throws IOException, JSONException {
         var dtos = List.of(
-                new DatasetDTO("id1", "http://bauhaus/ds/id1", "Titre 1 FR", "Title 1 EN",
+                new DatasetForListDTO("id1", "http://bauhaus/ds/id1", "Titre 1 FR", "Title 1 EN",
                         LocalDate.of(2024, 1, 10), "Publiée", LocalDate.of(2023, 6, 1)),
-                new DatasetDTO("id2", "http://bauhaus/ds/id2", "Titre 2 FR", "Title 2 EN",
+                new DatasetForListDTO("id2", "http://bauhaus/ds/id2", "Titre 2 FR", "Title 2 EN",
                         null, "Provisoire, jamais publiée", null)
         );
 

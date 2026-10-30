@@ -2,7 +2,7 @@ package fr.insee.rmes.magmafusion.utils;
 
 import java.time.LocalDate;
 
-public record DatasetDTO(
+public record DatasetForListDTO(
         String id,
         String uri,
         String titreLg1,

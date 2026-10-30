@@ -37,6 +37,7 @@
     {"contenu": "Titre du dataset test","langue": "fr" },
     {"contenu": "Dataset Test Title","langue": "en" }
   ],
+  "periodiciteDeMiseAJour" : { },
   "resolutionTemporelle": [
     {"libelle": [
       {"contenu": "temporalResolution1 du dataset test", "langue": "fr" },
@@ -96,16 +97,13 @@
     }
   ],
   "resume": [
-    {"contenu": "Résumé du dataset test", "langue": "fr" },
-    {"langue": "en"}
+    {"contenu": "Résumé du dataset test", "langue": "fr" }
   ],
   "description": [
-    {"contenu": "Description du dataset test", "langue": "fr" },
-    {"langue": "en"}
+    {"contenu": "Description du dataset test", "langue": "fr" }
   ],
   "noteDePortee": [
-    {"contenu": "Note de portée du dataset test", "langue": "fr" },
-    {"langue": "en"}
+    {"contenu": "Note de portée du dataset test", "langue": "fr" }
   ],
   "aEteGenerePar": [
     {"id": "http://bauhaus/operations/serie/idSerieGeneratrice", "libelle": []}

@@ -2,11 +2,12 @@ package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.Dataset;
+import fr.insee.rmes.magmafusion.model.DatasetForList;
 import fr.insee.rmes.magmafusion.model.Distribution;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.services.DatasetsService;
 import fr.insee.rmes.magmafusion.utils.DatasetByIdDTO;
-import fr.insee.rmes.magmafusion.utils.DatasetDTO;
+import fr.insee.rmes.magmafusion.utils.DatasetForListDTO;
 import fr.insee.rmes.magmafusion.utils.DistributionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -26,14 +27,14 @@ public class DatasetsEndpoints implements JeuxDeDonneesApi {
     }
 
     @Override
-    public ResponseEntity<List<Dataset>> getListDatasets(@Nullable String dateMiseAJour) {
-        List<DatasetDTO> dtos = requestProcessor.queryToFindAllDatasets()
+    public ResponseEntity<List<DatasetForList>> getListDatasets(@Nullable String dateMiseAJour) {
+        List<DatasetForListDTO> dtos = requestProcessor.queryToFindAllDatasets()
                 .with(DatasetsRequestParametizer.ofDate(dateMiseAJour))
                 .executeQuery()
-                .listResult(DatasetDTO.class)
+                .listResult(DatasetForListDTO.class)
                 .result();
 
-        List<Dataset> dataSets = datasetsService.convertDatasetDTOsToDataSets(dtos);
+        List<DatasetForList> dataSets = datasetsService.convertDatasetDTOsToDataSets(dtos);
         return ResponseEntity.ok(dataSets);
     }
 
