@@ -10,8 +10,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
 
 @Service
 public class DatasetsServiceImpl implements DatasetsService {
@@ -34,10 +33,10 @@ public class DatasetsServiceImpl implements DatasetsService {
 
     @Override
     public List<Dataset> convertDatasetDTOsToDataSets(List<DatasetDTO> dtos) {
-        return dtos.stream().map(this::convertDatasetDTOToDataSet).toList();
+        return dtos.stream().map(this::convertDatasetDTOToDataSetForList).toList();
     }
 
-    private Dataset convertDatasetDTOToDataSet(DatasetDTO dto) {
+    private Dataset convertDatasetDTOToDataSetForList(DatasetDTO dto) {
         Dataset dataSet = initDataset();
 
         dataSet.setId(dto.id());
@@ -45,9 +44,10 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setEtatValidation(dto.statutValidation());
         dataSet.setDateCreationEnregistrementCatalogue(dto.dateCreation() != null ? dto.dateCreation().toString() : null);
         dataSet.setDateMiseAJourEnregistrementCatalogue(dto.catalogRecordModified() != null ? dto.catalogRecordModified().toString() : null);
-        dataSet.setTitre(createList(
-                createLangField(dto.titreLg1(),lg1),
-                createLangField(dto.titreLg2(),lg2)));
+        dataSet.setTitre(buildLocalisedLabels(
+                dto.titreLg1(),
+                dto.titreLg2(),
+                lg1,lg2));
         return dataSet;
     }
 
@@ -58,14 +58,14 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setId(dto.id());
         dataSet.setUri(dto.uri());
         dataSet.setEtatValidation(dto.statutValidation());
-        dataSet.setDateMiseAJour(dto.modified());
-        dataSet.setDatePublication(dto.issued());
-        dataSet.setVersion(dto.version());
-        dataSet.setSpatioTemporel(dto.spatialTemporal());
-        dataSet.setDisseminationStatus(dto.disseminationStatus());
-        dataSet.setIdentifier(dto.identifier());
-        dataSet.setDateCreationEnregistrementCatalogue(dto.catalogRecordCreated());
-        dataSet.setDateMiseAJourEnregistrementCatalogue(dto.catalogRecordModified());
+        dataSet.setDateMiseAJour(dto.modified() != null ? dto.modified().toString() : null);
+        dataSet.setDatePublication(dto.issued() != null ? dto.issued().toString() : null);
+        dataSet.setVersion(dto.version() != null ? dto.version().toString() : null);
+        dataSet.setSpatioTemporel(dto.spatialTemporal() != null ? dto.spatialTemporal().toString() : null);
+        dataSet.setDisseminationStatus(dto.disseminationStatus() != null ? dto.disseminationStatus().toString() : null);
+        dataSet.setIdentifier(dto.identifier() != null ? dto.identifier().toString() : null);
+        dataSet.setDateCreationEnregistrementCatalogue(dto.catalogRecordCreated() != null ? dto.catalogRecordCreated().toString() : null);
+        dataSet.setDateMiseAJourEnregistrementCatalogue(dto.catalogRecordModified() != null ? dto.catalogRecordModified().toString() : null);
 
         if (StringUtils.hasText(dto.numObservations()) ) {
             dataSet.setNumObservations(Integer.parseInt(dto.numObservations()));
@@ -74,36 +74,36 @@ public class DatasetsServiceImpl implements DatasetsService {
             dataSet.setNumSeries(Integer.parseInt(dto.numSeries()));
         }
 
-        if (StringUtils.hasText(dto.titleLg1()) ) {
-            dataSet.setTitre(createList(
-                    createLangField(dto.titleLg1(), lg1),
-                    createLangField(dto.titleLg2(), lg2)));
-        }
-        if (StringUtils.hasText(dto.subtitleLg1())) {
-            dataSet.setSousTitre(createList(
-                    createLangField(dto.subtitleLg1(),lg1),
-                    createLangField(dto.subtitleLg2(),lg2)));
-        }
-        if (StringUtils.hasText(dto.abstractLg1())){
-            dataSet.setResume(createList(
-                    createLangField(dto.abstractLg1(),lg1),
-                    createLangField(dto.abstractLg2(),lg2)));
-        }
-        if (StringUtils.hasText(dto.descriptionLg1())){
-            dataSet.setDescription(createList(
-                    createLangField(dto.descriptionLg1(),lg1),
-                    createLangField(dto.descriptionLg2(),lg2)));
-        }
-        if (StringUtils.hasText(dto.scopeNoteLg1())) {
-            dataSet.setNoteDePortee(createList(
-                    createLangField(dto.scopeNoteLg1(), lg1),
-                    createLangField(dto.scopeNoteLg2(), lg2)));
-        }
-        if (StringUtils.hasText(dto.landingPageLg1())) {
-            dataSet.setPageAccueil(createList(
-                    new LocalisedUrl().langue(lg1).url(dto.landingPageLg1()),
-                    new LocalisedUrl().langue(lg2).url(dto.landingPageLg2())));
-        }
+        dataSet.setTitre(buildLocalisedLabels(
+            dto.titleLg1(),
+            dto.titleLg2(),
+            lg1,lg2));
+
+        dataSet.setSousTitre(buildLocalisedLabels(
+            dto.subtitleLg1(),
+            dto.subtitleLg2(),
+            lg1,lg2));
+
+        dataSet.setResume(buildLocalisedLabels(
+            dto.abstractLg1(),
+            dto.abstractLg2(),
+            lg1, lg2));
+
+        dataSet.setDescription(buildLocalisedLabels(
+            dto.descriptionLg1(),
+            dto.descriptionLg2(),
+            lg1,lg2));
+
+
+        dataSet.setNoteDePortee(buildLocalisedLabels(
+            dto.scopeNoteLg1(),
+            dto.scopeNoteLg2(),
+            lg1, lg2));
+
+        dataSet.setPageAccueil(buildLocalisedUrls(
+            dto.landingPageLg1(),
+            dto.landingPageLg2(),
+            lg1,lg2));
 
         if (dto.keywordLg1() != null && dto.keywordLg2() != null){
             dataSet.setKeyword(buildKeywords(dto.keywordLg1(), dto.keywordLg2()));
@@ -112,34 +112,39 @@ public class DatasetsServiceImpl implements DatasetsService {
         if (StringUtils.hasText(dto.idPublisher())) {
             dataSet.setEditeur(new IdLabel()
                     .id(dto.idPublisher())
-                    .libelle(createList(
-                            createLangField(dto.labelPublisherLg1(),lg1),
-                            createLangField(dto.labelPublisherLg2(),lg2))));
+                    .libelle(buildLocalisedLabels(
+                            dto.labelPublisherLg1(),
+                            dto.labelPublisherLg2(),
+                            lg1,lg2))
+            );
         }
 
         if (StringUtils.hasText(dto.labeltypeLg1())) {
-            dataSet.setType(createList(
-                    createLangField(dto.labeltypeLg1(),lg1),
-                    createLangField(dto.labeltypeLg2(),lg2)));
+            dataSet.setType(buildLocalisedLabels(
+                    dto.labeltypeLg1(),
+                    dto.labeltypeLg2(),
+                    lg1, lg2));
         }
 
         if (StringUtils.hasText(dto.labelaccessRightsLg1())) {
-            dataSet.setAccessRights(createList(
-                    createLangField(dto.labelaccessRightsLg1(),lg1),
-                    createLangField(dto.labelaccessRightsLg2(),lg2)));
+            dataSet.setAccessRights(buildLocalisedLabels(
+                    dto.labelaccessRightsLg1(),
+                    dto.labelaccessRightsLg2(),
+                    lg1, lg2));
         }
 
         if (StringUtils.hasText(dto.labelconfidentialityStatusLg1())) {
-            dataSet.setConfidentialityStatus(createList(
-                    createLangField(dto.labelconfidentialityStatusLg1(),lg1),
-                    createLangField(dto.labelconfidentialityStatusLg2(),lg2)));
+            dataSet.setConfidentialityStatus(buildLocalisedLabels(
+                    dto.labelconfidentialityStatusLg1(),
+                    dto.labelconfidentialityStatusLg2(),
+                    lg1,lg2));
         }
 
         if (StringUtils.hasText(dto.labelaccrualPeriodicityLg1())) {
-            List<LocalisedContenu> accrualPeriodicityListTitle = createList(
-                    createLangField(dto.labelaccrualPeriodicityLg1(),lg1),
-                    createLangField(dto.labelaccrualPeriodicityLg2(),lg2)
-            );
+            List<LocalisedContenu> accrualPeriodicityListTitle = buildLocalisedLabels(
+                    dto.labelaccrualPeriodicityLg1(),
+                    dto.labelaccrualPeriodicityLg2(),
+                    lg1, lg2);
             IdLabel accrualPeriodicityIdLabel = new IdLabel();
             accrualPeriodicityIdLabel.setId(null);
             accrualPeriodicityIdLabel.setLibelle(accrualPeriodicityListTitle);
@@ -174,25 +179,28 @@ public class DatasetsServiceImpl implements DatasetsService {
         if (StringUtils.hasText(dto.spatialId())) {
             dataSet.setCouvertureSpatiale(new IdLabel()
                     .id(dto.spatialId())
-                    .libelle(createList(
-                            createLangField(dto.labelspatialLg1(),lg1),
-                            createLangField(dto.labelspatialLg2(),lg2))));
+                    .libelle(buildLocalisedLabels(
+                            dto.labelspatialLg1(),
+                            dto.labelspatialLg2(),
+                            lg1,lg2)));
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordCreator())) {
             dataSet.setCreateurEnregistrementCatalogue(new IdLabel()
                     .id(dto.idCatalogRecordCreator())
-                    .libelle(createList(
-                            createLangField(dto.catalogRecordCreatorLabelLg1(),lg1),
-                            createLangField(dto.catalogRecordCreatorLabelLg2(),lg2))));
+                    .libelle(buildLocalisedLabels(
+                            dto.catalogRecordCreatorLabelLg1(),
+                            dto.catalogRecordCreatorLabelLg2(),
+                            lg1, lg2)));
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordContributor())) {
             dataSet.setContributeurEnregistrementCatalogue(new IdLabel()
                     .id(dto.idCatalogRecordContributor())
-                    .libelle(createList(
-                            createLangField(dto.catalogRecordContributorLabelLg1(),lg1),
-                            createLangField(dto.catalogRecordContributorLabelLg2(),lg2))));
+                    .libelle(buildLocalisedLabels(
+                            dto.catalogRecordContributorLabelLg1(),
+                            dto.catalogRecordContributorLabelLg2(),
+                            lg1, lg2)));
         }
 
 
@@ -256,16 +264,10 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .datasets(Arrays.stream(dto.wasDerivedFromS().split(","))
                             .filter(s -> !s.isBlank())
                             .toList());
-            if (StringUtils.hasText(dto.derivedDescriptionLg1())) {
-                wasDerivedFrom.setDescription(createList(
-                        createLangField(dto.derivedDescriptionLg1(),lg1),
-                        createLangField(dto.derivedDescriptionLg2(), lg2)));
-            }
-            if (dto.derivedDescriptionLg1() != null && dto.derivedDescriptionLg1().isBlank()) {
-                wasDerivedFrom.setDescription(createList(
-                        createLangField(dto.derivedDescriptionLg1(),lg1),
-                        createLangField("", lg2)));
-            }
+            wasDerivedFrom.setDescription(buildLocalisedLabels(
+                    dto.derivedDescriptionLg1(),
+                    dto.derivedDescriptionLg2(),
+                    lg1,lg2));
             dataSet.setWasDerivedFrom(wasDerivedFrom);
         }
 
@@ -276,28 +278,9 @@ public class DatasetsServiceImpl implements DatasetsService {
     private Dataset initDataset(){
         Dataset dataSet = new Dataset();
         dataSet.setPageAccueil(null);
-        dataSet.setDateMiseAJour(null);
-        dataSet.setDatePublication(null);
-        dataSet.setVersion(null);
-        dataSet.setSpatioTemporel(null);
-        dataSet.setDisseminationStatus(null);
-        dataSet.setIdentifier(null);
-        dataSet.setDateCreationEnregistrementCatalogue(null);
-        dataSet.setDateMiseAJourEnregistrementCatalogue(null);
-        dataSet.setCreateurEnregistrementCatalogue(null);
-        dataSet.setContributeurEnregistrementCatalogue(null);
         dataSet.setNumObservations(null);
         dataSet.setNumSeries(null);
-        dataSet.setSousTitre(null);
-        dataSet.setResume(null);
-        dataSet.setDescription(null);
-        dataSet.setNoteDePortee(null);
-        dataSet.setEditeur(null);
         dataSet.setKeyword(null);
-        dataSet.setType(null);
-        dataSet.setAccessRights(null);
-        dataSet.setConfidentialityStatus(null);
-        dataSet.setSpatioTemporel(null);
         dataSet.setPeriodeTemporelle(null);
         dataSet.setStructure(null);
         dataSet.setCreateur(null);
@@ -322,9 +305,10 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .executeQuery()
                     .singleResult(TemporalResolutionDTO.class)
                     .result();
-            List<LocalisedContenu> temporalResolutionTitles = createList(
-                    createLangField(temporalResolutionContenu.labeltemporalResolutionLg1(),lg1),
-                    createLangField(temporalResolutionContenu.labeltemporalResolutionLg2(),lg2)
+            List<LocalisedContenu> temporalResolutionTitles = buildLocalisedLabels(
+                    temporalResolutionContenu.labeltemporalResolutionLg1(),
+                    temporalResolutionContenu.labeltemporalResolutionLg2(),
+                    lg1,lg2
             );
             Label temporalResolutionLabel = new Label();
             temporalResolutionLabel.setLibelle(temporalResolutionTitles);
@@ -341,9 +325,10 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .executeQuery()
                     .singleResult(SpatialResolutionDTO.class)
                     .result();
-            List<LocalisedContenu> spatialResolutionTitles = createList(
-                    createLangField(spatialResolutionContenu.labelSpatialResolutionLg1(),lg1),
-                    createLangField(spatialResolutionContenu.labelSpatialResolutionLg2(),lg2)
+            List<LocalisedContenu> spatialResolutionTitles = buildLocalisedLabels(
+                    spatialResolutionContenu.labelSpatialResolutionLg1(),
+                    spatialResolutionContenu.labelSpatialResolutionLg2(),
+                    lg1,lg2
             );
             IdLabel spatialResolutionLabel = new IdLabel();
             spatialResolutionLabel.setLibelle(spatialResolutionTitles);
@@ -361,9 +346,10 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .executeQuery()
                     .singleResult(StatisticalUnitDTO.class)
                     .result();
-            List<LocalisedContenu> statisticalUnitTitles = createList(
-                    createLangField(statisticalUnitsContenu.labelStatisticalUnitLg1(),lg1),
-                    createLangField(statisticalUnitsContenu.labelStatisticalUnitLg2(),lg2)
+            List<LocalisedContenu> statisticalUnitTitles = buildLocalisedLabels(
+                    statisticalUnitsContenu.labelStatisticalUnitLg1(),
+                    statisticalUnitsContenu.labelStatisticalUnitLg2(),
+                    lg1,lg2
             );
             IdLabel statisticalUnitLabel = new IdLabel();
             statisticalUnitLabel.setLibelle(statisticalUnitTitles);
@@ -381,9 +367,10 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .executeQuery()
                     .singleResult(ThemeDTO.class)
                     .result();
-            List<LocalisedContenu> themeTitles = createList(
-                    createLangField(themeDTO.labelThemeLg1(),lg1),
-                    createLangField(themeDTO.labelThemeLg2(),lg2)
+            List<LocalisedContenu> themeTitles = buildLocalisedLabels(
+                    themeDTO.labelThemeLg1(),
+                    themeDTO.labelThemeLg2(),
+                    lg1,lg2
             );
             Theme themeLabel = new Theme();
             themeLabel.setLibelle(themeTitles);
@@ -414,14 +401,16 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .distinct()
                     .toList());
             if (StringUtils.hasText(first.titleLg1())) {
-                d.setTitle(createList(
-                        createLangField(first.titleLg1(), lg1),
-                        createLangField(first.titleLg2(), lg2)));
+                d.setTitle(buildLocalisedLabels(
+                        first.titleLg1(),
+                        first.titleLg2(),
+                        lg1, lg2));
             }
             if (StringUtils.hasText(first.descriptionLg1())) {
-                d.setDescription(createList(
-                        createLangField(first.descriptionLg1(), lg1),
-                        createLangField(first.descriptionLg2(), lg2)));
+                d.setDescription(buildLocalisedLabels(
+                        first.descriptionLg1(),
+                        first.descriptionLg2(),
+                        lg1, lg2));
             }
             return d;
         }).toList();

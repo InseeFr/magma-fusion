@@ -9,9 +9,6 @@ import fr.insee.rmes.magmafusion.utils.*;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -399,11 +396,7 @@ class DatasetsServiceImplTest {
         // Then
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
-        assertThat(resolution.getLibelle()).hasSize(2);
-        assertThat(resolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(resolution.getLibelle().get(0).getContenu()).isNull();
-        assertThat(resolution.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(resolution.getLibelle().get(1).getContenu()).isNull();
+        assertThat(resolution.getLibelle()).isNull();
     }
 
     @Test
@@ -429,11 +422,8 @@ class DatasetsServiceImplTest {
         // Then
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
-        assertThat(resolution.getLibelle()).hasSize(2);
-        assertThat(resolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(resolution.getLibelle().get(0).getContenu()).isEmpty();
-        assertThat(resolution.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(resolution.getLibelle().get(1).getContenu()).isNull();
+
+        assertThat(resolution.getLibelle()).hasSize(0);
     }
 
 
