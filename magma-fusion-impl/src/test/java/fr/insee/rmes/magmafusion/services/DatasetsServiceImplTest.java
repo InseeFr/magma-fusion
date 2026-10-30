@@ -363,7 +363,6 @@ class DatasetsServiceImplTest {
     @Test
     void getTemporalResolution_shouldReturnEmptyListForEmptyInput() {
         // Given
-        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
         List<String> uris = List.of();
 
         // When
@@ -423,7 +422,7 @@ class DatasetsServiceImplTest {
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
 
-        assertThat(resolution.getLibelle()).hasSize(0);
+        assertThat(resolution.getLibelle()).isEmpty();
     }
 
 

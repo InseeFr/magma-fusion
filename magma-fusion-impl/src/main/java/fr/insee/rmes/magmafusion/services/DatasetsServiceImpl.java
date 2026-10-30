@@ -58,14 +58,14 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setId(dto.id());
         dataSet.setUri(dto.uri());
         dataSet.setEtatValidation(dto.statutValidation());
-        dataSet.setDateMiseAJour(dto.modified() != null ? dto.modified().toString() : null);
-        dataSet.setDatePublication(dto.issued() != null ? dto.issued().toString() : null);
-        dataSet.setVersion(dto.version() != null ? dto.version().toString() : null);
-        dataSet.setSpatioTemporel(dto.spatialTemporal() != null ? dto.spatialTemporal().toString() : null);
-        dataSet.setDisseminationStatus(dto.disseminationStatus() != null ? dto.disseminationStatus().toString() : null);
-        dataSet.setIdentifier(dto.identifier() != null ? dto.identifier().toString() : null);
-        dataSet.setDateCreationEnregistrementCatalogue(dto.catalogRecordCreated() != null ? dto.catalogRecordCreated().toString() : null);
-        dataSet.setDateMiseAJourEnregistrementCatalogue(dto.catalogRecordModified() != null ? dto.catalogRecordModified().toString() : null);
+        dataSet.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
+        dataSet.setDatePublication(dto.issued() != null ? dto.issued() : null);
+        dataSet.setVersion(dto.version() != null ? dto.version() : null);
+        dataSet.setSpatioTemporel(dto.spatialTemporal() != null ? dto.spatialTemporal() : null);
+        dataSet.setDisseminationStatus(dto.disseminationStatus() != null ? dto.disseminationStatus() : null);
+        dataSet.setIdentifier(dto.identifier() != null ? dto.identifier() : null);
+        dataSet.setDateCreationEnregistrementCatalogue(dto.catalogRecordCreated() != null ? dto.catalogRecordCreated() : null);
+        dataSet.setDateMiseAJourEnregistrementCatalogue(dto.catalogRecordModified() != null ? dto.catalogRecordModified() : null);
 
         if (StringUtils.hasText(dto.numObservations()) ) {
             dataSet.setNumObservations(Integer.parseInt(dto.numObservations()));
