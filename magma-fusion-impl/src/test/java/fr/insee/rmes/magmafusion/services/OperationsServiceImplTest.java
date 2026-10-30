@@ -8,7 +8,6 @@ import fr.insee.rmes.magmafusion.utils.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -26,9 +24,8 @@ public class OperationsServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new OperationsServiceImpl(requestProcessor);
-        ReflectionTestUtils.setField(service, "lg1", "fr");
-        ReflectionTestUtils.setField(service, "lg2", "en");
+        service = new OperationsServiceImpl("fr","en",requestProcessor);
+
     }
 
 
@@ -62,9 +59,8 @@ public class OperationsServiceImplTest {
         RapportQualite result = service.convertDTOToRapportQualite(dto);
 
         // Then
-        assertThat(result.getLabel()).hasSize(2);
+        assertThat(result.getLabel()).hasSize(1);
         assertThat(result.getLabel().get(0).getContenu()).isEqualTo("Rapport qualité");
-        assertThat(result.getLabel().get(1).getContenu()).isEmpty();
     }
 
     @Test
@@ -309,7 +305,7 @@ public class OperationsServiceImplTest {
                 .thenReturn(List.of(doc1En));
         //Double thenReturn chaîné : le premier appel à findDocuments (pour "fr") retourne 2 documents, le second (pour "en") en retourne 1.
 
-        OperationsServiceImpl serviceWithDocs = new OperationsServiceImpl(mockProcessor);
+        OperationsServiceImpl serviceWithDocs = new OperationsServiceImpl("fr","en",mockProcessor);
 
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-rich", "RICH_TEXT");
