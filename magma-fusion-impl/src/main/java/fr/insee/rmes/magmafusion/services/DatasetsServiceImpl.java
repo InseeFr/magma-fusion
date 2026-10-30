@@ -41,8 +41,8 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setDateCreationEnregistrementCatalogue(dto.dateCreation() != null ? dto.dateCreation().toString() : null);
         dataSet.setDateMiseAJourEnregistrementCatalogue(dto.catalogRecordModified() != null ? dto.catalogRecordModified().toString() : null);
         dataSet.setTitre(createList(
-                createLangField(dto.titreLg1(),"fr"),
-                createLangField(dto.titreLg2(),"en")));
+                createLangField(dto.titreLg1(),lg1),
+                createLangField(dto.titreLg2(),lg2)));
         return dataSet;
     }
 
@@ -71,18 +71,18 @@ public class DatasetsServiceImpl implements DatasetsService {
 
         if (StringUtils.hasText(dto.titleLg1()) ) {
             dataSet.setTitre(createList(
-                    createLangField(dto.titleLg1(), "fr"),
-                    createLangField(dto.titleLg2(), "en")));
+                    createLangField(dto.titleLg1(), lg1),
+                    createLangField(dto.titleLg2(), lg2)));
         }
         if (StringUtils.hasText(dto.subtitleLg1())) {
             dataSet.setSousTitre(createList(
-                    createLangField(dto.subtitleLg1(),"fr"),
-                    createLangField(dto.subtitleLg2(),"en")));
+                    createLangField(dto.subtitleLg1(),lg1),
+                    createLangField(dto.subtitleLg2(),lg2)));
         }
         if (StringUtils.hasText(dto.abstractLg1())){
             dataSet.setResume(createList(
-                    createLangField(dto.abstractLg1(),"fr"),
-                    createLangField(dto.abstractLg2(),"en")));
+                    createLangField(dto.abstractLg1(),lg1),
+                    createLangField(dto.abstractLg2(),lg2)));
         }
         if (StringUtils.hasText(dto.descriptionLg1())){
             dataSet.setDescription(createList(
@@ -91,13 +91,13 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
         if (StringUtils.hasText(dto.scopeNoteLg1())) {
             dataSet.setNoteDePortee(createList(
-                    createLangField(dto.scopeNoteLg1(), "fr"),
-                    createLangField(dto.scopeNoteLg2(), "en")));
+                    createLangField(dto.scopeNoteLg1(), lg1),
+                    createLangField(dto.scopeNoteLg2(), lg2)));
         }
         if (StringUtils.hasText(dto.landingPageLg1())) {
             dataSet.setPageAccueil(createList(
-                    new LocalisedUrl().langue("fr").url(dto.landingPageLg1()),
-                    new LocalisedUrl().langue("en").url(dto.landingPageLg2())));
+                    new LocalisedUrl().langue(lg1).url(dto.landingPageLg1()),
+                    new LocalisedUrl().langue(lg2).url(dto.landingPageLg2())));
         }
 
         if (dto.keywordLg1() != null && dto.keywordLg2() != null){
@@ -108,8 +108,8 @@ public class DatasetsServiceImpl implements DatasetsService {
             dataSet.setEditeur(new IdLabel()
                     .id(dto.idPublisher())
                     .libelle(createList(
-                            createLangField(dto.labelPublisherLg1(),"fr"),
-                            createLangField(dto.labelPublisherLg2(),"en"))));
+                            createLangField(dto.labelPublisherLg1(),lg1),
+                            createLangField(dto.labelPublisherLg2(),lg2))));
         }
 
         if (StringUtils.hasText(dto.labeltypeLg1())) {
@@ -170,24 +170,24 @@ public class DatasetsServiceImpl implements DatasetsService {
             dataSet.setCouvertureSpatiale(new IdLabel()
                     .id(dto.spatialId())
                     .libelle(createList(
-                            createLangField(dto.labelspatialLg1(),"fr"),
-                            createLangField(dto.labelspatialLg2(),"en"))));
+                            createLangField(dto.labelspatialLg1(),lg1),
+                            createLangField(dto.labelspatialLg2(),lg2))));
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordCreator())) {
             dataSet.setCreateurEnregistrementCatalogue(new IdLabel()
                     .id(dto.idCatalogRecordCreator())
                     .libelle(createList(
-                            createLangField(dto.catalogRecordCreatorLabelLg1(),"fr"),
-                            createLangField(dto.catalogRecordCreatorLabelLg2(),"en"))));
+                            createLangField(dto.catalogRecordCreatorLabelLg1(),lg1),
+                            createLangField(dto.catalogRecordCreatorLabelLg2(),lg2))));
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordContributor())) {
             dataSet.setContributeurEnregistrementCatalogue(new IdLabel()
                     .id(dto.idCatalogRecordContributor())
                     .libelle(createList(
-                            createLangField(dto.catalogRecordContributorLabelLg1(),"fr"),
-                            createLangField(dto.catalogRecordContributorLabelLg2(),"en"))));
+                            createLangField(dto.catalogRecordContributorLabelLg1(),lg1),
+                            createLangField(dto.catalogRecordContributorLabelLg2(),lg2))));
         }
 
 
@@ -213,8 +213,8 @@ public class DatasetsServiceImpl implements DatasetsService {
                         return new IdLabel()
                                 .id(parts.length > 0 ? parts[0] : null)
                                 .libelle(createList(
-                                        createLangField(parts.length > 1 ? parts[1] : null, "fr"),
-                                        createLangField(parts.length > 2 ? parts[2] : null, "en")));
+                                        createLangField(parts.length > 1 ? parts[1] : null, lg1),
+                                        createLangField(parts.length > 2 ? parts[2] : null, lg2)));
                     })
                     .toList());
         }
