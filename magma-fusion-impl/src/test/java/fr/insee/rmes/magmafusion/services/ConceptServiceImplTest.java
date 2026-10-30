@@ -17,16 +17,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 class ConceptServiceImplTest {
 
-    @InjectMocks
     private ConceptServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(service, "lg1", "fr");
-        ReflectionTestUtils.setField(service, "lg2", "en");
+        service = new ConceptServiceImpl("fr","en");
     }
 
 

@@ -25,11 +25,16 @@ import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
 @Slf4j
 public class ConceptServiceImpl implements ConceptService{
 
-    @Value("${fr.insee.rmes.magmafusion.lg1}")
-    private String lg1;
+    private final String lg1;
+    private final String lg2;
 
-    @Value("${fr.insee.rmes.magmafusion.lg2}")
-    private String lg2;
+    public ConceptServiceImpl(
+            @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
+            @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2
+    ) {
+        this.lg1 = lg1;
+        this.lg2 = lg2;
+    }
 
     public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
             Concept concept = new Concept();
