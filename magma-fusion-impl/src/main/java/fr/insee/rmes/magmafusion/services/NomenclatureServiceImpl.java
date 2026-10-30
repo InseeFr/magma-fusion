@@ -29,11 +29,7 @@ public class NomenclatureServiceImpl implements NomenclatureService{
         NomenclatureForList nomenclatureForList = new NomenclatureForList();
         nomenclatureForList.setNomenclature(nomenclatureForListDTO.id());
         nomenclatureForList.setUri(nomenclatureForListDTO.classification());
-        nomenclatureForList.setIntitule(createList(
-                createLangField(nomenclatureForListDTO.prefLabelLg1(),lg1),
-                createLangField(nomenclatureForListDTO.prefLabelLg2(),lg2)
-                )
-        );
+        nomenclatureForList.setIntitule(buildLocalisedLabels(nomenclatureForListDTO.prefLabelLg1(),nomenclatureForListDTO.prefLabelLg2(),this.lg1, this.lg2));
         return nomenclatureForList;
     }
 }
