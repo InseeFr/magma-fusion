@@ -115,4 +115,12 @@
         dc:contributor "DG75-TEST" ;
         dcterms:created "2024-12-09T12:00:00.000"^^xsd:dateTime ;
         dcterms:modified "2025-12-09T12:00:00.000"^^xsd:dateTime .
+
+}
+
+<http://rdf.insee.fr/graphes/operations> {
+    <http://bauhaus/operations/serie/idSerieGeneratrice>
+        rdf:type insee:StatisticalOperation ;
+        skos:prefLabel "Libelle FR SerieGeneratrice"@fr ;
+        skos:prefLabel "label EN SerieGeneratrice"@en .
 }
