@@ -110,7 +110,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
 
         if (StringUtils.hasText(dto.idPublisher())) {
-            dataSet.setEditeur(new IdLabel()
+            dataSet.setEditeur(new IdLibelle()
                     .id(dto.idPublisher())
                     .libelle(buildLocalisedLabels(
                             dto.labelPublisherLg1(),
@@ -138,26 +138,26 @@ public class DatasetsServiceImpl implements DatasetsService {
             dto.labelaccrualPeriodicityLg1(),
             dto.labelaccrualPeriodicityLg2(),
             lg1, lg2);
-        IdLabel accrualPeriodicityIdLabel = new IdLabel();
-        accrualPeriodicityIdLabel.setId(null);
-        accrualPeriodicityIdLabel.setLibelle(accrualPeriodicityListTitle);
-        dataSet.setPeriodiciteDeMiseAJour(accrualPeriodicityIdLabel);
+        IdLibelle accrualPeriodicityIdLibelle = new IdLibelle();
+        accrualPeriodicityIdLibelle.setId(null);
+        accrualPeriodicityIdLibelle.setLibelle(accrualPeriodicityListTitle);
+        dataSet.setPeriodiciteDeMiseAJour(accrualPeriodicityIdLibelle);
 
         if (StringUtils.hasText(dto.temporalResolutions())) {
             List<String> urisTemporalResolution = List.of(dto.temporalResolutions().split(","));
             List<Label> temporalResolutionList = getTemporalResolution(urisTemporalResolution);
             dataSet.setResolutionTemporelle(temporalResolutionList);
-            }
+        }
 
         if (StringUtils.hasText(dto.spatialResolutions())) {
             List<String> urisSpatialResolution = List.of(dto.spatialResolutions().split(","));
-            List<IdLabel> spatialResolutionList = getSpatialResolution(urisSpatialResolution);
+            List<IdLibelle> spatialResolutionList = getSpatialResolution(urisSpatialResolution);
             dataSet.setResolutionSpatiale(spatialResolutionList);
         }
 
         if (StringUtils.hasText(dto.statisticalUnits())) {
             List<String> urisStatisticalUnits = List.of(dto.statisticalUnits().split(","));
-            List<IdLabel> statisticalUnitList = getStatisticalUnits(urisStatisticalUnits);
+            List<IdLibelle> statisticalUnitList = getStatisticalUnits(urisStatisticalUnits);
             dataSet.setUniteStatistique(statisticalUnitList);
         }
 
@@ -167,8 +167,9 @@ public class DatasetsServiceImpl implements DatasetsService {
             dataSet.setTheme(themesList);
         }
 
+
         if (StringUtils.hasText(dto.spatialId())) {
-            dataSet.setCouvertureSpatiale(new IdLabel()
+            dataSet.setCouvertureSpatiale(new IdLibelle()
                     .id(dto.spatialId())
                     .libelle(buildLocalisedLabels(
                             dto.labelspatialLg1(),
@@ -177,7 +178,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordCreator())) {
-            dataSet.setCreateurEnregistrementCatalogue(new IdLabel()
+            dataSet.setCreateurEnregistrementCatalogue(new IdLibelle()
                     .id(dto.idCatalogRecordCreator())
                     .libelle(buildLocalisedLabels(
                             dto.catalogRecordCreatorLabelLg1(),
@@ -186,7 +187,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordContributor())) {
-            dataSet.setContributeurEnregistrementCatalogue(new IdLabel()
+            dataSet.setContributeurEnregistrementCatalogue(new IdLibelle()
                     .id(dto.idCatalogRecordContributor())
                     .libelle(buildLocalisedLabels(
                             dto.catalogRecordContributorLabelLg1(),
@@ -214,7 +215,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .filter(s -> !s.isBlank())
                     .map(raw -> {
                         String[] parts = raw.split("\\$", -1);
-                        return new IdLabel()
+                        return new IdLibelle()
                                 .id(parts.length > 0 ? parts[0] : null)
                                 .libelle(createList(
                                         createLangField(parts.length > 1 ? parts[1] : null, lg1),
@@ -223,10 +224,16 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .toList());
         }
 
+//        if (StringUtils.hasText(dto.operationStat())) {
+//            List<String> urisoperationStat = List.of(dto.operationStat().split(","));
+////            List<IdLibelle> aEteGenereParList = getAEteGenerePa(urisoperationStat);
+//            dataSet.setaEteGenerePar(aEteGenereParList);
+//        }
+
         if (StringUtils.hasText(dto.operationStat())) {
             dataSet.setaEteGenerePar(Arrays.stream(dto.operationStat().split(","))
                     .filter(s -> !s.isBlank())
-                    .map(uri -> new IdLabel().id(uri))
+                    .map(uri -> new IdLibelle().id(uri))
                     .toList());
         }
 
@@ -246,7 +253,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         if (StringUtils.hasText(dto.archiveUnits())) {
             dataSet.setArchiveUnit(Arrays.stream(dto.archiveUnits().split(","))
                     .filter(s -> !s.isBlank())
-                    .map(uri -> new IdLabel().id(uri))
+                    .map(uri -> new IdLibelle().id(uri))
                     .toList());
         }
 
@@ -264,6 +271,7 @@ public class DatasetsServiceImpl implements DatasetsService {
 
         return dataSet;
     }
+
 
 
     private Dataset initDataset(){
@@ -309,8 +317,8 @@ public class DatasetsServiceImpl implements DatasetsService {
         return temporalResolution;
     }
 
-    protected List<IdLabel> getSpatialResolution(List<String> urisSpatialResolution) {
-        List<IdLabel> spatialResolution = new ArrayList<>();
+    protected List<IdLibelle> getSpatialResolution(List<String> urisSpatialResolution) {
+        List<IdLibelle> spatialResolution = new ArrayList<>();
         for (String uri : urisSpatialResolution) {
             SpatialResolutionDTO spatialResolutionContenu = this.requestProcessor.queryToFindSpatialResolutionContenu()
                     .with(DatasetsRequestParametizer.ofUri(uri))
@@ -322,7 +330,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                     spatialResolutionContenu.labelSpatialResolutionLg2(),
                     lg1,lg2
             );
-            IdLabel spatialResolutionLabel = new IdLabel();
+            IdLibelle spatialResolutionLabel = new IdLibelle();
             spatialResolutionLabel.setLibelle(spatialResolutionTitles);
             spatialResolutionLabel.setId(spatialResolutionContenu.spatialResolutionId());
             spatialResolution.add(spatialResolutionLabel);
@@ -330,8 +338,8 @@ public class DatasetsServiceImpl implements DatasetsService {
         return spatialResolution;
     }
 
-    protected List<IdLabel> getStatisticalUnits(List<String> urisStatisticalUnits) {
-        List<IdLabel> statisticalUnits = new ArrayList<>();
+    protected List<IdLibelle> getStatisticalUnits(List<String> urisStatisticalUnits) {
+        List<IdLibelle> statisticalUnits = new ArrayList<>();
         for (String uri : urisStatisticalUnits) {
             StatisticalUnitDTO statisticalUnitsContenu = this.requestProcessor.queryToFindStatisticalUnits()
                     .with(DatasetsRequestParametizer.ofUri(uri))
@@ -343,7 +351,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                     statisticalUnitsContenu.labelStatisticalUnitLg2(),
                     lg1,lg2
             );
-            IdLabel statisticalUnitLabel = new IdLabel();
+            IdLibelle statisticalUnitLabel = new IdLibelle();
             statisticalUnitLabel.setLibelle(statisticalUnitTitles);
             statisticalUnitLabel.setId(statisticalUnitsContenu.statisticalUnitId());
             statisticalUnits.add(statisticalUnitLabel);
@@ -371,6 +379,27 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
         return themes;
     }
+
+//    protected List<IdLibelle> getAEteGenerePa(List<String> urisoperationStat) {
+//        List<IdLibelle> aEteGenereParList = new ArrayList<>();
+//        for (String uri : urisoperationStat) {
+//            aEteGenereParDTO aEteGenereParContenu = this.requestProcessor.queryToFindAEteGenerePar()
+//                    .with(DatasetsRequestParametizer.ofUri(uri))
+//                    .executeQuery()
+//                    .singleResult(aEteGenereParDTO.class)
+//                    .result();
+//            List<LocalisedContenu> aEteGenereParTitles = buildLocalisedLabels(
+//                    aEteGenereParContenu.aEteGenereParLg1(),
+//                    aEteGenereParContenu.aEteGenereParLg2(),
+//                    lg1,lg2
+//            );
+//            IdLibelle aEteGenereParLabel = new IdLibelle();
+//            aEteGenereParLabel.setLibelle(aEteGenereParTitles);
+//            aEteGenereParLabel.setId(aEteGenereParContenu.aEteGenereParId());
+//            aEteGenerePar.add(aEteGenereParLabel);
+//        }
+//        return aEteGenerePar;
+//    }
 
      @Override
      public List<Distribution> convertDistributionDTOsToDistributions(List<DistributionDTO> dtos) {

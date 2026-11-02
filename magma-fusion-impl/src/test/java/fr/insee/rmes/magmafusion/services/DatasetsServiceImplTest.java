@@ -2,7 +2,7 @@ package fr.insee.rmes.magmafusion.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
-import fr.insee.rmes.magmafusion.model.IdLabel;
+import fr.insee.rmes.magmafusion.model.IdLibelle;
 import fr.insee.rmes.magmafusion.model.Label;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
@@ -459,19 +459,19 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<IdLabel> result = service.getSpatialResolution(uris);
+        List<IdLibelle> result = service.getSpatialResolution(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
-        IdLabel firstResolution = result.get(0);
+        IdLibelle firstResolution = result.get(0);
         assertThat(firstResolution.getLibelle()).hasSize(2);
         assertThat(firstResolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
         assertThat(firstResolution.getLibelle().get(0).getContenu()).isEqualTo("labelSpatialResolution1Lg1");
         assertThat(firstResolution.getLibelle().get(1).getLangue()).isEqualTo("en");
         assertThat(firstResolution.getLibelle().get(1).getContenu()).isEqualTo("labelSpatialResolution1Lg2");
 
-        IdLabel secondResolution = result.get(1);
+        IdLibelle secondResolution = result.get(1);
         assertThat(secondResolution.getLibelle()).hasSize(2);
         assertThat(secondResolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
         assertThat(secondResolution.getLibelle().get(0).getContenu()).isEqualTo("labelSpatialResolution2Lg1");
@@ -512,19 +512,19 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<IdLabel> result = service.getStatisticalUnits(uris);
+        List<IdLibelle> result = service.getStatisticalUnits(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
-        IdLabel firstStatiticalUnit = result.get(0);
+        IdLibelle firstStatiticalUnit = result.get(0);
         assertThat(firstStatiticalUnit.getLibelle()).hasSize(2);
         assertThat(firstStatiticalUnit.getLibelle().get(0).getLangue()).isEqualTo("fr");
         assertThat(firstStatiticalUnit.getLibelle().get(0).getContenu()).isEqualTo("labelStatisticalUnit1Lg1");
         assertThat(firstStatiticalUnit.getLibelle().get(1).getLangue()).isEqualTo("en");
         assertThat(firstStatiticalUnit.getLibelle().get(1).getContenu()).isEqualTo("labelStatisticalUnit1Lg2");
 
-        IdLabel secondStatiticalUnit = result.get(1);
+        IdLibelle secondStatiticalUnit = result.get(1);
         assertThat(secondStatiticalUnit.getLibelle()).hasSize(2);
         assertThat(secondStatiticalUnit.getLibelle().get(0).getLangue()).isEqualTo("fr");
         assertThat(secondStatiticalUnit.getLibelle().get(0).getContenu()).isEqualTo("labelStatisticalUnit2Lg1");

@@ -16,6 +16,7 @@ public class QueryPathList {
     public static final String DATASET_SPATIAL_RESOLUTION = "datasets/getDatasetByIdSpatialResolution.ftlh";
     public static final String DATASET_STATISTICAL = "datasets/getDatasetByIdStatisticalUnit.ftlh";
     public static final String DATASET_THEMES = "datasets/getDatasetByIdTheme.ftlh";
+    public static final String DATASET_A_ETE_GENERE_PAR = "datasets/getDatasetByIdAEteGenerePar.ftlh";
     public static final String DISTRIBUTIONS_BY_DATASET_ID = "datasets/getDistributionsById.ftlh";
 
     public static final String ASCENDANTS_OR_DESCENDANTS = "geographie/getAscendantsOrDescendantsByCodeTypeDate.ftlh";

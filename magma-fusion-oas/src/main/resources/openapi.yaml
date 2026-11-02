@@ -8735,12 +8735,10 @@ components:
       description: 'Identifiant d''une documentation'
 
 
-    IdLabel:
+    IdLibelle:
       type: object
       properties:
         id:
-          type: string
-        type:
           type: string
         libelle:
           type: array
@@ -9080,9 +9078,9 @@ components:
         dateMiseAJourEnregistrementCatalogue:
           type: string
         createurEnregistrementCatalogue:
-          $ref: '#/components/schemas/IdLabel'
+          $ref: '#/components/schemas/IdLibelle'
         contributeurEnregistrementCatalogue:
-          $ref: '#/components/schemas/IdLabel'
+          $ref: '#/components/schemas/IdLibelle'
         identifier:
           type: string
         datePublication:
@@ -9098,9 +9096,9 @@ components:
         createur:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: '#/components/schemas/IdLibelle'
         editeur:
-          $ref: '#/components/schemas/IdLabel'
+          $ref: '#/components/schemas/IdLibelle'
         titre:
           type: array
           items:
@@ -9124,7 +9122,7 @@ components:
         aEteGenerePar:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: '#/components/schemas/IdLibelle'
         type:
           type: array
           items:
@@ -9132,7 +9130,7 @@ components:
         archiveUnit:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: '#/components/schemas/IdLibelle'
         accessRights:
           type: array
           items:
@@ -9152,7 +9150,7 @@ components:
         processStep:
           $ref: '#/components/schemas/ProcessStep'
         periodiciteDeMiseAJour:
-          $ref: '#/components/schemas/IdLabel'
+          $ref: '#/components/schemas/IdLibelle'
         periodeTemporelle:
           $ref: '#/components/schemas/Temporal'
         resolutionTemporelle:
@@ -9160,17 +9158,17 @@ components:
           items:
             $ref: '#/components/schemas/Label'
         couvertureSpatiale:
-          $ref: '#/components/schemas/IdLabel'
+          $ref: '#/components/schemas/IdLibelle'
         resolutionSpatiale:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: '#/components/schemas/IdLibelle'
         spatioTemporel:
           type: string
         uniteStatistique:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: '#/components/schemas/IdLibelle'
         structure:
           $ref: '#/components/schemas/Structure'
         numObservations:

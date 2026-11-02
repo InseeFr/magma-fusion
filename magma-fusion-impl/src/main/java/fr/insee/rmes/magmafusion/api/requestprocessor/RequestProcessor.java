@@ -58,6 +58,10 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(DATASET_THEMES, this, unmarshaller);
     }
 
+    public ExecutableQueryBuilder queryToFindAEteGenerePar() {
+        return new ExecutableQueryBuilder(DATASET_A_ETE_GENERE_PAR, this, unmarshaller);
+    }
+
     public ExecutableQueryBuilder queryToFindDistributionsByDatasetId() {
         return new ExecutableQueryBuilder(DISTRIBUTIONS_BY_DATASET_ID, this, unmarshaller);
     }
