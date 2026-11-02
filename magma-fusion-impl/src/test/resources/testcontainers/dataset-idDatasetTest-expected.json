@@ -106,6 +106,6 @@
     {"contenu": "Note de portée du dataset test", "langue": "fr" }
   ],
   "aEteGenerePar": [
-    {"id": "http://bauhaus/operations/serie/idSerieGeneratrice", "libelle": []}
+    {"uri": "http://bauhaus/operations/serie/idSerieGeneratrice"}
   ]
 }

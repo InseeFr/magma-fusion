@@ -9122,7 +9122,7 @@ components:
         aEteGenerePar:
           type: array
           items:
-            $ref: '#/components/schemas/IdLibelle'
+            $ref: './id-uri-libelle.schema.json'
         type:
           type: array
           items:

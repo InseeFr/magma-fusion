@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://magma.insee/dataset.schema.json",
+  "title": "IdUriLibelle",
+  "description": "Ensemble de propriétés pour le champ aEteGenerePar et frequenceDeMiseAJour de Dataset",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "libelle": {
+      "type": "array",
+      "items": {
+        "$ref": "langue-contenu.schema.json"
+      }
+    }
+  },
+  "required": ["id"],
+  "additionalProperties": false
+}

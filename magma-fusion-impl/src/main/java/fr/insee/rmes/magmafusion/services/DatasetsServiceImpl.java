@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.net.URI;
 import java.util.*;
 
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
@@ -224,17 +225,10 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .toList());
         }
 
-//        if (StringUtils.hasText(dto.operationStat())) {
-//            List<String> urisoperationStat = List.of(dto.operationStat().split(","));
-////            List<IdLibelle> aEteGenereParList = getAEteGenerePa(urisoperationStat);
-//            dataSet.setaEteGenerePar(aEteGenereParList);
-//        }
-
         if (StringUtils.hasText(dto.operationStat())) {
-            dataSet.setaEteGenerePar(Arrays.stream(dto.operationStat().split(","))
-                    .filter(s -> !s.isBlank())
-                    .map(uri -> new IdLibelle().id(uri))
-                    .toList());
+            List<String> urisoperationStat = List.of(dto.operationStat().split(","));
+            List<IdUriLibelle> aEteGenereParList = getAEteGenerePar(urisoperationStat);
+            dataSet.setaEteGenerePar(aEteGenereParList);
         }
 
         if (StringUtils.hasText(dto.names())) {
@@ -273,7 +267,6 @@ public class DatasetsServiceImpl implements DatasetsService {
     }
 
 
-
     private Dataset initDataset(){
         Dataset dataSet = new Dataset();
         dataSet.setPageAccueil(null);
@@ -305,14 +298,16 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .executeQuery()
                     .singleResult(TemporalResolutionDTO.class)
                     .result();
-            List<LocalisedContenu> temporalResolutionTitles = buildLocalisedLabels(
-                    temporalResolutionContenu.labeltemporalResolutionLg1(),
-                    temporalResolutionContenu.labeltemporalResolutionLg2(),
-                    lg1,lg2
-            );
-            Label temporalResolutionLabel = new Label();
-            temporalResolutionLabel.setLibelle(temporalResolutionTitles);
-            temporalResolution.add(temporalResolutionLabel);
+            if (temporalResolutionContenu != null) {
+                List<LocalisedContenu> temporalResolutionTitles = buildLocalisedLabels(
+                        temporalResolutionContenu.labeltemporalResolutionLg1(),
+                        temporalResolutionContenu.labeltemporalResolutionLg2(),
+                        lg1, lg2
+                );
+                Label temporalResolutionLabel = new Label();
+                temporalResolutionLabel.setLibelle(temporalResolutionTitles);
+                temporalResolution.add(temporalResolutionLabel);
+            }
         }
         return temporalResolution;
     }
@@ -325,15 +320,17 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .executeQuery()
                     .singleResult(SpatialResolutionDTO.class)
                     .result();
-            List<LocalisedContenu> spatialResolutionTitles = buildLocalisedLabels(
-                    spatialResolutionContenu.labelSpatialResolutionLg1(),
-                    spatialResolutionContenu.labelSpatialResolutionLg2(),
-                    lg1,lg2
-            );
-            IdLibelle spatialResolutionLabel = new IdLibelle();
-            spatialResolutionLabel.setLibelle(spatialResolutionTitles);
-            spatialResolutionLabel.setId(spatialResolutionContenu.spatialResolutionId());
-            spatialResolution.add(spatialResolutionLabel);
+            if (spatialResolutionContenu != null) {
+                List<LocalisedContenu> spatialResolutionTitles = buildLocalisedLabels(
+                        spatialResolutionContenu.labelSpatialResolutionLg1(),
+                        spatialResolutionContenu.labelSpatialResolutionLg2(),
+                        lg1, lg2
+                );
+                IdLibelle spatialResolutionLabel = new IdLibelle();
+                spatialResolutionLabel.setLibelle(spatialResolutionTitles);
+                spatialResolutionLabel.setId(spatialResolutionContenu.spatialResolutionId());
+                spatialResolution.add(spatialResolutionLabel);
+            }
         }
         return spatialResolution;
     }
@@ -346,15 +343,17 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .executeQuery()
                     .singleResult(StatisticalUnitDTO.class)
                     .result();
-            List<LocalisedContenu> statisticalUnitTitles = buildLocalisedLabels(
-                    statisticalUnitsContenu.labelStatisticalUnitLg1(),
-                    statisticalUnitsContenu.labelStatisticalUnitLg2(),
-                    lg1,lg2
-            );
-            IdLibelle statisticalUnitLabel = new IdLibelle();
-            statisticalUnitLabel.setLibelle(statisticalUnitTitles);
-            statisticalUnitLabel.setId(statisticalUnitsContenu.statisticalUnitId());
-            statisticalUnits.add(statisticalUnitLabel);
+            if (statisticalUnitsContenu != null) {
+                List<LocalisedContenu> statisticalUnitTitles = buildLocalisedLabels(
+                        statisticalUnitsContenu.labelStatisticalUnitLg1(),
+                        statisticalUnitsContenu.labelStatisticalUnitLg2(),
+                        lg1, lg2
+                );
+                IdLibelle statisticalUnitLabel = new IdLibelle();
+                statisticalUnitLabel.setLibelle(statisticalUnitTitles);
+                statisticalUnitLabel.setId(statisticalUnitsContenu.statisticalUnitId());
+                statisticalUnits.add(statisticalUnitLabel);
+            }
         }
         return statisticalUnits;
     }
@@ -362,44 +361,51 @@ public class DatasetsServiceImpl implements DatasetsService {
     protected List<Theme> getThemes(List<String> urisThemes) {
         List<Theme> themes = new ArrayList<>();
         for (String uri : urisThemes) {
+            Theme themeLabel = new Theme();
+            themeLabel.setUri(uri);
             ThemeDTO themeDTO = this.requestProcessor.queryToFindThemes()
                     .with(DatasetsRequestParametizer.ofUri(uri))
                     .executeQuery()
                     .singleResult(ThemeDTO.class)
                     .result();
-            List<LocalisedContenu> themeTitles = buildLocalisedLabels(
-                    themeDTO.labelThemeLg1(),
-                    themeDTO.labelThemeLg2(),
-                    lg1,lg2
-            );
-            Theme themeLabel = new Theme();
-            themeLabel.setLibelle(themeTitles);
-            themeLabel.setUri(themeDTO.uri());
-            themes.add(themeLabel);
+            if (themeDTO != null) {
+                List<LocalisedContenu> themeTitles = buildLocalisedLabels(
+                        themeDTO.labelThemeLg1(),
+                        themeDTO.labelThemeLg2(),
+                        lg1, lg2
+                );
+                themeLabel.setLibelle(themeTitles);
+                themeLabel.setUri(themeDTO.uri());
+                themes.add(themeLabel);
+            }
         }
         return themes;
     }
 
-//    protected List<IdLibelle> getAEteGenerePa(List<String> urisoperationStat) {
-//        List<IdLibelle> aEteGenereParList = new ArrayList<>();
-//        for (String uri : urisoperationStat) {
-//            aEteGenereParDTO aEteGenereParContenu = this.requestProcessor.queryToFindAEteGenerePar()
-//                    .with(DatasetsRequestParametizer.ofUri(uri))
-//                    .executeQuery()
-//                    .singleResult(aEteGenereParDTO.class)
-//                    .result();
-//            List<LocalisedContenu> aEteGenereParTitles = buildLocalisedLabels(
-//                    aEteGenereParContenu.aEteGenereParLg1(),
-//                    aEteGenereParContenu.aEteGenereParLg2(),
-//                    lg1,lg2
-//            );
-//            IdLibelle aEteGenereParLabel = new IdLibelle();
-//            aEteGenereParLabel.setLibelle(aEteGenereParTitles);
-//            aEteGenereParLabel.setId(aEteGenereParContenu.aEteGenereParId());
-//            aEteGenerePar.add(aEteGenereParLabel);
-//        }
-//        return aEteGenerePar;
-//    }
+    protected List<IdUriLibelle> getAEteGenerePar(List<String> urisoperationStat) {
+        List<IdUriLibelle> aEteGenereParList = new ArrayList<>();
+        for (String uri : urisoperationStat) {
+            IdUriLibelle aEteGenereParLabel = new IdUriLibelle();
+            aEteGenereParLabel.setUri(URI.create(uri));
+            aEteGenereParLabel.setLibelle(null);
+            DatasetAEteGenereParDTO aEteGenereParContenu = this.requestProcessor.queryToFindAEteGenerePar()
+                    .with(DatasetsRequestParametizer.ofUri(uri))
+                    .executeQuery()
+                    .singleResult(DatasetAEteGenereParDTO.class)
+                    .result();
+            if (aEteGenereParContenu != null) {
+                List<LocalisedContenu> aEteGenereParTitles = buildLocalisedLabels(
+                        aEteGenereParContenu.labelWasGeneratedByLg1(),
+                        aEteGenereParContenu.labelWasGeneratedByLg2(),
+                        lg1, lg2
+                );
+                aEteGenereParLabel.setLibelle(aEteGenereParTitles);
+                aEteGenereParLabel.setId(aEteGenereParContenu.wasGeneratedById());
+            }
+            aEteGenereParList.add(aEteGenereParLabel);
+        }
+        return aEteGenereParList;
+    }
 
      @Override
      public List<Distribution> convertDistributionDTOsToDistributions(List<DistributionDTO> dtos) {

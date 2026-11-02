@@ -13,6 +13,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
@@ -233,7 +234,7 @@ class DatasetsServiceImplTest {
 
         assertAll(
                 () -> assertEquals(1, result.getaEteGenerePar().size()),
-                () -> assertEquals("http://bauhaus/operations/serie/s1223", result.getaEteGenerePar().getFirst().getId())
+                () -> assertEquals(URI.create("http://bauhaus/operations/serie/s1223"), result.getaEteGenerePar().getFirst().getUri())
         );
     }
 
