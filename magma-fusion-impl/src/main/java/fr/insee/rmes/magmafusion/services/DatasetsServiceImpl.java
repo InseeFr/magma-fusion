@@ -135,14 +135,17 @@ public class DatasetsServiceImpl implements DatasetsService {
             dto.labelconfidentialityStatusLg2(),
             lg1,lg2));
 
-        List<LocalisedContenu> accrualPeriodicityListTitle = buildLocalisedLabels(
-            dto.labelaccrualPeriodicityLg1(),
-            dto.labelaccrualPeriodicityLg2(),
-            lg1, lg2);
-        IdLibelle accrualPeriodicityIdLibelle = new IdLibelle();
-        accrualPeriodicityIdLibelle.setId(null);
-        accrualPeriodicityIdLibelle.setLibelle(accrualPeriodicityListTitle);
-        dataSet.setPeriodiciteDeMiseAJour(accrualPeriodicityIdLibelle);
+        if (StringUtils.hasText((dto.uriAccrualPeriodicity()))) {
+            List<LocalisedContenu> accrualPeriodicityListTitle = buildLocalisedLabels(
+                    dto.labelAccrualPeriodicityLg1(),
+                    dto.labelAccrualPeriodicityLg2(),
+                    lg1, lg2);
+            IdUriLibelle accrualPeriodicityIdLibelle = new IdUriLibelle();
+            accrualPeriodicityIdLibelle.setId(dto.idAccrualPeriodicity());
+            accrualPeriodicityIdLibelle.setUri(URI.create(dto.uriAccrualPeriodicity()));
+            accrualPeriodicityIdLibelle.setLibelle(accrualPeriodicityListTitle);
+            dataSet.setFrequenceDeMiseAJour(accrualPeriodicityIdLibelle);
+        }
 
         if (StringUtils.hasText(dto.temporalResolutions())) {
             List<String> urisTemporalResolution = List.of(dto.temporalResolutions().split(","));
@@ -282,7 +285,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setArchiveUnit(null);
         dataSet.setWasDerivedFrom(null);
         dataSet.setProcessStep(null);
-        dataSet.setPeriodiciteDeMiseAJour(null);
+        dataSet.setFrequenceDeMiseAJour(null);
         dataSet.setResolutionTemporelle(null);
         dataSet.setResolutionSpatiale(null);
         dataSet.setUniteStatistique(null);
@@ -414,7 +417,7 @@ public class DatasetsServiceImpl implements DatasetsService {
             grouped.computeIfAbsent(dto.identifier(), k -> new ArrayList<>()).add(dto);
         }
         return grouped.values().stream().map(rows -> {
-            DistributionDTO first = rows.get(0);
+            DistributionDTO first = rows.getFirst();
             Distribution d = new Distribution();
             d.setIdentifier(first.identifier());
             d.setUri(first.uri());

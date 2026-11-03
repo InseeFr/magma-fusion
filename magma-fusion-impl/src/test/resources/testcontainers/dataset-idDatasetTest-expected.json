@@ -37,7 +37,7 @@
     {"contenu": "Titre du dataset test","langue": "fr" },
     {"contenu": "Dataset Test Title","langue": "en" }
   ],
-  "periodiciteDeMiseAJour" : { },
+  "frequenceDeMiseAJour" : { },
   "resolutionTemporelle": [
     {"libelle": [
       {"contenu": "temporalResolution1 du dataset test", "langue": "fr" },

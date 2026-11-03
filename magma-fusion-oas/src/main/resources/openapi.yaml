@@ -9149,8 +9149,8 @@ components:
             $ref: '#/components/schemas/LocalisedUrl'
         processStep:
           $ref: '#/components/schemas/ProcessStep'
-        periodiciteDeMiseAJour:
-          $ref: '#/components/schemas/IdLibelle'
+        frequenceDeMiseAJour:
+          $ref: './id-uri-libelle.schema.json'
         periodeTemporelle:
           $ref: '#/components/schemas/Temporal'
         resolutionTemporelle:
