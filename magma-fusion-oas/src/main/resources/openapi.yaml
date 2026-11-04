@@ -8849,14 +8849,12 @@ components:
       description: 'Identifiant d''une documentation'
 
 
-    IdLabel:
+    IdLibelle:
       type: object
       properties:
         id:
           type: string
-        type:
-          type: string
-        label:
+        libelle:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -8866,7 +8864,7 @@ components:
       properties:
         type:
           type: string
-        label:
+        libelle:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -9091,7 +9089,7 @@ components:
       properties:
         uri:
           type: string
-        label:
+        libelle:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -9101,7 +9099,7 @@ components:
     LocalisedUrl:
       type: object
       properties:
-        lang:
+        langue:
           type: string
         url:
           type: string
@@ -9111,15 +9109,15 @@ components:
       properties:
         id:
           type: string
-        label:
+        libelle:
           $ref: 'langue-contenu.schema.json'
 
     Temporal:
       type: object
       properties:
-        startPeriod:
+        debutPeriode:
           type: string
-        endPeriod:
+        finPeriode:
           type: string
 
     Structure:
@@ -9129,21 +9127,8 @@ components:
           type: string
         id:
           type: string
-        dsd:
+        structureDonnees:
           type: string
-
-    WasDerivedFrom:
-      type: object
-      properties:
-        datasets:
-          type: array
-          items:
-            type: string
-        description:
-          type: array
-          items:
-            $ref: './langue-contenu.schema.json'
-
 
     ListeDistributions:
       description: 'Liste des distributions'
@@ -9189,41 +9174,41 @@ components:
           type: string
         uri:
           type: string
-        catalogRecordCreated:
+        dateCreationEnregistrementCatalogue:
           type: string
-        catalogRecordModified:
+        dateMiseAJourEnregistrementCatalogue:
           type: string
-        catalogRecordCreator:
-          $ref: '#/components/schemas/IdLabel'
-        catalogRecordContributor:
-          $ref: '#/components/schemas/IdLabel'
+        createurEnregistrementCatalogue:
+          $ref: '#/components/schemas/IdLibelle'
+        contributeurEnregistrementCatalogue:
+          $ref: '#/components/schemas/IdLibelle'
         identifier:
           type: string
-        issued:
+        datePublication:
           type: string
-        modified:
+        dateMiseAJour:
           type: string
         disseminationStatus:
           type: string
-        validationState:
+        etatValidation:
           type: string
         version:
           type: string
-        creator:
+        createur:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
-        publisher:
-          $ref: '#/components/schemas/IdLabel'
-        title:
-          type: array
-          items:
-            $ref: './langue-contenu.schema.json'
-        subtitle:
+            $ref: '#/components/schemas/IdLibelle'
+        editeur:
+          $ref: '#/components/schemas/IdLibelle'
+        titre:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
-        abstract:
+        sousTitre:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+        resume:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -9231,14 +9216,14 @@ components:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
-        scopeNote:
+        noteDePortee:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
-        wasGeneratedBy:
+        aEteGenerePar:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: './id-uri-libelle.schema.json'
         type:
           type: array
           items:
@@ -9246,7 +9231,7 @@ components:
         archiveUnit:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: '#/components/schemas/IdLibelle'
         accessRights:
           type: array
           items:
@@ -9259,32 +9244,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Theme'
-        landingPage:
+        pageAccueil:
           type: array
           items:
             $ref: '#/components/schemas/LocalisedUrl'
         processStep:
           $ref: '#/components/schemas/ProcessStep'
-        accrualPeriodicity:
-          $ref: '#/components/schemas/IdLabel'
-        temporal:
+        frequenceDeMiseAJour:
+          $ref: './id-uri-libelle.schema.json'
+        periodeTemporelle:
           $ref: '#/components/schemas/Temporal'
-        temporalResolution:
+        resolutionTemporelle:
           type: array
           items:
             $ref: '#/components/schemas/Label'
-        spatial:
-          $ref: '#/components/schemas/IdLabel'
-        spatialResolution:
+        couvertureSpatiale:
+          $ref: '#/components/schemas/IdLibelle'
+        resolutionSpatiale:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
-        spatialTemporal:
+            $ref: '#/components/schemas/IdLibelle'
+        spatioTemporel:
           type: string
-        statisticalUnit:
+        uniteStatistique:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: '#/components/schemas/IdLibelle'
         structure:
           $ref: '#/components/schemas/Structure'
         numObservations:
@@ -9293,8 +9278,6 @@ components:
         numSeries:
           type: integer
           format: int32
-        wasDerivedFrom:
-          $ref: '#/components/schemas/WasDerivedFrom'
         relations:
           type: array
           items:
@@ -9312,9 +9295,25 @@ components:
         wrapped: true
         name: Definition
       items:
-        $ref: '#/components/schemas/Dataset'
+        $ref: '#/components/schemas/DatasetForList'
 
-
+    DatasetForList:
+      type: object
+      properties:
+        id:
+          type: string
+        uri:
+          type: string
+        dateCreationEnregistrementCatalogue:
+          type: string
+        dateMiseAJourEnregistrementCatalogue:
+          type: string
+        titre:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+        etatValidation:
+          type: string
 
 
 

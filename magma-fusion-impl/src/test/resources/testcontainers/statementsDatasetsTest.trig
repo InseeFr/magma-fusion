@@ -61,6 +61,7 @@
         insee:statisticalUnit <http://bauhaus/statisticalUnit/2>;
         dcat:theme <http://bauhaus/theme/1>;
         dcat:theme <http://bauhaus/theme/2>;
+        dcterms:accrualPeriodicity <http://bauhaus/accrualPeriodicity>;
         dcat:distribution <http://bauhaus/catalogues/distribution/idDistributionTest> .
 
     <http://bauhaus/organisations/insee/ident_insee>
@@ -115,4 +116,20 @@
         dc:contributor "DG75-TEST" ;
         dcterms:created "2024-12-09T12:00:00.000"^^xsd:dateTime ;
         dcterms:modified "2025-12-09T12:00:00.000"^^xsd:dateTime .
+
+}
+
+<http://rdf.insee.fr/graphes/operations> {
+    <http://bauhaus/operations/serie/idSerieGeneratrice>
+        rdf:type insee:StatisticalOperation ;
+        skos:prefLabel "Libelle FR SerieGeneratrice"@fr ;
+        skos:prefLabel "label EN SerieGeneratrice"@en .
+}
+
+<http://rdf.insee.fr/graphes/codes> {
+    <http://bauhaus/accrualPeriodicity>
+        a <http://id.insee.fr/codes/concept/Frequence> ;
+        skos:notation "idAccrualPeriodicity" ;
+        skos:prefLabel "Fréquence du dataset test"@fr ;
+        skos:prefLabel "Test dataset frequency"@en .
 }

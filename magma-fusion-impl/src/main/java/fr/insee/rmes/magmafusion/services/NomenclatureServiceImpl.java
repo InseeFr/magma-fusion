@@ -20,12 +20,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.buildLocalisedLabels;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
 
 
 @Service
 @Slf4j
 public class NomenclatureServiceImpl implements NomenclatureService{
+
     private final String lg1;
     private final String lg2;
 
