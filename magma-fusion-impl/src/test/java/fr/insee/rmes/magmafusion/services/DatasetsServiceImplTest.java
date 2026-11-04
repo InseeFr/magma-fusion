@@ -234,7 +234,7 @@ class DatasetsServiceImplTest {
 
         assertAll(
                 () -> assertEquals(1, result.getaEteGenerePar().size()),
-                () -> assertEquals(URI.create("http://bauhaus/operations/serie/s1223"), result.getaEteGenerePar().getFirst().getUri())
+                () -> assertEquals(URI.create("http://bauhaus/operations/serie/serieGeneratrice"), result.getaEteGenerePar().getFirst().getUri())
         );
     }
 
@@ -249,8 +249,8 @@ class DatasetsServiceImplTest {
 
         assertAll(
                 () -> assertEquals(2, result.getTheme().size()),
-                () -> assertEquals("http://theme/emploi", result.getTheme().get(0).getUri()),
-                () -> assertEquals("http://theme/chomage", result.getTheme().get(1).getUri())
+                () -> assertEquals("http://theme/theme1", result.getTheme().get(0).getUri()),
+                () -> assertEquals("http://theme/theme2", result.getTheme().get(1).getUri())
         );
     }
 
@@ -259,13 +259,12 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertEquals(3, result.getKeyword().size()),
+                () -> assertEquals(2, result.getKeyword().size()),
                 () -> assertEquals("fr", result.getKeyword().get(0).getLangue()),
-                () -> assertEquals("emploi", result.getKeyword().get(0).getContenu()),
-                () -> assertEquals("fr", result.getKeyword().get(1).getLangue()),
-                () -> assertEquals("chômage", result.getKeyword().get(1).getContenu()),
-                () -> assertEquals("en", result.getKeyword().get(2).getLangue()),
-                () -> assertEquals("employment", result.getKeyword().get(2).getContenu())
+                () -> assertEquals("keyWord FR", result.getKeyword().get(0).getContenu()),
+                () -> assertEquals("fr", result.getKeyword().get(0).getLangue()),
+                () -> assertEquals("keyWord EN", result.getKeyword().get(1).getContenu()),
+                () -> assertEquals("en", result.getKeyword().get(1).getLangue())
         );
     }
 
@@ -290,24 +289,7 @@ class DatasetsServiceImplTest {
         );
     }
 
-    @Test
-    void should_map_wasDerivedFrom_with_description_when_present() {
-        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
-        assertAll(
-                () -> assertNotNull(result.getWasDerivedFrom()),
-                () -> assertEquals(1, result.getWasDerivedFrom().getDatasets().size()),
-                () -> assertEquals("ds-source-1", result.getWasDerivedFrom().getDatasets().getFirst()),
-                () -> assertNotNull(result.getWasDerivedFrom().getDescription()),
-                () -> assertEquals("Dérivé de FR", result.getWasDerivedFrom().getDescription().getFirst().getContenu()),
-                () -> assertEquals("Derived from EN", result.getWasDerivedFrom().getDescription().get(1).getContenu())
-        );
-    }
-
-    @Test
-    void should_not_set_wasDerivedFrom_when_null() {
-        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getWasDerivedFrom());
-    }
 
 
     // =========================================================

@@ -9130,19 +9130,6 @@ components:
         structureDonnees:
           type: string
 
-    WasDerivedFrom:
-      type: object
-      properties:
-        datasets:
-          type: array
-          items:
-            type: string
-        description:
-          type: array
-          items:
-            $ref: './langue-contenu.schema.json'
-
-
     ListeDistributions:
       description: 'Liste des distributions'
       type: array
@@ -9291,8 +9278,6 @@ components:
         numSeries:
           type: integer
           format: int32
-        wasDerivedFrom:
-          $ref: '#/components/schemas/WasDerivedFrom'
         relations:
           type: array
           items:

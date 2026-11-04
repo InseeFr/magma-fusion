@@ -231,9 +231,5 @@
       "uri": "http://theme/theme2",
       "libelle": []
     }
-  ],
-  "wasDerivedFrom":
-    {
-      "datasets": "Derived from EN"
-    }
+  ]
 }

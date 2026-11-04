@@ -254,18 +254,6 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .toList());
         }
 
-        if (StringUtils.hasText(dto.wasDerivedFromS())) {
-            WasDerivedFrom wasDerivedFrom = new WasDerivedFrom()
-                    .datasets(Arrays.stream(dto.wasDerivedFromS().split(","))
-                            .filter(s -> !s.isBlank())
-                            .toList());
-            wasDerivedFrom.setDescription(buildLocalisedLabels(
-                    dto.derivedDescriptionLg1(),
-                    dto.derivedDescriptionLg2(),
-                    lg1,lg2));
-            dataSet.setWasDerivedFrom(wasDerivedFrom);
-        }
-
         return dataSet;
     }
 
@@ -283,7 +271,6 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setTheme(null);
         dataSet.setRelations(null);
         dataSet.setArchiveUnit(null);
-        dataSet.setWasDerivedFrom(null);
         dataSet.setProcessStep(null);
         dataSet.setFrequenceDeMiseAJour(null);
         dataSet.setResolutionTemporelle(null);
