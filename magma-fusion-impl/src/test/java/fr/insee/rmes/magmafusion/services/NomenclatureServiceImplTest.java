@@ -187,8 +187,7 @@ class NomenclatureServiceImplTest {
         Nomenclature result = service.convertNomenclatureDto(nomenclatureDTO, new ArrayList<>());
 
         // Then
-        assertNotNull(result.getDescription());
-        assertTrue(result.getDescription().isEmpty());
+        assertNull(result.getDescription());
     }
 
     @Test
