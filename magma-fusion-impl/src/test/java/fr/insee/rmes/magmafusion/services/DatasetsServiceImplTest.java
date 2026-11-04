@@ -540,54 +540,60 @@ class DatasetsServiceImplTest {
 
     private DatasetByIdDTO fullDatasetByIdDTO() {
         return new DatasetByIdDTO(
-                "http://bauhaus/ds/25baaf1f",    // uri
-                "25baaf1f",                      // id
-                "Provisoire, jamais publiée",    // statutValidation
-                "Titre FR", "Title EN",          // titleLg1, titleLg2
-                "Sous-titre FR", "Subtitle EN",  // subtitleLg1, subtitleLg2
-                "Résumé FR", "Abstract EN",      // abstractLg1, abstractLg2
-                "Description FR", "Description EN", // descriptionLg1, descriptionLg2
-                "Note FR", "Note EN",            // scopeNoteLg1, scopeNoteLg2
-                "https://example.fr/page", "https://example.en/page", // landingPageLg1, landingPageLg2
+                "http://bauhaus/ds/25baaf1f",
+                "25baaf1f",
+                "Provisoire, jamais publiée",
+                "Titre FR", "Title EN",
+                "Sous-titre FR", "Subtitle EN",
+                "Résumé FR", "Abstract EN",
+                "Description FR", "Description EN",
+                "Note FR",
+                "Note EN",
+                "https://example.fr/page",
+                "https://example.en/page",
                 "id catalogRecordCreator",
                 "catalogRecordCreatorLabelLg1",
-                "catalogRecordCreatorLabelLg2",// catalogRecordCreator
+                "catalogRecordCreatorLabelLg2",
                 "id catalogRecordContributor",
                 "catalogRecordContributorLabelLg1",
-                "catalogRecordContributorLabelLg2",// catalogRecordContributor
-                "2024-12-09T12:00:00",           // catalogRecordModified
-                "2024-12-09T12:00:00",           // catalogRecordCreated
-                "2024-11-01",                    // modified
-                "2023-05-15",                    // issued
-                "2.0",                           // version
-                "2025-01-01",                            // spatialTemporal
-                "2010",                          // startPeriod
-                "2024",                          // endPeriod
-                "Dérivé de FR", "Derived from EN", // derivedDescriptionLg1, derivedDescriptionLg2
-                "DG75-F001", "Éditeur FR", "Publisher EN", // idPublisher, labelPublisherLg1, labelPublisherLg2
-                "label Type FR", "label Type EN",                      // labeltypeLg1, labeltypeLg2
-                "label Access Rights FR", "label Access Rights EN",                      // labelaccessRightsLg1, labelaccessRightsLg2
-                "label Condidentiality Status FR", "label Condidentiality Status EN",                      // labelconfidentialityStatusLg1, labelconfidentialityStatusLg2
-                "http://bauhaus/uriAccrualperiodicity", //uriAccrualPeriodicity
-                "idAccrualPeriodicity", //idAccrualPeriodicity
-                "label Accrual Periodicity FR", "label Accrual Periodicity EN",                      // labelaccrualPeriodicityLg1, labelaccrualPeriodicityLg2
-                "France", "France métropolitaine", "Metropolitan France", // spatialId, labelspatialLg1, labelspatialLg2
-                "code process",                            // codeProcessStep
-                "dissemination status",                            // disseminationStatus
-                "DD_EEC_SERIES",                 // identifier
-                "http://bauhaus/dsd/dsd1000", "dsd1000", "DSD_1000", null, // structureUri, structureId, dsd, isDataStructureDefinition
-                "42000", "12",                   // numObservations, numSeries
-                "DG75-E330$Division ESPRI$ESPRI Division", // creators
-                "http://bauhaus/operations/serie/s1223", // operationStat
-                "http://theme/emploi,http://theme/chomage", // names
-                "ds-source-1",                   // wasDerivedFromS
-                "http://ds/related1,http://ds/related2", // relations
-                "emploi,chômage", "employment",  // keywordLg1, keywordLg2
-                "http://archive/unit1",          // archiveUnits
-                null, // temporalResolutions
-                null,   // spatialResolutions
-                null,  //statisticalUnits
-                null //themes
+                "catalogRecordContributorLabelLg2",
+                "2024-12-09T12:00:00",
+                "2024-12-09T12:00:00",
+                "2024-11-01",
+                "2023-05-15",
+                "2.0",
+                "2025-01-01",
+                "2010",
+                "2024",
+                "Dérivé de FR", "Derived from EN",
+                "DG75-F001", "Éditeur FR", "Publisher EN",
+                "label Type FR", "label Type EN",
+                "label Access Rights FR", "label Access Rights EN",
+                "label Condidentiality Status FR", "label Condidentiality Status EN",
+                "http://bauhaus/uriAccrualperiodicity",
+                "idAccrualPeriodicity",
+                "label Accrual Periodicity FR", "label Accrual Periodicity EN",
+                "France", "France métropolitaine", "Metropolitan France",
+                "code process",
+                "dissemination status",
+                "DD_EEC_SERIES",
+                "http://bauhaus/dsd/dsd1000",
+                "dsd1000",
+                "DSD_1000",
+                null,
+                "42000",
+                "12",
+                "DG75-E330$Division ESPRI$ESPRI Division",
+                "http://bauhaus/operations/serie/serieGeneratrice",
+                "http://theme/theme1,http://theme/theme2",
+                "ds-source-1",
+                "http://ds/related1,http://ds/related2",
+                "keyWord FR", "keyWord EN",
+                "http://archive/unit1",
+                "temporalResolution FR, temporalResolution EN",
+                null,
+                null,
+                "uri/theme1, uri/theme2"
         );
     }
 

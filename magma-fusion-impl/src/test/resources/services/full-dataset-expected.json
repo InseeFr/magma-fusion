@@ -66,6 +66,11 @@
       "langue": "en"
     }
   ],
+  "aEteGenerePar": [
+    {
+      "uri": "http://bauhaus/operations/serie/serieGeneratrice"
+    }
+  ],
   "frequenceDeMiseAJour": {
     "id": "idAccrualPeriodicity",
     "uri": "http://bauhaus/uriAccrualperiodicity",
@@ -81,5 +86,154 @@
     ]
   },
   "disseminationStatus": "dissemination status",
-  "spatioTemporel": "2025-01-01"
+  "spatioTemporel": "2025-01-01",
+  "archiveUnit": [
+    {
+      "id": "http://archive/unit1"
+    }
+  ],
+  "couvertureSpatiale":
+  {
+    "id": "France",
+    "libelle": [
+      {
+        "contenu": "France métropolitaine",
+        "langue": "fr"
+      },
+      {
+        "contenu": "Metropolitan France",
+        "langue": "en"
+      }
+    ]
+  },
+  "createur": [
+    {
+      "id": "DG75-E330",
+      "libelle": [
+        {
+          "contenu": "Division ESPRI",
+          "langue": "fr"
+        },
+        {
+          "contenu": "ESPRI Division",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "description": [
+    {
+      "contenu": "Description FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "Description EN",
+      "langue": "en"
+    }
+  ],
+  "editeur": {
+    "id": "DG75-F001",
+    "libelle": [
+      {
+        "contenu": "Éditeur FR",
+        "langue": "fr"
+      },
+      {
+        "contenu": "Publisher EN",
+        "langue": "en"
+      }
+    ]
+  },
+  "keyword": [
+    {
+      "contenu": "keyWord FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "keyWord EN",
+      "langue": "en"
+    }
+  ],
+  "noteDePortee":
+  [
+    {
+      "contenu": "Note FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "Note EN",
+      "langue": "en"
+    }
+  ],
+  "numObservations": 42000,
+  "numSeries": 12,
+  "pageAccueil":
+  [
+    {
+      "url": "https://example.fr/page",
+      "langue": "fr"
+    },
+    {
+      "url": "https://example.en/page",
+      "langue": "en"
+    }
+  ],
+  "periodeTemporelle": {
+    "debutPeriode":  "2010",
+    "finPeriode":  "2024"
+  },
+  "relations": [
+    "http://ds/related1",
+    "http://ds/related2"
+   ],
+  "resolutionTemporelle": [],
+  "resume": [
+    {
+      "contenu": "Résumé FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "Abstract EN",
+      "langue": "en"
+    }
+  ],
+  "titre": [
+  {
+    "contenu": "Titre FR",
+    "langue": "fr"
+  },
+  {
+    "contenu": "Title EN",
+    "langue": "en"
+  }
+  ],
+  "sousTitre": [
+    {
+      "contenu": "Sous-titre FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "Subtitle EN",
+      "langue": "en"
+    }
+  ],
+  "structure": {
+    "uri": "http://bauhaus/dsd/dsd1000",
+    "id": "dsd1000",
+    "structureDonnees": "DSD_1000"
+  },
+  "theme": [
+    {
+      "uri": "http://theme/theme1",
+      "libelle": []
+    },
+    {
+      "uri": "http://theme/theme2",
+      "libelle": []
+    }
+  ],
+  "wasDerivedFrom":
+    {
+      "datasets": "Derived from EN"
+    }
 }

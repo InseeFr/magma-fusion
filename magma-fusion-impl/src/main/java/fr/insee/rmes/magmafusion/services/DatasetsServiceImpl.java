@@ -250,7 +250,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         if (StringUtils.hasText(dto.archiveUnits())) {
             dataSet.setArchiveUnit(Arrays.stream(dto.archiveUnits().split(","))
                     .filter(s -> !s.isBlank())
-                    .map(uri -> new IdLibelle().id(uri))
+                    .map(uri -> new IdLibelle().id(uri).libelle(null))
                     .toList());
         }
 
