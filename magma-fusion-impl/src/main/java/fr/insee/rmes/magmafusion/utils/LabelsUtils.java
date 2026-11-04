@@ -36,13 +36,11 @@ public class LabelsUtils {
     }
 
     public static List<LocalisedContenu> buildLocalisedLabels(String lg1Field, String lg2Field, String lg1, String lg2) {
-        if (lg1Field != null || lg2Field != null){
-            return createList(
-                    StringUtils.hasText(lg1Field) ? createLangField(lg1Field, lg1) : null,
-                    StringUtils.hasText(lg2Field) ? createLangField(lg2Field, lg2) : null
-            );
-        }
-        else return null;
+        List<LocalisedContenu> result = createList(
+                StringUtils.hasText(lg1Field) ? createLangField(lg1Field, lg1) : null,
+                StringUtils.hasText(lg2Field) ? createLangField(lg2Field, lg2) : null
+        );
+        return result.isEmpty() ? null : result;
     }
 
     public static List<LocalisedUrl> buildLocalisedUrls(String lg1Field, String lg2Field, String lg1, String lg2) {

@@ -8,4 +8,8 @@ public record NomenclaturesRequestParametizer(String nomenclature,
         this("none", "none", "none");
     }
 
+    public NomenclaturesRequestParametizer(String nomenclature) {
+        this(nomenclature, "none", "none");
+    }
+
 }
