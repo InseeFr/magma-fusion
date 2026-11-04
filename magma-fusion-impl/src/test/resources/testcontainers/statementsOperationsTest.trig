@@ -325,40 +325,40 @@
         skos:prefLabel "By phone"@en .
 
     <http://bauhaus/temporalResolution/1>
-            skos:notation "TR1" ;
-            skos:inScheme <http://bauhaus/typeTemporalResol> ;
-            skos:prefLabel "temporalResolution1 du dataset test"@fr ;
-            skos:prefLabel "temporalResolution1 of test dataset"@en .
+        skos:notation "TR1" ;
+        skos:inScheme <http://bauhaus/typeTemporalResol> ;
+        skos:prefLabel "temporalResolution1 du dataset test"@fr ;
+        skos:prefLabel "temporalResolution1 of test dataset"@en .
 
     <http://bauhaus/temporalResolution/2>
-                skos:notation "TR2" ;
-                skos:inScheme <http://bauhaus/typeTemporalResol> ;
-                skos:prefLabel "temporalResolution2 du dataset test"@fr ;
-                skos:prefLabel "temporalResolution2 of test dataset"@en .
+        skos:notation "TR2" ;
+        skos:inScheme <http://bauhaus/typeTemporalResol> ;
+        skos:prefLabel "temporalResolution2 du dataset test"@fr ;
+        skos:prefLabel "temporalResolution2 of test dataset"@en .
 
-        <http://bauhaus/spatialResolution/1>
-                skos:notation "SR1" ;
-                skos:inScheme <http://bauhaus/typeSpatialResol> ;
-                skos:prefLabel "spatialResolution1 du dataset test"@fr ;
-                skos:prefLabel "spatialResolution1 of test dataset"@en .
+    <http://bauhaus/spatialResolution/1>
+        skos:notation "SR1" ;
+        skos:inScheme <http://bauhaus/typeSpatialResol> ;
+        skos:prefLabel "spatialResolution1 du dataset test"@fr ;
+        skos:prefLabel "spatialResolution1 of test dataset"@en .
 
-        <http://bauhaus/spatialResolution/2>
-                skos:notation "SR2" ;
-                skos:inScheme <http://bauhaus/typeSpatialResol> ;
-                skos:prefLabel "spatialResolution2 du dataset test"@fr ;
-                skos:prefLabel "spatialResolution2 of test dataset"@en .
+    <http://bauhaus/spatialResolution/2>
+        skos:notation "SR2" ;
+        skos:inScheme <http://bauhaus/typeSpatialResol> ;
+        skos:prefLabel "spatialResolution2 du dataset test"@fr ;
+        skos:prefLabel "spatialResolution2 of test dataset"@en .
 
-        <http://bauhaus/statisticalUnit/1>
-                skos:notation "SU1" ;
-                skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
-                skos:prefLabel "statisticalUnit1 du dataset test"@fr ;
-                skos:prefLabel "statisticalUnit1 of test dataset"@en .
+    <http://bauhaus/statisticalUnit/1>
+        skos:notation "SU1" ;
+        skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
+        skos:prefLabel "statisticalUnit1 du dataset test"@fr ;
+        skos:prefLabel "statisticalUnit1 of test dataset"@en .
 
-        <http://bauhaus/statisticalUnit/2>
-                skos:notation "SU2" ;
-                skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
-                skos:prefLabel "statisticalUnit2 du dataset test"@fr ;
-                skos:prefLabel "statisticalUnit2 of test dataset"@en .
+    <http://bauhaus/statisticalUnit/2>
+        skos:notation "SU2" ;
+        skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
+        skos:prefLabel "statisticalUnit2 du dataset test"@fr ;
+        skos:prefLabel "statisticalUnit2 of test dataset"@en .
 
 }
 
@@ -372,6 +372,7 @@
          skos:inScheme <http://bauhaus/concepts/themes> ;
          skos:prefLabel "theme2 du dataset test"@fr ;
          skos:prefLabel "theme2 of test dataset"@en .
+
 }
 
 <http://rdf.insee.fr/graphes/qualite/territoires> {
