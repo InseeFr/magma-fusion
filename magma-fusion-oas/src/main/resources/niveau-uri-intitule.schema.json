@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://magma-fusion.insee/niveau-uri-intitule.schema.json",
+  "title": "NiveauUriIntitule",
+  "description": "Ensemble de propriétés communes à Territoire, CodeListe et Organisme",
+  "type": "object",
+  "properties": {
+    "niveau": {
+      "type": "string"
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "intitule": {
+      "type": "array",
+      "items": {
+        "$ref": "langue-contenu.schema.json"
+      }
+    }
+  },
+  "required": ["id"],
+  "additionalProperties": false
+}

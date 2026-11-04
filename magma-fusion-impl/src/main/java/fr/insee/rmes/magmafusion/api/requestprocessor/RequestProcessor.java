@@ -70,6 +70,14 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(NOMENCLATURE, this, unmarshaller);
     }
 
+    public ExecutableQueryBuilder queryToFindLevelsClassification() {
+        return new ExecutableQueryBuilder(NOMENCLATURE_NIVEAUX, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindClassificationByCode() {
+        return new ExecutableQueryBuilder(NOMENCLATURE_BY_CODE, this, unmarshaller);
+    }
+
     public ExecutableQueryBuilder queryToFindConcept() {
         return new ExecutableQueryBuilder(CONCEPT, this, unmarshaller);
     }
