@@ -20,8 +20,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.buildLocalisedLabels;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
 
 
 @Service

@@ -37,7 +37,14 @@
     {"contenu": "Titre du dataset test","langue": "fr" },
     {"contenu": "Dataset Test Title","langue": "en" }
   ],
-  "frequenceDeMiseAJour" : { },
+  "frequenceDeMiseAJour" : {
+    "id": "idAccrualPeriodicity",
+    "uri": "http://bauhaus/accrualPeriodicity",
+    "libelle": [
+      {"contenu": "Fréquence du dataset test", "langue": "fr" },
+      {"contenu": "Test dataset frequency", "langue": "en" }
+    ]
+  },
   "resolutionTemporelle": [
     {"libelle": [
       {"contenu": "temporalResolution1 du dataset test", "langue": "fr" },
