@@ -84,7 +84,7 @@ class DatasetsServiceImplTest {
                         .readAllBytes(),
                 StandardCharsets.UTF_8
         );
-        JSONAssert.assertEquals(expected, data, JSONCompareMode.LENIENT);
+        JSONAssert.assertEquals(expected, data,true);
     }
 
 
@@ -423,7 +423,7 @@ class DatasetsServiceImplTest {
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
 
-        assertThat(resolution.getLibelle()).isEmpty();
+        assertNull(resolution.getLibelle());
     }
 
 
@@ -568,7 +568,7 @@ class DatasetsServiceImplTest {
                 "label Type FR", "label Type EN",                      // labeltypeLg1, labeltypeLg2
                 "label Access Rights FR", "label Access Rights EN",                      // labelaccessRightsLg1, labelaccessRightsLg2
                 "label Condidentiality Status FR", "label Condidentiality Status EN",                      // labelconfidentialityStatusLg1, labelconfidentialityStatusLg2
-                "http://bauhaus/uriaccrualperiodicity", //uriAccrualPeriodicity
+                "http://bauhaus/uriAccrualperiodicity", //uriAccrualPeriodicity
                 "idAccrualPeriodicity", //idAccrualPeriodicity
                 "label Accrual Periodicity FR", "label Accrual Periodicity EN",                      // labelaccrualPeriodicityLg1, labelaccrualPeriodicityLg2
                 "France", "France métropolitaine", "Metropolitan France", // spatialId, labelspatialLg1, labelspatialLg2
@@ -586,7 +586,7 @@ class DatasetsServiceImplTest {
                 "http://archive/unit1",          // archiveUnits
                 null, // temporalResolutions
                 null,   // spatialResolutions
-                null,  //statiticalUnits
+                null,  //statisticalUnits
                 null //themes
         );
     }
@@ -635,7 +635,7 @@ class DatasetsServiceImplTest {
                 null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, creators, null, null, null, null,
+                null, null, null, null, null, null, creators, null, null,
                 null,null, null, null, null, null, null, null, null
         );
     }

@@ -67,6 +67,8 @@
     }
   ],
   "frequenceDeMiseAJour": {
+    "id": "idAccrualPeriodicity",
+    "uri": "http://bauhaus/uriAccrualperiodicity",
     "libelle": [
       {
         "contenu": "label Accrual Periodicity FR",
