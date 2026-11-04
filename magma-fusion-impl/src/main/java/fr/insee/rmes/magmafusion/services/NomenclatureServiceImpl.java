@@ -1,6 +1,9 @@
 package fr.insee.rmes.magmafusion.services;
 
-import fr.insee.rmes.magmafusion.model.*;
+import fr.insee.rmes.magmafusion.model.LocalisedContenu;
+import fr.insee.rmes.magmafusion.model.NiveauUriIntitule;
+import fr.insee.rmes.magmafusion.model.Nomenclature;
+import fr.insee.rmes.magmafusion.model.NomenclatureForList;
 import fr.insee.rmes.magmafusion.utils.NiveauDTO;
 import fr.insee.rmes.magmafusion.utils.NomenclatureDTO;
 import fr.insee.rmes.magmafusion.utils.NomenclatureForListDTO;
@@ -10,19 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.net.URI;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
 
 
