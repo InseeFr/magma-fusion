@@ -16,6 +16,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
@@ -52,13 +53,11 @@ public class NomenclatureServiceImpl implements NomenclatureService{
         setAlternativeLabels(nomenclature, nomenclatureDTO, lg1, lg2);
 
         nomenclature.setDescription(
-            createList(
-                StringUtils.hasText(nomenclatureDTO.descriptionLg1()) ? createLangField(nomenclatureDTO.descriptionLg1(), lg1) : null,
-                StringUtils.hasText(nomenclatureDTO.descriptionLg2()) ? createLangField(nomenclatureDTO.descriptionLg2(), lg2) : null
-            )
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList())
+            Optional.ofNullable(buildLocalisedLabels(nomenclatureDTO.descriptionLg1(),nomenclatureDTO.descriptionLg2(), lg1, lg2))
+                .map(list -> list.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()))
+                .orElse(null)
         );
 
         nomenclature.setDatePublication(tryParseDateToLocalDate(nomenclatureDTO.issued()));
@@ -115,11 +114,7 @@ public class NomenclatureServiceImpl implements NomenclatureService{
             NiveauUriIntitule niveau = new NiveauUriIntitule();
             niveau.setNiveau(niveauDTO.idLevel());
             niveau.setUri(URI.create(niveauDTO.level()));
-            niveau.setIntitule(
-                createList(
-                    StringUtils.hasText(niveauDTO.prefLabelLevelLg1()) ? createLangField(niveauDTO.prefLabelLevelLg1(), lg1) : null,
-                    StringUtils.hasText(niveauDTO.prefLabelLevelLg2()) ? createLangField(niveauDTO.prefLabelLevelLg2(), lg2) : null
-                )
+            niveau.setIntitule(buildLocalisedLabels(niveauDTO.prefLabelLevelLg1(),niveauDTO.prefLabelLevelLg2(),lg1,lg2)
                     .stream()
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList())
