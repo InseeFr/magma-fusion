@@ -14,14 +14,14 @@ public record ConceptDTO(
 
     String id,
     String uri,
-    String intituleFr,
-    String intituleEn,
-    String definitionFr,
-    String definitionEn,
-    String scopeNoteFr,
-    String scopeNoteEn,
-    String noteEditorialeFr,
-    String noteEditorialeEn,
+    String intituleLg1,
+    String intituleLg2,
+    String definitionLg1,
+    String definitionLg2,
+    String scopeNoteLg1,
+    String scopeNoteLg2,
+    String noteEditorialeLg1,
+    String noteEditorialeLg2,
     String dateMiseAJour,
     String dateCreation,
     String dateFinDeValidite,
@@ -36,15 +36,15 @@ public record ConceptDTO(
 {
 
    public ConceptDTO withDateCreation(String dateCreation) {
-       return new ConceptDTO(id, uri, intituleFr, intituleEn, definitionFr, definitionEn, scopeNoteFr, scopeNoteEn, noteEditorialeFr, noteEditorialeEn, dateMiseAJour, dateCreation, dateFinDeValidite, hasLink, hasIntitulesAlternatifs, nearbyConcepts, intitulesAlternatifs);
+       return new ConceptDTO(id, uri, intituleLg1, intituleLg2, definitionLg1, definitionLg2, scopeNoteLg1, scopeNoteLg2, noteEditorialeLg1, noteEditorialeLg2, dateMiseAJour, dateCreation, dateFinDeValidite, hasLink, hasIntitulesAlternatifs, nearbyConcepts, intitulesAlternatifs);
    }
 
     public ConceptDTO withNearbyConcepts(List<NearbyConcept> nearbyConcepts) {
-        return new ConceptDTO(id, uri, intituleFr, intituleEn, definitionFr, definitionEn, scopeNoteFr, scopeNoteEn, noteEditorialeFr, noteEditorialeEn, dateMiseAJour, dateCreation, dateFinDeValidite, hasLink, hasIntitulesAlternatifs, nearbyConcepts, intitulesAlternatifs);
+        return new ConceptDTO(id, uri, intituleLg1, intituleLg2, definitionLg1, definitionLg2, scopeNoteLg1, scopeNoteLg2, noteEditorialeLg1, noteEditorialeLg2, dateMiseAJour, dateCreation, dateFinDeValidite, hasLink, hasIntitulesAlternatifs, nearbyConcepts, intitulesAlternatifs);
     }
 
     public ConceptDTO withIntitulesAlternatifs(List<LocalisedContenu> intitulesAlternatifs) {
-        return new ConceptDTO(id, uri, intituleFr, intituleEn, definitionFr, definitionEn, scopeNoteFr, scopeNoteEn, noteEditorialeFr, noteEditorialeEn, dateMiseAJour, dateCreation, dateFinDeValidite, hasLink, hasIntitulesAlternatifs, nearbyConcepts, intitulesAlternatifs);
+        return new ConceptDTO(id, uri, intituleLg1, intituleLg2, definitionLg1, definitionLg2, scopeNoteLg1, scopeNoteLg2, noteEditorialeLg1, noteEditorialeLg2, dateMiseAJour, dateCreation, dateFinDeValidite, hasLink, hasIntitulesAlternatifs, nearbyConcepts, intitulesAlternatifs);
     }
 
     public boolean hasLinkValue() {

@@ -25,9 +25,7 @@
     "intitule" : [ {
       "contenu" : "Classification 3",
       "langue" : "fr"
-    }, {
-      "langue" : "en"
-    } ]
+    }]
   },{
   "nomenclature" : "naf4",
   "uri" : "http://id.insee.fr/codes/naf4/naf",

@@ -23,27 +23,28 @@ import java.util.stream.Collectors;
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
 
 
 @Service
 @Slf4j
-public class NomenclatureServiceImpl implements NomenclatureService {
+public class NomenclatureServiceImpl implements NomenclatureService{
+    private final String lg1;
+    private final String lg2;
 
-    @Value("${fr.insee.rmes.magmafusion.lg1}")
-    private String lg1;
+    public NomenclatureServiceImpl(
+            @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
+            @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2
+    ) {
+        this.lg1 = lg1;
+        this.lg2 = lg2;
+    }
 
-    @Value("${fr.insee.rmes.magmafusion.lg2}")
-    private String lg2;
-
-    public NomenclatureForList convertNomenclatureDtoforList(NomenclatureForListDTO nomenclatureForListDTO) {
+    public NomenclatureForList convertNomenclatureDtoforList(NomenclatureForListDTO nomenclatureForListDTO){
         NomenclatureForList nomenclatureForList = new NomenclatureForList();
         nomenclatureForList.setNomenclature(nomenclatureForListDTO.id());
         nomenclatureForList.setUri(nomenclatureForListDTO.classification());
-        nomenclatureForList.setIntitule(createList(
-             createLangField(nomenclatureForListDTO.prefLabelLg1(), lg1),
-             createLangField(nomenclatureForListDTO.prefLabelLg2(), lg2)
-                )
-        );
+        nomenclatureForList.setIntitule(buildLocalisedLabels(nomenclatureForListDTO.prefLabelLg1(),nomenclatureForListDTO.prefLabelLg2(),this.lg1, this.lg2));
         return nomenclatureForList;
     }
 

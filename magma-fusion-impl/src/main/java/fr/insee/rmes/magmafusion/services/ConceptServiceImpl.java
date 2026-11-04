@@ -6,6 +6,7 @@ import fr.insee.rmes.magmafusion.model.LocalisedContenu;
 import fr.insee.rmes.magmafusion.model.NearbyConcept;
 import fr.insee.rmes.magmafusion.utils.ConceptDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -13,23 +14,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
+import static fr.insee.rmes.magmafusion.utils.LabelsUtils.buildLocalisedLabels;
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createList;
 
 @Service
 @Slf4j
 public class ConceptServiceImpl implements ConceptService{
 
-        public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
+    private final String lg1;
+    private final String lg2;
+
+    public ConceptServiceImpl(
+            @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
+            @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2
+    ) {
+        this.lg1 = lg1;
+        this.lg2 = lg2;
+    }
+
+    public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
             Concept concept = new Concept();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
-
-            concept.setIntitule(buildLocalisedLabels(conceptDTO.intituleFr(), conceptDTO.intituleEn()));
-            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionFr(), conceptDTO.definitionEn()));
-            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteFr(), conceptDTO.scopeNoteEn()));
-            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeFr(), conceptDTO.noteEditorialeEn()));
-
+            concept.setIntitule(buildLocalisedLabels(conceptDTO.intituleLg1(),conceptDTO.intituleLg2(), lg1, lg2));
+            concept.setDefinition(buildLocalisedLabels(conceptDTO.definitionLg1(), conceptDTO.definitionLg2(),lg1, lg2));
+            concept.setDefinitionCourte(buildLocalisedLabels(conceptDTO.scopeNoteLg1(), conceptDTO.scopeNoteLg2(),lg1, lg2));
+            concept.setNoteEditoriale(buildLocalisedLabels(conceptDTO.noteEditorialeLg1(), conceptDTO.noteEditorialeLg2(),lg1, lg2));
 
             if (Boolean.TRUE.equals(conceptDTO.hasIntitulesAlternatifs())) {
                 addIntitulesAlternatifs(conceptDTO,concept);
@@ -45,13 +55,6 @@ public class ConceptServiceImpl implements ConceptService{
 
             return concept;
         }
-
-
-        private static List<LocalisedContenu> buildLocalisedLabels(String frField, String enField) {
-            if (frField == null && enField == null) return null;
-            return createList(createLangField(frField, "fr"), createLangField(enField, "en"));
-        }
-
 
 
     private void addNearByConcepts(ConceptDTO conceptDTO, Concept concept) {
@@ -121,7 +124,7 @@ public class ConceptServiceImpl implements ConceptService{
             ConceptForList concept = new ConceptForList();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
-            concept.setIntitule(conceptDTO.intituleFr());
+            concept.setIntitule(conceptDTO.intituleLg1());
 
             addNearByConcepts(conceptDTO, concept);
 
