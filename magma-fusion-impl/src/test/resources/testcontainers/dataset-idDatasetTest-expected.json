@@ -1,9 +1,9 @@
 {
   "id": "idDatasetTest",
   "uri": "http://bauhaus/catalogues/jeuDeDonnees/idDatasetTest",
-  "catalogRecordCreated": "2024-12-09T12:00:00.000",
-  "catalogRecordModified": "2024-12-09T12:00:00.000",
-  "catalogRecordCreator":
+  "dateCreationEnregistrementCatalogue": "2024-12-09T12:00:00.000",
+  "dateMiseAJourEnregistrementCatalogue": "2024-12-09T12:00:00.000",
+  "createurEnregistrementCatalogue":
     {
       "id": "id INSEE",
       "label": [
@@ -17,7 +17,7 @@
         }
       ]
     },
-  "catalogRecordContributor":
+  "contributeurEnregistrementCatalogue":
   {
     "id": "id INSEE",
     "label": [
@@ -32,12 +32,20 @@
     ]
   },
   "identifier": "DD_DATASET_TEST",
-  "validationState": "Provisoire, jamais publiée",
-  "title": [
+  "etatValidation": "Provisoire, jamais publiée",
+  "titre": [
     {"contenu": "Titre du dataset test","langue": "fr" },
     {"contenu": "Dataset Test Title","langue": "en" }
   ],
-  "temporalResolution": [
+  "frequenceDeMiseAJour" : {
+    "id": "idAccrualPeriodicity",
+    "uri": "http://bauhaus/accrualPeriodicity",
+    "label": [
+      {"contenu": "Fréquence du dataset test", "langue": "fr" },
+      {"contenu": "Test dataset frequency", "langue": "en" }
+    ]
+  },
+  "resolutionTemporelle": [
     {"label": [
       {"contenu": "temporalResolution1 du dataset test", "langue": "fr" },
       {"contenu": "temporalResolution1 of test dataset", "langue": "en" }
@@ -47,7 +55,7 @@
       {"contenu": "temporalResolution2 of test dataset","langue": "en" }
     ]}
   ],
-  "spatialResolution": [
+  "resolutionSpatiale": [
     {
       "id": "SR1",
       "label": [
@@ -63,7 +71,7 @@
     ]
     }
   ],
-  "statisticalUnit": [
+  "uniteStatistique": [
     {
       "id": "SU1",
       "label": [
@@ -95,19 +103,23 @@
         ]
     }
   ],
-  "abstract": [
-    {"contenu": "Résumé du dataset test", "langue": "fr" },
-    {"langue": "en"}
+  "resume": [
+    {"contenu": "Résumé du dataset test", "langue": "fr" }
   ],
   "description": [
-    {"contenu": "Description du dataset test", "langue": "fr" },
-    {"langue": "en"}
+    {"contenu": "Description du dataset test", "langue": "fr" }
   ],
-  "scopeNote": [
-    {"contenu": "Note de portée du dataset test", "langue": "fr" },
-    {"langue": "en"}
+  "noteDePortee": [
+    {"contenu": "Note de portée du dataset test", "langue": "fr" }
   ],
-  "wasGeneratedBy": [
-    {"id": "http://bauhaus/operations/serie/idSerieGeneratrice", "label": []}
+  "aEteGenerePar": [
+    {
+      "id": "idSerieGeneratrice",
+      "uri": "http://bauhaus/operations/serie/idSerieGeneratrice",
+      "label": [
+        {"contenu": "Libelle FR SerieGeneratrice","langue": "fr" },
+        {"contenu": "label EN SerieGeneratrice", "langue": "en" }
+      ]
+    }
   ]
 }

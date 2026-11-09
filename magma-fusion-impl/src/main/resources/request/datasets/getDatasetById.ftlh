@@ -18,7 +18,8 @@ SELECT DISTINCT
     ?labeltypeLg1 ?labeltypeLg2
     ?labelaccessRightsLg1 ?labelaccessRightsLg2
     ?labelconfidentialityStatusLg1 ?labelconfidentialityStatusLg2
-    ?labelaccrualPeriodicityLg1 ?labelaccrualPeriodicityLg2
+    ?uriAccrualPeriodicity ?idAccrualPeriodicity
+    ?labelAccrualPeriodicityLg1 ?labelAccrualPeriodicityLg2
     ?spatialId ?labelspatialLg1 ?labelspatialLg2
     ?codeProcessStep ?disseminationStatus ?identifier
     ?structureUri ?structureId ?dsd ?isDataStructureDefinition
@@ -154,9 +155,11 @@ OPTIONAL {
     }
 
     OPTIONAL {
-        ?dataset dcterms:accrualPeriodicity ?accrualPeriodicity .
-        OPTIONAL { ?accrualPeriodicity skos:prefLabel ?labelaccrualPeriodicityLg1 . FILTER (lang(?labelaccrualPeriodicityLg1) = '${LG1}') }
-        OPTIONAL { ?accrualPeriodicity skos:prefLabel ?labelaccrualPeriodicityLg2 . FILTER (lang(?labelaccrualPeriodicityLg2) = '${LG2}') }
+        ?dataset dcterms:accrualPeriodicity ?uriAccrualPeriodicity .
+        ?uriAccrualPeriodicity rdf:type <http://id.insee.fr/codes/concept/Frequence> .
+        OPTIONAL {?uriAccrualPeriodicity skos:notation ?idAccrualPeriodicity }
+        OPTIONAL {?uriAccrualPeriodicity skos:prefLabel ?labelAccrualPeriodicityLg1  . FILTER(LANG(?labelAccrualPeriodicityLg1)='${LG1}')}
+        OPTIONAL {?uriAccrualPeriodicity skos:prefLabel ?labelAccrualPeriodicityLg2  . FILTER(LANG(?labelAccrualPeriodicityLg2)='${LG2}')}
     }
 
     OPTIONAL {
@@ -198,7 +201,8 @@ GROUP BY
     ?labeltypeLg1 ?labeltypeLg2
     ?labelaccessRightsLg1 ?labelaccessRightsLg2
     ?labelconfidentialityStatusLg1 ?labelconfidentialityStatusLg2
-    ?labelaccrualPeriodicityLg1 ?labelaccrualPeriodicityLg2
+    ?uriAccrualPeriodicity ?idAccrualPeriodicity
+    ?labelAccrualPeriodicityLg1 ?labelAccrualPeriodicityLg2
     ?spatialId ?labelspatialLg1 ?labelspatialLg2
     ?codeProcessStep ?disseminationStatus ?identifier
     ?structureUri ?structureId ?dsd ?isDataStructureDefinition

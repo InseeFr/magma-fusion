@@ -38,72 +38,72 @@
 
 
 
-    <http://bauhaus/operations/serie/idSeriePrecedenteTest>
+   <http://bauhaus/operations/serie/idSeriePrecedenteTest>
         rdf:type insee:StatisticalOperationSeries ;
         skos:prefLabel "Label Série Précédente fr"@fr ;
         skos:prefLabel "Previous Series Label en"@en ;
         dcterms:isReplacedBy <http://bauhaus/operations/serie/idSeriePrincipaleTest> .
 
-    <http://bauhaus/operations/serie/idSerieSuivanteTest>
+   <http://bauhaus/operations/serie/idSerieSuivanteTest>
         rdf:type insee:StatisticalOperationSeries ;
         skos:prefLabel "Label Série Suivante fr"@fr ;
         skos:prefLabel "Next Series Label en"@en ;
         dcterms:replaces <http://bauhaus/operations/serie/idSeriePrincipaleTest> .
 
-    <http://bauhaus/operations/serie/idSerieLiee1Test>
+   <http://bauhaus/operations/serie/idSerieLiee1Test>
         rdf:type insee:StatisticalOperationSeries ;
         skos:prefLabel "Label Série Liée 1 fr"@fr ;
         skos:prefLabel "Related Series 1 Label en"@en ;
         rdfs:seeAlso <http://bauhaus/operations/serie/idSeriePrincipaleTest> .
 
-    <http://bauhaus/operations/serie/idSerieLiee2Test>
+   <http://bauhaus/operations/serie/idSerieLiee2Test>
         rdf:type insee:StatisticalOperationSeries ;
         skos:prefLabel "Label Série Liée 2 fr"@fr ;
         skos:prefLabel "Related Series 2 Label en"@en ;
         rdfs:seeAlso <http://bauhaus/operations/serie/idSeriePrincipaleTest> .
 
-    <http://bauhaus/operations/famille/idFamilleTest>
+   <http://bauhaus/operations/famille/idFamilleTest>
         rdf:type insee:StatisticalOperationFamily ;
         dcterms:hasPart <http://bauhaus/operations/serie/idSeriePrincipaleTest> ;
         skos:prefLabel "Label Famille fr"@fr ;
         skos:prefLabel "Family Label en"@en .
 
-    <http://bauhaus/operations/operation/idOperation1SeriePrincipaleTest>
+   <http://bauhaus/operations/operation/idOperation1SeriePrincipaleTest>
         rdf:type insee:StatisticalOperation ;
         dcterms:isPartOf <http://bauhaus/operations/serie/idSeriePrincipaleTest> ;
         skos:prefLabel "Label Opération 1 fr"@fr ;
         skos:prefLabel "Operation 1 Label en"@en .
 
-    <http://bauhaus/operations/operation/idOperation2SeriePrincipaleTest>
+   <http://bauhaus/operations/operation/idOperation2SeriePrincipaleTest>
         rdf:type insee:StatisticalOperation ;
         dcterms:isPartOf <http://bauhaus/operations/serie/idSeriePrincipaleTest> ;
         skos:prefLabel "Label Opération 2 fr"@fr ;
         skos:prefLabel "Operation 2 Label en"@en .
 
-    <http://bauhaus/organisations/idOrganisationProprietaireTest>
+   <http://bauhaus/organisations/idOrganisationProprietaireTest>
         rdf:type org:Organization ;
         dcterms:identifier "idOrganisationProprietaireTest" ;
         skos:prefLabel "Label Organisation Propriétaire fr"@fr ;
         skos:prefLabel "Owner Organisation Label en"@en .
 
-    <http://bauhaus/organisations/idOrganisationResponsableTest>
+   <http://bauhaus/organisations/idOrganisationResponsableTest>
         rdf:type org:Organization ;
         dcterms:identifier "idOrganisationResponsableTest" ;
         skos:prefLabel "Label Organisation Responsable fr"@fr ;
         skos:prefLabel "Responsible Organisation Label en"@en .
 
-    <http://bauhaus/organisations/idOrganisationPartenaireTest>
+   <http://bauhaus/organisations/idOrganisationPartenaireTest>
         rdf:type org:Organization ;
         dcterms:identifier "idOrganisationPartenaireTest" ;
         skos:prefLabel "Label Organisation Partenaire fr"@fr ;
         skos:prefLabel "Partner Organisation Label en"@en .
 
-    <http://bauhaus/operations/serie/idSerieTest>
+   <http://bauhaus/operations/serie/idSerieTest>
         rdf:type insee:StatisticalOperationSeries ;
         skos:prefLabel "Label Serie fr"@fr ;
         skos:prefLabel "Series Label en"@en .
 
-    <http://bauhaus/operations/operation/idOperationTest>
+   <http://bauhaus/operations/operation/idOperationTest>
         rdf:type insee:StatisticalOperation ;
         dcterms:isPartOf <http://bauhaus/operations/serie/idSerieTest> ;
         skos:prefLabel "Label Operation Test fr"@fr ;
@@ -115,35 +115,35 @@
         dcterms:modified "2025-04-02"^^xsd:date ;
         insee:validationState "Validated" .
 
-    <http://bauhaus/concepts/type/E>
+   <http://bauhaus/concepts/type/E>
         skos:notation "E" ;
         skos:prefLabel "Enquête"@fr ;
         skos:prefLabel "Survey"@en .
 
-    <http://bauhaus/concepts/periodicity/A>
+   <http://bauhaus/concepts/periodicity/A>
         skos:notation "A" ;
         skos:prefLabel "Annuelle"@fr ;
         skos:prefLabel "Annual"@en .
 
-    <http://bauhaus/organisations/insee>
+   <http://bauhaus/organisations/insee>
         rdf:type org:Organization ;
         dcterms:identifier "insee" ;
         skos:prefLabel "Institut national de la statistique"@fr ;
         skos:prefLabel "National Institute of Statistics"@en .
 
-    <http://bauhaus/organisations/drees>
+   <http://bauhaus/organisations/drees>
         rdf:type org:Organization ;
         dcterms:identifier "drees" ;
         skos:prefLabel "Direction de la recherche"@fr ;
         skos:prefLabel "Research Directorate"@en .
 
-    <http://bauhaus/organisations/dares>
+   <http://bauhaus/organisations/dares>
         rdf:type org:Organization ;
         dcterms:identifier "dares" ;
         skos:prefLabel "Direction de l'animation de la recherche"@fr ;
         skos:prefLabel "Labour Studies Directorate"@en .
 
-    <http://bauhaus/produits/indicateur/idIndicateurTest>
+   <http://bauhaus/produits/indicateur/idIndicateurTest>
         rdf:type insee:StatisticalIndicator ;
         skos:prefLabel "Label Indicateur fr"@fr ;
         skos:prefLabel "Indicator Label en"@en ;
@@ -164,7 +164,7 @@
         rdfs:seeAlso <http://bauhaus/operations/serie/idSerieLiee1Test> ;
         rdfs:seeAlso <http://bauhaus/produits/indicateur/idIndicateurLieTest> .
 
-    <http://bauhaus/produits/indicateur/idIndicateurLieTest>
+   <http://bauhaus/produits/indicateur/idIndicateurLieTest>
         rdf:type insee:StatisticalIndicator ;
         skos:prefLabel "Label Indicateur Lié fr"@fr ;
         skos:prefLabel "Related Indicator Label en"@en .
@@ -325,40 +325,40 @@
         skos:prefLabel "By phone"@en .
 
     <http://bauhaus/temporalResolution/1>
-            skos:notation "TR1" ;
-            skos:inScheme <http://bauhaus/typeTemporalResol> ;
-            skos:prefLabel "temporalResolution1 du dataset test"@fr ;
-            skos:prefLabel "temporalResolution1 of test dataset"@en .
+        skos:notation "TR1" ;
+        skos:inScheme <http://bauhaus/typeTemporalResol> ;
+        skos:prefLabel "temporalResolution1 du dataset test"@fr ;
+        skos:prefLabel "temporalResolution1 of test dataset"@en .
 
     <http://bauhaus/temporalResolution/2>
-                skos:notation "TR2" ;
-                skos:inScheme <http://bauhaus/typeTemporalResol> ;
-                skos:prefLabel "temporalResolution2 du dataset test"@fr ;
-                skos:prefLabel "temporalResolution2 of test dataset"@en .
+        skos:notation "TR2" ;
+        skos:inScheme <http://bauhaus/typeTemporalResol> ;
+        skos:prefLabel "temporalResolution2 du dataset test"@fr ;
+        skos:prefLabel "temporalResolution2 of test dataset"@en .
 
-        <http://bauhaus/spatialResolution/1>
-                skos:notation "SR1" ;
-                skos:inScheme <http://bauhaus/typeSpatialResol> ;
-                skos:prefLabel "spatialResolution1 du dataset test"@fr ;
-                skos:prefLabel "spatialResolution1 of test dataset"@en .
+    <http://bauhaus/spatialResolution/1>
+        skos:notation "SR1" ;
+        skos:inScheme <http://bauhaus/typeSpatialResol> ;
+        skos:prefLabel "spatialResolution1 du dataset test"@fr ;
+        skos:prefLabel "spatialResolution1 of test dataset"@en .
 
-        <http://bauhaus/spatialResolution/2>
-                skos:notation "SR2" ;
-                skos:inScheme <http://bauhaus/typeSpatialResol> ;
-                skos:prefLabel "spatialResolution2 du dataset test"@fr ;
-                skos:prefLabel "spatialResolution2 of test dataset"@en .
+    <http://bauhaus/spatialResolution/2>
+        skos:notation "SR2" ;
+        skos:inScheme <http://bauhaus/typeSpatialResol> ;
+        skos:prefLabel "spatialResolution2 du dataset test"@fr ;
+        skos:prefLabel "spatialResolution2 of test dataset"@en .
 
-        <http://bauhaus/statisticalUnit/1>
-                skos:notation "SU1" ;
-                skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
-                skos:prefLabel "statisticalUnit1 du dataset test"@fr ;
-                skos:prefLabel "statisticalUnit1 of test dataset"@en .
+    <http://bauhaus/statisticalUnit/1>
+        skos:notation "SU1" ;
+        skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
+        skos:prefLabel "statisticalUnit1 du dataset test"@fr ;
+        skos:prefLabel "statisticalUnit1 of test dataset"@en .
 
-        <http://bauhaus/statisticalUnit/2>
-                skos:notation "SU2" ;
-                skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
-                skos:prefLabel "statisticalUnit2 du dataset test"@fr ;
-                skos:prefLabel "statisticalUnit2 of test dataset"@en .
+    <http://bauhaus/statisticalUnit/2>
+        skos:notation "SU2" ;
+        skos:inScheme <http://bauhaus/typeStatisticalUnit> ;
+        skos:prefLabel "statisticalUnit2 du dataset test"@fr ;
+        skos:prefLabel "statisticalUnit2 of test dataset"@en .
 
 }
 
@@ -372,6 +372,7 @@
          skos:inScheme <http://bauhaus/concepts/themes> ;
          skos:prefLabel "theme2 du dataset test"@fr ;
          skos:prefLabel "theme2 of test dataset"@en .
+
 }
 
 <http://rdf.insee.fr/graphes/qualite/territoires> {
