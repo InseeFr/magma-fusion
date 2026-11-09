@@ -6518,8 +6518,9 @@ components:
         dateCreation: '2011-03-31'
         intituleSansArticle: 'Mayotte'
         typeArticle: '0'
-        chefLieu: '97611'
         intitule: 'Mayotte'
+        chefLieu: '97611'
+
 
     RegionListeDescendants:
       value:
