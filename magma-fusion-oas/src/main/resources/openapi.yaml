@@ -8854,8 +8854,6 @@ components:
       properties:
         id:
           type: string
-        type:
-          type: string
         label:
           type: array
           items:
@@ -9101,7 +9099,7 @@ components:
     LocalisedUrl:
       type: object
       properties:
-        lang:
+        langue:
           type: string
         url:
           type: string
@@ -9117,9 +9115,9 @@ components:
     Temporal:
       type: object
       properties:
-        startPeriod:
+        debutPeriode:
           type: string
-        endPeriod:
+        finPeriode:
           type: string
 
     Structure:
@@ -9129,21 +9127,8 @@ components:
           type: string
         id:
           type: string
-        dsd:
+        structureDonnees:
           type: string
-
-    WasDerivedFrom:
-      type: object
-      properties:
-        datasets:
-          type: array
-          items:
-            type: string
-        description:
-          type: array
-          items:
-            $ref: './langue-contenu.schema.json'
-
 
     ListeDistributions:
       description: 'Liste des distributions'
@@ -9189,41 +9174,41 @@ components:
           type: string
         uri:
           type: string
-        catalogRecordCreated:
+        dateCreationEnregistrementCatalogue:
           type: string
-        catalogRecordModified:
+        dateMiseAJourEnregistrementCatalogue:
           type: string
-        catalogRecordCreator:
+        createurEnregistrementCatalogue:
           $ref: '#/components/schemas/IdLabel'
-        catalogRecordContributor:
+        contributeurEnregistrementCatalogue:
           $ref: '#/components/schemas/IdLabel'
         identifier:
           type: string
-        issued:
+        datePublication:
           type: string
-        modified:
+        dateMiseAJour:
           type: string
         disseminationStatus:
           type: string
-        validationState:
+        etatValidation:
           type: string
         version:
           type: string
-        creator:
+        createur:
           type: array
           items:
             $ref: '#/components/schemas/IdLabel'
-        publisher:
+        editeur:
           $ref: '#/components/schemas/IdLabel'
-        title:
+        titre:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
-        subtitle:
+        sousTitre:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
-        abstract:
+        resume:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -9231,14 +9216,14 @@ components:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
-        scopeNote:
+        noteDePortee:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
-        wasGeneratedBy:
+        aEteGenerePar:
           type: array
           items:
-            $ref: '#/components/schemas/IdLabel'
+            $ref: './id-uri-label.schema.json'
         type:
           type: array
           items:
@@ -9259,29 +9244,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Theme'
-        landingPage:
+        pageAccueil:
           type: array
           items:
             $ref: '#/components/schemas/LocalisedUrl'
         processStep:
           $ref: '#/components/schemas/ProcessStep'
-        accrualPeriodicity:
-          $ref: '#/components/schemas/IdLabel'
-        temporal:
+        frequenceDeMiseAJour:
+          $ref: './id-uri-label.schema.json'
+        periodeTemporelle:
           $ref: '#/components/schemas/Temporal'
-        temporalResolution:
+        resolutionTemporelle:
           type: array
           items:
             $ref: '#/components/schemas/Label'
-        spatial:
+        couvertureSpatiale:
           $ref: '#/components/schemas/IdLabel'
-        spatialResolution:
+        resolutionSpatiale:
           type: array
           items:
             $ref: '#/components/schemas/IdLabel'
-        spatialTemporal:
+        spatioTemporel:
           type: string
-        statisticalUnit:
+        uniteStatistique:
           type: array
           items:
             $ref: '#/components/schemas/IdLabel'
@@ -9293,8 +9278,6 @@ components:
         numSeries:
           type: integer
           format: int32
-        wasDerivedFrom:
-          $ref: '#/components/schemas/WasDerivedFrom'
         relations:
           type: array
           items:
@@ -9312,9 +9295,25 @@ components:
         wrapped: true
         name: Definition
       items:
-        $ref: '#/components/schemas/Dataset'
+        $ref: '#/components/schemas/DatasetForList'
 
-
+    DatasetForList:
+      type: object
+      properties:
+        id:
+          type: string
+        uri:
+          type: string
+        dateCreationEnregistrementCatalogue:
+          type: string
+        dateMiseAJourEnregistrementCatalogue:
+          type: string
+        titre:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+        etatValidation:
+          type: string
 
 
 

@@ -9,14 +9,11 @@ import fr.insee.rmes.magmafusion.utils.*;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,22 +25,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class DatasetsServiceImplTest {
 
     private RequestProcessor requestProcessor;
 
-    @InjectMocks
     private DatasetsServiceImpl service;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+
     @BeforeEach
     void setUp() {
         requestProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-        service = new DatasetsServiceImpl(requestProcessor);
-        ReflectionTestUtils.setField(service, "lg1", "fr");
-        ReflectionTestUtils.setField(service, "lg2", "en");
+        service = new DatasetsServiceImpl("fr", "en", requestProcessor);
     }
 
     // =========================================================
@@ -53,9 +47,9 @@ class DatasetsServiceImplTest {
     @Test
     void should_map_list_of_dtos_to_datasets() throws IOException, JSONException {
         var dtos = List.of(
-                new DatasetDTO("id1", "http://bauhaus/ds/id1", "Titre 1 FR", "Title 1 EN",
+                new DatasetForListDTO("id1", "http://bauhaus/ds/id1", "Titre 1 FR", "Title 1 EN",
                         LocalDate.of(2024, 1, 10), "Publiée", LocalDate.of(2023, 6, 1)),
-                new DatasetDTO("id2", "http://bauhaus/ds/id2", "Titre 2 FR", "Title 2 EN",
+                new DatasetForListDTO("id2", "http://bauhaus/ds/id2", "Titre 2 FR", "Title 2 EN",
                         null, "Provisoire, jamais publiée", null)
         );
 
@@ -90,7 +84,7 @@ class DatasetsServiceImplTest {
                         .readAllBytes(),
                 StandardCharsets.UTF_8
         );
-        JSONAssert.assertEquals(expected, data, JSONCompareMode.LENIENT);
+        JSONAssert.assertEquals(expected, data,true);
     }
 
 
@@ -99,18 +93,18 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertNotNull(result.getLandingPage()),
-                () -> assertEquals(2, result.getLandingPage().size()),
-                () -> assertEquals("fr", result.getLandingPage().getFirst().getLang()),
-                () -> assertEquals("https://example.fr/page", result.getLandingPage().getFirst().getUrl()),
-                () -> assertEquals("en", result.getLandingPage().get(1).getLang()),
-                () -> assertEquals("https://example.en/page", result.getLandingPage().get(1).getUrl())
+                () -> assertNotNull(result.getPageAccueil()),
+                () -> assertEquals(2, result.getPageAccueil().size()),
+                () -> assertEquals("fr", result.getPageAccueil().getFirst().getLangue()),
+                () -> assertEquals("https://example.fr/page", result.getPageAccueil().getFirst().getUrl()),
+                () -> assertEquals("en", result.getPageAccueil().get(1).getLangue()),
+                () -> assertEquals("https://example.en/page", result.getPageAccueil().get(1).getUrl())
         );
     }
 
     @Test
     void should_not_set_landingPage_when_null() {
-        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getLandingPage());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getPageAccueil());
     }
 
     @Test
@@ -118,17 +112,17 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertNotNull(result.getPublisher()),
-                () -> assertEquals("DG75-F001", result.getPublisher().getId()),
-                () -> assertEquals(2, result.getPublisher().getLabel().size()),
-                () -> assertEquals("Éditeur FR", result.getPublisher().getLabel().getFirst().getContenu()),
-                () -> assertEquals("Publisher EN", result.getPublisher().getLabel().get(1).getContenu())
+                () -> assertNotNull(result.getEditeur()),
+                () -> assertEquals("DG75-F001", result.getEditeur().getId()),
+                () -> assertEquals(2, result.getEditeur().getLabel().size()),
+                () -> assertEquals("Éditeur FR", result.getEditeur().getLabel().getFirst().getContenu()),
+                () -> assertEquals("Publisher EN", result.getEditeur().getLabel().get(1).getContenu())
         );
     }
 
     @Test
     void should_not_set_publisher_when_idPublisher_is_null() {
-        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getPublisher());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getEditeur());
     }
 
     @Test
@@ -136,16 +130,16 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertNotNull(result.getSpatial()),
-                () -> assertEquals("France", result.getSpatial().getId()),
-                () -> assertEquals("France métropolitaine", result.getSpatial().getLabel().getFirst().getContenu()),
-                () -> assertEquals("Metropolitan France", result.getSpatial().getLabel().get(1).getContenu())
+                () -> assertNotNull(result.getCouvertureSpatiale()),
+                () -> assertEquals("France", result.getCouvertureSpatiale().getId()),
+                () -> assertEquals("France métropolitaine", result.getCouvertureSpatiale().getLabel().getFirst().getContenu()),
+                () -> assertEquals("Metropolitan France", result.getCouvertureSpatiale().getLabel().get(1).getContenu())
         );
     }
 
     @Test
     void should_not_set_spatial_when_spatialId_is_null() {
-        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getSpatial());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getCouvertureSpatiale());
     }
 
     @Test
@@ -153,15 +147,15 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertNotNull(result.getTemporal()),
-                () -> assertEquals("2010", result.getTemporal().getStartPeriod()),
-                () -> assertEquals("2024", result.getTemporal().getEndPeriod())
+                () -> assertNotNull(result.getPeriodeTemporelle()),
+                () -> assertEquals("2010", result.getPeriodeTemporelle().getDebutPeriode()),
+                () -> assertEquals("2024", result.getPeriodeTemporelle().getFinPeriode())
         );
     }
 
     @Test
     void should_not_set_temporal_when_startPeriod_is_null() {
-        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getTemporal());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getPeriodeTemporelle());
     }
 
     @Test
@@ -172,7 +166,7 @@ class DatasetsServiceImplTest {
                 () -> assertNotNull(result.getStructure()),
                 () -> assertEquals("http://bauhaus/dsd/dsd1000", result.getStructure().getUri()),
                 () -> assertEquals("dsd1000", result.getStructure().getId()),
-                () -> assertEquals("DSD_1000", result.getStructure().getDsd())
+                () -> assertEquals("DSD_1000", result.getStructure().getStructureDonnees())
         );
     }
 
@@ -203,13 +197,13 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertEquals(1, result.getCreator().size()),
-                () -> assertEquals("DG75-E330", result.getCreator().getFirst().getId()),
-                () -> assertEquals(2, result.getCreator().getFirst().getLabel().size()),
-                () -> assertEquals("fr", result.getCreator().getFirst().getLabel().getFirst().getLangue()),
-                () -> assertEquals("Division ESPRI", result.getCreator().getFirst().getLabel().getFirst().getContenu()),
-                () -> assertEquals("en", result.getCreator().getFirst().getLabel().get(1).getLangue()),
-                () -> assertEquals("ESPRI Division", result.getCreator().getFirst().getLabel().get(1).getContenu())
+                () -> assertEquals(1, result.getCreateur().size()),
+                () -> assertEquals("DG75-E330", result.getCreateur().getFirst().getId()),
+                () -> assertEquals(2, result.getCreateur().getFirst().getLabel().size()),
+                () -> assertEquals("fr", result.getCreateur().getFirst().getLabel().getFirst().getLangue()),
+                () -> assertEquals("Division ESPRI", result.getCreateur().getFirst().getLabel().getFirst().getContenu()),
+                () -> assertEquals("en", result.getCreateur().getFirst().getLabel().get(1).getLangue()),
+                () -> assertEquals("ESPRI Division", result.getCreateur().getFirst().getLabel().get(1).getContenu())
         );
     }
 
@@ -219,19 +213,19 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(dto);
 
         assertAll(
-                () -> assertEquals(2, result.getCreator().size()),
-                () -> assertEquals("DG75-A", result.getCreator().get(0).getId()),
-                () -> assertEquals("Label A FR", result.getCreator().get(0).getLabel().getFirst().getContenu()),
-                () -> assertEquals("Label A EN", result.getCreator().get(0).getLabel().get(1).getContenu()),
-                () -> assertEquals("DG75-B", result.getCreator().get(1).getId()),
-                () -> assertEquals("Label B FR", result.getCreator().get(1).getLabel().getFirst().getContenu())
+                () -> assertEquals(2, result.getCreateur().size()),
+                () -> assertEquals("DG75-A", result.getCreateur().get(0).getId()),
+                () -> assertEquals("Label A FR", result.getCreateur().get(0).getLabel().getFirst().getContenu()),
+                () -> assertEquals("Label A EN", result.getCreateur().get(0).getLabel().get(1).getContenu()),
+                () -> assertEquals("DG75-B", result.getCreateur().get(1).getId()),
+                () -> assertEquals("Label B FR", result.getCreateur().get(1).getLabel().getFirst().getContenu())
         );
     }
 
     @Test
     void should_not_set_creator_when_creators_is_null() {
         var result = service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO());
-        assertNull(result.getCreator());
+        assertNull(result.getCreateur());
     }
 
     @Test
@@ -239,14 +233,14 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertEquals(1, result.getWasGeneratedBy().size()),
-                () -> assertEquals("http://bauhaus/operations/serie/s1223", result.getWasGeneratedBy().getFirst().getId())
+                () -> assertEquals(1, result.getaEteGenerePar().size()),
+                () -> assertEquals(URI.create("http://bauhaus/operations/serie/serieGeneratrice"), result.getaEteGenerePar().getFirst().getUri())
         );
     }
 
     @Test
     void should_return_null_wasGeneratedBy_when_operationStat_is_null() {
-        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getWasGeneratedBy());
+        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getaEteGenerePar());
     }
 
     @Test
@@ -255,8 +249,8 @@ class DatasetsServiceImplTest {
 
         assertAll(
                 () -> assertEquals(2, result.getTheme().size()),
-                () -> assertEquals("http://theme/emploi", result.getTheme().get(0).getUri()),
-                () -> assertEquals("http://theme/chomage", result.getTheme().get(1).getUri())
+                () -> assertEquals("http://theme/theme1", result.getTheme().get(0).getUri()),
+                () -> assertEquals("http://theme/theme2", result.getTheme().get(1).getUri())
         );
     }
 
@@ -265,13 +259,12 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
         assertAll(
-                () -> assertEquals(3, result.getKeyword().size()),
+                () -> assertEquals(2, result.getKeyword().size()),
                 () -> assertEquals("fr", result.getKeyword().get(0).getLangue()),
-                () -> assertEquals("emploi", result.getKeyword().get(0).getContenu()),
-                () -> assertEquals("fr", result.getKeyword().get(1).getLangue()),
-                () -> assertEquals("chômage", result.getKeyword().get(1).getContenu()),
-                () -> assertEquals("en", result.getKeyword().get(2).getLangue()),
-                () -> assertEquals("employment", result.getKeyword().get(2).getContenu())
+                () -> assertEquals("keyWord FR", result.getKeyword().get(0).getContenu()),
+                () -> assertEquals("fr", result.getKeyword().get(0).getLangue()),
+                () -> assertEquals("keyWord EN", result.getKeyword().get(1).getContenu()),
+                () -> assertEquals("en", result.getKeyword().get(1).getLangue())
         );
     }
 
@@ -296,24 +289,7 @@ class DatasetsServiceImplTest {
         );
     }
 
-    @Test
-    void should_map_wasDerivedFrom_with_description_when_present() {
-        var result = service.convertDatasetByIdDTOToDataSet(fullDatasetByIdDTO());
 
-        assertAll(
-                () -> assertNotNull(result.getWasDerivedFrom()),
-                () -> assertEquals(1, result.getWasDerivedFrom().getDatasets().size()),
-                () -> assertEquals("ds-source-1", result.getWasDerivedFrom().getDatasets().getFirst()),
-                () -> assertNotNull(result.getWasDerivedFrom().getDescription()),
-                () -> assertEquals("Dérivé de FR", result.getWasDerivedFrom().getDescription().getFirst().getContenu()),
-                () -> assertEquals("Derived from EN", result.getWasDerivedFrom().getDescription().get(1).getContenu())
-        );
-    }
-
-    @Test
-    void should_not_set_wasDerivedFrom_when_null() {
-        assertNull(service.convertDatasetByIdDTOToDataSet(minimalDatasetByIdDTO()).getWasDerivedFrom());
-    }
 
 
     // =========================================================
@@ -370,12 +346,10 @@ class DatasetsServiceImplTest {
     @Test
     void getTemporalResolution_shouldReturnEmptyListForEmptyInput() {
         // Given
-        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
-        DatasetsServiceImpl datasetsService = new DatasetsServiceImpl(mockProcessor);
         List<String> uris = List.of();
 
         // When
-        List<Label> result = datasetsService.getTemporalResolution(uris);
+        List<Label> result = service.getTemporalResolution(uris);
 
         // Then
         assertThat(result).isEmpty();
@@ -404,11 +378,7 @@ class DatasetsServiceImplTest {
         // Then
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
-        assertThat(resolution.getLabel()).hasSize(2);
-        assertThat(resolution.getLabel().get(0).getLangue()).isEqualTo("fr");
-        assertThat(resolution.getLabel().get(0).getContenu()).isNull();
-        assertThat(resolution.getLabel().get(1).getLangue()).isEqualTo("en");
-        assertThat(resolution.getLabel().get(1).getContenu()).isNull();
+        assertThat(resolution.getLabel()).isNull();
     }
 
     @Test
@@ -434,11 +404,8 @@ class DatasetsServiceImplTest {
         // Then
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
-        assertThat(resolution.getLabel()).hasSize(2);
-        assertThat(resolution.getLabel().get(0).getLangue()).isEqualTo("fr");
-        assertThat(resolution.getLabel().get(0).getContenu()).isEmpty();
-        assertThat(resolution.getLabel().get(1).getLangue()).isEqualTo("en");
-        assertThat(resolution.getLabel().get(1).getContenu()).isNull();
+
+        assertNull(resolution.getLabel());
     }
 
 
@@ -555,52 +522,60 @@ class DatasetsServiceImplTest {
 
     private DatasetByIdDTO fullDatasetByIdDTO() {
         return new DatasetByIdDTO(
-                "http://bauhaus/ds/25baaf1f",    // uri
-                "25baaf1f",                      // id
-                "Provisoire, jamais publiée",    // statutValidation
-                "Titre FR", "Title EN",          // titleLg1, titleLg2
-                "Sous-titre FR", "Subtitle EN",  // subtitleLg1, subtitleLg2
-                "Résumé FR", "Abstract EN",      // abstractLg1, abstractLg2
-                "Description FR", "Description EN", // descriptionLg1, descriptionLg2
-                "Note FR", "Note EN",            // scopeNoteLg1, scopeNoteLg2
-                "https://example.fr/page", "https://example.en/page", // landingPageLg1, landingPageLg2
+                "http://bauhaus/ds/25baaf1f",
+                "25baaf1f",
+                "Provisoire, jamais publiée",
+                "Titre FR", "Title EN",
+                "Sous-titre FR", "Subtitle EN",
+                "Résumé FR", "Abstract EN",
+                "Description FR", "Description EN",
+                "Note FR",
+                "Note EN",
+                "https://example.fr/page",
+                "https://example.en/page",
                 "id catalogRecordCreator",
                 "catalogRecordCreatorLabelLg1",
-                "catalogRecordCreatorLabelLg2",// catalogRecordCreator
+                "catalogRecordCreatorLabelLg2",
                 "id catalogRecordContributor",
                 "catalogRecordContributorLabelLg1",
-                "catalogRecordContributorLabelLg2",// catalogRecordContributor
-                "2024-12-09T12:00:00",           // catalogRecordModified
-                "2024-12-09T12:00:00",           // catalogRecordCreated
-                "2024-11-01",                    // modified
-                "2023-05-15",                    // issued
-                "2.0",                           // version
-                "2025-01-01",                            // spatialTemporal
-                "2010",                          // startPeriod
-                "2024",                          // endPeriod
-                "Dérivé de FR", "Derived from EN", // derivedDescriptionLg1, derivedDescriptionLg2
-                "DG75-F001", "Éditeur FR", "Publisher EN", // idPublisher, labelPublisherLg1, labelPublisherLg2
-                "label Type FR", "label Type EN",                      // labeltypeLg1, labeltypeLg2
-                "label Access Rights FR", "label Access Rights EN",                      // labelaccessRightsLg1, labelaccessRightsLg2
-                "label Condidentiality Status FR", "label Condidentiality Status EN",                      // labelconfidentialityStatusLg1, labelconfidentialityStatusLg2
-                "label Accrual Periodicity FR", "label Accrual Periodicity EN",                      // labelaccrualPeriodicityLg1, labelaccrualPeriodicityLg2
-                "France", "France métropolitaine", "Metropolitan France", // spatialId, labelspatialLg1, labelspatialLg2
-                "code process",                            // codeProcessStep
-                "dissemination status",                            // disseminationStatus
-                "DD_EEC_SERIES",                 // identifier
-                "http://bauhaus/dsd/dsd1000", "dsd1000", "DSD_1000", null, // structureUri, structureId, dsd, isDataStructureDefinition
-                "42000", "12",                   // numObservations, numSeries
-                "DG75-E330$Division ESPRI$ESPRI Division", // creators
-                "http://bauhaus/operations/serie/s1223", // operationStat
-                "http://theme/emploi,http://theme/chomage", // names
-                "ds-source-1",                   // wasDerivedFromS
-                "http://ds/related1,http://ds/related2", // relations
-                "emploi,chômage", "employment",  // keywordLg1, keywordLg2
-                "http://archive/unit1",          // archiveUnits
-                null, // temporalResolutions
-                null,   // spatialResolutions
-                null,  //statiticalUnits
-                null //themes
+                "catalogRecordContributorLabelLg2",
+                "2024-12-09T12:00:00",
+                "2024-12-09T12:00:00",
+                "2024-11-01",
+                "2023-05-15",
+                "2.0",
+                "2025-01-01",
+                "2010",
+                "2024",
+                "Dérivé de FR", "Derived from EN",
+                "DG75-F001", "Éditeur FR", "Publisher EN",
+                "label Type FR", "label Type EN",
+                "label Access Rights FR", "label Access Rights EN",
+                "label Condidentiality Status FR", "label Condidentiality Status EN",
+                "http://bauhaus/uriAccrualperiodicity",
+                "idAccrualPeriodicity",
+                "label Accrual Periodicity FR", "label Accrual Periodicity EN",
+                "France", "France métropolitaine", "Metropolitan France",
+                "code process",
+                "dissemination status",
+                "DD_EEC_SERIES",
+                "http://bauhaus/dsd/dsd1000",
+                "dsd1000",
+                "DSD_1000",
+                null,
+                "42000",
+                "12",
+                "DG75-E330$Division ESPRI$ESPRI Division",
+                "http://bauhaus/operations/serie/serieGeneratrice",
+                "http://theme/theme1,http://theme/theme2",
+                "ds-source-1",
+                "http://ds/related1,http://ds/related2",
+                "keyWord FR", "keyWord EN",
+                "http://archive/unit1",
+                "temporalResolution FR, temporalResolution EN",
+                null,
+                null,
+                "uri/theme1, uri/theme2"
         );
     }
 
@@ -623,8 +598,10 @@ class DatasetsServiceImplTest {
                 null, null,
                 null, null,
                 null, null,
-                null, null, null,
-                null, null, null,
+                null, null,
+                null,null,
+                null, null,
+                null, null,
                 null, null, null, null,
                 null, null,
                 null, null, null, null,
@@ -646,8 +623,8 @@ class DatasetsServiceImplTest {
                 null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, creators, null, null, null, null,
-                null,null, null, null, null, null, null
+                null, null, null, null, null, null, creators, null, null,
+                null,null, null, null, null, null, null, null, null
         );
     }
 }
