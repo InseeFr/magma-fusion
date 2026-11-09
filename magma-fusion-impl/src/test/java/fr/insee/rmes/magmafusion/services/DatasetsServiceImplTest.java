@@ -2,7 +2,7 @@ package fr.insee.rmes.magmafusion.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
-import fr.insee.rmes.magmafusion.model.IdLibelle;
+import fr.insee.rmes.magmafusion.model.IdLabel;
 import fr.insee.rmes.magmafusion.model.Label;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
@@ -114,9 +114,9 @@ class DatasetsServiceImplTest {
         assertAll(
                 () -> assertNotNull(result.getEditeur()),
                 () -> assertEquals("DG75-F001", result.getEditeur().getId()),
-                () -> assertEquals(2, result.getEditeur().getLibelle().size()),
-                () -> assertEquals("Éditeur FR", result.getEditeur().getLibelle().getFirst().getContenu()),
-                () -> assertEquals("Publisher EN", result.getEditeur().getLibelle().get(1).getContenu())
+                () -> assertEquals(2, result.getEditeur().getLabel().size()),
+                () -> assertEquals("Éditeur FR", result.getEditeur().getLabel().getFirst().getContenu()),
+                () -> assertEquals("Publisher EN", result.getEditeur().getLabel().get(1).getContenu())
         );
     }
 
@@ -132,8 +132,8 @@ class DatasetsServiceImplTest {
         assertAll(
                 () -> assertNotNull(result.getCouvertureSpatiale()),
                 () -> assertEquals("France", result.getCouvertureSpatiale().getId()),
-                () -> assertEquals("France métropolitaine", result.getCouvertureSpatiale().getLibelle().getFirst().getContenu()),
-                () -> assertEquals("Metropolitan France", result.getCouvertureSpatiale().getLibelle().get(1).getContenu())
+                () -> assertEquals("France métropolitaine", result.getCouvertureSpatiale().getLabel().getFirst().getContenu()),
+                () -> assertEquals("Metropolitan France", result.getCouvertureSpatiale().getLabel().get(1).getContenu())
         );
     }
 
@@ -199,11 +199,11 @@ class DatasetsServiceImplTest {
         assertAll(
                 () -> assertEquals(1, result.getCreateur().size()),
                 () -> assertEquals("DG75-E330", result.getCreateur().getFirst().getId()),
-                () -> assertEquals(2, result.getCreateur().getFirst().getLibelle().size()),
-                () -> assertEquals("fr", result.getCreateur().getFirst().getLibelle().getFirst().getLangue()),
-                () -> assertEquals("Division ESPRI", result.getCreateur().getFirst().getLibelle().getFirst().getContenu()),
-                () -> assertEquals("en", result.getCreateur().getFirst().getLibelle().get(1).getLangue()),
-                () -> assertEquals("ESPRI Division", result.getCreateur().getFirst().getLibelle().get(1).getContenu())
+                () -> assertEquals(2, result.getCreateur().getFirst().getLabel().size()),
+                () -> assertEquals("fr", result.getCreateur().getFirst().getLabel().getFirst().getLangue()),
+                () -> assertEquals("Division ESPRI", result.getCreateur().getFirst().getLabel().getFirst().getContenu()),
+                () -> assertEquals("en", result.getCreateur().getFirst().getLabel().get(1).getLangue()),
+                () -> assertEquals("ESPRI Division", result.getCreateur().getFirst().getLabel().get(1).getContenu())
         );
     }
 
@@ -215,10 +215,10 @@ class DatasetsServiceImplTest {
         assertAll(
                 () -> assertEquals(2, result.getCreateur().size()),
                 () -> assertEquals("DG75-A", result.getCreateur().get(0).getId()),
-                () -> assertEquals("Label A FR", result.getCreateur().get(0).getLibelle().getFirst().getContenu()),
-                () -> assertEquals("Label A EN", result.getCreateur().get(0).getLibelle().get(1).getContenu()),
+                () -> assertEquals("Label A FR", result.getCreateur().get(0).getLabel().getFirst().getContenu()),
+                () -> assertEquals("Label A EN", result.getCreateur().get(0).getLabel().get(1).getContenu()),
                 () -> assertEquals("DG75-B", result.getCreateur().get(1).getId()),
-                () -> assertEquals("Label B FR", result.getCreateur().get(1).getLibelle().getFirst().getContenu())
+                () -> assertEquals("Label B FR", result.getCreateur().get(1).getLabel().getFirst().getContenu())
         );
     }
 
@@ -329,18 +329,18 @@ class DatasetsServiceImplTest {
         assertThat(result).hasSize(2);
 
         Label annualResolution = result.get(0);
-        assertThat(annualResolution.getLibelle()).hasSize(2);
-        assertThat(annualResolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(annualResolution.getLibelle().get(0).getContenu()).isEqualTo("Annuelle");
-        assertThat(annualResolution.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(annualResolution.getLibelle().get(1).getContenu()).isEqualTo("Annual");
+        assertThat(annualResolution.getLabel()).hasSize(2);
+        assertThat(annualResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(annualResolution.getLabel().get(0).getContenu()).isEqualTo("Annuelle");
+        assertThat(annualResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(annualResolution.getLabel().get(1).getContenu()).isEqualTo("Annual");
 
         Label monthlyResolution = result.get(1);
-        assertThat(monthlyResolution.getLibelle()).hasSize(2);
-        assertThat(monthlyResolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(monthlyResolution.getLibelle().get(0).getContenu()).isEqualTo("Mensuelle");
-        assertThat(monthlyResolution.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(monthlyResolution.getLibelle().get(1).getContenu()).isEqualTo("Monthly");
+        assertThat(monthlyResolution.getLabel()).hasSize(2);
+        assertThat(monthlyResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(monthlyResolution.getLabel().get(0).getContenu()).isEqualTo("Mensuelle");
+        assertThat(monthlyResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(monthlyResolution.getLabel().get(1).getContenu()).isEqualTo("Monthly");
     }
 
     @Test
@@ -378,7 +378,7 @@ class DatasetsServiceImplTest {
         // Then
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
-        assertThat(resolution.getLibelle()).isNull();
+        assertThat(resolution.getLabel()).isNull();
     }
 
     @Test
@@ -405,7 +405,7 @@ class DatasetsServiceImplTest {
         assertThat(result).hasSize(1);
         Label resolution = result.get(0);
 
-        assertNull(resolution.getLibelle());
+        assertNull(resolution.getLabel());
     }
 
 
@@ -442,24 +442,24 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<IdLibelle> result = service.getSpatialResolution(uris);
+        List<IdLabel> result = service.getSpatialResolution(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
-        IdLibelle firstResolution = result.get(0);
-        assertThat(firstResolution.getLibelle()).hasSize(2);
-        assertThat(firstResolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(firstResolution.getLibelle().get(0).getContenu()).isEqualTo("labelSpatialResolution1Lg1");
-        assertThat(firstResolution.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(firstResolution.getLibelle().get(1).getContenu()).isEqualTo("labelSpatialResolution1Lg2");
+        IdLabel firstResolution = result.get(0);
+        assertThat(firstResolution.getLabel()).hasSize(2);
+        assertThat(firstResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(firstResolution.getLabel().get(0).getContenu()).isEqualTo("labelSpatialResolution1Lg1");
+        assertThat(firstResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(firstResolution.getLabel().get(1).getContenu()).isEqualTo("labelSpatialResolution1Lg2");
 
-        IdLibelle secondResolution = result.get(1);
-        assertThat(secondResolution.getLibelle()).hasSize(2);
-        assertThat(secondResolution.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(secondResolution.getLibelle().get(0).getContenu()).isEqualTo("labelSpatialResolution2Lg1");
-        assertThat(secondResolution.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(secondResolution.getLibelle().get(1).getContenu()).isEqualTo("labelSpatialResolution2Lg2");
+        IdLabel secondResolution = result.get(1);
+        assertThat(secondResolution.getLabel()).hasSize(2);
+        assertThat(secondResolution.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(secondResolution.getLabel().get(0).getContenu()).isEqualTo("labelSpatialResolution2Lg1");
+        assertThat(secondResolution.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(secondResolution.getLabel().get(1).getContenu()).isEqualTo("labelSpatialResolution2Lg2");
     }
 
     // =========================================================
@@ -495,24 +495,24 @@ class DatasetsServiceImplTest {
         );
 
         // When
-        List<IdLibelle> result = service.getStatisticalUnits(uris);
+        List<IdLabel> result = service.getStatisticalUnits(uris);
 
         // Then
         assertThat(result).hasSize(2);
 
-        IdLibelle firstStatiticalUnit = result.get(0);
-        assertThat(firstStatiticalUnit.getLibelle()).hasSize(2);
-        assertThat(firstStatiticalUnit.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(firstStatiticalUnit.getLibelle().get(0).getContenu()).isEqualTo("labelStatisticalUnit1Lg1");
-        assertThat(firstStatiticalUnit.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(firstStatiticalUnit.getLibelle().get(1).getContenu()).isEqualTo("labelStatisticalUnit1Lg2");
+        IdLabel firstStatiticalUnit = result.get(0);
+        assertThat(firstStatiticalUnit.getLabel()).hasSize(2);
+        assertThat(firstStatiticalUnit.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(firstStatiticalUnit.getLabel().get(0).getContenu()).isEqualTo("labelStatisticalUnit1Lg1");
+        assertThat(firstStatiticalUnit.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(firstStatiticalUnit.getLabel().get(1).getContenu()).isEqualTo("labelStatisticalUnit1Lg2");
 
-        IdLibelle secondStatiticalUnit = result.get(1);
-        assertThat(secondStatiticalUnit.getLibelle()).hasSize(2);
-        assertThat(secondStatiticalUnit.getLibelle().get(0).getLangue()).isEqualTo("fr");
-        assertThat(secondStatiticalUnit.getLibelle().get(0).getContenu()).isEqualTo("labelStatisticalUnit2Lg1");
-        assertThat(secondStatiticalUnit.getLibelle().get(1).getLangue()).isEqualTo("en");
-        assertThat(secondStatiticalUnit.getLibelle().get(1).getContenu()).isEqualTo("labelStatisticalUnit2Lg2");
+        IdLabel secondStatiticalUnit = result.get(1);
+        assertThat(secondStatiticalUnit.getLabel()).hasSize(2);
+        assertThat(secondStatiticalUnit.getLabel().get(0).getLangue()).isEqualTo("fr");
+        assertThat(secondStatiticalUnit.getLabel().get(0).getContenu()).isEqualTo("labelStatisticalUnit2Lg1");
+        assertThat(secondStatiticalUnit.getLabel().get(1).getLangue()).isEqualTo("en");
+        assertThat(secondStatiticalUnit.getLabel().get(1).getContenu()).isEqualTo("labelStatisticalUnit2Lg2");
     }
 
 

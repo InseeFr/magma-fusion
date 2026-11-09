@@ -8849,12 +8849,12 @@ components:
       description: 'Identifiant d''une documentation'
 
 
-    IdLibelle:
+    IdLabel:
       type: object
       properties:
         id:
           type: string
-        libelle:
+        label:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -8864,7 +8864,7 @@ components:
       properties:
         type:
           type: string
-        libelle:
+        label:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -9089,7 +9089,7 @@ components:
       properties:
         uri:
           type: string
-        libelle:
+        label:
           type: array
           items:
             $ref: './langue-contenu.schema.json'
@@ -9109,7 +9109,7 @@ components:
       properties:
         id:
           type: string
-        libelle:
+        label:
           $ref: 'langue-contenu.schema.json'
 
     Temporal:
@@ -9179,9 +9179,9 @@ components:
         dateMiseAJourEnregistrementCatalogue:
           type: string
         createurEnregistrementCatalogue:
-          $ref: '#/components/schemas/IdLibelle'
+          $ref: '#/components/schemas/IdLabel'
         contributeurEnregistrementCatalogue:
-          $ref: '#/components/schemas/IdLibelle'
+          $ref: '#/components/schemas/IdLabel'
         identifier:
           type: string
         datePublication:
@@ -9197,9 +9197,9 @@ components:
         createur:
           type: array
           items:
-            $ref: '#/components/schemas/IdLibelle'
+            $ref: '#/components/schemas/IdLabel'
         editeur:
-          $ref: '#/components/schemas/IdLibelle'
+          $ref: '#/components/schemas/IdLabel'
         titre:
           type: array
           items:
@@ -9223,7 +9223,7 @@ components:
         aEteGenerePar:
           type: array
           items:
-            $ref: './id-uri-libelle.schema.json'
+            $ref: './id-uri-label.schema.json'
         type:
           type: array
           items:
@@ -9231,7 +9231,7 @@ components:
         archiveUnit:
           type: array
           items:
-            $ref: '#/components/schemas/IdLibelle'
+            $ref: '#/components/schemas/IdLabel'
         accessRights:
           type: array
           items:
@@ -9251,7 +9251,7 @@ components:
         processStep:
           $ref: '#/components/schemas/ProcessStep'
         frequenceDeMiseAJour:
-          $ref: './id-uri-libelle.schema.json'
+          $ref: './id-uri-label.schema.json'
         periodeTemporelle:
           $ref: '#/components/schemas/Temporal'
         resolutionTemporelle:
@@ -9259,17 +9259,17 @@ components:
           items:
             $ref: '#/components/schemas/Label'
         couvertureSpatiale:
-          $ref: '#/components/schemas/IdLibelle'
+          $ref: '#/components/schemas/IdLabel'
         resolutionSpatiale:
           type: array
           items:
-            $ref: '#/components/schemas/IdLibelle'
+            $ref: '#/components/schemas/IdLabel'
         spatioTemporel:
           type: string
         uniteStatistique:
           type: array
           items:
-            $ref: '#/components/schemas/IdLibelle'
+            $ref: '#/components/schemas/IdLabel'
         structure:
           $ref: '#/components/schemas/Structure'
         numObservations:

@@ -6,7 +6,7 @@
   "createurEnregistrementCatalogue":
     {
       "id": "id INSEE",
-      "libelle": [
+      "label": [
         {
           "contenu": "Institut national de la statistique",
           "langue": "fr"
@@ -20,7 +20,7 @@
   "contributeurEnregistrementCatalogue":
   {
     "id": "id INSEE",
-    "libelle": [
+    "label": [
       {
         "contenu": "Institut national de la statistique",
         "langue": "fr"
@@ -40,17 +40,17 @@
   "frequenceDeMiseAJour" : {
     "id": "idAccrualPeriodicity",
     "uri": "http://bauhaus/accrualPeriodicity",
-    "libelle": [
+    "label": [
       {"contenu": "Fréquence du dataset test", "langue": "fr" },
       {"contenu": "Test dataset frequency", "langue": "en" }
     ]
   },
   "resolutionTemporelle": [
-    {"libelle": [
+    {"label": [
       {"contenu": "temporalResolution1 du dataset test", "langue": "fr" },
       {"contenu": "temporalResolution1 of test dataset", "langue": "en" }
     ]},
-    {"libelle": [
+    {"label": [
       {"contenu": "temporalResolution2 du dataset test","langue": "fr" },
       {"contenu": "temporalResolution2 of test dataset","langue": "en" }
     ]}
@@ -58,14 +58,14 @@
   "resolutionSpatiale": [
     {
       "id": "SR1",
-      "libelle": [
+      "label": [
       {"contenu": "spatialResolution1 du dataset test","langue": "fr" },
       {"contenu": "spatialResolution1 of test dataset", "langue": "en" }
     ]
     },
     {
       "id": "SR2",
-      "libelle": [
+      "label": [
       {"contenu": "spatialResolution2 du dataset test", "langue": "fr" },
       {"contenu": "spatialResolution2 of test dataset", "langue": "en" }
     ]
@@ -74,14 +74,14 @@
   "uniteStatistique": [
     {
       "id": "SU1",
-      "libelle": [
+      "label": [
         {"contenu": "statisticalUnit1 du dataset test","langue": "fr" },
         {"contenu": "statisticalUnit1 of test dataset", "langue": "en" }
       ]
     },
     {
       "id": "SU2",
-      "libelle": [
+      "label": [
         {"contenu": "statisticalUnit2 du dataset test", "langue": "fr" },
         {"contenu": "statisticalUnit2 of test dataset", "langue": "en" }
       ]
@@ -90,14 +90,14 @@
   "theme": [
     {
       "uri": "http://bauhaus/theme/1",
-      "libelle": [
+      "label": [
         {"contenu": "theme1 du dataset test","langue": "fr" },
         {"contenu": "theme1 of test dataset", "langue": "en" }
       ]
     },
     {
       "uri": "http://bauhaus/theme/2",
-      "libelle": [
+      "label": [
         {"contenu": "theme2 du dataset test","langue": "fr" },
         {"contenu": "theme2 of test dataset", "langue": "en" }
         ]
@@ -116,7 +116,7 @@
     {
       "id": "idSerieGeneratrice",
       "uri": "http://bauhaus/operations/serie/idSerieGeneratrice",
-      "libelle": [
+      "label": [
         {"contenu": "Libelle FR SerieGeneratrice","langue": "fr" },
         {"contenu": "label EN SerieGeneratrice", "langue": "en" }
       ]

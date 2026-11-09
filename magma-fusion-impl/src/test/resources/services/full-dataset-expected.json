@@ -9,7 +9,7 @@
   "createurEnregistrementCatalogue":
   {
     "id": "id catalogRecordCreator",
-    "libelle": [
+    "label": [
       {
         "contenu": "catalogRecordCreatorLabelLg1",
         "langue": "fr"
@@ -23,7 +23,7 @@
   "contributeurEnregistrementCatalogue":
   {
     "id": "id catalogRecordContributor",
-    "libelle": [
+    "label": [
       {
         "contenu": "catalogRecordContributorLabelLg1",
         "langue": "fr"
@@ -74,7 +74,7 @@
   "frequenceDeMiseAJour": {
     "id": "idAccrualPeriodicity",
     "uri": "http://bauhaus/uriAccrualperiodicity",
-    "libelle": [
+    "label": [
       {
         "contenu": "label Accrual Periodicity FR",
         "langue": "fr"
@@ -95,7 +95,7 @@
   "couvertureSpatiale":
   {
     "id": "France",
-    "libelle": [
+    "label": [
       {
         "contenu": "France métropolitaine",
         "langue": "fr"
@@ -109,7 +109,7 @@
   "createur": [
     {
       "id": "DG75-E330",
-      "libelle": [
+      "label": [
         {
           "contenu": "Division ESPRI",
           "langue": "fr"
@@ -133,7 +133,7 @@
   ],
   "editeur": {
     "id": "DG75-F001",
-    "libelle": [
+    "label": [
       {
         "contenu": "Éditeur FR",
         "langue": "fr"
@@ -225,11 +225,11 @@
   "theme": [
     {
       "uri": "http://theme/theme1",
-      "libelle": []
+      "label": []
     },
     {
       "uri": "http://theme/theme2",
-      "libelle": []
+      "label": []
     }
   ]
 }

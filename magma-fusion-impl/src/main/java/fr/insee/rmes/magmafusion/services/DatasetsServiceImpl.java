@@ -111,9 +111,9 @@ public class DatasetsServiceImpl implements DatasetsService {
         }
 
         if (StringUtils.hasText(dto.idPublisher())) {
-            dataSet.setEditeur(new IdLibelle()
+            dataSet.setEditeur(new IdLabel()
                     .id(dto.idPublisher())
-                    .libelle(buildLocalisedLabels(
+                    .label(buildLocalisedLabels(
                             dto.labelPublisherLg1(),
                             dto.labelPublisherLg2(),
                             lg1,lg2))
@@ -140,10 +140,10 @@ public class DatasetsServiceImpl implements DatasetsService {
                     dto.labelAccrualPeriodicityLg1(),
                     dto.labelAccrualPeriodicityLg2(),
                     lg1, lg2);
-            IdUriLibelle accrualPeriodicityIdLibelle = new IdUriLibelle();
+            IdUriLabel accrualPeriodicityIdLibelle = new IdUriLabel();
             accrualPeriodicityIdLibelle.setId(dto.idAccrualPeriodicity());
             accrualPeriodicityIdLibelle.setUri(URI.create(dto.uriAccrualPeriodicity()));
-            accrualPeriodicityIdLibelle.setLibelle(accrualPeriodicityListTitle);
+            accrualPeriodicityIdLibelle.setLabel(accrualPeriodicityListTitle);
             dataSet.setFrequenceDeMiseAJour(accrualPeriodicityIdLibelle);
         }
 
@@ -155,13 +155,13 @@ public class DatasetsServiceImpl implements DatasetsService {
 
         if (StringUtils.hasText(dto.spatialResolutions())) {
             List<String> urisSpatialResolution = List.of(dto.spatialResolutions().split(","));
-            List<IdLibelle> spatialResolutionList = getSpatialResolution(urisSpatialResolution);
+            List<IdLabel> spatialResolutionList = getSpatialResolution(urisSpatialResolution);
             dataSet.setResolutionSpatiale(spatialResolutionList);
         }
 
         if (StringUtils.hasText(dto.statisticalUnits())) {
             List<String> urisStatisticalUnits = List.of(dto.statisticalUnits().split(","));
-            List<IdLibelle> statisticalUnitList = getStatisticalUnits(urisStatisticalUnits);
+            List<IdLabel> statisticalUnitList = getStatisticalUnits(urisStatisticalUnits);
             dataSet.setUniteStatistique(statisticalUnitList);
         }
 
@@ -173,27 +173,27 @@ public class DatasetsServiceImpl implements DatasetsService {
 
 
         if (StringUtils.hasText(dto.spatialId())) {
-            dataSet.setCouvertureSpatiale(new IdLibelle()
+            dataSet.setCouvertureSpatiale(new IdLabel()
                     .id(dto.spatialId())
-                    .libelle(buildLocalisedLabels(
+                    .label(buildLocalisedLabels(
                             dto.labelspatialLg1(),
                             dto.labelspatialLg2(),
                             lg1,lg2)));
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordCreator())) {
-            dataSet.setCreateurEnregistrementCatalogue(new IdLibelle()
+            dataSet.setCreateurEnregistrementCatalogue(new IdLabel()
                     .id(dto.idCatalogRecordCreator())
-                    .libelle(buildLocalisedLabels(
+                    .label(buildLocalisedLabels(
                             dto.catalogRecordCreatorLabelLg1(),
                             dto.catalogRecordCreatorLabelLg2(),
                             lg1, lg2)));
         }
 
         if (StringUtils.hasText(dto.idCatalogRecordContributor())) {
-            dataSet.setContributeurEnregistrementCatalogue(new IdLibelle()
+            dataSet.setContributeurEnregistrementCatalogue(new IdLabel()
                     .id(dto.idCatalogRecordContributor())
-                    .libelle(buildLocalisedLabels(
+                    .label(buildLocalisedLabels(
                             dto.catalogRecordContributorLabelLg1(),
                             dto.catalogRecordContributorLabelLg2(),
                             lg1, lg2)));
@@ -219,9 +219,9 @@ public class DatasetsServiceImpl implements DatasetsService {
                     .filter(s -> !s.isBlank())
                     .map(raw -> {
                         String[] parts = raw.split("\\$", -1);
-                        return new IdLibelle()
+                        return new IdLabel()
                                 .id(parts.length > 0 ? parts[0] : null)
-                                .libelle(createList(
+                                .label(createList(
                                         createLangField(parts.length > 1 ? parts[1] : null, lg1),
                                         createLangField(parts.length > 2 ? parts[2] : null, lg2)));
                     })
@@ -230,7 +230,7 @@ public class DatasetsServiceImpl implements DatasetsService {
 
         if (StringUtils.hasText(dto.operationStat())) {
             List<String> urisoperationStat = List.of(dto.operationStat().split(","));
-            List<IdUriLibelle> aEteGenereParList = getAEteGenerePar(urisoperationStat);
+            List<IdUriLabel> aEteGenereParList = getAEteGenerePar(urisoperationStat);
             dataSet.setaEteGenerePar(aEteGenereParList);
         }
 
@@ -250,7 +250,7 @@ public class DatasetsServiceImpl implements DatasetsService {
         if (StringUtils.hasText(dto.archiveUnits())) {
             dataSet.setArchiveUnit(Arrays.stream(dto.archiveUnits().split(","))
                     .filter(s -> !s.isBlank())
-                    .map(uri -> new IdLibelle().id(uri).libelle(null))
+                    .map(uri -> new IdLabel().id(uri).label(null))
                     .toList());
         }
 
@@ -295,15 +295,15 @@ public class DatasetsServiceImpl implements DatasetsService {
                         lg1, lg2
                 );
                 Label temporalResolutionLabel = new Label();
-                temporalResolutionLabel.setLibelle(temporalResolutionTitles);
+                temporalResolutionLabel.setLabel(temporalResolutionTitles);
                 temporalResolution.add(temporalResolutionLabel);
             }
         }
         return temporalResolution;
     }
 
-    protected List<IdLibelle> getSpatialResolution(List<String> urisSpatialResolution) {
-        List<IdLibelle> spatialResolution = new ArrayList<>();
+    protected List<IdLabel> getSpatialResolution(List<String> urisSpatialResolution) {
+        List<IdLabel> spatialResolution = new ArrayList<>();
         for (String uri : urisSpatialResolution) {
             SpatialResolutionDTO spatialResolutionContenu = this.requestProcessor.queryToFindSpatialResolutionContenu()
                     .with(DatasetsRequestParametizer.ofUri(uri))
@@ -316,8 +316,8 @@ public class DatasetsServiceImpl implements DatasetsService {
                         spatialResolutionContenu.labelSpatialResolutionLg2(),
                         lg1, lg2
                 );
-                IdLibelle spatialResolutionLabel = new IdLibelle();
-                spatialResolutionLabel.setLibelle(spatialResolutionTitles);
+                IdLabel spatialResolutionLabel = new IdLabel();
+                spatialResolutionLabel.setLabel(spatialResolutionTitles);
                 spatialResolutionLabel.setId(spatialResolutionContenu.spatialResolutionId());
                 spatialResolution.add(spatialResolutionLabel);
             }
@@ -325,8 +325,8 @@ public class DatasetsServiceImpl implements DatasetsService {
         return spatialResolution;
     }
 
-    protected List<IdLibelle> getStatisticalUnits(List<String> urisStatisticalUnits) {
-        List<IdLibelle> statisticalUnits = new ArrayList<>();
+    protected List<IdLabel> getStatisticalUnits(List<String> urisStatisticalUnits) {
+        List<IdLabel> statisticalUnits = new ArrayList<>();
         for (String uri : urisStatisticalUnits) {
             StatisticalUnitDTO statisticalUnitsContenu = this.requestProcessor.queryToFindStatisticalUnits()
                     .with(DatasetsRequestParametizer.ofUri(uri))
@@ -339,8 +339,8 @@ public class DatasetsServiceImpl implements DatasetsService {
                         statisticalUnitsContenu.labelStatisticalUnitLg2(),
                         lg1, lg2
                 );
-                IdLibelle statisticalUnitLabel = new IdLibelle();
-                statisticalUnitLabel.setLibelle(statisticalUnitTitles);
+                IdLabel statisticalUnitLabel = new IdLabel();
+                statisticalUnitLabel.setLabel(statisticalUnitTitles);
                 statisticalUnitLabel.setId(statisticalUnitsContenu.statisticalUnitId());
                 statisticalUnits.add(statisticalUnitLabel);
             }
@@ -364,7 +364,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                         themeDTO.labelThemeLg2(),
                         lg1, lg2
                 );
-                themeLabel.setLibelle(themeTitles);
+                themeLabel.setLabel(themeTitles);
                 themeLabel.setUri(themeDTO.uri());
                 themes.add(themeLabel);
             }
@@ -372,12 +372,12 @@ public class DatasetsServiceImpl implements DatasetsService {
         return themes;
     }
 
-    protected List<IdUriLibelle> getAEteGenerePar(List<String> urisoperationStat) {
-        List<IdUriLibelle> aEteGenereParList = new ArrayList<>();
+    protected List<IdUriLabel> getAEteGenerePar(List<String> urisoperationStat) {
+        List<IdUriLabel> aEteGenereParList = new ArrayList<>();
         for (String uri : urisoperationStat) {
-            IdUriLibelle aEteGenereParLabel = new IdUriLibelle();
+            IdUriLabel aEteGenereParLabel = new IdUriLabel();
             aEteGenereParLabel.setUri(URI.create(uri));
-            aEteGenereParLabel.setLibelle(null);
+            aEteGenereParLabel.setLabel(null);
             DatasetAEteGenereParDTO aEteGenereParContenu = this.requestProcessor.queryToFindAEteGenerePar()
                     .with(DatasetsRequestParametizer.ofUri(uri))
                     .executeQuery()
@@ -389,7 +389,7 @@ public class DatasetsServiceImpl implements DatasetsService {
                         aEteGenereParContenu.labelWasGeneratedByLg2(),
                         lg1, lg2
                 );
-                aEteGenereParLabel.setLibelle(aEteGenereParTitles);
+                aEteGenereParLabel.setLabel(aEteGenereParTitles);
                 aEteGenereParLabel.setId(aEteGenereParContenu.wasGeneratedById());
             }
             aEteGenereParList.add(aEteGenereParLabel);

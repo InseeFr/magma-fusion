@@ -1,6 +1,5 @@
 package fr.insee.rmes.magmafusion.utils;
 
-import fr.insee.rmes.magmafusion.model.IdLibelle;
 import fr.insee.rmes.magmafusion.model.LocalisedContenu;
 import fr.insee.rmes.magmafusion.model.LocalisedUrl;
 import org.springframework.util.StringUtils;
