@@ -6518,9 +6518,8 @@ components:
         dateCreation: '2011-03-31'
         intituleSansArticle: 'Mayotte'
         typeArticle: '0'
-        intitule: 'Mayotte'
         chefLieu: '97611'
-
+        intitule: 'Mayotte'
 
     RegionListeDescendants:
       value:
@@ -9298,4 +9297,25 @@ components:
         wrapped: true
         name: Definition
       items:
-        $ref: '#/components/schemas/Dataset'
+        $ref: '#/components/schemas/DatasetForList'
+
+    DatasetForList:
+      type: object
+      properties:
+        id:
+          type: string
+        uri:
+          type: string
+        dateCreationEnregistrementCatalogue:
+          type: string
+        dateMiseAJourEnregistrementCatalogue:
+          type: string
+        titre:
+          type: array
+          items:
+            $ref: './langue-contenu.schema.json'
+        etatValidation:
+          type: string
+
+
+
