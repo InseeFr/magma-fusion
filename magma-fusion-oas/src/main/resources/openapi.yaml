@@ -6749,6 +6749,7 @@ components:
             langue: 'fr'
           - contenu: 'CIS'
             langue: 'en'
+        millesime: '2010'
         resume:
           - contenu: '<p>L''enquête Capacité à innover et stratégie (CIS) permet d’une part, de mesurer le poids économique de ...'
             langue: 'fr'
@@ -8884,6 +8885,8 @@ components:
           type: array
           items:
             $ref: 'langue-contenu.schema.json'
+        millesime:
+          type: string
         resume:
           type: array
           items:

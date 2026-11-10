@@ -54,6 +54,8 @@ public class OperationsServiceImpl implements OperationsService {
                 dto.seriesAltLabelLg2(),
                 lg1,lg2));
 
+        serieById.setMillesime(dto.temporal());
+
         serieById.setResume(buildLocalisedLabels(
                 dto.seriesAbstractLg1(),
                 dto.seriesAbstractLg2(),

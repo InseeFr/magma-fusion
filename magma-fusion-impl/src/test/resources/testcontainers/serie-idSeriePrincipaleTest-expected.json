@@ -9,6 +9,7 @@
     {"langue": "fr", "contenu": "AltLabel Série fr"},
     {"langue": "en", "contenu": "Series AltLabel en"}
   ],
+  "millesime" : "2010",
   "resume": [
     {"langue": "fr", "contenu": "Résumé de la série test"},
     {"langue": "en", "contenu": "Test series abstract"}

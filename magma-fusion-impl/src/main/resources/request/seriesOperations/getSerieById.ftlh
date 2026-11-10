@@ -1,5 +1,5 @@
 SELECT ?seriesId  ?series
-?seriesLabelLg1 ?seriesLabelLg2 ?seriesAltLabelLg1 ?seriesAltLabelLg2
+?seriesLabelLg1 ?seriesLabelLg2 ?seriesAltLabelLg1 ?seriesAltLabelLg2 ?temporal
 ?seriesAbstractLg1 ?seriesAbstractLg2 ?seriesHistoryNoteLg1 ?seriesHistoryNoteLg2
 ?type ?typeID ?typeLabelLg1 ?typeLabelLg2
 ?periodicity ?periodicityId ?periodicityLabelLg1 ?periodicityLabelLg2
@@ -28,6 +28,8 @@ WHERE {
 	#Alt labels
 	OPTIONAL {?series skos:altLabel ?seriesAltLabelLg1 . FILTER (lang(?seriesAltLabelLg1) = ?lg1)}
 	OPTIONAL {?series skos:altLabel ?seriesAltLabelLg2 . FILTER (lang(?seriesAltLabelLg2) = ?lg2)}
+    # Millésime
+    OPTIONAL {?operation dcterms:temporal ?temporal}
 	#Abstract
 	OPTIONAL {?series dcterms:abstract ?seriesAbstractLg1 . FILTER (lang(?seriesAbstractLg1) = ?lg1)}
 	OPTIONAL {?series dcterms:abstract ?seriesAbstractLg2 . FILTER (lang(?seriesAbstractLg2) = ?lg2)}
