@@ -1,8 +1,8 @@
-package fr.insee.rmes.magmafusion.api.testcontainers;
+package fr.insee.rmes.magmafusion.services.utils;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
-import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestResourceLoader;
 import fr.insee.rmes.magmafusion.api.testcontainers.utils.StringUtils;
+import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestResourceLoader;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,24 +13,14 @@ import java.io.IOException;
 
 @SpringBootTest
 @TestPropertySource(properties = "spring.profiles.active=security.disabled")
-public abstract class BaseIntegrationTest {
+public abstract class BaseIntegrationServiceTest {
 
-    @Autowired
-    protected RestTestClient restTestClient;
 
-    protected final TestResourceLoader resourceLoader = new TestResourceLoader();
-    protected final StringUtils stringUtils = new StringUtils();
-
-    @BeforeAll
-    static void setupContainer() {
-        GraphDBTestContainerConfig.startContainer();
-    }
+    protected final TestResourceLoaderServiceTest resourceLoader = new TestResourceLoaderServiceTest();
 
     protected String loadExpectedJson(String resourceName) throws IOException {
         return resourceLoader.loadResource(resourceName);
     }
 
-    protected String bodyAsString(byte[] body) {
-        return stringUtils.bytesToString(body);
-    }
 }
+

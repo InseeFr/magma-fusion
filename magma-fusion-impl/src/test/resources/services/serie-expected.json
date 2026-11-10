@@ -1,0 +1,265 @@
+{
+  "seriesId": "s1001",
+  "uri": "http://id.insee.fr/operations/serie/s1001",
+  "label": [
+    {
+      "contenu": "Enquête innovation",
+      "langue": "fr"
+    },
+    {
+      "contenu": "Innovation survey",
+      "langue": "en"
+    }
+  ],
+  "altLabel": [
+    {
+      "contenu": "Sigle FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "Sigle EN",
+      "langue": "en"
+    }
+  ],
+  "millesime": "2020",
+  "resume": [
+    {
+      "contenu": "Résumé FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "Abstract EN",
+      "langue": "en"
+    }
+  ],
+  "noteHistorique": [
+    {
+      "contenu": "Note historique FR",
+      "langue": "fr"
+    },
+    {
+      "contenu": "History note EN",
+      "langue": "en"
+    }
+  ],
+  "type": {
+    "id": "E",
+    "uri": "http://id.insee.fr/concepts/type/E",
+    "label": [
+      {
+        "contenu": "Enquête",
+        "langue": "fr"
+      },
+      {
+        "contenu": "Survey",
+        "langue": "en"
+      }
+    ]
+  },
+  "frequenceCollecte": {
+    "id": "A",
+    "uri": "http://id.insee.fr/concepts/periodicity/A",
+    "label": [
+      {
+        "contenu": "Annuelle",
+        "langue": "fr"
+      },
+      {
+        "contenu": "Annual",
+        "langue": "en"
+      }
+    ]
+  },
+  "rapportQualite": {
+    "id": "1500",
+    "uri": "http://id.insee.fr/qualite/rapport/1500"
+  },
+  "famille": {
+    "id": "f1001",
+    "uri": "http://id.insee.fr/operations/famille/f1001",
+    "label": [
+      {
+        "contenu": "Famille FR",
+        "langue": "fr"
+      },
+      {
+        "contenu": "Family EN",
+        "langue": "en"
+      }
+    ]
+  },
+  "seriesPrecedentes": [
+    {
+      "id": "s1010",
+      "uri": "http://id.insee.fr/operations/serie/s1010",
+      "label": [
+        {
+          "contenu": "Précédente FR",
+          "langue": "fr"
+        },
+        {
+          "contenu": "Previous EN",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "seriesSuivantes": [
+    {
+      "id": "s1020",
+      "uri": "http://id.insee.fr/operations/serie/s1020",
+      "label": [
+        {
+          "contenu": "Suivante FR",
+          "langue": "fr"
+        },
+        {
+          "contenu": "Next EN",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "seriesLiees": [
+    {
+      "id": "s1197",
+      "uri": "http://id.insee.fr/operations/serie/s1197",
+      "label": [
+        {
+          "contenu": "Série liée 1",
+          "langue": "fr"
+        },
+        {
+          "contenu": "Linked series 1",
+          "langue": "en"
+        }
+      ]
+    },
+    {
+      "id": "s1198",
+      "uri": "http://id.insee.fr/operations/serie/s1198",
+      "label": [
+        {
+          "contenu": "Série liée 2",
+          "langue": "fr"
+        },
+        {
+          "contenu": "Linked series 2",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op2024",
+      "uri": "http://id.insee.fr/operations/operation/op2024",
+      "label": [
+        {
+          "contenu": "Opération 2024",
+          "langue": "fr"
+        },
+        {
+          "contenu": "Operation 2024",
+          "langue": "en"
+        }
+      ]
+    },
+    {
+      "id": "op2023",
+      "uri": "http://id.insee.fr/operations/operation/op2023",
+      "label": [
+        {
+          "contenu": "Opération 2023",
+          "langue": "fr"
+        },
+        {
+          "contenu": "Operation 2023",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "indicateurs": [],
+  "dateCreation": "2020-01-15",
+  "dateMiseAJour": "2024-06-01",
+  "proprietaires": [
+    {
+      "id": "insee",
+      "uri": "http://id.insee.fr/organisations/insee",
+      "label": [
+        {
+          "contenu": "Institut national de la statistique",
+          "langue": "fr"
+        },
+        {
+          "contenu": "French national institute of statistics",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "organismesResponsables": [
+    {
+      "id": "drees",
+      "uri": "http://id.insee.fr/organisations/drees",
+      "label": [
+        {
+          "contenu": "DREES",
+          "langue": "fr"
+        },
+        {
+          "contenu": "DREES",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "partenaires": [
+    {
+      "id": "dares",
+      "uri": "http://id.insee.fr/organisations/dares",
+      "label": [
+        {
+          "contenu": "DARES",
+          "langue": "fr"
+        },
+        {
+          "contenu": "DARES",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "servicesCollecteurs": [
+    {
+      "id": "dataCollectorId1",
+      "uri": "dataCollector1",
+      "label": [
+        {
+          "contenu": "dataCollector1LabelLg1",
+          "langue": "fr"
+        },
+        {
+          "contenu": "dataCollector1LabelLg2",
+          "langue": "en"
+        }
+      ]
+    },
+    {
+      "id": "dataCollectorId2",
+      "uri": "dataCollector2",
+      "label": [
+        {
+          "contenu": "dataCollector2LabelLg1",
+          "langue": "fr"
+        },
+        {
+          "contenu": "dataCollector2LabelLg2",
+          "langue": "en"
+        }
+      ]
+    }
+  ],
+  "statutValidation": "Publiée"
+}
