@@ -492,7 +492,7 @@ public class OperationsServiceImplTest {
                 "   ", null, null, null,
                 null, null, null, null,
                 null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null
+                null, null, null, null, null, null, null,null
         );
         assertNull(service.convertSeriesDTOToSerieById(dto).getType());
     }
@@ -623,7 +623,7 @@ public class OperationsServiceImplTest {
                         "Enquête 2 FR", "Survey 2 EN", null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null,
-                        null, null, null, null, null, null, null)
+                        null, null, null, null, null, null, null, null)
         );
 
         var result = service.convertSeriesDTOsToSeries(dtos);
@@ -840,6 +840,16 @@ public class OperationsServiceImplTest {
     }
 
     @Test
+    void should_map_millesime_when_present() {
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
+
+        assertAll(
+                () -> assertNotNull(result.getMillesime()),
+                () -> assertEquals("2020", result.getMillesime())
+        );
+    }
+
+    @Test
     void should_not_set_periodicity_indicateur_when_null() {
         assertNull(service.convertIndicateurDTOToIndicateur(minimalIndicateurDTO()).getFrequenceCollecte());
     }
@@ -1003,6 +1013,7 @@ public class OperationsServiceImplTest {
                 "http://id.insee.fr/operations/serie/s1001",
                 "Enquête innovation", "Innovation survey",
                 "Sigle FR", "Sigle EN",
+                "2020",
                 "Résumé FR", "Abstract EN",
                 "Note historique FR", "History note EN",
                 "http://id.insee.fr/concepts/type/E", "E", "Enquête", "Survey",
@@ -1032,7 +1043,7 @@ public class OperationsServiceImplTest {
                 null, null, null, null,
                 null, null, null, null,
                 null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null
+                null, null, null, null, null, null, null,null
         );
     }
 

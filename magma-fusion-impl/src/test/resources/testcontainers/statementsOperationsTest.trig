@@ -22,6 +22,7 @@
         skos:prefLabel "Series Label en"@en ;
         skos:altLabel "AltLabel Série fr"@fr ;
         skos:altLabel "Series AltLabel en"@en ;
+        dcterms:temporal "2010" ;
         dcterms:abstract "Résumé de la série test"@fr ;
         dcterms:abstract "Test series abstract"@en ;
         skos:historyNote "Note historique test"@fr ;
