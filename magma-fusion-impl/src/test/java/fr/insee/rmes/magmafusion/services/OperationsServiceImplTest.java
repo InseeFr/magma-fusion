@@ -422,6 +422,7 @@ public class OperationsServiceImplTest {
     //   convertSeriesDTOToSerieById
     // =========================================================
 
+
     @Test
     void should_map_identifiers_and_dates_when_convertSeriesDTO() {
         var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
@@ -462,6 +463,16 @@ public class OperationsServiceImplTest {
 
                 () -> assertEquals("Note historique FR", result.getNoteHistorique().getFirst().getContenu()),
                 () -> assertEquals("History note EN", result.getNoteHistorique().get(1).getContenu())
+        );
+    }
+
+    @Test
+    void should_map_millesime_when_present() {
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
+
+        assertAll(
+                () -> assertNotNull(result.getMillesime()),
+                () -> assertEquals("2020", result.getMillesime())
         );
     }
 
@@ -527,6 +538,7 @@ public class OperationsServiceImplTest {
                 () -> assertEquals("Family EN", result.getFamille().getLabel().get(1).getContenu())
         );
     }
+
 
     @Test
     void should_not_set_famille_when_families_is_null() {
@@ -839,15 +851,6 @@ public class OperationsServiceImplTest {
         );
     }
 
-    @Test
-    void should_map_millesime_when_present() {
-        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
-
-        assertAll(
-                () -> assertNotNull(result.getMillesime()),
-                () -> assertEquals("2020", result.getMillesime())
-        );
-    }
 
     @Test
     void should_not_set_periodicity_indicateur_when_null() {
@@ -1030,8 +1033,8 @@ public class OperationsServiceImplTest {
                 "insee$http://id.insee.fr/organisations/insee$Institut national de la statistique$French national institute of statistics",
                 "drees$http://id.insee.fr/organisations/drees$DREES$DREES",
                 "dares$http://id.insee.fr/organisations/dares$DARES$DARES",
-                null,
-                "Publiée"
+                "dataCollectorId1$dataCollector1$dataCollector1LabelLg1$dataCollector1LabelLg2|dataCollectorId2$dataCollector2$dataCollector2LabelLg1$dataCollector2LabelLg2",
+        "Publiée"
         );
     }
 
