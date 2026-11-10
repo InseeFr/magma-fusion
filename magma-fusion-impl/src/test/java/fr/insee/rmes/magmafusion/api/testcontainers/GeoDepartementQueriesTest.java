@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
+import fr.insee.rmes.magmafusion.api.testcontainers.utils.BaseIntegrationTest;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
