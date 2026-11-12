@@ -7,10 +7,10 @@ import java.io.IOException;
 
 @SpringBootTest
 @TestPropertySource(properties = "spring.profiles.active=security.disabled")
-public abstract class BaseServiceTest {
+public abstract class TestsIntegrationServices {
 
 
-    protected final ResourceLoaderServiceTest resourceLoader = new ResourceLoaderServiceTest();
+    protected final TestsResourceLoaderService resourceLoader = new TestsResourceLoaderService();
 
     protected String loadExpectedJson(String resourceName) throws IOException {
         return resourceLoader.loadResource(resourceName);

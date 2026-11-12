@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-import static fr.insee.rmes.magmafusion.services.utils.ResourceLoaderServiceTest.loadResource;
+import static fr.insee.rmes.magmafusion.services.utils.TestsResourceLoaderService.loadResource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
