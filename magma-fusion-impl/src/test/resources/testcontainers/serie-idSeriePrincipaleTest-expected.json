@@ -87,6 +87,10 @@
       "label": [
         {"langue": "fr", "contenu": "Label Opération 1 fr"},
         {"langue": "en", "contenu": "Operation 1 Label en"}
+      ],
+      "altLabel": [
+        {"langue": "fr", "contenu": "AltLabel Opération 1 fr"},
+        {"langue": "en", "contenu": "Operation 1 AltLabel en"}
       ]
     },
     {
@@ -140,6 +144,5 @@
       ]
     }
   ],
-  "servicesCollecteurs": [],
   "statutValidation": "Publiée"
 }

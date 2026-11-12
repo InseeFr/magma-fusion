@@ -73,7 +73,9 @@
         rdf:type insee:StatisticalOperation ;
         dcterms:isPartOf <http://bauhaus/operations/serie/idSeriePrincipaleTest> ;
         skos:prefLabel "Label Opération 1 fr"@fr ;
-        skos:prefLabel "Operation 1 Label en"@en .
+        skos:prefLabel "Operation 1 Label en"@en ;
+        skos:altLabel "AltLabel Opération 1 fr"@fr ;
+        skos:altLabel "Operation 1 AltLabel en"@en .
 
    <http://bauhaus/operations/operation/idOperation2SeriePrincipaleTest>
         rdf:type insee:StatisticalOperation ;
