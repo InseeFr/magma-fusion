@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 import java.net.URI;
 import java.util.*;
 
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.*;
 
 @Service
 public class DatasetsServiceImpl implements DatasetsService {

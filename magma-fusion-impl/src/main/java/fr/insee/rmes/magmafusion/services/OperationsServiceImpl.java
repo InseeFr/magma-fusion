@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.*;
 
 @Service
 public class OperationsServiceImpl implements OperationsService {
