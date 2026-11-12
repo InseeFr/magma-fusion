@@ -19,7 +19,7 @@ import java.net.URI;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class ConceptsQueries extends TestsIntegration {
+class TestConceptsQueries extends TestsIntegration {
 
     @BeforeAll
     static void installContainer() {
