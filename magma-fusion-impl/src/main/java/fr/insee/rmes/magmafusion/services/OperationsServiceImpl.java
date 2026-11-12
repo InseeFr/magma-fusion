@@ -314,7 +314,6 @@ public class OperationsServiceImpl implements OperationsService {
                     parts.length > 5 ? parts[5] : null,
                     lg1, lg2));
             list.add(ref);
-            list.add(ref);
         }
         return list;
     }

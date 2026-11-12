@@ -607,7 +607,18 @@ public class OperationsServiceImplTest {
         assertAll(
                 () -> assertEquals(2, result.getOperations().size()),
                 () -> assertEquals("op2024", result.getOperations().getFirst().getId()),
-                () -> assertEquals("op2023", result.getOperations().get(1).getId())
+                () -> assertEquals("op2023", result.getOperations().get(1).getId()),
+                () -> assertEquals("op2024labelLg1", result.getOperations().getFirst().getLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().getFirst().getLabel().getFirst().getLangue()),
+                () -> assertEquals("op2023labelLg1", result.getOperations().get(1).getLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().get(1).getLabel().getFirst().getLangue()),
+                () -> assertEquals("op2024altLabelLg1", result.getOperations().getFirst().getAltLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().get(1).getAltLabel().getFirst().getLangue()),
+                () -> assertEquals("op2023altLabelLg1", result.getOperations().get(1).getAltLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().get(1).getAltLabel().getFirst().getLangue()),
+                () -> assertEquals("op2024labelLg2", result.getOperations().getFirst().getLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().getFirst().getLabel().get(1).getLangue())
+
         );
     }
 
@@ -1040,7 +1051,7 @@ public class OperationsServiceImplTest {
                 "s1197$http://id.insee.fr/operations/serie/s1197$Série liée 1$Linked series 1|s1198$http://id.insee.fr/operations/serie/s1198$Série liée 2$Linked series 2",
                 "s1010$http://id.insee.fr/operations/serie/s1010$Précédente FR$Previous EN",
                 "s1020$http://id.insee.fr/operations/serie/s1020$Suivante FR$Next EN",
-                "op2024$http://id.insee.fr/operations/operation/op2024$Opération 2024$Operation 2024|op2023$http://id.insee.fr/operations/operation/op2023$Opération 2023$Operation 2023",
+                "op2024$http://id.insee.fr/operations/operation/op2024$op2024labelLg1$op2024labelLg2$op2024altLabelLg1$op2024altLabelLg2|op2023$http://id.insee.fr/operations/operation/op2023$op2023labelLg1$op2023labelLg2$op2023altLabelLg1$op2023altLabelLg2",
                 null,
                 "http://id.insee.fr/qualite/rapport/1500", "1500",
                 LocalDate.of(2020, 1, 15),
