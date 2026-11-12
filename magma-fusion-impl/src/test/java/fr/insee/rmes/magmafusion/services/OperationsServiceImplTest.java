@@ -490,6 +490,21 @@ public class OperationsServiceImplTest {
     }
 
     @Test
+    void should_map_servicesCollecteurs_when_dataCollectors_is_present() {
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
+
+        assertAll(
+                () -> assertNotNull(result.getType()),
+                () -> assertEquals("dataCollectorId1", result.getServicesCollecteurs().getFirst().getId()),
+                () -> assertEquals(URI.create("dataCollector1"), result.getServicesCollecteurs().getFirst().getUri()),
+                () -> assertEquals("dataCollector1LabelLg1", result.getServicesCollecteurs().getFirst().getLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getServicesCollecteurs().getFirst().getLabel().getFirst().getLangue()),
+                () -> assertEquals("dataCollector1LabelLg2", result.getServicesCollecteurs().getFirst().getLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getServicesCollecteurs().getFirst().getLabel().get(1).getLangue())
+        );
+    }
+
+    @Test
     void should_not_set_type_when_type_is_null() {
         var result = service.convertSeriesDTOToSerieById(minimalSeriesDTO());
         assertNull(result.getType());
