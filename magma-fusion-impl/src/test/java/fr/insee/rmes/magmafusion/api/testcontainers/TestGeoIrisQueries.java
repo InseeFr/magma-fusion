@@ -18,7 +18,7 @@ import java.net.URI;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoIrisQueries extends TestsIntegration {
+class TestGeoIrisQueries extends TestsIntegration {
 
 
     @BeforeAll

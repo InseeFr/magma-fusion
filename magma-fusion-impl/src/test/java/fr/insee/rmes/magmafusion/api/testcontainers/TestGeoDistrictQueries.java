@@ -10,11 +10,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoCirconscriptionTerritorialeQueries extends TestsIntegration {
+class TestGeoDistrictQueries extends TestsIntegration {
+
 
     @BeforeAll
     static void installContainer() {
@@ -26,14 +28,14 @@ class GeoCirconscriptionTerritorialeQueries extends TestsIntegration {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
     @Nested
-    @DisplayName("geo/circonscriptionTerritoriale/{code}")
-    class GetCogCir {
+    @DisplayName("geo/district/{code}")
+    class GetCogDis {
 
         @Test
-        @DisplayName("When getcogcir 98601, returns CT 98601")
-        void should_return_ct_98601_when_getcogcir_98601() throws Exception {
+        @DisplayName("When getcogdis 98610, returns district 98610")
+        void should_return_district_98610_when_getcogdis_98610() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/circonscriptionTerritoriale/{code}?date={date}", "98601", "2025-01-01")
+                    .uri("/geo/district/{code}?date={date}", "98610", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -41,31 +43,31 @@ class GeoCirconscriptionTerritorialeQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("circonscription-territoriale-98601-expected.json"),
+                    loadExpectedJson("district-98610-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcir 98600 (inexistant), returns 404")
-        void should_return_404_when_getcogcir_98600_inexistant() {
+        @DisplayName("When getcogdis 98699 (inexistant), returns 404")
+        void should_return_404_when_getcogdis_98699_inexistant() {
             restTestClient.get()
-                    .uri("/geo/circonscriptionTerritoriale/{code}?date={date}", "98600", "2025-01-01")
+                    .uri("/geo/district/{code}?date={date}", "98699", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/circonscriptionTerritoriale/{code}/ascendants")
-    class GetCogCirAsc {
+    @DisplayName("geo/district/{code}/ascendants")
+    class GetCogDisAsc {
 
         @Test
-        @DisplayName("When getcogcirasc 98601 type null, returns 1 ascendant (COM 986)")
-        void should_return_1_ascendant_when_getcogcirasc_98601_type_null() throws Exception {
+        @DisplayName("When getcogdisasc 98610 type null, returns 1 ascendant (COM 986)")
+        void should_return_1_ascendant_when_getcogdisasc_98610_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/circonscriptionTerritoriale/{code}/ascendants?date={date}", "98601", "2025-01-01")
+                    .uri("/geo/district/{code}/ascendants?date={date}", "98610", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -73,18 +75,19 @@ class GeoCirconscriptionTerritorialeQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("circonscription-territoriale-98601-ascendants-expected.json"),
+                    loadExpectedJson("district-98610-ascendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcirasc 98601 type CollectiviteDOutreMer, returns 1 ascendant (COM 986)")
-        void should_return_1_ascendant_when_getcogcirasc_98601_type_collectiviteDOutreMer() throws Exception {
+        @DisplayName("When getcogdisasc 98610 type CollectiviteDOutreMer, returns 1 COM")
+        void should_return_1_com_when_getcogdisasc_98610_type_collectiviteDOutreMer() throws Exception {
+
             byte[] body = restTestClient.get()
-                    .uri("/geo/circonscriptionTerritoriale/{code}/ascendants?date={date}&type={type}",
-                            "98601", "2025-01-01", "CollectiviteDOutreMer")
+                    .uri("/geo/district/{code}/ascendants?date={date}&type={type}",
+                            "98610", "2025-01-01", "CollectiviteDOutreMer")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -92,7 +95,7 @@ class GeoCirconscriptionTerritorialeQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("circonscription-territoriale-98601-ascendants-collectiviteDOutreMer-expected.json"),
+                    loadExpectedJson("district-98610-ascendants-collectiviteDOutreMer-expected.json"),
                     bodyAsString(body),
                     true
             );

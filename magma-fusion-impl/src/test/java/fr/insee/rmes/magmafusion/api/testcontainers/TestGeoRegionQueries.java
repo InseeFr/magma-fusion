@@ -15,7 +15,7 @@ import org.springframework.test.context.DynamicPropertySource;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoRegionQueries extends TestsIntegration {
+class TestGeoRegionQueries extends TestsIntegration {
 
 
     @BeforeAll

@@ -10,11 +10,12 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoUniteUrbaineQueries extends TestsIntegration {
+class TestGeoAireDAttractionDesVillesQueries extends TestsIntegration {
 
 
     @BeforeAll
@@ -26,48 +27,48 @@ class GeoUniteUrbaineQueries extends TestsIntegration {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
+
     @Nested
-    @DisplayName("geo/uniteUrbaine2020/{code}")
-    class GetCogUu {
+    @DisplayName("geo/aireDAttractionDesVilles2020/{code}")
+    class GetCogAav {
 
         @Test
-        @DisplayName("When getcoguu 99101, returns unite urbaine 99101")
-        void should_return_uu_99101_when_getcoguu_99101() throws Exception {
+        @DisplayName("When getcogaav T01, returns AAV T01")
+        void should_return_aav_T01_when_getcogaav_T01() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/uniteUrbaine2020/{code}?date={date}", "99101", "2025-01-01")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}?date={date}", "T01", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
 
-
             JSONAssert.assertEquals(
-                    loadExpectedJson("unite-urbaine-99101-expected.json"),
+                    loadExpectedJson("aav-T01-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcoguu 99199 (inexistant), returns 404")
-        void should_return_404_when_getcoguu_99199_inexistant() {
+        @DisplayName("When getcogaav T99 (inexistant), returns 404")
+        void should_return_404_when_getcogaav_T99_inexistant() {
             restTestClient.get()
-                    .uri("/geo/uniteUrbaine2020/{code}?date={date}", "99199", "2025-01-01")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}?date={date}", "T99", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/uniteUrbaine2020/{code}/descendants")
-    class GetCogUuDes {
+    @DisplayName("geo/aireDAttractionDesVilles2020/{code}/descendants")
+    class GetCogAavDesc {
 
         @Test
-        @DisplayName("When getcoguudes 99101 type null, returns 2 descendants")
-        void should_return_2_descendants_when_getcoguudes_99101_type_null() throws Exception {
+        @DisplayName("When getcogaavdesc T01 type null, returns 9 descendants")
+        void should_return_9_descendants_when_getcogaavdesc_T01_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/uniteUrbaine2020/{code}/descendants?date={date}", "99101", "2025-01-01")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}/descendants?date={date}", "T01", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -75,18 +76,18 @@ class GeoUniteUrbaineQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("unite-urbaine-99101-descendants-expected.json"),
+                    loadExpectedJson("aav-T01-descendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcoguudes 99101 type Commune, returns 2 communes")
-        void should_return_2_communes_when_getcoguudes_99101_type_commune() throws Exception {
+        @DisplayName("When getcogaavdesc T01 type Commune, returns 3 communes")
+        void should_return_3_communes_when_getcogaavdesc_T01_type_commune() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/uniteUrbaine2020/{code}/descendants?date={date}&type={type}",
-                            "99101", "2025-01-01", "Commune")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}/descendants?date={date}&type={type}",
+                            "T01", "2025-01-01", "Commune")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -94,7 +95,7 @@ class GeoUniteUrbaineQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("unite-urbaine-99101-descendants-commune-expected.json"),
+                    loadExpectedJson("aav-T01-descendants-commune-expected.json"),
                     bodyAsString(body),
                     true
             );
@@ -102,14 +103,14 @@ class GeoUniteUrbaineQueries extends TestsIntegration {
     }
 
     @Nested
-    @DisplayName("geo/unitesUrbaines2020")
-    class GetCogUuListe {
+    @DisplayName("geo/airesDAttractionDesVilles2020")
+    class GetCogAavListe {
 
         @Test
-        @DisplayName("When getcoguuliste date 2025-01-01, returns 1 unite urbaine")
-        void should_return_1_uu_when_getcoguuliste_date() throws Exception {
+        @DisplayName("When getcogaavliste date=2025-01-01, returns 1 AAV active")
+        void should_return_1_aav_when_getcogaavliste_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/unitesUrbaines2020?date={date}", "2025-01-01")
+                    .uri("/geo/airesDAttractionDesVilles2020?date={date}", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -117,17 +118,17 @@ class GeoUniteUrbaineQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("unites-urbaines-liste-expected.json"),
+                    loadExpectedJson("aav-liste-date-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcoguuliste date *, returns 1 unite urbaine")
-        void should_return_1_uu_when_getcoguuliste_date_etoile() throws Exception {
+        @DisplayName("When getcogaavliste date=*, returns 2 AAVs")
+        void should_return_2_aav_when_getcogaavliste_etoile() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/unitesUrbaines2020?date={date}", "*")
+                    .uri("/geo/airesDAttractionDesVilles2020?date={date}", "*")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -135,7 +136,7 @@ class GeoUniteUrbaineQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("unites-urbaines-liste-expected.json"),
+                    loadExpectedJson("aav-liste-etoile-expected.json"),
                     bodyAsString(body),
                     true
             );

@@ -10,11 +10,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class DatasetsQueries extends TestsIntegration {
+class TestGeoZoneDEmploiQueries extends TestsIntegration {
+
 
     @BeforeAll
     static void installContainer() {
@@ -25,19 +27,15 @@ class DatasetsQueries extends TestsIntegration {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
-
-    private static final String DATASET_ID = "idDatasetTest";
-    private static final String DATASET_ID_2 = "idDatasetTest2";
-
     @Nested
-    @DisplayName("dataset/{id}")
-    class GetDataSetById {
+    @DisplayName("geo/zoneDEmploi2020/{code}")
+    class GetCogZe {
 
         @Test
-        @DisplayName("When getDataSetById, returns full dataset")
-        void should_return_full_dataset_when_getDataSetById() throws Exception {
+        @DisplayName("When getcogze 9901, returns zone d'emploi 9901")
+        void should_return_ze_9901_when_getcogze_9901() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/dataset/{id}", DATASET_ID)
+                    .uri("/geo/zoneDEmploi2020/{code}?date={date}", "9901", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -45,31 +43,31 @@ class DatasetsQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("dataset-idDatasetTest-expected.json"),
+                    loadExpectedJson("zone-d-emploi-9901-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getDataSetById with unknown id, returns 404")
-        void should_return_404_when_getDataSetById_unknown_id() {
+        @DisplayName("When getcogze 9999 (inexistant), returns 404")
+        void should_return_404_when_getcogze_9999_inexistant() {
             restTestClient.get()
-                    .uri("/dataset/id-inconnu")
+                    .uri("/geo/zoneDEmploi2020/{code}?date={date}", "9999", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("datasets/list")
-    class GetListDatasets {
+    @DisplayName("geo/zoneDEmploi2020/{code}/descendants")
+    class GetCogZeDesc {
 
         @Test
-        @DisplayName("When getListDatasets, returns datasets with correct fields")
-        void should_return_dataset_list_with_correct_fields() throws Exception {
+        @DisplayName("When getcogzedesc 9901 type null, returns 2 descendants")
+        void should_return_2_descendants_when_getcogzedesc_9901_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/datasets/list")
+                    .uri("/geo/zoneDEmploi2020/{code}/descendants?date={date}", "9901", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -77,17 +75,18 @@ class DatasetsQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("dataset-list-expected.json"),
+                    loadExpectedJson("zone-d-emploi-9901-descendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getListDatasets with dateMiseAJour before modified date, returns one of the datasets of the database")
-        void should_return_one_dataset_when_dateMiseAJour_is_before_modified_date() throws Exception {
+        @DisplayName("When getcogzedesc 9901 type Commune, returns 2 communes")
+        void should_return_2_communes_when_getcogzedesc_9901_type_commune() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/datasets/list?dateMiseAJour={dateMiseAJour}", "2025-01-01T00:00:00.000")
+                    .uri("/geo/zoneDEmploi2020/{code}/descendants?date={date}&type={type}",
+                            "9901", "2025-01-01", "Commune")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -95,33 +94,22 @@ class DatasetsQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("dataset-list2-expected.json"),
+                    loadExpectedJson("zone-d-emploi-9901-descendants-commune-expected.json"),
                     bodyAsString(body),
                     true
             );
-        }
-
-        @Test
-        @DisplayName("When getListDatasets with dateMiseAJour after modified date, returns empty list")
-        void should_return_empty_list_when_dateMiseAJour_is_after_modified_date() {
-            restTestClient.get()
-                    .uri("/datasets/list?dateMiseAJour={dateMiseAJour}", "2026-12-10T00:00:00.000")
-                    .exchange()
-                    .expectStatus().isOk()
-                    .expectBody()
-                    .jsonPath("$.length()").isEqualTo(0);
         }
     }
 
     @Nested
-    @DisplayName("dataset/{id}/distributions")
-    class GetDataSetDistributionsById {
+    @DisplayName("geo/zonesDEmploi2020")
+    class GetCogZeListe {
 
         @Test
-        @DisplayName("When getDataSetDistributionsById, returns distributions for the dataset")
-        void should_return_full_distributions_when_getDataSetDistributionsById() throws Exception {
+        @DisplayName("When getcogzeliste date 2025-01-01, returns 1 zone d'emploi")
+        void should_return_1_ze_when_getcogzeliste_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/dataset/{id}/distributions", DATASET_ID)
+                    .uri("/geo/zonesDEmploi2020?date={date}", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -129,21 +117,28 @@ class DatasetsQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("dataset-idDatasetTest-distributions-expected.json"),
+                    loadExpectedJson("zones-d-emploi-liste-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getDataSetDistributionsById, returns empty list for dataset with no distributions")
-        void should_return_empty_list_when_getDataSetDistributionsById_dataset_without_distributions() {
-            restTestClient.get()
-                    .uri("/dataset/{id}/distributions", DATASET_ID_2)
+        @DisplayName("When getcogzeliste date *, returns 1 zone d'emploi")
+        void should_return_1_ze_when_getcogzeliste_date_etoile() throws Exception {
+            byte[] body = restTestClient.get()
+                    .uri("/geo/zonesDEmploi2020?date={date}", "*")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
-                    .jsonPath("$.length()").isEqualTo(0);
+                    .returnResult()
+                    .getResponseBody();
+
+            JSONAssert.assertEquals(
+                    loadExpectedJson("zones-d-emploi-liste-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
         }
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.test.context.DynamicPropertySource;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoBassinDeVieQueries extends TestsIntegration {
+class TestGeoCollectiviteDOutreMerQueries extends TestsIntegration {
 
     @BeforeAll
     static void installContainer() {
@@ -25,15 +25,16 @@ class GeoBassinDeVieQueries extends TestsIntegration {
     static void overrideSpringProperties(DynamicPropertyRegistry registry) {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
+
     @Nested
-    @DisplayName("geo/bassinDeVie2022/{code}")
-    class GetCogBass {
+    @DisplayName("geo/collectiviteDOutreMer/{code}")
+    class GetCogColl {
 
         @Test
-        @DisplayName("When getcogbass 88001, returns BV 88001")
-        void should_return_bv_88001_when_getcogbass_88001() throws Exception {
+        @DisplayName("When getcogcoll 986, returns COM 986")
+        void should_return_com_986_when_getcogcoll_986() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/bassinDeVie2022/{code}?date={date}", "88001", "2025-01-01")
+                    .uri("/geo/collectiviteDOutreMer/{code}?date={date}", "986", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -41,31 +42,31 @@ class GeoBassinDeVieQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("bassin-de-vie-88001-expected.json"),
+                    loadExpectedJson("collectivite-d-outre-mer-986-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogbass 88099 (inexistant), returns 404")
-        void should_return_404_when_getcogbass_88099_inexistant() {
+        @DisplayName("When getcogcoll 989 (inexistant), returns 404")
+        void should_return_404_when_getcogcoll_989_inexistant() {
             restTestClient.get()
-                    .uri("/geo/bassinDeVie2022/{code}?date={date}", "88099", "2025-01-01")
+                    .uri("/geo/collectiviteDOutreMer/{code}?date={date}", "989", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/bassinDeVie2022/{code}/descendants")
-    class GetCogBassDes {
+    @DisplayName("geo/collectiviteDOutreMer/{code}/descendants")
+    class GetCogCollDes {
 
         @Test
-        @DisplayName("When getcogbassdes 88001 type null, returns 4 descendants (2 communes + 2 comdel)")
-        void should_return_4_descendants_when_getcogbassdes_88001_type_null() throws Exception {
+        @DisplayName("When getcogcolldes 986 type null, returns 2 descendants (CT 98601, district 98610)")
+        void should_return_2_descendants_when_getcogcolldes_986_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/bassinDeVie2022/{code}/descendants?date={date}", "88001", "2025-01-01")
+                    .uri("/geo/collectiviteDOutreMer/{code}/descendants?date={date}", "986", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -73,25 +74,26 @@ class GeoBassinDeVieQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("bassin-de-vie-88001-descendants-expected.json"),
+                    loadExpectedJson("collectivite-d-outre-mer-986-descendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogbassdes 88001 type Commune, returns 2 communes")
-        void should_return_2_communes_when_getcogbassdes_88001_type_commune() throws Exception {
+        @DisplayName("When getcogcolldes 986 type CirconscriptionTerritoriale, returns 1 descendant (CT 98601)")
+        void should_return_1_descendant_when_getcogcolldes_986_type_circonscriptionTerritoriale() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/bassinDeVie2022/{code}/descendants?date={date}&type={type}",
-                            "88001", "2025-01-01", "Commune")
+                    .uri("/geo/collectiviteDOutreMer/{code}/descendants?date={date}&type={type}",
+                            "986", "2025-01-01", "CirconscriptionTerritoriale")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
+
             JSONAssert.assertEquals(
-                    loadExpectedJson("bassin-de-vie-88001-descendants-commune-expected.json"),
+                    loadExpectedJson("collectivite-d-outre-mer-986-descendants-circonscriptionTerritoriale-expected.json"),
                     bodyAsString(body),
                     true
             );
@@ -99,15 +101,14 @@ class GeoBassinDeVieQueries extends TestsIntegration {
     }
 
     @Nested
-    @DisplayName("geo/bassinsDeVie2022")
-    class GetCogBassListe {
+    @DisplayName("geo/collectivitesDOutreMer")
+    class GetCogCollListe {
 
         @Test
-        @DisplayName("When getcogbassliste date=2025-01-01 filtreNom='Bassin de vie test 1', returns 1 BV")
-        void should_return_1_bv_when_getcogbassliste_filtre_nom() throws Exception {
+        @DisplayName("When getcogcollliste date=2025-01-01, returns 1 COM active (986)")
+        void should_return_1_com_when_getcogcollliste_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/bassinsDeVie2022?date={date}&filtreNom={filtreNom}",
-                            "2025-01-01", "Bassin de vie test 1")
+                    .uri("/geo/collectivitesDOutreMer?date={date}", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -115,17 +116,17 @@ class GeoBassinDeVieQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("bassins-de-vie-liste-filtre-expected.json"),
+                    loadExpectedJson("collectivites-d-outre-mer-liste-date-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogbassliste date=*, returns 2 BV")
-        void should_return_2_bv_when_getcogbassliste_etoile() throws Exception {
+        @DisplayName("When getcogcollliste date=*, returns 2 COMs (986, 987)")
+        void should_return_2_coms_when_getcogcollliste_etoile() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/bassinsDeVie2022?date={date}", "*")
+                    .uri("/geo/collectivitesDOutreMer?date={date}", "*")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -133,7 +134,7 @@ class GeoBassinDeVieQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("bassins-de-vie-liste-etoile-expected.json"),
+                    loadExpectedJson("collectivites-d-outre-mer-liste-etoile-expected.json"),
                     bodyAsString(body),
                     true
             );

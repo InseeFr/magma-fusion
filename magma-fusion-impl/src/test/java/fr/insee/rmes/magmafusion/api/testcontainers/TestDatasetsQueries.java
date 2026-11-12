@@ -14,7 +14,7 @@ import org.springframework.test.context.DynamicPropertySource;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoCollectiviteDOutreMerQueries extends TestsIntegration {
+class TestDatasetsQueries extends TestsIntegration {
 
     @BeforeAll
     static void installContainer() {
@@ -26,15 +26,18 @@ class GeoCollectiviteDOutreMerQueries extends TestsIntegration {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
 
+    private static final String DATASET_ID = "idDatasetTest";
+    private static final String DATASET_ID_2 = "idDatasetTest2";
+
     @Nested
-    @DisplayName("geo/collectiviteDOutreMer/{code}")
-    class GetCogColl {
+    @DisplayName("dataset/{id}")
+    class GetDataSetById {
 
         @Test
-        @DisplayName("When getcogcoll 986, returns COM 986")
-        void should_return_com_986_when_getcogcoll_986() throws Exception {
+        @DisplayName("When getDataSetById, returns full dataset")
+        void should_return_full_dataset_when_getDataSetById() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/collectiviteDOutreMer/{code}?date={date}", "986", "2025-01-01")
+                    .uri("/dataset/{id}", DATASET_ID)
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -42,31 +45,31 @@ class GeoCollectiviteDOutreMerQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("collectivite-d-outre-mer-986-expected.json"),
+                    loadExpectedJson("dataset-idDatasetTest-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcoll 989 (inexistant), returns 404")
-        void should_return_404_when_getcogcoll_989_inexistant() {
+        @DisplayName("When getDataSetById with unknown id, returns 404")
+        void should_return_404_when_getDataSetById_unknown_id() {
             restTestClient.get()
-                    .uri("/geo/collectiviteDOutreMer/{code}?date={date}", "989", "2025-01-01")
+                    .uri("/dataset/id-inconnu")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/collectiviteDOutreMer/{code}/descendants")
-    class GetCogCollDes {
+    @DisplayName("datasets/list")
+    class GetListDatasets {
 
         @Test
-        @DisplayName("When getcogcolldes 986 type null, returns 2 descendants (CT 98601, district 98610)")
-        void should_return_2_descendants_when_getcogcolldes_986_type_null() throws Exception {
+        @DisplayName("When getListDatasets, returns datasets with correct fields")
+        void should_return_dataset_list_with_correct_fields() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/collectiviteDOutreMer/{code}/descendants?date={date}", "986", "2025-01-01")
+                    .uri("/datasets/list")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -74,18 +77,17 @@ class GeoCollectiviteDOutreMerQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("collectivite-d-outre-mer-986-descendants-expected.json"),
+                    loadExpectedJson("dataset-list-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcolldes 986 type CirconscriptionTerritoriale, returns 1 descendant (CT 98601)")
-        void should_return_1_descendant_when_getcogcolldes_986_type_circonscriptionTerritoriale() throws Exception {
+        @DisplayName("When getListDatasets with dateMiseAJour before modified date, returns one of the datasets of the database")
+        void should_return_one_dataset_when_dateMiseAJour_is_before_modified_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/collectiviteDOutreMer/{code}/descendants?date={date}&type={type}",
-                            "986", "2025-01-01", "CirconscriptionTerritoriale")
+                    .uri("/datasets/list?dateMiseAJour={dateMiseAJour}", "2025-01-01T00:00:00.000")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -93,22 +95,33 @@ class GeoCollectiviteDOutreMerQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("collectivite-d-outre-mer-986-descendants-circonscriptionTerritoriale-expected.json"),
+                    loadExpectedJson("dataset-list2-expected.json"),
                     bodyAsString(body),
                     true
             );
+        }
+
+        @Test
+        @DisplayName("When getListDatasets with dateMiseAJour after modified date, returns empty list")
+        void should_return_empty_list_when_dateMiseAJour_is_after_modified_date() {
+            restTestClient.get()
+                    .uri("/datasets/list?dateMiseAJour={dateMiseAJour}", "2026-12-10T00:00:00.000")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .jsonPath("$.length()").isEqualTo(0);
         }
     }
 
     @Nested
-    @DisplayName("geo/collectivitesDOutreMer")
-    class GetCogCollListe {
+    @DisplayName("dataset/{id}/distributions")
+    class GetDataSetDistributionsById {
 
         @Test
-        @DisplayName("When getcogcollliste date=2025-01-01, returns 1 COM active (986)")
-        void should_return_1_com_when_getcogcollliste_date() throws Exception {
+        @DisplayName("When getDataSetDistributionsById, returns distributions for the dataset")
+        void should_return_full_distributions_when_getDataSetDistributionsById() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/collectivitesDOutreMer?date={date}", "2025-01-01")
+                    .uri("/dataset/{id}/distributions", DATASET_ID)
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -116,28 +129,21 @@ class GeoCollectiviteDOutreMerQueries extends TestsIntegration {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("collectivites-d-outre-mer-liste-date-expected.json"),
+                    loadExpectedJson("dataset-idDatasetTest-distributions-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcollliste date=*, returns 2 COMs (986, 987)")
-        void should_return_2_coms_when_getcogcollliste_etoile() throws Exception {
-            byte[] body = restTestClient.get()
-                    .uri("/geo/collectivitesDOutreMer?date={date}", "*")
+        @DisplayName("When getDataSetDistributionsById, returns empty list for dataset with no distributions")
+        void should_return_empty_list_when_getDataSetDistributionsById_dataset_without_distributions() {
+            restTestClient.get()
+                    .uri("/dataset/{id}/distributions", DATASET_ID_2)
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
-                    .returnResult()
-                    .getResponseBody();
-
-            JSONAssert.assertEquals(
-                    loadExpectedJson("collectivites-d-outre-mer-liste-etoile-expected.json"),
-                    bodyAsString(body),
-                    true
-            );
+                    .jsonPath("$.length()").isEqualTo(0);
         }
     }
 }
