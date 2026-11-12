@@ -11,12 +11,12 @@ import java.io.IOException;
 
 @SpringBootTest
 @TestPropertySource(properties = "spring.profiles.active=security.disabled")
-public abstract class BaseIntegrationTest {
+public abstract class TestsIntegration {
 
     @Autowired
     protected RestTestClient restTestClient;
 
-    protected final TestResourceLoader resourceLoader = new TestResourceLoader();
+    protected final TestsResourceLoader resourceLoader = new TestsResourceLoader();
     protected final StringUtils stringUtils = new StringUtils();
 
     @BeforeAll

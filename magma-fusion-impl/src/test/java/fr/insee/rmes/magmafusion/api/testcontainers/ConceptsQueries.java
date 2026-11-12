@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
-import fr.insee.rmes.magmafusion.api.testcontainers.utils.BaseIntegrationTest;
+import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestsIntegration;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -19,7 +19,7 @@ import java.net.URI;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class ConceptsQueriesTest extends BaseIntegrationTest {
+class ConceptsQueries extends TestsIntegration {
 
     @BeforeAll
     static void installContainer() {

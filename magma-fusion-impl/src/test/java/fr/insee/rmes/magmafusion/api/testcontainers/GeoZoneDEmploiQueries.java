@@ -1,7 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
-import fr.insee.rmes.magmafusion.api.testcontainers.utils.BaseIntegrationTest;
+import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestsIntegration;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -15,7 +15,8 @@ import org.springframework.test.context.DynamicPropertySource;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
+class GeoZoneDEmploiQueries extends TestsIntegration {
+
 
     @BeforeAll
     static void installContainer() {
@@ -27,14 +28,14 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
     @Nested
-    @DisplayName("geo/communeAssociee/{code}")
-    class GetCogComA {
+    @DisplayName("geo/zoneDEmploi2020/{code}")
+    class GetCogZe {
 
         @Test
-        @DisplayName("When getcogcoma 99101, returns commune associee 99101")
-        void should_return_commune_associee_99101_when_getcogcoma_99101() throws Exception {
+        @DisplayName("When getcogze 9901, returns zone d'emploi 9901")
+        void should_return_ze_9901_when_getcogze_9901() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}?date={date}", "99101", "2025-01-01")
+                    .uri("/geo/zoneDEmploi2020/{code}?date={date}", "9901", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -42,31 +43,31 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-associee-99101-expected.json"),
+                    loadExpectedJson("zone-d-emploi-9901-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcoma 99100 (inexistant), returns 404")
-        void should_return_404_when_getcogcoma_99100_inexistant() {
+        @DisplayName("When getcogze 9999 (inexistant), returns 404")
+        void should_return_404_when_getcogze_9999_inexistant() {
             restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}?date={date}", "99100", "2025-01-01")
+                    .uri("/geo/zoneDEmploi2020/{code}?date={date}", "9999", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/communeAssociee/{code}/ascendants")
-    class GetCogComAAsc {
+    @DisplayName("geo/zoneDEmploi2020/{code}/descendants")
+    class GetCogZeDesc {
 
         @Test
-        @DisplayName("When getcogcomaasc 99101 type null, returns 5 ascendants (aav T01, arr 991, com 99001, dep 10, reg 99)")
-        void should_return_5_ascendants_when_getcogcomaasc_99101_type_null() throws Exception {
+        @DisplayName("When getcogzedesc 9901 type null, returns 2 descendants")
+        void should_return_2_descendants_when_getcogzedesc_9901_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}/ascendants?date={date}", "99101", "2025-01-01")
+                    .uri("/geo/zoneDEmploi2020/{code}/descendants?date={date}", "9901", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -74,18 +75,18 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-associee-99101-ascendants-expected.json"),
+                    loadExpectedJson("zone-d-emploi-9901-descendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcomaasc 99101 type Departement, returns 1 departement")
-        void should_return_1_departement_when_getcogcomaasc_99101_type_departement() throws Exception {
+        @DisplayName("When getcogzedesc 9901 type Commune, returns 2 communes")
+        void should_return_2_communes_when_getcogzedesc_9901_type_commune() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}/ascendants?date={date}&type={type}",
-                            "99101", "2025-01-01", "Departement")
+                    .uri("/geo/zoneDEmploi2020/{code}/descendants?date={date}&type={type}",
+                            "9901", "2025-01-01", "Commune")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -93,7 +94,7 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-associee-99101-ascendants-departement-expected.json"),
+                    loadExpectedJson("zone-d-emploi-9901-descendants-commune-expected.json"),
                     bodyAsString(body),
                     true
             );
@@ -101,14 +102,14 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
     }
 
     @Nested
-    @DisplayName("geo/communesAssociees")
-    class GetCogComAListe {
+    @DisplayName("geo/zonesDEmploi2020")
+    class GetCogZeListe {
 
         @Test
-        @DisplayName("When getcogcomaliste date=2025-01-01, returns 1 commune associee active (99101)")
-        void should_return_1_commune_associee_when_getcogcomaliste_date() throws Exception {
+        @DisplayName("When getcogzeliste date 2025-01-01, returns 1 zone d'emploi")
+        void should_return_1_ze_when_getcogzeliste_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communesAssociees?date={date}", "2025-01-01")
+                    .uri("/geo/zonesDEmploi2020?date={date}", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -116,17 +117,17 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("communes-associees-liste-date-expected.json"),
+                    loadExpectedJson("zones-d-emploi-liste-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcomaliste date=*, returns 2 communes associees (99101, 99102)")
-        void should_return_2_communes_associees_when_getcogcomaliste_etoile() throws Exception {
+        @DisplayName("When getcogzeliste date *, returns 1 zone d'emploi")
+        void should_return_1_ze_when_getcogzeliste_date_etoile() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communesAssociees?date={date}", "*")
+                    .uri("/geo/zonesDEmploi2020?date={date}", "*")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -134,7 +135,7 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("communes-associees-liste-etoile-expected.json"),
+                    loadExpectedJson("zones-d-emploi-liste-expected.json"),
                     bodyAsString(body),
                     true
             );
