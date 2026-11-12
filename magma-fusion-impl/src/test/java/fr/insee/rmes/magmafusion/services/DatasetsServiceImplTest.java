@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+import static fr.insee.rmes.magmafusion.services.utils.ResourceLoaderServiceTest.loadResource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,16 +57,9 @@ class DatasetsServiceImplTest {
         var result = service.convertDatasetDTOsToDataSets(dtos);
 
         assertNotNull(result, "Result should not be null");
-
         String data = objectMapper.writeValueAsString(result);
-        String expected = new String(
-                Objects.requireNonNull(getClass().getClassLoader()
-                                .getResourceAsStream("services/datasets-list-expected.json"))
-                        .readAllBytes(),
-                StandardCharsets.UTF_8
-        );
+        String expected = new String(loadResource("datasets-list-expected.json"));
         JSONAssert.assertEquals(expected, data, JSONCompareMode.LENIENT);
-
     }
 
     // =========================================================
