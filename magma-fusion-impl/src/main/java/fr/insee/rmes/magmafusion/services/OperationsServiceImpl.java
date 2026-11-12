@@ -99,15 +99,15 @@ public class OperationsServiceImpl implements OperationsService {
             serieById.setRapportQualite(rapportQualite);
         }
 
-        serieById.setSeriesPrecedentes(parseRefList(dto.previousSeries()));
-        serieById.setSeriesSuivantes(parseRefList(dto.nextSeries()));
-        serieById.setSeriesLiees(parseRefList(dto.seeAlsoSeries()));
-        serieById.setOperations(parseRefList(dto.operations()));
-        serieById.setIndicateurs(parseRefList(dto.indicators()));
-        serieById.setProprietaires(parseRefList(dto.creators()));
-        serieById.setOrganismesResponsables(parseRefList(dto.publishers()));
-        serieById.setPartenaires(parseRefList(dto.contributors()));
-        serieById.setServicesCollecteurs(parseRefList(dto.dataCollectors()));
+        serieById.setSeriesPrecedentes(parseIdUriLabelList(dto.previousSeries()));
+        serieById.setSeriesSuivantes(parseIdUriLabelList(dto.nextSeries()));
+        serieById.setSeriesLiees(parseIdUriLabelList(dto.seeAlsoSeries()));
+        serieById.setOperations(parseIdUriLabelAltLabelList(dto.operations()));
+        serieById.setIndicateurs(parseIdUriLabelList(dto.indicators()));
+        serieById.setProprietaires(parseIdUriLabelList(dto.creators()));
+        serieById.setOrganismesResponsables(parseIdUriLabelList(dto.publishers()));
+        serieById.setPartenaires(parseIdUriLabelList(dto.contributors()));
+        serieById.setServicesCollecteurs(parseIdUriLabelList(dto.dataCollectors()));
 
         return serieById;
     }
@@ -199,35 +199,6 @@ public class OperationsServiceImpl implements OperationsService {
         return famille;
     }
 
-    private IdUriLabel parseSingleRef(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return null;
-        }
-        String[] parts = raw.split("\\$", -1);
-        IdUriLabel ref = new IdUriLabel();
-        ref.setId(parts.length > 0 ? parts[0] : null);
-        String uriStr = parts.length > 1 ? parts[1] : null;
-        ref.setUri(StringUtils.hasText(uriStr) ? URI.create(uriStr) : null);
-        ref.setLabel(buildLocalisedLabels(
-                parts.length > 2 ? parts[2] : null,
-                parts.length > 3 ? parts[3] : null,
-                this.lg1, this.lg2));
-        return ref;
-    }
-
-    private List<IdUriLabel> parseRefList(String raw) {
-        List<IdUriLabel> list = new ArrayList<>();
-        if (raw == null || raw.isBlank()) {
-            return list;
-        }
-        for (String item : raw.split("\\|")) {
-            IdUriLabel ref = parseSingleRef(item);
-            if (ref != null) {
-                list.add(ref);
-            }
-        }
-        return list;
-    }
 
     @Override
     public Indicateur convertIndicateurDTOToIndicateur(IndicateurDTO dto) {
@@ -314,6 +285,35 @@ public class OperationsServiceImpl implements OperationsService {
                     parts.length > 2 ? parts[2] : null,
                     parts.length > 3 ? parts[3] : null,
                     lg1,lg2));
+            list.add(ref);
+        }
+        return list;
+    }
+
+    private List<IdUriLabelAltLabel>  parseIdUriLabelAltLabelList(String raw) {
+        List<IdUriLabelAltLabel> list = new ArrayList<>();
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+        for (String item : raw.split("\\|")) {
+            String[] parts = item.split("\\$", -1);
+            String id = parts.length > 0 ? parts[0] : null;
+            if (id == null || id.isBlank()) {
+                continue;
+            }
+            IdUriLabelAltLabel ref = new IdUriLabelAltLabel(id);
+            if (parts.length > 1 && !parts[1].isBlank()) {
+                ref.setUri(toUri(parts[1]));
+            }
+            ref.setLabel(buildLocalisedLabels(
+                    parts.length > 2 ? parts[2] : null,
+                    parts.length > 3 ? parts[3] : null,
+                    lg1,lg2));
+            ref.setAltLabel(buildLocalisedLabels(
+                    parts.length > 4 ? parts[4] : null,
+                    parts.length > 5 ? parts[5] : null,
+                    lg1, lg2));
+            list.add(ref);
             list.add(ref);
         }
         return list;

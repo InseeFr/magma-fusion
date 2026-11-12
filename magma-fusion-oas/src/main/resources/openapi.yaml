@@ -6804,6 +6804,11 @@ components:
                 langue: 'fr'
               - contenu: 'Community innovation survey 2018'
                 langue: 'en'
+            altLabel:
+              - contenu: 'CIS 2018'
+                langue: 'fr'
+              - contenu: 'CIS 2018'
+                langue: 'en'
         indicateurs:
           -
         dateMiseAJour: '2025-04-03'
@@ -8918,7 +8923,7 @@ components:
         operations:
           type: array
           items:
-            $ref: 'id-uri-label.schema.json'
+            $ref: 'id-uri-label-altLabel.schema.json'
         indicateurs:
           type: array
           items:
