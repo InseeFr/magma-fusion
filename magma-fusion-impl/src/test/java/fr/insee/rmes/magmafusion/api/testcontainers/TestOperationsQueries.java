@@ -43,7 +43,7 @@ class TestOperationsQueries extends TestsIntegration {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
-            String responseBody = bodyAsString(body);
+
             JSONAssert.assertEquals(
                     loadExpectedJson("serie-idSeriePrincipaleTest-expected.json"),
                     bodyAsString(body),
