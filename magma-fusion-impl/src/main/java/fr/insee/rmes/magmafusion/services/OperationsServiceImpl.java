@@ -265,59 +265,107 @@ public class OperationsServiceImpl implements OperationsService {
     }
 
     private List<IdUriLabel> parseIdUriLabelList(String raw) {
-        List<IdUriLabel> list = new ArrayList<>();
         if (raw == null || raw.isBlank()) {
             return null;
         }
+
+        List<IdUriLabel> list = new ArrayList<>();
         for (String item : raw.split("\\|")) {
-            String[] parts = item.split("\\$", -1);
-            String id = parts.length > 0 ? parts[0] : null;
-            if (id == null || id.isBlank()) {
-                continue;
+            IdUriLabel ref = parseIdUriLabelItem(item);
+            if (ref != null) {
+                list.add(ref);
             }
-            IdUriLabel ref = new IdUriLabel(id);
-            if (parts.length > 1 && !parts[1].isBlank()) {
-                ref.setUri(toUri(parts[1]));
-            }
-            ref.setLabel(buildLocalisedLabels(
-                    parts.length > 2 ? parts[2] : null,
-                    parts.length > 3 ? parts[3] : null,
-                    lg1,lg2));
-            list.add(ref);
         }
         return list;
     }
 
+    private IdUriLabel parseIdUriLabelItem(String item) {
+        String[] parts = item.split("\\$", -1);
+        String id = parts.length > 0 ? parts[0] : null;
 
-    private List<IdUriLabelAltLabelMillesime>  parseIdUriLabelAltLabelMillesimeList(String raw) {
-        List<IdUriLabelAltLabelMillesime> list = new ArrayList<>();
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+
+        IdUriLabel ref = new IdUriLabel(id);
+
+        setUriIfPresentForIdUriLabel(ref, parts);
+        setLabelIfPresentForIdUriLabel(ref, parts);
+
+        return ref;
+    }
+
+    private void setUriIfPresentForIdUriLabel(IdUriLabel ref, String[] parts) {
+        if (parts.length > 1 && !parts[1].isBlank()) {
+            ref.setUri(toUri(parts[1]));
+        }
+    }
+
+    private void setLabelIfPresentForIdUriLabel(IdUriLabel ref, String[] parts) {
+        ref.setLabel(buildLocalisedLabels(
+                parts.length > 2 ? parts[2] : null,
+                parts.length > 3 ? parts[3] : null,
+                lg1, lg2));
+    }
+
+
+    private List<IdUriLabelAltLabelMillesime> parseIdUriLabelAltLabelMillesimeList(String raw) {
         if (raw == null || raw.isBlank()) {
             return null;
         }
+
+        List<IdUriLabelAltLabelMillesime> list = new ArrayList<>();
         for (String item : raw.split("\\|")) {
-            String[] parts = item.split("\\$", -1);
-            String id = parts.length > 0 ? parts[0] : null;
-            if (id == null || id.isBlank()) {
-                continue;
+            IdUriLabelAltLabelMillesime ref = parseItem(item);
+            if (ref != null) {
+                list.add(ref);
             }
-            IdUriLabelAltLabelMillesime ref = new IdUriLabelAltLabelMillesime(id);
-            if (parts.length > 1 && !parts[1].isBlank()) {
-                ref.setUri(toUri(parts[1]));
-            }
-            ref.setLabel(buildLocalisedLabels(
-                    parts.length > 2 ? parts[2] : null,
-                    parts.length > 3 ? parts[3] : null,
-                    lg1,lg2));
-            ref.setAltLabel(buildLocalisedLabels(
-                    parts.length > 4 ? parts[4] : null,
-                    parts.length > 5 ? parts[5] : null,
-                    lg1, lg2));
-            if (parts.length > 6 && !parts[6].isBlank()) {
-                ref.setMillesime(parts[6]);
-            }
-            list.add(ref);
         }
         return list;
+    }
+
+    private IdUriLabelAltLabelMillesime parseItem(String item) {
+        String[] parts = item.split("\\$", -1);
+        String id = parts.length > 0 ? parts[0] : null;
+
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+
+        IdUriLabelAltLabelMillesime ref = new IdUriLabelAltLabelMillesime(id);
+
+        setUriIfPresentForIdUriLabelMillesime(ref, parts);
+        setLabelIfPresentForIdUriLabelMillesime(ref, parts);
+        setAltLabelIfPresentForIdUriLabelMillesime(ref, parts);
+        setMillesimeIfPresentForIdUriLabelMillesime(ref, parts);
+
+        return ref;
+    }
+
+    private void setUriIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        if (parts.length > 1 && !parts[1].isBlank()) {
+            ref.setUri(toUri(parts[1]));
+        }
+    }
+
+    private void setLabelIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        ref.setLabel(buildLocalisedLabels(
+                parts.length > 2 ? parts[2] : null,
+                parts.length > 3 ? parts[3] : null,
+                lg1, lg2));
+    }
+
+    private void setAltLabelIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        ref.setAltLabel(buildLocalisedLabels(
+                parts.length > 4 ? parts[4] : null,
+                parts.length > 5 ? parts[5] : null,
+                lg1, lg2));
+    }
+
+    private void setMillesimeIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        if (parts.length > 6 && !parts[6].isBlank()) {
+            ref.setMillesime(parts[6]);
+        }
     }
 
     private URI toUri(String uriString) {
