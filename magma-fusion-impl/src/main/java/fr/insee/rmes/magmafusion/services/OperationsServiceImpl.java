@@ -54,8 +54,6 @@ public class OperationsServiceImpl implements OperationsService {
                 dto.seriesAltLabelLg2(),
                 lg1,lg2));
 
-        serieById.setMillesime(dto.temporal());
-
         serieById.setResume(buildLocalisedLabels(
                 dto.seriesAbstractLg1(),
                 dto.seriesAbstractLg2(),
@@ -102,7 +100,7 @@ public class OperationsServiceImpl implements OperationsService {
         serieById.setSeriesPrecedentes(parseIdUriLabelList(dto.previousSeries()));
         serieById.setSeriesSuivantes(parseIdUriLabelList(dto.nextSeries()));
         serieById.setSeriesLiees(parseIdUriLabelList(dto.seeAlsoSeries()));
-        serieById.setOperations(parseIdUriLabelAltLabelList(dto.operations()));
+        serieById.setOperations(parseIdUriLabelAltLabelMillesimeList(dto.operations()));
         serieById.setIndicateurs(parseIdUriLabelList(dto.indicators()));
         serieById.setProprietaires(parseIdUriLabelList(dto.creators()));
         serieById.setOrganismesResponsables(parseIdUriLabelList(dto.publishers()));
@@ -290,8 +288,9 @@ public class OperationsServiceImpl implements OperationsService {
         return list;
     }
 
-    private List<IdUriLabelAltLabel>  parseIdUriLabelAltLabelList(String raw) {
-        List<IdUriLabelAltLabel> list = new ArrayList<>();
+
+    private List<IdUriLabelAltLabelMillesime>  parseIdUriLabelAltLabelMillesimeList(String raw) {
+        List<IdUriLabelAltLabelMillesime> list = new ArrayList<>();
         if (raw == null || raw.isBlank()) {
             return null;
         }
@@ -301,7 +300,7 @@ public class OperationsServiceImpl implements OperationsService {
             if (id == null || id.isBlank()) {
                 continue;
             }
-            IdUriLabelAltLabel ref = new IdUriLabelAltLabel(id);
+            IdUriLabelAltLabelMillesime ref = new IdUriLabelAltLabelMillesime(id);
             if (parts.length > 1 && !parts[1].isBlank()) {
                 ref.setUri(toUri(parts[1]));
             }
@@ -313,6 +312,9 @@ public class OperationsServiceImpl implements OperationsService {
                     parts.length > 4 ? parts[4] : null,
                     parts.length > 5 ? parts[5] : null,
                     lg1, lg2));
+            if (parts.length > 6 && !parts[6].isBlank()) {
+                ref.setMillesime(parts[6]);
+            }
             list.add(ref);
         }
         return list;

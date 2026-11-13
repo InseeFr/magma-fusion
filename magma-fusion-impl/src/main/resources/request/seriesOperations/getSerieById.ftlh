@@ -28,8 +28,6 @@ WHERE {
 	#Alt labels
 	OPTIONAL {?series skos:altLabel ?seriesAltLabelLg1 . FILTER (lang(?seriesAltLabelLg1) = ?lg1)}
 	OPTIONAL {?series skos:altLabel ?seriesAltLabelLg2 . FILTER (lang(?seriesAltLabelLg2) = ?lg2)}
-    # Millésime
-    OPTIONAL {?operation dcterms:temporal ?temporal}
 	#Abstract
 	OPTIONAL {?series dcterms:abstract ?seriesAbstractLg1 . FILTER (lang(?seriesAbstractLg1) = ?lg1)}
 	OPTIONAL {?series dcterms:abstract ?seriesAbstractLg2 . FILTER (lang(?seriesAbstractLg2) = ?lg2)}
@@ -97,7 +95,7 @@ WHERE {
 	}
 	#Opérations
 	OPTIONAL {
-		SELECT ?series (GROUP_CONCAT(DISTINCT CONCAT(STR(?operationId), '$', STR(?operation), '$', COALESCE(?operationLabelLg1, ''), '$', COALESCE(?operationLabelLg2, ''), '$', COALESCE(?operationAltLabelLg1, ''), '$', COALESCE(?operationAltLabelLg2, '')) ; SEPARATOR='|') AS ?operations)
+		SELECT ?series (GROUP_CONCAT(DISTINCT CONCAT(STR(?operationId), '$', STR(?operation), '$', COALESCE(?operationLabelLg1, ''), '$', COALESCE(?operationLabelLg2, ''), '$', COALESCE(?operationAltLabelLg1, ''), '$', COALESCE(?operationAltLabelLg2, ''), '$', COALESCE(STR(?temporal), '')) ; SEPARATOR='|') AS ?operations)
 		WHERE {
 			?operation a insee:StatisticalOperation ; (^dcterms:hasPart|dcterms:isPartOf) ?series .
 			BIND(STRAFTER(STR(?operation),'/operations/operation/') AS ?operationId ) .
@@ -105,6 +103,7 @@ WHERE {
 			OPTIONAL {?operation skos:prefLabel ?operationLabelLg2 . FILTER (lang(?operationLabelLg2) = '${LG2}')}
         	OPTIONAL {?operation skos:altLabel ?operationAltLabelLg1 . FILTER (lang(?operationAltLabelLg1) = '${LG1}')}
         	OPTIONAL {?operation skos:altLabel ?operationAltLabelLg2 . FILTER (lang(?operationAltLabelLg2) = '${LG2}')}
+            OPTIONAL {?operation dcterms:temporal ?temporal}
 		}
 		GROUP BY ?series
 	}

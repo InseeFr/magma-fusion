@@ -466,15 +466,6 @@ public class OperationsServiceImplTest {
         );
     }
 
-    @Test
-    void should_map_millesime_when_present() {
-        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
-
-        assertAll(
-                () -> assertNotNull(result.getMillesime()),
-                () -> assertEquals("2020", result.getMillesime())
-        );
-    }
 
     @Test
     void should_map_type_when_type_uri_is_present() {
@@ -617,9 +608,16 @@ public class OperationsServiceImplTest {
                 () -> assertEquals("op2023altLabelLg1", result.getOperations().get(1).getAltLabel().getFirst().getContenu()),
                 () -> assertEquals("fr", result.getOperations().get(1).getAltLabel().getFirst().getLangue()),
                 () -> assertEquals("op2024labelLg2", result.getOperations().getFirst().getLabel().get(1).getContenu()),
-                () -> assertEquals("en", result.getOperations().getFirst().getLabel().get(1).getLangue())
-
-        );
+                () -> assertEquals("en", result.getOperations().getFirst().getLabel().get(1).getLangue()),
+                () -> assertEquals("op2023labelLg2", result.getOperations().get(1).getLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().get(1).getLabel().get(1).getLangue()),
+                () -> assertEquals("op2024altLabelLg2", result.getOperations().getFirst().getAltLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().getFirst().getAltLabel().get(1).getLangue()),
+                () -> assertEquals("op2023altLabelLg2", result.getOperations().get(1).getAltLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().get(1).getAltLabel().get(1).getLangue()),
+                () -> assertEquals("2024", result.getOperations().getFirst().getMillesime()),
+                () -> assertEquals("2023", result.getOperations().get(1).getMillesime())
+                );
     }
 
     @Test
@@ -1050,7 +1048,7 @@ public class OperationsServiceImplTest {
                 "s1197$http://id.insee.fr/operations/serie/s1197$Série liée 1$Linked series 1|s1198$http://id.insee.fr/operations/serie/s1198$Série liée 2$Linked series 2",
                 "s1010$http://id.insee.fr/operations/serie/s1010$Précédente FR$Previous EN",
                 "s1020$http://id.insee.fr/operations/serie/s1020$Suivante FR$Next EN",
-                "op2024$http://id.insee.fr/operations/operation/op2024$op2024labelLg1$op2024labelLg2$op2024altLabelLg1$op2024altLabelLg2|op2023$http://id.insee.fr/operations/operation/op2023$op2023labelLg1$op2023labelLg2$op2023altLabelLg1$op2023altLabelLg2",
+                "op2024$http://id.insee.fr/operations/operation/op2024$op2024labelLg1$op2024labelLg2$op2024altLabelLg1$op2024altLabelLg2$2024|op2023$http://id.insee.fr/operations/operation/op2023$op2023labelLg1$op2023labelLg2$op2023altLabelLg1$op2023altLabelLg2$2023",
                 null,
                 "http://id.insee.fr/qualite/rapport/1500", "1500",
                 LocalDate.of(2020, 1, 15),

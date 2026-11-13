@@ -9,7 +9,6 @@
     {"langue": "fr", "contenu": "AltLabel Série fr"},
     {"langue": "en", "contenu": "Series AltLabel en"}
   ],
-  "millesime" : "2010",
   "resume": [
     {"langue": "fr", "contenu": "Résumé de la série test"},
     {"langue": "en", "contenu": "Test series abstract"}
@@ -91,7 +90,8 @@
       "altLabel": [
         {"langue": "fr", "contenu": "AltLabel Opération 1 fr"},
         {"langue": "en", "contenu": "Operation 1 AltLabel en"}
-      ]
+      ],
+      "millesime" : "2010"
     },
     {
       "id": "idOperation2SeriePrincipaleTest",
@@ -141,6 +141,16 @@
       "label": [
         {"langue": "fr", "contenu": "Label Organisation Partenaire fr"},
         {"langue": "en", "contenu": "Partner Organisation Label en"}
+      ]
+    }
+  ],
+  "servicesCollecteurs": [
+    {
+      "id": "idServiceCollecteur1",
+      "uri": "http://bauhaus/organisations/insee/HIE1000000",
+      "label": [
+        {"langue": "fr", "contenu": "Label ServiceCollecteur1 fr"},
+        {"langue": "en", "contenu": "DataCollector1 Label en"}
       ]
     }
   ],
