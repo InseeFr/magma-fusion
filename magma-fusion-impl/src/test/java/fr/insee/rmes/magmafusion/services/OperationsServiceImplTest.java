@@ -627,16 +627,15 @@ public class OperationsServiceImplTest {
         var result = service.convertSeriesDTOToSerieById(minimalSeriesDTO());
 
         assertAll(
-                () -> assertNotNull(result.getOperations()),
-                () -> assertTrue(result.getOperations().isEmpty()),
-                () -> assertTrue(result.getIndicateurs().isEmpty()),
-                () -> assertTrue(result.getSeriesPrecedentes().isEmpty()),
-                () -> assertTrue(result.getSeriesSuivantes().isEmpty()),
-                () -> assertTrue(result.getSeriesLiees().isEmpty()),
-                () -> assertTrue(result.getProprietaires().isEmpty()),
-                () -> assertTrue(result.getOrganismesResponsables().isEmpty()),
-                () -> assertTrue(result.getPartenaires().isEmpty()),
-                () -> assertTrue(result.getServicesCollecteurs().isEmpty())
+                () -> assertNull(result.getOperations()),
+                () -> assertNull(result.getIndicateurs()),
+                () -> assertNull(result.getSeriesPrecedentes()),
+                () -> assertNull(result.getSeriesSuivantes()),
+                () -> assertNull(result.getSeriesLiees()),
+                () -> assertNull(result.getProprietaires()),
+                () -> assertNull(result.getOrganismesResponsables()),
+                () -> assertNull(result.getPartenaires()),
+                () -> assertNull(result.getServicesCollecteurs())
         );
     }
 
