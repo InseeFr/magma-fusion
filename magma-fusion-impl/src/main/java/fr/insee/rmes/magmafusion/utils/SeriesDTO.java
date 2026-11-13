@@ -9,6 +9,7 @@ public record SeriesDTO(
         String seriesLabelLg2,
         String seriesAltLabelLg1,
         String seriesAltLabelLg2,
+        String temporal,
         String seriesAbstractLg1,
         String seriesAbstractLg2,
         String seriesHistoryNoteLg1,

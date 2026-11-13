@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.*;
 
 @Service
 public class OperationsServiceImpl implements OperationsService {
@@ -97,15 +97,15 @@ public class OperationsServiceImpl implements OperationsService {
             serieById.setRapportQualite(rapportQualite);
         }
 
-        serieById.setSeriesPrecedentes(parseRefList(dto.previousSeries()));
-        serieById.setSeriesSuivantes(parseRefList(dto.nextSeries()));
-        serieById.setSeriesLiees(parseRefList(dto.seeAlsoSeries()));
-        serieById.setOperations(parseRefList(dto.operations()));
-        serieById.setIndicateurs(parseRefList(dto.indicators()));
-        serieById.setProprietaires(parseRefList(dto.creators()));
-        serieById.setOrganismesResponsables(parseRefList(dto.publishers()));
-        serieById.setPartenaires(parseRefList(dto.contributors()));
-        serieById.setServicesCollecteurs(parseRefList(dto.dataCollectors()));
+        serieById.setSeriesPrecedentes(parseIdUriLabelList(dto.previousSeries()));
+        serieById.setSeriesSuivantes(parseIdUriLabelList(dto.nextSeries()));
+        serieById.setSeriesLiees(parseIdUriLabelList(dto.seeAlsoSeries()));
+        serieById.setOperations(parseIdUriLabelAltLabelMillesimeList(dto.operations()));
+        serieById.setIndicateurs(parseIdUriLabelList(dto.indicators()));
+        serieById.setProprietaires(parseIdUriLabelList(dto.creators()));
+        serieById.setOrganismesResponsables(parseIdUriLabelList(dto.publishers()));
+        serieById.setPartenaires(parseIdUriLabelList(dto.contributors()));
+        serieById.setServicesCollecteurs(parseIdUriLabelList(dto.dataCollectors()));
 
         return serieById;
     }
@@ -197,35 +197,6 @@ public class OperationsServiceImpl implements OperationsService {
         return famille;
     }
 
-    private IdUriLabel parseSingleRef(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return null;
-        }
-        String[] parts = raw.split("\\$", -1);
-        IdUriLabel ref = new IdUriLabel();
-        ref.setId(parts.length > 0 ? parts[0] : null);
-        String uriStr = parts.length > 1 ? parts[1] : null;
-        ref.setUri(StringUtils.hasText(uriStr) ? URI.create(uriStr) : null);
-        ref.setLabel(buildLocalisedLabels(
-                parts.length > 2 ? parts[2] : null,
-                parts.length > 3 ? parts[3] : null,
-                this.lg1, this.lg2));
-        return ref;
-    }
-
-    private List<IdUriLabel> parseRefList(String raw) {
-        List<IdUriLabel> list = new ArrayList<>();
-        if (raw == null || raw.isBlank()) {
-            return list;
-        }
-        for (String item : raw.split("\\|")) {
-            IdUriLabel ref = parseSingleRef(item);
-            if (ref != null) {
-                list.add(ref);
-            }
-        }
-        return list;
-    }
 
     @Override
     public Indicateur convertIndicateurDTOToIndicateur(IndicateurDTO dto) {
@@ -294,27 +265,107 @@ public class OperationsServiceImpl implements OperationsService {
     }
 
     private List<IdUriLabel> parseIdUriLabelList(String raw) {
-        List<IdUriLabel> list = new ArrayList<>();
         if (raw == null || raw.isBlank()) {
             return null;
         }
+
+        List<IdUriLabel> list = new ArrayList<>();
         for (String item : raw.split("\\|")) {
-            String[] parts = item.split("\\$", -1);
-            String id = parts.length > 0 ? parts[0] : null;
-            if (id == null || id.isBlank()) {
-                continue;
+            IdUriLabel ref = parseIdUriLabelItem(item);
+            if (ref != null) {
+                list.add(ref);
             }
-            IdUriLabel ref = new IdUriLabel(id);
-            if (parts.length > 1 && !parts[1].isBlank()) {
-                ref.setUri(toUri(parts[1]));
-            }
-            ref.setLabel(buildLocalisedLabels(
-                    parts.length > 2 ? parts[2] : null,
-                    parts.length > 3 ? parts[3] : null,
-                    lg1,lg2));
-            list.add(ref);
         }
         return list;
+    }
+
+    private IdUriLabel parseIdUriLabelItem(String item) {
+        String[] parts = item.split("\\$", -1);
+        String id = parts.length > 0 ? parts[0] : null;
+
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+
+        IdUriLabel ref = new IdUriLabel(id);
+
+        setUriIfPresentForIdUriLabel(ref, parts);
+        setLabelIfPresentForIdUriLabel(ref, parts);
+
+        return ref;
+    }
+
+    private void setUriIfPresentForIdUriLabel(IdUriLabel ref, String[] parts) {
+        if (parts.length > 1 && !parts[1].isBlank()) {
+            ref.setUri(toUri(parts[1]));
+        }
+    }
+
+    private void setLabelIfPresentForIdUriLabel(IdUriLabel ref, String[] parts) {
+        ref.setLabel(buildLocalisedLabels(
+                parts.length > 2 ? parts[2] : null,
+                parts.length > 3 ? parts[3] : null,
+                lg1, lg2));
+    }
+
+
+    private List<IdUriLabelAltLabelMillesime> parseIdUriLabelAltLabelMillesimeList(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+
+        List<IdUriLabelAltLabelMillesime> list = new ArrayList<>();
+        for (String item : raw.split("\\|")) {
+            IdUriLabelAltLabelMillesime ref = parseItem(item);
+            if (ref != null) {
+                list.add(ref);
+            }
+        }
+        return list;
+    }
+
+    private IdUriLabelAltLabelMillesime parseItem(String item) {
+        String[] parts = item.split("\\$", -1);
+        String id = parts.length > 0 ? parts[0] : null;
+
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+
+        IdUriLabelAltLabelMillesime ref = new IdUriLabelAltLabelMillesime(id);
+
+        setUriIfPresentForIdUriLabelMillesime(ref, parts);
+        setLabelIfPresentForIdUriLabelMillesime(ref, parts);
+        setAltLabelIfPresentForIdUriLabelMillesime(ref, parts);
+        setMillesimeIfPresentForIdUriLabelMillesime(ref, parts);
+
+        return ref;
+    }
+
+    private void setUriIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        if (parts.length > 1 && !parts[1].isBlank()) {
+            ref.setUri(toUri(parts[1]));
+        }
+    }
+
+    private void setLabelIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        ref.setLabel(buildLocalisedLabels(
+                parts.length > 2 ? parts[2] : null,
+                parts.length > 3 ? parts[3] : null,
+                lg1, lg2));
+    }
+
+    private void setAltLabelIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        ref.setAltLabel(buildLocalisedLabels(
+                parts.length > 4 ? parts[4] : null,
+                parts.length > 5 ? parts[5] : null,
+                lg1, lg2));
+    }
+
+    private void setMillesimeIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        if (parts.length > 6 && !parts[6].isBlank()) {
+            ref.setMillesime(parts[6]);
+        }
     }
 
     private URI toUri(String uriString) {

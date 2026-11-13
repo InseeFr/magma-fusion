@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
+import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestsIntegration;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -14,7 +15,8 @@ import org.springframework.test.context.DynamicPropertySource;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
+class TestGeoAireDAttractionDesVillesQueries extends TestsIntegration {
+
 
     @BeforeAll
     static void installContainer() {
@@ -26,16 +28,15 @@ class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
 
-
     @Nested
-    @DisplayName("geo/communeDeleguee/{code}")
-    class GetCogComD {
+    @DisplayName("geo/aireDAttractionDesVilles2020/{code}")
+    class GetCogAav {
 
         @Test
-        @DisplayName("When getcogcomd 98001, returns commune deleguee 98001")
-        void should_return_commune_deleguee_98001_when_getcogcomd_98001() throws Exception {
+        @DisplayName("When getcogaav T01, returns AAV T01")
+        void should_return_aav_T01_when_getcogaav_T01() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeDeleguee/{code}?date={date}", "98001", "2025-01-01")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}?date={date}", "T01", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -43,31 +44,31 @@ class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-deleguee-98001-expected.json"),
+                    loadExpectedJson("aav-T01-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcomd 98099 (inexistant), returns 404")
-        void should_return_404_when_getcogcomd_98099_inexistant() {
+        @DisplayName("When getcogaav T99 (inexistant), returns 404")
+        void should_return_404_when_getcogaav_T99_inexistant() {
             restTestClient.get()
-                    .uri("/geo/communeDeleguee/{code}?date={date}", "98099", "2025-01-01")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}?date={date}", "T99", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/communeDeleguee/{code}/ascendants")
-    class GetCogComDAsc {
+    @DisplayName("geo/aireDAttractionDesVilles2020/{code}/descendants")
+    class GetCogAavDesc {
 
         @Test
-        @DisplayName("When getcogcomdasc 98001 type null, returns 7 ascendants (aav T01, arr 991, bv 88001, cov 7701, com 99002, dep 10, reg 99)")
-        void should_return_7_ascendants_when_getcogcomdasc_98001_type_null() throws Exception {
+        @DisplayName("When getcogaavdesc T01 type null, returns 9 descendants")
+        void should_return_9_descendants_when_getcogaavdesc_T01_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeDeleguee/{code}/ascendants?date={date}", "98001", "2025-01-01")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}/descendants?date={date}", "T01", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -75,18 +76,18 @@ class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-deleguee-98001-ascendants-expected.json"),
+                    loadExpectedJson("aav-T01-descendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcomdasc 98001 type Departement, returns 1 departement")
-        void should_return_1_departement_when_getcogcomdasc_98001_type_departement() throws Exception {
+        @DisplayName("When getcogaavdesc T01 type Commune, returns 3 communes")
+        void should_return_3_communes_when_getcogaavdesc_T01_type_commune() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeDeleguee/{code}/ascendants?date={date}&type={type}",
-                            "98001", "2025-01-01", "Departement")
+                    .uri("/geo/aireDAttractionDesVilles2020/{code}/descendants?date={date}&type={type}",
+                            "T01", "2025-01-01", "Commune")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -94,31 +95,22 @@ class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-deleguee-98001-ascendants-departement-expected.json"),
+                    loadExpectedJson("aav-T01-descendants-commune-expected.json"),
                     bodyAsString(body),
                     true
             );
-        }
-
-        @Test
-        @DisplayName("When getcogcomdasc 98001 date before creation, returns 404")
-        void should_return_404_when_getcogcomdasc_98001_date_before_creation() {
-            restTestClient.get()
-                    .uri("/geo/communeDeleguee/{code}/ascendants?date={date}", "98001", "2010-01-01")
-                    .exchange()
-                    .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/communesDeleguees")
-    class GetCogComDListe {
+    @DisplayName("geo/airesDAttractionDesVilles2020")
+    class GetCogAavListe {
 
         @Test
-        @DisplayName("When getcogcomdliste date=2025-01-01, returns 2 communes deleguees actives (98001, 98002)")
-        void should_return_2_communes_deleguees_when_getcogcomdliste_date() throws Exception {
+        @DisplayName("When getcogaavliste date=2025-01-01, returns 1 AAV active")
+        void should_return_1_aav_when_getcogaavliste_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communesDeleguees?date={date}", "2025-01-01")
+                    .uri("/geo/airesDAttractionDesVilles2020?date={date}", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -126,17 +118,17 @@ class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("communes-deleguees-liste-date-expected.json"),
+                    loadExpectedJson("aav-liste-date-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcomdliste date=*, returns 3 communes deleguees (98001, 98002, 98003)")
-        void should_return_3_communes_deleguees_when_getcogcomdliste_etoile() throws Exception {
+        @DisplayName("When getcogaavliste date=*, returns 2 AAVs")
+        void should_return_2_aav_when_getcogaavliste_etoile() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communesDeleguees?date={date}", "*")
+                    .uri("/geo/airesDAttractionDesVilles2020?date={date}", "*")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -144,7 +136,7 @@ class GeoCommuneDelegueeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("communes-deleguees-liste-etoile-expected.json"),
+                    loadExpectedJson("aav-liste-etoile-expected.json"),
                     bodyAsString(body),
                     true
             );

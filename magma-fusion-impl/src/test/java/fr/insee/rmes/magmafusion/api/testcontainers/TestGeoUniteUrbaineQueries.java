@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
+import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestsIntegration;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -9,12 +10,12 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
+class TestGeoUniteUrbaineQueries extends TestsIntegration {
+
 
     @BeforeAll
     static void installContainer() {
@@ -26,46 +27,47 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
         GraphDBTestContainerConfig.overrideSpringProperties(registry);
     }
     @Nested
-    @DisplayName("geo/communeAssociee/{code}")
-    class GetCogComA {
+    @DisplayName("geo/uniteUrbaine2020/{code}")
+    class GetCogUu {
 
         @Test
-        @DisplayName("When getcogcoma 99101, returns commune associee 99101")
-        void should_return_commune_associee_99101_when_getcogcoma_99101() throws Exception {
+        @DisplayName("When getcoguu 99101, returns unite urbaine 99101")
+        void should_return_uu_99101_when_getcoguu_99101() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}?date={date}", "99101", "2025-01-01")
+                    .uri("/geo/uniteUrbaine2020/{code}?date={date}", "99101", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
 
+
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-associee-99101-expected.json"),
+                    loadExpectedJson("unite-urbaine-99101-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcoma 99100 (inexistant), returns 404")
-        void should_return_404_when_getcogcoma_99100_inexistant() {
+        @DisplayName("When getcoguu 99199 (inexistant), returns 404")
+        void should_return_404_when_getcoguu_99199_inexistant() {
             restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}?date={date}", "99100", "2025-01-01")
+                    .uri("/geo/uniteUrbaine2020/{code}?date={date}", "99199", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/communeAssociee/{code}/ascendants")
-    class GetCogComAAsc {
+    @DisplayName("geo/uniteUrbaine2020/{code}/descendants")
+    class GetCogUuDes {
 
         @Test
-        @DisplayName("When getcogcomaasc 99101 type null, returns 5 ascendants (aav T01, arr 991, com 99001, dep 10, reg 99)")
-        void should_return_5_ascendants_when_getcogcomaasc_99101_type_null() throws Exception {
+        @DisplayName("When getcoguudes 99101 type null, returns 2 descendants")
+        void should_return_2_descendants_when_getcoguudes_99101_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}/ascendants?date={date}", "99101", "2025-01-01")
+                    .uri("/geo/uniteUrbaine2020/{code}/descendants?date={date}", "99101", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -73,18 +75,18 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-associee-99101-ascendants-expected.json"),
+                    loadExpectedJson("unite-urbaine-99101-descendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcomaasc 99101 type Departement, returns 1 departement")
-        void should_return_1_departement_when_getcogcomaasc_99101_type_departement() throws Exception {
+        @DisplayName("When getcoguudes 99101 type Commune, returns 2 communes")
+        void should_return_2_communes_when_getcoguudes_99101_type_commune() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communeAssociee/{code}/ascendants?date={date}&type={type}",
-                            "99101", "2025-01-01", "Departement")
+                    .uri("/geo/uniteUrbaine2020/{code}/descendants?date={date}&type={type}",
+                            "99101", "2025-01-01", "Commune")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -92,7 +94,7 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("commune-associee-99101-ascendants-departement-expected.json"),
+                    loadExpectedJson("unite-urbaine-99101-descendants-commune-expected.json"),
                     bodyAsString(body),
                     true
             );
@@ -100,14 +102,14 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
     }
 
     @Nested
-    @DisplayName("geo/communesAssociees")
-    class GetCogComAListe {
+    @DisplayName("geo/unitesUrbaines2020")
+    class GetCogUuListe {
 
         @Test
-        @DisplayName("When getcogcomaliste date=2025-01-01, returns 1 commune associee active (99101)")
-        void should_return_1_commune_associee_when_getcogcomaliste_date() throws Exception {
+        @DisplayName("When getcoguuliste date 2025-01-01, returns 1 unite urbaine")
+        void should_return_1_uu_when_getcoguuliste_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communesAssociees?date={date}", "2025-01-01")
+                    .uri("/geo/unitesUrbaines2020?date={date}", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -115,17 +117,17 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("communes-associees-liste-date-expected.json"),
+                    loadExpectedJson("unites-urbaines-liste-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogcomaliste date=*, returns 2 communes associees (99101, 99102)")
-        void should_return_2_communes_associees_when_getcogcomaliste_etoile() throws Exception {
+        @DisplayName("When getcoguuliste date *, returns 1 unite urbaine")
+        void should_return_1_uu_when_getcoguuliste_date_etoile() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/communesAssociees?date={date}", "*")
+                    .uri("/geo/unitesUrbaines2020?date={date}", "*")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -133,7 +135,7 @@ class GeoCommuneAssocieeQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("communes-associees-liste-etoile-expected.json"),
+                    loadExpectedJson("unites-urbaines-liste-expected.json"),
                     bodyAsString(body),
                     true
             );
