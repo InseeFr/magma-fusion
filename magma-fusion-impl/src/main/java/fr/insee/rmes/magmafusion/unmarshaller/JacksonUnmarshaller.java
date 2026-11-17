@@ -96,6 +96,7 @@ public record JacksonUnmarshaller(CsvMapper csvMapper) implements Unmarshaller {
 
     private <G, R> String findReturned(Class<G> targetClass, R resultEmpty) {
         return switch (resultEmpty) {
+            case null -> "null";
             case List<?> ignored -> "List<" + targetClass.getName() + ">";
             case Optional<?> ignored -> targetClass.getName();
             default -> "Unknown wrapper for " + targetClass.getName();
