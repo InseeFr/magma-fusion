@@ -15,15 +15,21 @@ import java.util.Map;
 @Slf4j
 public record QueryBuilder(Configuration freemarkerConfiguration) {
     public Query build(Map<String, Object> parameters, String queryfile) {
-        Template template;
-        Writer out = new StringWriter();
         try {
-            template = freemarkerConfiguration.getTemplate(queryfile);
+            Template template = freemarkerConfiguration.getTemplate(queryfile);
+            Writer out = new StringWriter();
             template.process(parameters, out);
+            return new Query(out);
         } catch (IOException | TemplateException e) {
-            //TODO lever une Exception non contrôlée et utiliser un ExceptionHandler au niveau des contrôleurs pour traiter l'erreur
-            log.error("Can't read query {} : ", queryfile, e);
+            log.error("Failed to process FreeMarker template '{}' with parameters: {}",
+                    queryfile, parameters, e);
+            throw new QueryBuildException("Can't read query {} : " + queryfile, e);
         }
-        return new Query(out);
+    }
+    public static class QueryBuildException extends RuntimeException {
+        public QueryBuildException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 }
+
