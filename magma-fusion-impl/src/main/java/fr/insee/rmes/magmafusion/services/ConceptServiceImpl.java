@@ -127,14 +127,18 @@ public class ConceptServiceImpl implements ConceptService{
 
 
         public ConceptForList convertConceptDTOToDefinition(ConceptDTO conceptDTO) {
-            ConceptForList concept = new ConceptForList();
-            concept.setId(conceptDTO.id());
-            concept.setUri(URI.create(conceptDTO.uri()));
-            concept.setIntitule(conceptDTO.intituleLg1());
+            try {
+                ConceptForList concept = new ConceptForList();
+                concept.setId(conceptDTO.id());
+                concept.setUri(URI.create(conceptDTO.uri()));
+                concept.setIntitule(conceptDTO.intituleLg1());
+                addNearByConcepts(conceptDTO, concept);
+                return concept;
+            } catch (Exception e) {
+                log.error("Unexpected error while processing ConceptDTO id: {} for list", conceptDTO.id(), e);
+                throw e;
+            }
 
-            addNearByConcepts(conceptDTO, concept);
-
-            return concept;
         }
 
 }
