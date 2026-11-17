@@ -4,6 +4,7 @@ import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationsDocumentsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
 
+@Slf4j
 @Service
 public class OperationsServiceImpl implements OperationsService {
 
@@ -324,6 +326,7 @@ public class OperationsServiceImpl implements OperationsService {
         try {
             return URI.create(uriString);
         } catch (IllegalArgumentException _) {
+            log.warn("Invalid URI string: '{}'", uriString);
             return null;
         }
     }
@@ -388,6 +391,7 @@ public class OperationsServiceImpl implements OperationsService {
                 rubrique.setOrganisme(createUriLabel(rubriqueDTO, rubriqueDTO.organisationUri()));
                 break;
             default:
+                log.warn("type of rubrique unknown or null : {}", rubriqueDTO.type());
                 break;
         }
 

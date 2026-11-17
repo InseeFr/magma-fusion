@@ -75,7 +75,7 @@ public class ConceptServiceImpl implements ConceptService{
                         case "broader"      -> concept.setConceptsPlusGeneriques(addToList(nearbyConcept, concept.getConceptsPlusGeneriques()));
                         case "narrower"     -> concept.setConceptsPlusSpecifiques(addToList(nearbyConcept, concept.getConceptsPlusSpecifiques()));
                         case "references"   -> concept.setConceptsReferences(addToList(nearbyConcept, concept.getConceptsReferences()));
-                        case null, default  -> log.warn("typeOfLink unknown or null : {}", nearbyConcept.getTypeOfLink());
+                        case null, default  -> log.warn("type of link unknown or null : {}", nearbyConcept.getTypeOfLink());
                     }
                 });
             }
