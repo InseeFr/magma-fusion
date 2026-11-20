@@ -56,6 +56,7 @@ public record JacksonUnmarshaller(CsvMapper csvMapper) implements Unmarshaller {
                     String enumName = value.matches("\\d+") ? "_" + value : value;
                     return Enum.valueOf(enumClass, enumName);
                 } catch (JacksonException e) {
+                    log.warn("Cannot deserialize '{}' as enum type {}", parser.getValueAsString(), enumClass.getSimpleName());
                     return null;
                 }
             }
@@ -95,6 +96,7 @@ public record JacksonUnmarshaller(CsvMapper csvMapper) implements Unmarshaller {
 
     private <G, R> String findReturned(Class<G> targetClass, R resultEmpty) {
         return switch (resultEmpty) {
+            case null -> "null";
             case List<?> ignored -> "List<" + targetClass.getName() + ">";
             case Optional<?> ignored -> targetClass.getName();
             default -> "Unknown wrapper for " + targetClass.getName();
