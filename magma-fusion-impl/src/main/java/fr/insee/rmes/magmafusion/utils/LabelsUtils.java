@@ -49,7 +49,7 @@ public class LabelsUtils {
 
     public static List<LocalisedContenu> buildLocalisedLabels(String lg1Field, String lg2Field, String lg1, String lg2) {
         log.debug(
-                "Construction de labels localisés: lg1Field='{}', lg2Field='{}', lg1='{}', lg2='{}'",
+                "Localised labels building : lg1Field='{}', lg2Field='{}', lg1='{}', lg2='{}'",
                 lg1Field, lg2Field, lg1, lg2
         );
         List<LocalisedContenu> result = createList(
@@ -57,28 +57,28 @@ public class LabelsUtils {
                 StringUtils.hasText(lg2Field) ? createLangField(lg2Field, lg2) : null
         );
         if (result.isEmpty()) {
-            log.info("Aucun label localisé valide généré (lg1Field et lg2Field vides ou null)");
+            log.info("No valid localised label generated (lg1Field and lg2Field are empty or null))");
             return null;
         }
 
-        log.debug("{} labels localisés générés", result.size());
+        log.debug("{} localised label generated", result.size());
         return result;
     }
 
     public static List<LocalisedUrl> buildLocalisedUrls(String lg1Field, String lg2Field, String lg1, String lg2) {
         log.debug(
-                "Construction d'URLs localisées : lg1Field='{}', lg2Field='{}', lg1='{}', lg2='{}'",
+                "Building localised URLs : lg1Field='{}', lg2Field='{}', lg1='{}', lg2='{}'",
                 lg1Field, lg2Field, lg1, lg2
         );
         if (lg1Field == null && lg2Field == null) {
-            log.info("Aucune URL localisée générée (lg1Field et lg2Field sont null)");
+            log.info("No localised URLs generated (lg1Field and lg2Field are null)");
             return null;
         }
         List<LocalisedUrl> result = createList(
             StringUtils.hasText(lg1Field) ? createLangUrl(lg1Field, lg1) : null,
             StringUtils.hasText(lg2Field) ? createLangUrl(lg2Field, lg2) : null
             );
-        log.debug("{} URLs localisées générées", result.size());
+        log.debug("{} localised URLs generated", result.size());
         return result;
     }
 }
