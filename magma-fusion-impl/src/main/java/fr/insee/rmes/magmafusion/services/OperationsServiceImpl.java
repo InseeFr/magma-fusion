@@ -367,16 +367,7 @@ public class OperationsServiceImpl implements OperationsService {
 
             if (rapportQualiteDTO.rubriqueDTOList() != null) {
                 for (RubriqueDTO rubDTO : rapportQualiteDTO.rubriqueDTOList()) {
-                    try {
-                        Rubrique rubrique = convertRubrique(rubDTO, rapportQualite);
-                        if (rubrique != null) {
-                            rapportQualite.addRubriquesItem(rubrique);
-                        }
-                    } catch (Exception e) {
-                        log.error("Failed to convert RubriqueDTO id: {} for rapport {}. Error : {}",
-                                rubDTO != null ? rubDTO.id() : "null",
-                                rapportQualiteDTO.id(), e.getMessage(), e);
-                    }
+                    addRubriqueToRapportQualite(rapportQualiteDTO, rubDTO, rapportQualite);
                 }
             }
 
@@ -386,6 +377,19 @@ public class OperationsServiceImpl implements OperationsService {
             throw e;
         }
 
+    }
+
+    private void addRubriqueToRapportQualite(RapportQualiteDTO rapportQualiteDTO, RubriqueDTO rubDTO, RapportQualite rapportQualite) {
+        try {
+            Rubrique rubrique = convertRubrique(rubDTO, rapportQualite);
+            if (rubrique != null) {
+                rapportQualite.addRubriquesItem(rubrique);
+            }
+        } catch (Exception e) {
+            log.error("Failed to convert RubriqueDTO id: {} for rapport {}. Error : {}",
+                    rubDTO != null ? rubDTO.id() : "null",
+                    rapportQualiteDTO.id(), e.getMessage(), e);
+        }
     }
 
     private Rubrique convertRubrique(RubriqueDTO rubriqueDTO, RapportQualite rapportQualite) {
