@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api.testcontainers;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
+import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestsIntegration;
 import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -9,13 +10,11 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
-
+class TestGeoCollectiviteDOutreMerQueries extends TestsIntegration {
 
     @BeforeAll
     static void installContainer() {
@@ -28,14 +27,14 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
     }
 
     @Nested
-    @DisplayName("geo/aireDAttractionDesVilles2020/{code}")
-    class GetCogAav {
+    @DisplayName("geo/collectiviteDOutreMer/{code}")
+    class GetCogColl {
 
         @Test
-        @DisplayName("When getcogaav T01, returns AAV T01")
-        void should_return_aav_T01_when_getcogaav_T01() throws Exception {
+        @DisplayName("When getcogcoll 986, returns COM 986")
+        void should_return_com_986_when_getcogcoll_986() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/aireDAttractionDesVilles2020/{code}?date={date}", "T01", "2025-01-01")
+                    .uri("/geo/collectiviteDOutreMer/{code}?date={date}", "986", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -43,31 +42,31 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("aav-T01-expected.json"),
+                    loadExpectedJson("collectivite-d-outre-mer-986-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogaav T99 (inexistant), returns 404")
-        void should_return_404_when_getcogaav_T99_inexistant() {
+        @DisplayName("When getcogcoll 989 (inexistant), returns 404")
+        void should_return_404_when_getcogcoll_989_inexistant() {
             restTestClient.get()
-                    .uri("/geo/aireDAttractionDesVilles2020/{code}?date={date}", "T99", "2025-01-01")
+                    .uri("/geo/collectiviteDOutreMer/{code}?date={date}", "989", "2025-01-01")
                     .exchange()
                     .expectStatus().isNotFound();
         }
     }
 
     @Nested
-    @DisplayName("geo/aireDAttractionDesVilles2020/{code}/descendants")
-    class GetCogAavDesc {
+    @DisplayName("geo/collectiviteDOutreMer/{code}/descendants")
+    class GetCogCollDes {
 
         @Test
-        @DisplayName("When getcogaavdesc T01 type null, returns 9 descendants")
-        void should_return_9_descendants_when_getcogaavdesc_T01_type_null() throws Exception {
+        @DisplayName("When getcogcolldes 986 type null, returns 2 descendants (CT 98601, district 98610)")
+        void should_return_2_descendants_when_getcogcolldes_986_type_null() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/aireDAttractionDesVilles2020/{code}/descendants?date={date}", "T01", "2025-01-01")
+                    .uri("/geo/collectiviteDOutreMer/{code}/descendants?date={date}", "986", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -75,18 +74,18 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("aav-T01-descendants-expected.json"),
+                    loadExpectedJson("collectivite-d-outre-mer-986-descendants-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogaavdesc T01 type Commune, returns 3 communes")
-        void should_return_3_communes_when_getcogaavdesc_T01_type_commune() throws Exception {
+        @DisplayName("When getcogcolldes 986 type CirconscriptionTerritoriale, returns 1 descendant (CT 98601)")
+        void should_return_1_descendant_when_getcogcolldes_986_type_circonscriptionTerritoriale() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/aireDAttractionDesVilles2020/{code}/descendants?date={date}&type={type}",
-                            "T01", "2025-01-01", "Commune")
+                    .uri("/geo/collectiviteDOutreMer/{code}/descendants?date={date}&type={type}",
+                            "986", "2025-01-01", "CirconscriptionTerritoriale")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -94,7 +93,7 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("aav-T01-descendants-commune-expected.json"),
+                    loadExpectedJson("collectivite-d-outre-mer-986-descendants-circonscriptionTerritoriale-expected.json"),
                     bodyAsString(body),
                     true
             );
@@ -102,14 +101,14 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
     }
 
     @Nested
-    @DisplayName("geo/airesDAttractionDesVilles2020")
-    class GetCogAavListe {
+    @DisplayName("geo/collectivitesDOutreMer")
+    class GetCogCollListe {
 
         @Test
-        @DisplayName("When getcogaavliste date=2025-01-01, returns 1 AAV active")
-        void should_return_1_aav_when_getcogaavliste_date() throws Exception {
+        @DisplayName("When getcogcollliste date=2025-01-01, returns 1 COM active (986)")
+        void should_return_1_com_when_getcogcollliste_date() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/airesDAttractionDesVilles2020?date={date}", "2025-01-01")
+                    .uri("/geo/collectivitesDOutreMer?date={date}", "2025-01-01")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -117,17 +116,17 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("aav-liste-date-expected.json"),
+                    loadExpectedJson("collectivites-d-outre-mer-liste-date-expected.json"),
                     bodyAsString(body),
                     true
             );
         }
 
         @Test
-        @DisplayName("When getcogaavliste date=*, returns 2 AAVs")
-        void should_return_2_aav_when_getcogaavliste_etoile() throws Exception {
+        @DisplayName("When getcogcollliste date=*, returns 2 COMs (986, 987)")
+        void should_return_2_coms_when_getcogcollliste_etoile() throws Exception {
             byte[] body = restTestClient.get()
-                    .uri("/geo/airesDAttractionDesVilles2020?date={date}", "*")
+                    .uri("/geo/collectivitesDOutreMer?date={date}", "*")
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -135,7 +134,7 @@ class GeoAireDAttractionDesVillesQueriesTest extends BaseIntegrationTest {
                     .getResponseBody();
 
             JSONAssert.assertEquals(
-                    loadExpectedJson("aav-liste-etoile-expected.json"),
+                    loadExpectedJson("collectivites-d-outre-mer-liste-etoile-expected.json"),
                     bodyAsString(body),
                     true
             );
