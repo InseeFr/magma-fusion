@@ -2,6 +2,7 @@ package fr.insee.rmes.magmafusion.services;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.*;
+import fr.insee.rmes.magmafusion.queries.parameters.DocumentRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationsDocumentsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
 import org.springframework.util.StringUtils;
@@ -17,6 +18,9 @@ import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
 
 @Service
 public class OperationsServiceImpl implements OperationsService {
+
+    private static final String DOC_METHOD_CONCEPT = "http://ec.europa.eu/eurostat/simsv2/concept/DOC_METHOD";
+    private static final String COLLECTION_DOCUMENTS_CONCEPT = "http://id.insee.fr/concepts/simsv2fr/COLLECTION_DOCUMENTS";
 
     private final String lg1;
     private final String lg2;
@@ -461,18 +465,54 @@ public class OperationsServiceImpl implements OperationsService {
                 .result();
         List<Document> documents = new ArrayList<>();
         for (DocumentDTO documentDTO : documentsDTO) {
-            Document document = new Document();
-            List<LocalisedContenu> label = buildLocalisedLabels(
-                    documentDTO.labelLg1(),
-                    documentDTO.labelLg2(),
-                    lg1,lg2);
-            document.label(label);
-            document.setDateMiseAJour(documentDTO.dateMiseAJour());
-            document.setLangue(documentDTO.langue());
-            document.setUrl(documentDTO.url());
-            documents.add(document);
+            documents.add(convertDocumentDTOToDocument(documentDTO));
         }
         return documents;
+    }
+
+    @Override
+    public Document findDocumentByUri(String uri) {
+        DocumentDTO documentDTO = this.requestProcessor.queryToFindDocument()
+                .with(new DocumentRequestParametizer(uri))
+                .executeQuery()
+                .singleResult(DocumentDTO.class)
+                .result();
+        return documentDTO == null ? null : convertDocumentDTOToDocument(documentDTO);
+    }
+
+    private Document convertDocumentDTOToDocument(DocumentDTO documentDTO) {
+        Document document = new Document();
+        document.setUri(documentDTO.uri());
+        document.label(buildLocalisedLabels(
+                documentDTO.labelLg1(),
+                documentDTO.labelLg2(),
+                lg1,lg2));
+        document.commentaire(buildLocalisedLabels(
+                documentDTO.commentLg1(),
+                documentDTO.commentLg2(),
+                lg1,lg2));
+        document.setDateMiseAJour(documentDTO.dateMiseAJour());
+        document.setLangue(documentDTO.langue());
+        document.setTaille(FileSizeFormatter.humanReadable(documentDTO.taille()));
+        document.setType(findDocumentType(documentDTO.uri()));
+        document.setUrl(documentDTO.url());
+        return document;
+    }
+
+    private Document.TypeEnum findDocumentType(String uri) {
+        List<DocumentConceptDTO> concepts = this.requestProcessor.queryToFindDocumentRubricConcepts()
+                .with(new DocumentRequestParametizer(uri))
+                .executeQuery()
+                .listResult(DocumentConceptDTO.class)
+                .result();
+        if (concepts == null || concepts.size() != 1) {
+            return Document.TypeEnum.OTHER;
+        }
+        return switch (concepts.getFirst().concept()) {
+            case DOC_METHOD_CONCEPT -> Document.TypeEnum.DOC_METHOD;
+            case COLLECTION_DOCUMENTS_CONCEPT -> Document.TypeEnum.COLLECTION_DOCUMENTS;
+            case null, default -> Document.TypeEnum.OTHER;
+        };
     }
 
     private Rubrique addCodeList(RubriqueDTO rubriqueDTO, Rubrique rubrique, RapportQualite rapportQualite) {

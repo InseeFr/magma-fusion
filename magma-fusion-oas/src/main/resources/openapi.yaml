@@ -2232,6 +2232,46 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /operations/documents/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Description d''un document des rapports qualité
+      operationId: 'getDocumentById'
+      parameters:
+        - $ref: '#/components/parameters/idDocument'
+      responses:
+        '200':
+          $ref: '#/components/responses/Document200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /operations/liens/{id}:
+    get:
+      tags:
+        - Operations
+      summary: Description d''un lien des rapports qualité
+      operationId: 'getLienById'
+      parameters:
+        - $ref: '#/components/parameters/idDocument'
+      responses:
+        '200':
+          $ref: '#/components/responses/Document200'
+        '400':
+          $ref: '#/components/responses/IncorrectRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
 
   # -- Jeux de données
 
@@ -3915,6 +3955,22 @@ components:
             défaut:
               $ref: '#/components/examples/RapportQualite'
 
+    Document200:
+      description: 'Opération réussie'
+      content:
+        application/json:
+          schema:
+            $ref: './document.schema.json'
+          examples:
+            défaut:
+              $ref: '#/components/examples/Document'
+        application/xml:
+          schema:
+            $ref: './document.schema.json'
+          examples:
+            défaut:
+              $ref: '#/components/examples/Document'
+
     Serie200:
       description: 'Opération réussie'
       content:
@@ -5324,6 +5380,14 @@ components:
       schema:
         $ref: '#/components/schemas/IdDocumentation'
 
+    idDocument:
+      name: id
+      required: true
+      in: path
+      description: "Identifiant du document ou du lien (dernier segment de son URI)"
+      schema:
+        $ref: '#/components/schemas/IdDocument'
+
   ### EXAMPLES SPECIFICATION ###
 
   examples:
@@ -6693,6 +6757,25 @@ components:
         intitule: 'Entrepreneur individuel'
 
     # -- Opérations
+
+    Document:
+      value:
+        uri: 'http://id.insee.fr/documents/document/1070'
+        label:
+          - contenu: 'Les projections de population 2026 : comment les évolutions démographiques récentes peuvent éclairer le choix des hypothèses'
+            langue: 'fr'
+          - contenu: 'Population projections for 2026: how can recent demographic trends inform the choice of assumptions'
+            langue: 'en'
+        commentaire:
+          - contenu: 'Commentaire sur les projections de population 2026'
+            langue: 'fr'
+          - contenu: 'Comment on population projections for 2026'
+            langue: 'en'
+        dateMiseAJour: '2026-04-09'
+        langue: 'fr'
+        taille: '127 ko'
+        type: 'DOC_METHOD'
+        url: 'https://www.insee.fr/fr/metadonnees/source/fichier/Note_technique_hypotheses_projections_2026.pdf'
 
     RapportQualite:
       value:
@@ -8833,6 +8916,12 @@ components:
       pattern: '^[0-9]{4}$'
       example: '1979'
       description: 'Identifiant d''une documentation'
+
+    IdDocument:
+      type: string
+      pattern: '^[0-9]+$'
+      example: '1070'
+      description: 'Identifiant d''un document ou d''un lien'
 
 
     IdLabel:

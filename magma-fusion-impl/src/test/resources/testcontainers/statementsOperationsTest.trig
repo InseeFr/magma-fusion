@@ -225,8 +225,54 @@
         <http://schema.org/url> <https://www.test.fr/doc/note-methodo-test.pdf> ;
         rdfs:label "Note methodologique test"@fr ;
         rdfs:label "Test methodological note"@en ;
+        rdfs:comment "Commentaire note methodologique test"@fr ;
         pav:lastRefreshedOn "2025-03-01T00:00:00"^^xsd:dateTime ;
-        dc:language "fr" .
+        dc:language "fr" ;
+        dcterms:extent "2048"^^xsd:integer .
+}
+
+<http://rdf.insee.fr/graphes/qualite/documents> {
+    <http://bauhaus/documents/document/9101> rdf:type foaf:Document ;
+        rdfs:label "Les projections de population 2026"@fr ;
+        rdfs:label "Population projections for 2026"@en ;
+        rdfs:comment "Commentaire sur les projections"@fr ;
+        rdfs:comment "Comment on population projections"@en ;
+        pav:lastRefreshedOn "2026-04-09"^^xsd:date ;
+        dc:language "fr" ;
+        dcterms:extent "127000"^^xsd:integer ;
+        <http://schema.org/url> <https://www.test.fr/fichier/Note_technique_projections.pdf> .
+
+    <http://bauhaus/documents/page/9101> rdf:type foaf:Document ;
+        rdfs:label "Page des projections"@fr ;
+        <http://schema.org/url> <https://www.test.fr/statistiques/9101> .
+
+    <http://bauhaus/documents/document/9102> rdf:type foaf:Document ;
+        rdfs:label "Document minimal"@fr ;
+        <http://schema.org/url> <https://www.test.fr/fichier/minimal.pdf> .
+
+    <http://bauhaus/documents/document/9103> rdf:type foaf:Document ;
+        rdfs:label "Document partage"@fr ;
+        <http://schema.org/url> <https://www.test.fr/fichier/partage.pdf> .
+}
+
+<http://rdf.insee.fr/graphes/qualite/rapport/9997> {
+    <http://bauhaus/qualite/rapport/9997>
+        rdf:type sdmx-mm:MetadataReport ;
+        rdfs:label "Rapport citant des documents"@fr .
+
+    <http://bauhaus/qualite/attribut/9997/S.10.6> rdf:type sdmx-mm:ReportedAttribute ;
+        sdmx-mm:metadataReport <http://bauhaus/qualite/rapport/9997> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/S.10.6> <http://bauhaus/qualite/attribut/9997/S.10.6/texte> .
+
+    <http://bauhaus/qualite/attribut/9997/S.10.6/texte> rdf:type <http://purl.org/dc/dcmitype/Text> ;
+        insee:additionalMaterial ( <http://bauhaus/documents/document/9101> <http://bauhaus/documents/document/9103> ) .
+
+    <http://bauhaus/qualite/attribut/9997/I.18.12> rdf:type sdmx-mm:ReportedAttribute ;
+        sdmx-mm:metadataReport <http://bauhaus/qualite/rapport/9997> ;
+        <http://id.insee.fr/qualite/simsv2fr/attribut/I.18.12> <http://bauhaus/qualite/attribut/9997/I.18.12/texte> .
+
+    <http://bauhaus/qualite/attribut/9997/I.18.12/texte> rdf:type <http://purl.org/dc/dcmitype/Text> ;
+        insee:additionalMaterial ( <http://bauhaus/documents/page/9101> <http://bauhaus/documents/document/9103> ) .
 }
 
 <http://rdf.insee.fr/graphes/qualite/rapport/9998> {
@@ -237,6 +283,12 @@
 }
 
 <http://rdf.insee.fr/graphes/qualite/simsv2fr> {
+    <http://id.insee.fr/qualite/simsv2fr/attribut/S.10.6>
+        sdmx-mm:concept <http://ec.europa.eu/eurostat/simsv2/concept/DOC_METHOD> .
+
+    <http://id.insee.fr/qualite/simsv2fr/attribut/I.18.12>
+        sdmx-mm:concept <http://id.insee.fr/concepts/simsv2fr/COLLECTION_DOCUMENTS> .
+
     <http://id.insee.fr/qualite/simsv2fr/attribut/R.1.1>
         sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR11> .
 

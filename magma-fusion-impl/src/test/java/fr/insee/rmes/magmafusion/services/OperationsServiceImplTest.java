@@ -291,9 +291,9 @@ public class OperationsServiceImplTest {
     @Test
     void convertRubrique_shouldConvertRichTextType_withMultipleDocuments() {
         // Given
-        DocumentDTO doc1Fr = new DocumentDTO("http://doc1.fr", "Label doc 1 FR", "Label doc 1 EN", "2024-01-01", "fr");
-        DocumentDTO doc2Fr = new DocumentDTO("http://doc2.fr", "Label doc 2 FR", null, "2024-02-01", "fr");
-        DocumentDTO doc1En = new DocumentDTO("http://doc1.en", "Label doc 1 EN", "Label doc 1 EN", "2024-01-01", "en");
+        DocumentDTO doc1Fr = new DocumentDTO(null, "http://doc1.fr", "Label doc 1 FR", "Label doc 1 EN", null, null, "2024-01-01", "fr", null);
+        DocumentDTO doc2Fr = new DocumentDTO(null, "http://doc2.fr", "Label doc 2 FR", null, null, null, "2024-02-01", "fr", null);
+        DocumentDTO doc1En = new DocumentDTO(null, "http://doc1.en", "Label doc 1 EN", "Label doc 1 EN", null, null, "2024-01-01", "en", null);
 
         RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
         when(mockProcessor.queryToFindDocuments()

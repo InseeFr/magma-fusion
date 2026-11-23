@@ -1,5 +1,6 @@
 package fr.insee.rmes.magmafusion.services;
 
+import fr.insee.rmes.magmafusion.model.Document;
 import fr.insee.rmes.magmafusion.model.Indicateur;
 import fr.insee.rmes.magmafusion.model.Operation;
 import fr.insee.rmes.magmafusion.model.RapportQualite;
@@ -17,4 +18,5 @@ public interface OperationsService {
     List<Serie> convertSeriesDTOsToSeries(List<SeriesDTO> dtos);
     Indicateur convertIndicateurDTOToIndicateur(IndicateurDTO indicateurDTO);
     RapportQualite convertDTOToRapportQualite(RapportQualiteDTO rapportQualiteDTO);
+    Document findDocumentByUri(String uri);
 }
