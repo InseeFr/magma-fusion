@@ -30,7 +30,7 @@ public class OperationsServiceImpl implements OperationsService {
     public OperationsServiceImpl(
             @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
             @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2,
-            @Value("${fr.insee.rmes.magmafusion.gestion.baseURI}") String baseUri,
+            @Value("${fr.insee.rmes.magmafusion.gestion.baseURI:http://id.insee.fr/}") String baseUri,
             RequestProcessor requestProcessor
     ) {
         this.lg1 = lg1;

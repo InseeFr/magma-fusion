@@ -28,7 +28,7 @@ public class OperationsEndpoints implements OperationsApi {
     private final String linksBaseUri;
 
     public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService,
-                               @Value("${fr.insee.rmes.magmafusion.gestion.baseURI}") String baseUri,
+                               @Value("${fr.insee.rmes.magmafusion.gestion.baseURI:http://id.insee.fr/}") String baseUri,
                                @Value("${fr.insee.rmes.magmafusion.documents.baseURI}") String documentsPath,
                                @Value("${fr.insee.rmes.magmafusion.links.baseURI}") String linksPath) {
         this.requestProcessor = requestProcessor;
