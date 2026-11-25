@@ -1,0 +1,16 @@
+{
+  "uri": "http://bauhaus/documents/document/9101",
+  "label": [
+    {"langue": "fr", "contenu": "Les projections de population 2026"},
+    {"langue": "en", "contenu": "Population projections for 2026"}
+  ],
+  "commentaire": [
+    {"langue": "fr", "contenu": "Commentaire sur les projections"},
+    {"langue": "en", "contenu": "Comment on population projections"}
+  ],
+  "dateMiseAJour": "2026-04-09",
+  "langue": "fr",
+  "taille": "127 ko",
+  "type": "DOC_METHOD",
+  "url": "https://www.test.fr/fichier/Note_technique_projections.pdf"
+}

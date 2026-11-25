@@ -287,7 +287,7 @@
         sdmx-mm:concept <http://ec.europa.eu/eurostat/simsv2/concept/DOC_METHOD> .
 
     <http://id.insee.fr/qualite/simsv2fr/attribut/I.18.12>
-        sdmx-mm:concept <http://id.insee.fr/concepts/simsv2fr/COLLECTION_DOCUMENTS> .
+        sdmx-mm:concept <http://bauhaus/concepts/simsv2fr/COLLECTION_DOCUMENTS> .
 
     <http://id.insee.fr/qualite/simsv2fr/attribut/R.1.1>
         sdmx-mm:concept <http://id.insee.fr/concepts/qualite/conceptR11> .

@@ -246,24 +246,11 @@ class OperationsQueriesTest extends BaseIntegrationTest {
                     .returnResult()
                     .getResponseBody();
 
-            JSONAssert.assertEquals("""
-                    {
-                      "uri": "http://bauhaus/documents/document/9101",
-                      "label": [
-                        {"langue": "fr", "contenu": "Les projections de population 2026"},
-                        {"langue": "en", "contenu": "Population projections for 2026"}
-                      ],
-                      "commentaire": [
-                        {"langue": "fr", "contenu": "Commentaire sur les projections"},
-                        {"langue": "en", "contenu": "Comment on population projections"}
-                      ],
-                      "dateMiseAJour": "2026-04-09",
-                      "langue": "fr",
-                      "taille": "127 ko",
-                      "type": "DOC_METHOD",
-                      "url": "https://www.test.fr/fichier/Note_technique_projections.pdf"
-                    }
-                    """, bodyAsString(body), true);
+            JSONAssert.assertEquals(
+                    loadExpectedJson("document-9101-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
         }
 
         @Test
@@ -276,14 +263,11 @@ class OperationsQueriesTest extends BaseIntegrationTest {
                     .returnResult()
                     .getResponseBody();
 
-            JSONAssert.assertEquals("""
-                    {
-                      "uri": "http://bauhaus/documents/page/9101",
-                      "label": [{"langue": "fr", "contenu": "Page des projections"}],
-                      "type": "COLLECTION_DOCUMENTS",
-                      "url": "https://www.test.fr/statistiques/9101"
-                    }
-                    """, bodyAsString(body), true);
+            JSONAssert.assertEquals(
+                    loadExpectedJson("lien-9101-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
         }
 
         @Test
@@ -296,14 +280,11 @@ class OperationsQueriesTest extends BaseIntegrationTest {
                     .returnResult()
                     .getResponseBody();
 
-            JSONAssert.assertEquals("""
-                    {
-                      "uri": "http://bauhaus/documents/document/9102",
-                      "label": [{"langue": "fr", "contenu": "Document minimal"}],
-                      "type": "OTHER",
-                      "url": "https://www.test.fr/fichier/minimal.pdf"
-                    }
-                    """, bodyAsString(body), true);
+            JSONAssert.assertEquals(
+                    loadExpectedJson("document-9102-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
         }
 
         @Test

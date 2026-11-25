@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.services;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
+import fr.insee.rmes.magmafusion.model.LocalisedContenu;
 import fr.insee.rmes.magmafusion.model.RapportQualite;
 import fr.insee.rmes.magmafusion.model.Rubrique;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationsDocumentsRequestParametizer;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -24,7 +26,7 @@ public class OperationsServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new OperationsServiceImpl("fr","en",requestProcessor);
+        service = new OperationsServiceImpl("fr","en","http://bauhaus/",requestProcessor);
 
     }
 
@@ -305,7 +307,7 @@ public class OperationsServiceImplTest {
                 .thenReturn(List.of(doc1En));
         //Double thenReturn chaîné : le premier appel à findDocuments (pour "fr") retourne 2 documents, le second (pour "en") en retourne 1.
 
-        OperationsServiceImpl serviceWithDocs = new OperationsServiceImpl("fr","en",mockProcessor);
+        OperationsServiceImpl serviceWithDocs = new OperationsServiceImpl("fr","en","http://bauhaus/",mockProcessor);
 
         RapportQualiteDTO dto = createBasicDTO();
         RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-rich", "RICH_TEXT");
@@ -340,6 +342,54 @@ public class OperationsServiceImplTest {
         assertThat(rubrique.getContenus().get(1).getDocuments())
                 .hasSize(1)
                 .satisfies(docs -> assertThat(docs.get(0).getUrl()).isEqualTo("http://doc1.en"));
+    }
+
+    @Test
+    void convertRubrique_shouldMapUriCommentsLangueAndTailleOfDocuments() {
+        // Given
+        DocumentDTO docFr = new DocumentDTO(
+                "http://bauhaus/documents/document/1070",
+                "http://doc1.fr",
+                "Label doc FR",
+                "Label doc EN",
+                "Commentaire FR",
+                "Comment EN",
+                "2024-01-01",
+                "fr",
+                "126543");
+
+        RequestProcessor mockProcessor = mock(RequestProcessor.class, RETURNS_DEEP_STUBS);
+        when(mockProcessor.queryToFindDocuments()
+                .with(any(OperationsDocumentsRequestParametizer.class))
+                .executeQuery()
+                .listResult(DocumentDTO.class)
+                .result())
+                .thenReturn(List.of(docFr));
+
+        OperationsServiceImpl serviceWithDocs = new OperationsServiceImpl("fr","en","http://bauhaus/",mockProcessor);
+
+        RapportQualiteDTO dto = createBasicDTO();
+        RubriqueDTO rubriqueDTO = createRubriqueDTO("rubrique-rich", "RICH_TEXT")
+                .withLabelLg1("Texte riche français")
+                .withHasDocLg1(true);
+        dto = dto.withRubriqueDTOList(List.of(rubriqueDTO));
+
+        // When
+        RapportQualite result = serviceWithDocs.convertDTOToRapportQualite(dto);
+
+        // Then
+        assertThat(result.getRubriques().getFirst().getContenus().getFirst().getDocuments())
+                .singleElement()
+                .satisfies(doc -> {
+                    assertThat(doc.getUri()).isEqualTo("http://bauhaus/documents/document/1070");
+                    assertThat(doc.getCommentaire())
+                            .extracting(LocalisedContenu::getLangue, LocalisedContenu::getContenu)
+                            .containsExactly(
+                                    tuple("fr", "Commentaire FR"),
+                                    tuple("en", "Comment EN"));
+                    assertThat(doc.getLangue()).isEqualTo("fr");
+                    assertThat(doc.getTaille()).isEqualTo("126,5 ko");
+                });
     }
 
     @Test
