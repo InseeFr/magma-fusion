@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-public class LabelsUtils {
-    private LabelsUtils() {
+public class LocatingFieldsConverter {
+    private LocatingFieldsConverter() {
         /* This utility class should not be instantiated */
     }
 

@@ -6803,6 +6803,12 @@ components:
                 langue: 'fr'
               - contenu: 'Community innovation survey 2018'
                 langue: 'en'
+            altLabel:
+              - contenu: 'CIS 2018'
+                langue: 'fr'
+              - contenu: 'CIS 2018'
+                langue: 'en'
+            millesime: '2018'
         indicateurs:
           -
         dateMiseAJour: '2025-04-03'
@@ -8884,6 +8890,8 @@ components:
           type: array
           items:
             $ref: 'langue-contenu.schema.json'
+        millesime:
+          type: string
         resume:
           type: array
           items:
@@ -8915,7 +8923,7 @@ components:
         operations:
           type: array
           items:
-            $ref: 'id-uri-label.schema.json'
+            $ref: 'id-uri-label-altLabel-millesime.schema.json'
         indicateurs:
           type: array
           items:

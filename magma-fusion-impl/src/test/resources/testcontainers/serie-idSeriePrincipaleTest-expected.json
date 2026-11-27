@@ -86,7 +86,12 @@
       "label": [
         {"langue": "fr", "contenu": "Label Opération 1 fr"},
         {"langue": "en", "contenu": "Operation 1 Label en"}
-      ]
+      ],
+      "altLabel": [
+        {"langue": "fr", "contenu": "AltLabel Opération 1 fr"},
+        {"langue": "en", "contenu": "Operation 1 AltLabel en"}
+      ],
+      "millesime" : "2010"
     },
     {
       "id": "idOperation2SeriePrincipaleTest",
@@ -139,6 +144,15 @@
       ]
     }
   ],
-  "servicesCollecteurs": [],
+  "servicesCollecteurs": [
+    {
+      "id": "idServiceCollecteur1",
+      "uri": "http://bauhaus/organisations/insee/HIE1000000",
+      "label": [
+        {"langue": "fr", "contenu": "Label ServiceCollecteur1 fr"},
+        {"langue": "en", "contenu": "DataCollector1 Label en"}
+      ]
+    }
+  ],
   "statutValidation": "Publiée"
 }

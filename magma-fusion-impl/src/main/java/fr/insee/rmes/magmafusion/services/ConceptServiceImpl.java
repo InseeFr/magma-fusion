@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.buildLocalisedLabels;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.buildLocalisedLabels;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.createLangField;
 
 @Service
 @Slf4j

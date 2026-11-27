@@ -422,6 +422,7 @@ public class OperationsServiceImplTest {
     //   convertSeriesDTOToSerieById
     // =========================================================
 
+
     @Test
     void should_map_identifiers_and_dates_when_convertSeriesDTO() {
         var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
@@ -465,6 +466,7 @@ public class OperationsServiceImplTest {
         );
     }
 
+
     @Test
     void should_map_type_when_type_uri_is_present() {
         var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
@@ -475,6 +477,21 @@ public class OperationsServiceImplTest {
                 () -> assertEquals(URI.create("http://id.insee.fr/concepts/type/E"), result.getType().getUri()),
                 () -> assertEquals("Enquête", result.getType().getLabel().get(0).getContenu()),
                 () -> assertEquals("Survey", result.getType().getLabel().get(1).getContenu())
+        );
+    }
+
+    @Test
+    void should_map_servicesCollecteurs_when_dataCollectors_is_present() {
+        var result = service.convertSeriesDTOToSerieById(fullSeriesDTO());
+
+        assertAll(
+                () -> assertNotNull(result.getType()),
+                () -> assertEquals("dataCollectorId1", result.getServicesCollecteurs().getFirst().getId()),
+                () -> assertEquals(URI.create("dataCollector1"), result.getServicesCollecteurs().getFirst().getUri()),
+                () -> assertEquals("dataCollector1LabelLg1", result.getServicesCollecteurs().getFirst().getLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getServicesCollecteurs().getFirst().getLabel().getFirst().getLangue()),
+                () -> assertEquals("dataCollector1LabelLg2", result.getServicesCollecteurs().getFirst().getLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getServicesCollecteurs().getFirst().getLabel().get(1).getLangue())
         );
     }
 
@@ -492,7 +509,7 @@ public class OperationsServiceImplTest {
                 "   ", null, null, null,
                 null, null, null, null,
                 null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null
+                null, null, null, null, null, null, null,null
         );
         assertNull(service.convertSeriesDTOToSerieById(dto).getType());
     }
@@ -527,6 +544,7 @@ public class OperationsServiceImplTest {
                 () -> assertEquals("Family EN", result.getFamille().getLabel().get(1).getContenu())
         );
     }
+
 
     @Test
     void should_not_set_famille_when_families_is_null() {
@@ -580,8 +598,26 @@ public class OperationsServiceImplTest {
         assertAll(
                 () -> assertEquals(2, result.getOperations().size()),
                 () -> assertEquals("op2024", result.getOperations().getFirst().getId()),
-                () -> assertEquals("op2023", result.getOperations().get(1).getId())
-        );
+                () -> assertEquals("op2023", result.getOperations().get(1).getId()),
+                () -> assertEquals("op2024labelLg1", result.getOperations().getFirst().getLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().getFirst().getLabel().getFirst().getLangue()),
+                () -> assertEquals("op2023labelLg1", result.getOperations().get(1).getLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().get(1).getLabel().getFirst().getLangue()),
+                () -> assertEquals("op2024altLabelLg1", result.getOperations().getFirst().getAltLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().get(1).getAltLabel().getFirst().getLangue()),
+                () -> assertEquals("op2023altLabelLg1", result.getOperations().get(1).getAltLabel().getFirst().getContenu()),
+                () -> assertEquals("fr", result.getOperations().get(1).getAltLabel().getFirst().getLangue()),
+                () -> assertEquals("op2024labelLg2", result.getOperations().getFirst().getLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().getFirst().getLabel().get(1).getLangue()),
+                () -> assertEquals("op2023labelLg2", result.getOperations().get(1).getLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().get(1).getLabel().get(1).getLangue()),
+                () -> assertEquals("op2024altLabelLg2", result.getOperations().getFirst().getAltLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().getFirst().getAltLabel().get(1).getLangue()),
+                () -> assertEquals("op2023altLabelLg2", result.getOperations().get(1).getAltLabel().get(1).getContenu()),
+                () -> assertEquals("en", result.getOperations().get(1).getAltLabel().get(1).getLangue()),
+                () -> assertEquals("2024", result.getOperations().getFirst().getMillesime()),
+                () -> assertEquals("2023", result.getOperations().get(1).getMillesime())
+                );
     }
 
     @Test
@@ -589,16 +625,15 @@ public class OperationsServiceImplTest {
         var result = service.convertSeriesDTOToSerieById(minimalSeriesDTO());
 
         assertAll(
-                () -> assertNotNull(result.getOperations()),
-                () -> assertTrue(result.getOperations().isEmpty()),
-                () -> assertTrue(result.getIndicateurs().isEmpty()),
-                () -> assertTrue(result.getSeriesPrecedentes().isEmpty()),
-                () -> assertTrue(result.getSeriesSuivantes().isEmpty()),
-                () -> assertTrue(result.getSeriesLiees().isEmpty()),
-                () -> assertTrue(result.getProprietaires().isEmpty()),
-                () -> assertTrue(result.getOrganismesResponsables().isEmpty()),
-                () -> assertTrue(result.getPartenaires().isEmpty()),
-                () -> assertTrue(result.getServicesCollecteurs().isEmpty())
+                () -> assertNull(result.getOperations()),
+                () -> assertNull(result.getIndicateurs()),
+                () -> assertNull(result.getSeriesPrecedentes()),
+                () -> assertNull(result.getSeriesSuivantes()),
+                () -> assertNull(result.getSeriesLiees()),
+                () -> assertNull(result.getProprietaires()),
+                () -> assertNull(result.getOrganismesResponsables()),
+                () -> assertNull(result.getPartenaires()),
+                () -> assertNull(result.getServicesCollecteurs())
         );
     }
 
@@ -623,7 +658,7 @@ public class OperationsServiceImplTest {
                         "Enquête 2 FR", "Survey 2 EN", null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null,
                         null, null, null, null, null, null, null, null,
-                        null, null, null, null, null, null, null)
+                        null, null, null, null, null, null, null, null)
         );
 
         var result = service.convertSeriesDTOsToSeries(dtos);
@@ -839,6 +874,7 @@ public class OperationsServiceImplTest {
         );
     }
 
+
     @Test
     void should_not_set_periodicity_indicateur_when_null() {
         assertNull(service.convertIndicateurDTOToIndicateur(minimalIndicateurDTO()).getFrequenceCollecte());
@@ -1003,6 +1039,7 @@ public class OperationsServiceImplTest {
                 "http://id.insee.fr/operations/serie/s1001",
                 "Enquête innovation", "Innovation survey",
                 "Sigle FR", "Sigle EN",
+                "2020",
                 "Résumé FR", "Abstract EN",
                 "Note historique FR", "History note EN",
                 "http://id.insee.fr/concepts/type/E", "E", "Enquête", "Survey",
@@ -1011,7 +1048,7 @@ public class OperationsServiceImplTest {
                 "s1197$http://id.insee.fr/operations/serie/s1197$Série liée 1$Linked series 1|s1198$http://id.insee.fr/operations/serie/s1198$Série liée 2$Linked series 2",
                 "s1010$http://id.insee.fr/operations/serie/s1010$Précédente FR$Previous EN",
                 "s1020$http://id.insee.fr/operations/serie/s1020$Suivante FR$Next EN",
-                "op2024$http://id.insee.fr/operations/operation/op2024$Opération 2024$Operation 2024|op2023$http://id.insee.fr/operations/operation/op2023$Opération 2023$Operation 2023",
+                "op2024$http://id.insee.fr/operations/operation/op2024$op2024labelLg1$op2024labelLg2$op2024altLabelLg1$op2024altLabelLg2$2024|op2023$http://id.insee.fr/operations/operation/op2023$op2023labelLg1$op2023labelLg2$op2023altLabelLg1$op2023altLabelLg2$2023",
                 null,
                 "http://id.insee.fr/qualite/rapport/1500", "1500",
                 LocalDate.of(2020, 1, 15),
@@ -1019,8 +1056,8 @@ public class OperationsServiceImplTest {
                 "insee$http://id.insee.fr/organisations/insee$Institut national de la statistique$French national institute of statistics",
                 "drees$http://id.insee.fr/organisations/drees$DREES$DREES",
                 "dares$http://id.insee.fr/organisations/dares$DARES$DARES",
-                null,
-                "Publiée"
+                "dataCollectorId1$dataCollector1$dataCollector1LabelLg1$dataCollector1LabelLg2|dataCollectorId2$dataCollector2$dataCollector2LabelLg1$dataCollector2LabelLg2",
+        "Publiée"
         );
     }
 
@@ -1032,7 +1069,7 @@ public class OperationsServiceImplTest {
                 null, null, null, null,
                 null, null, null, null,
                 null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null
+                null, null, null, null, null, null, null,null
         );
     }
 
