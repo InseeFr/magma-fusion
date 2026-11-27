@@ -4,6 +4,7 @@ import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
 import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.queries.parameters.DatasetsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,6 +14,7 @@ import java.util.*;
 
 import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.*;
 
+@Slf4j
 @Service
 public class DatasetsServiceImpl implements DatasetsService {
 
@@ -69,10 +71,22 @@ public class DatasetsServiceImpl implements DatasetsService {
         dataSet.setDateMiseAJourEnregistrementCatalogue(dto.catalogRecordModified() != null ? dto.catalogRecordModified() : null);
 
         if (StringUtils.hasText(dto.numObservations()) ) {
-            dataSet.setNumObservations(Integer.parseInt(dto.numObservations()));
+            try{
+                dataSet.setNumObservations(Integer.parseInt(dto.numObservations()));
+            } catch (NumberFormatException e) {
+                log.warn("Invalid numObservations value '{}' for dataset id: {}. Using null.",
+                        dto.numObservations(), dto.id(), e);
+                dataSet.setNumObservations(null);
+            }
         }
         if (StringUtils.hasText(dto.numSeries()) ) {
-            dataSet.setNumSeries(Integer.parseInt(dto.numSeries()));
+            try {
+                dataSet.setNumSeries(Integer.parseInt(dto.numSeries()));
+            } catch (NumberFormatException e) {
+                log.warn("Invalid numSeries value '{}' for dataset id: {}. Using null.",
+                        dto.numSeries(), dto.id(), e);
+                dataSet.setNumSeries(null);
+            }
         }
 
         dataSet.setTitre(buildLocalisedLabels(
@@ -142,7 +156,13 @@ public class DatasetsServiceImpl implements DatasetsService {
                     lg1, lg2);
             IdUriLabel accrualPeriodicityIdLibelle = new IdUriLabel();
             accrualPeriodicityIdLibelle.setId(dto.idAccrualPeriodicity());
-            accrualPeriodicityIdLibelle.setUri(URI.create(dto.uriAccrualPeriodicity()));
+            try {
+                accrualPeriodicityIdLibelle.setUri(URI.create(dto.uriAccrualPeriodicity()));
+            } catch (IllegalArgumentException e) {
+                log.warn("Invalid URI for accrualPeriodicity: '{}' in dataset id: {}. Using null URI.",
+                        dto.uriAccrualPeriodicity(), dto.id(), e);
+                accrualPeriodicityIdLibelle.setUri(null);
+            }
             accrualPeriodicityIdLibelle.setLabel(accrualPeriodicityListTitle);
             dataSet.setFrequenceDeMiseAJour(accrualPeriodicityIdLibelle);
         }
@@ -283,20 +303,24 @@ public class DatasetsServiceImpl implements DatasetsService {
     protected List<Label> getTemporalResolution(List<String> urisTemporalResolution) {
         List<Label> temporalResolution = new ArrayList<>();
         for (String uri : urisTemporalResolution) {
-            TemporalResolutionDTO temporalResolutionContenu = this.requestProcessor.queryToFindTemporalResolutionContenu()
-                    .with(DatasetsRequestParametizer.ofUri(uri))
-                    .executeQuery()
-                    .singleResult(TemporalResolutionDTO.class)
-                    .result();
-            if (temporalResolutionContenu != null) {
-                List<LocalisedContenu> temporalResolutionTitles = buildLocalisedLabels(
-                        temporalResolutionContenu.labeltemporalResolutionLg1(),
-                        temporalResolutionContenu.labeltemporalResolutionLg2(),
-                        lg1, lg2
-                );
-                Label temporalResolutionLabel = new Label();
-                temporalResolutionLabel.setLabel(temporalResolutionTitles);
-                temporalResolution.add(temporalResolutionLabel);
+            try {
+                TemporalResolutionDTO temporalResolutionContenu = this.requestProcessor.queryToFindTemporalResolutionContenu()
+                        .with(DatasetsRequestParametizer.ofUri(uri))
+                        .executeQuery()
+                        .singleResult(TemporalResolutionDTO.class)
+                        .result();
+                if (temporalResolutionContenu != null) {
+                    List<LocalisedContenu> temporalResolutionTitles = buildLocalisedLabels(
+                            temporalResolutionContenu.labeltemporalResolutionLg1(),
+                            temporalResolutionContenu.labeltemporalResolutionLg2(),
+                            lg1, lg2
+                    );
+                    Label temporalResolutionLabel = new Label();
+                    temporalResolutionLabel.setLabel(temporalResolutionTitles);
+                    temporalResolution.add(temporalResolutionLabel);
+                }
+            } catch (Exception e) {
+                log.error("Failed to fetch temporal resolution for URI: {}. Error: {}", uri, e.getMessage(), e);
             }
         }
         return temporalResolution;
@@ -305,22 +329,27 @@ public class DatasetsServiceImpl implements DatasetsService {
     protected List<IdLabel> getSpatialResolution(List<String> urisSpatialResolution) {
         List<IdLabel> spatialResolution = new ArrayList<>();
         for (String uri : urisSpatialResolution) {
-            SpatialResolutionDTO spatialResolutionContenu = this.requestProcessor.queryToFindSpatialResolutionContenu()
-                    .with(DatasetsRequestParametizer.ofUri(uri))
-                    .executeQuery()
-                    .singleResult(SpatialResolutionDTO.class)
-                    .result();
-            if (spatialResolutionContenu != null) {
-                List<LocalisedContenu> spatialResolutionTitles = buildLocalisedLabels(
-                        spatialResolutionContenu.labelSpatialResolutionLg1(),
-                        spatialResolutionContenu.labelSpatialResolutionLg2(),
-                        lg1, lg2
-                );
-                IdLabel spatialResolutionLabel = new IdLabel();
-                spatialResolutionLabel.setLabel(spatialResolutionTitles);
-                spatialResolutionLabel.setId(spatialResolutionContenu.spatialResolutionId());
-                spatialResolution.add(spatialResolutionLabel);
+            try{
+                SpatialResolutionDTO spatialResolutionContenu = this.requestProcessor.queryToFindSpatialResolutionContenu()
+                        .with(DatasetsRequestParametizer.ofUri(uri))
+                        .executeQuery()
+                        .singleResult(SpatialResolutionDTO.class)
+                        .result();
+                if (spatialResolutionContenu != null) {
+                    List<LocalisedContenu> spatialResolutionTitles = buildLocalisedLabels(
+                            spatialResolutionContenu.labelSpatialResolutionLg1(),
+                            spatialResolutionContenu.labelSpatialResolutionLg2(),
+                            lg1, lg2
+                    );
+                    IdLabel spatialResolutionLabel = new IdLabel();
+                    spatialResolutionLabel.setLabel(spatialResolutionTitles);
+                    spatialResolutionLabel.setId(spatialResolutionContenu.spatialResolutionId());
+                    spatialResolution.add(spatialResolutionLabel);
+                }
+            } catch(Exception e){
+                log.error("Failed to fetch spatial resolution for URI: {}. Error: {}", uri, e.getMessage(), e);
             }
+
         }
         return spatialResolution;
     }
@@ -328,21 +357,25 @@ public class DatasetsServiceImpl implements DatasetsService {
     protected List<IdLabel> getStatisticalUnits(List<String> urisStatisticalUnits) {
         List<IdLabel> statisticalUnits = new ArrayList<>();
         for (String uri : urisStatisticalUnits) {
-            StatisticalUnitDTO statisticalUnitsContenu = this.requestProcessor.queryToFindStatisticalUnits()
-                    .with(DatasetsRequestParametizer.ofUri(uri))
-                    .executeQuery()
-                    .singleResult(StatisticalUnitDTO.class)
-                    .result();
-            if (statisticalUnitsContenu != null) {
-                List<LocalisedContenu> statisticalUnitTitles = buildLocalisedLabels(
-                        statisticalUnitsContenu.labelStatisticalUnitLg1(),
-                        statisticalUnitsContenu.labelStatisticalUnitLg2(),
-                        lg1, lg2
-                );
-                IdLabel statisticalUnitLabel = new IdLabel();
-                statisticalUnitLabel.setLabel(statisticalUnitTitles);
-                statisticalUnitLabel.setId(statisticalUnitsContenu.statisticalUnitId());
-                statisticalUnits.add(statisticalUnitLabel);
+            try {
+                StatisticalUnitDTO statisticalUnitsContenu = this.requestProcessor.queryToFindStatisticalUnits()
+                        .with(DatasetsRequestParametizer.ofUri(uri))
+                        .executeQuery()
+                        .singleResult(StatisticalUnitDTO.class)
+                        .result();
+                if (statisticalUnitsContenu != null) {
+                    List<LocalisedContenu> statisticalUnitTitles = buildLocalisedLabels(
+                            statisticalUnitsContenu.labelStatisticalUnitLg1(),
+                            statisticalUnitsContenu.labelStatisticalUnitLg2(),
+                            lg1, lg2
+                    );
+                    IdLabel statisticalUnitLabel = new IdLabel();
+                    statisticalUnitLabel.setLabel(statisticalUnitTitles);
+                    statisticalUnitLabel.setId(statisticalUnitsContenu.statisticalUnitId());
+                    statisticalUnits.add(statisticalUnitLabel);
+                }
+            } catch (Exception e){
+                log.error("Failed to fetch statistical units for URI: {}. Error: {}", uri, e.getMessage(), e);
             }
         }
         return statisticalUnits;
@@ -351,22 +384,26 @@ public class DatasetsServiceImpl implements DatasetsService {
     protected List<Theme> getThemes(List<String> urisThemes) {
         List<Theme> themes = new ArrayList<>();
         for (String uri : urisThemes) {
-            Theme themeLabel = new Theme();
-            themeLabel.setUri(uri);
-            ThemeDTO themeDTO = this.requestProcessor.queryToFindThemes()
-                    .with(DatasetsRequestParametizer.ofUri(uri))
-                    .executeQuery()
-                    .singleResult(ThemeDTO.class)
-                    .result();
-            if (themeDTO != null) {
-                List<LocalisedContenu> themeTitles = buildLocalisedLabels(
-                        themeDTO.labelThemeLg1(),
-                        themeDTO.labelThemeLg2(),
-                        lg1, lg2
-                );
-                themeLabel.setLabel(themeTitles);
-                themeLabel.setUri(themeDTO.uri());
-                themes.add(themeLabel);
+            try {
+                Theme themeLabel = new Theme();
+                themeLabel.setUri(uri);
+                ThemeDTO themeDTO = this.requestProcessor.queryToFindThemes()
+                        .with(DatasetsRequestParametizer.ofUri(uri))
+                        .executeQuery()
+                        .singleResult(ThemeDTO.class)
+                        .result();
+                if (themeDTO != null) {
+                    List<LocalisedContenu> themeTitles = buildLocalisedLabels(
+                            themeDTO.labelThemeLg1(),
+                            themeDTO.labelThemeLg2(),
+                            lg1, lg2
+                    );
+                    themeLabel.setLabel(themeTitles);
+                    themeLabel.setUri(themeDTO.uri());
+                    themes.add(themeLabel);
+                }
+            } catch (Exception e){
+                log.error("Failed to fetch themes for URI: {}. Error: {}", uri, e.getMessage(), e);
             }
         }
         return themes;
@@ -375,24 +412,28 @@ public class DatasetsServiceImpl implements DatasetsService {
     protected List<IdUriLabel> getAEteGenerePar(List<String> urisoperationStat) {
         List<IdUriLabel> aEteGenereParList = new ArrayList<>();
         for (String uri : urisoperationStat) {
-            IdUriLabel aEteGenereParLabel = new IdUriLabel();
-            aEteGenereParLabel.setUri(URI.create(uri));
-            aEteGenereParLabel.setLabel(null);
-            DatasetAEteGenereParDTO aEteGenereParContenu = this.requestProcessor.queryToFindAEteGenerePar()
-                    .with(DatasetsRequestParametizer.ofUri(uri))
-                    .executeQuery()
-                    .singleResult(DatasetAEteGenereParDTO.class)
-                    .result();
-            if (aEteGenereParContenu != null) {
-                List<LocalisedContenu> aEteGenereParTitles = buildLocalisedLabels(
-                        aEteGenereParContenu.labelWasGeneratedByLg1(),
-                        aEteGenereParContenu.labelWasGeneratedByLg2(),
-                        lg1, lg2
-                );
-                aEteGenereParLabel.setLabel(aEteGenereParTitles);
-                aEteGenereParLabel.setId(aEteGenereParContenu.wasGeneratedById());
+            try {
+                IdUriLabel aEteGenereParLabel = new IdUriLabel();
+                aEteGenereParLabel.setUri(URI.create(uri));
+                aEteGenereParLabel.setLabel(null);
+                DatasetAEteGenereParDTO aEteGenereParContenu = this.requestProcessor.queryToFindAEteGenerePar()
+                        .with(DatasetsRequestParametizer.ofUri(uri))
+                        .executeQuery()
+                        .singleResult(DatasetAEteGenereParDTO.class)
+                        .result();
+                if (aEteGenereParContenu != null) {
+                    List<LocalisedContenu> aEteGenereParTitles = buildLocalisedLabels(
+                            aEteGenereParContenu.labelWasGeneratedByLg1(),
+                            aEteGenereParContenu.labelWasGeneratedByLg2(),
+                            lg1, lg2
+                    );
+                    aEteGenereParLabel.setLabel(aEteGenereParTitles);
+                    aEteGenereParLabel.setId(aEteGenereParContenu.wasGeneratedById());
+                }
+                aEteGenereParList.add(aEteGenereParLabel);
+            } catch(Exception e){
+                log.error("Failed to fetch aEteGenerePar for URI: {}. Error: {}", uri, e.getMessage(), e);
             }
-            aEteGenereParList.add(aEteGenereParLabel);
         }
         return aEteGenereParList;
     }

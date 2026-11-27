@@ -40,11 +40,17 @@ public class NomenclatureServiceImpl implements NomenclatureService{
     }
 
     public NomenclatureForList convertNomenclatureDtoforList(NomenclatureForListDTO nomenclatureForListDTO){
-        NomenclatureForList nomenclatureForList = new NomenclatureForList();
-        nomenclatureForList.setNomenclature(nomenclatureForListDTO.id());
-        nomenclatureForList.setUri(nomenclatureForListDTO.classification());
-        nomenclatureForList.setIntitule(buildLocalisedLabels(nomenclatureForListDTO.prefLabelLg1(),nomenclatureForListDTO.prefLabelLg2(),this.lg1, this.lg2));
-        return nomenclatureForList;
+        try {
+            NomenclatureForList nomenclatureForList = new NomenclatureForList();
+            nomenclatureForList.setNomenclature(nomenclatureForListDTO.id());
+            nomenclatureForList.setUri(nomenclatureForListDTO.classification());
+            nomenclatureForList.setIntitule(buildLocalisedLabels(nomenclatureForListDTO.prefLabelLg1(),nomenclatureForListDTO.prefLabelLg2(),this.lg1, this.lg2));
+            return nomenclatureForList;
+        } catch (Exception e) {
+            log.error("Failed to convert NomenclatureForListDTO id: {} for list", nomenclatureForListDTO.id(), e);
+            throw e;
+        }
+
     }
 
     public Nomenclature convertNomenclatureDto(NomenclatureDTO nomenclatureDTO, List<NiveauDTO> niveauxDTO) {
@@ -77,6 +83,8 @@ public class NomenclatureServiceImpl implements NomenclatureService{
 
         if (!intituleslList.isEmpty()) {
             nomenclature.setIntitule(intituleslList);
+        } else {
+            log.warn("No intitules found for nomenclature id: {}", nomenclatureDTO.id());
         }
     }
     private void processIntitules(String intitules, String language, List<LocalisedContenu> targetList) {
@@ -96,7 +104,9 @@ public class NomenclatureServiceImpl implements NomenclatureService{
 
         if (!altLabelList.isEmpty()) {
             nomenclature.setIntituleAlternatif(altLabelList);
-        }
+        } else {
+        log.warn("No alternative labels found for nomenclature id: {}", nomenclatureDTO.id());
+    }
     }
 
     private void processAltLabels(String altLabels, String language, List<LocalisedContenu> targetList) {
@@ -109,19 +119,32 @@ public class NomenclatureServiceImpl implements NomenclatureService{
     }
 
     protected void addNiveaux(List<NiveauDTO> niveauxDTO, Nomenclature nomenclature) {
-        if (niveauxDTO == null || nomenclature == null) {
+
+        if (niveauxDTO == null) {
+            log.warn("Null niveauxDTO provided for nomenclature");
             return;
         }
-        for (NiveauDTO niveauDTO : niveauxDTO) {
-            NiveauUriIntitule niveau = new NiveauUriIntitule();
-            niveau.setNiveau(niveauDTO.idLevel());
-            niveau.setUri(URI.create(niveauDTO.level()));
-            niveau.setIntitule(buildLocalisedLabels(niveauDTO.prefLabelLevelLg1(),niveauDTO.prefLabelLevelLg2(),lg1,lg2)
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList())
-            );
-        nomenclature.addNiveauxItem(niveau);
+
+        if (nomenclature == null) {
+            log.warn("Null nomenclature provided when trying to add levels");
+            return;
+        }
+
+        try {
+            for (NiveauDTO niveauDTO : niveauxDTO) {
+                NiveauUriIntitule niveau = new NiveauUriIntitule();
+                niveau.setNiveau(niveauDTO.idLevel());
+                niveau.setUri(URI.create(niveauDTO.level()));
+                niveau.setIntitule(buildLocalisedLabels(niveauDTO.prefLabelLevelLg1(), niveauDTO.prefLabelLevelLg2(), lg1, lg2)
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList())
+                );
+                nomenclature.addNiveauxItem(niveau);
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error while adding levels to nomenclature id: {}", nomenclature.getNomenclature(), e);
+            throw e;
         }
     }
 }

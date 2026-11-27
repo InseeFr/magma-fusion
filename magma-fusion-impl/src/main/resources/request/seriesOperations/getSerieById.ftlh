@@ -18,7 +18,7 @@ WHERE {
 
 	# Une série est une StatisticalOperationSeries
 	?series a insee:StatisticalOperationSeries .
-	# Pas de notation, donc filtre pourri pour sélectionner la bonne série
+	# Pas de notation, donc utilisation de ce filtre pour sélectionner la bonne série
 	FILTER(STRAFTER(STR(?series),'/operations/serie/') = ?seriesId)
 
 	#Infos sur la série elle-même (tout en OPTIONAL pour éviter les problèmes)
@@ -71,7 +71,7 @@ WHERE {
 		}
 		GROUP BY ?series
 	}
-	#Séries précédents
+	#Séries précédentes
 	OPTIONAL {
 		SELECT ?series (GROUP_CONCAT(DISTINCT CONCAT(STR(?previousSerieId), '$', STR(?previousSerie), '$', COALESCE(?previousSerieLabelLg1, ''), '$', COALESCE(?previousSerieLabelLg2, '')) ; SEPARATOR='|') AS ?previousSeries)
 		WHERE {

@@ -27,7 +27,7 @@ public class DatesUtils {
             try {
                 return LocalDateTime.parse(dateString).toLocalDate();
             } catch (DateTimeParseException e2) {
-                log.error("IMPOSSIBLE TO PARSE THE DATE '{}' : {}", dateString, e2.getMessage());
+                log.error("Impossible to parse the date '{}' : {}", dateString, e2.getMessage());
                 return null;
             }
         }
