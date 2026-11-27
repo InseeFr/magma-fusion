@@ -26,15 +26,21 @@ public class OperationsEndpoints implements OperationsApi {
 
     private final String documentsBaseUri;
     private final String linksBaseUri;
+    private final String codesLangueLg1BaseUri;
+    private final String codesLangueLg2BaseUri;
 
     public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService,
                                @Value("${fr.insee.rmes.magmafusion.gestion.baseURI:http://id.insee.fr/}") String baseUri,
                                @Value("${fr.insee.rmes.magmafusion.documents.baseURI}") String documentsPath,
-                               @Value("${fr.insee.rmes.magmafusion.links.baseURI}") String linksPath) {
+                               @Value("${fr.insee.rmes.magmafusion.links.baseURI}") String linksPath,
+                               @Value("${fr.insee.rmes.magmafusion.lg1}") String lg1,
+                               @Value("${fr.insee.rmes.magmafusion.lg2}") String lg2) {
         this.requestProcessor = requestProcessor;
         this.seriesOperationsService = seriesOperationsService;
         this.documentsBaseUri = baseUri + documentsPath + "/";
         this.linksBaseUri = baseUri + linksPath + "/";
+        this.codesLangueLg1BaseUri = baseUri + "codes/langue/" + lg1;
+        this.codesLangueLg2BaseUri = baseUri + "codes/langue/" + lg2;
     }
 
     @Override
@@ -116,11 +122,9 @@ public class OperationsEndpoints implements OperationsApi {
             return ResponseEntity.notFound().build();
         }
 
-        String LG1_CL = "http://id.insee.fr/codes/langue/fr";
-        String LG2_CL = "http://id.insee.fr/codes/langue/en";
 
         List<RubriqueDTO> rubriqueList = requestProcessor.queryToFindRubriques()
-                .with(new OperationRubriquesRequestParametizer(rapportQualiteDTO.id(), LG1_CL, LG2_CL))
+                .with(new OperationRubriquesRequestParametizer(rapportQualiteDTO.id(), codesLangueLg1BaseUri, codesLangueLg2BaseUri))
                 .executeQuery()
                 .listResult(RubriqueDTO.class)
                 .result();

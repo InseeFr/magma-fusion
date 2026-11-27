@@ -9,11 +9,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
+@TestPropertySource(properties = {
+        "fr.insee.rmes.magmafusion.gestion.baseURI=http://id.insee.fr/"
+})
 class TestOperationsQueries extends TestsIntegration {
 
     @BeforeAll
@@ -197,7 +201,7 @@ class TestOperationsQueries extends TestsIntegration {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
-
+            String responseBody = bodyAsString(body);
             JSONAssert.assertEquals(
                     loadExpectedJson("rapportQualite-9999-expected.json"),
                     bodyAsString(body),
