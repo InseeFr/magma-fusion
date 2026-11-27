@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fr.insee.rmes.magmafusion.utils.DatesUtils.tryParseDateToLocalDate;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.buildLocalisedLabels;
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.createLangField;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.buildLocalisedLabels;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.createLangField;
 
 @Service
 @Slf4j
@@ -33,6 +33,7 @@ public class ConceptServiceImpl implements ConceptService{
     }
 
     public Concept convertConceptDTOToConcept(ConceptDTO conceptDTO) {
+        try{
             Concept concept = new Concept();
             concept.setId(conceptDTO.id());
             concept.setUri(URI.create(conceptDTO.uri()));
@@ -54,32 +55,37 @@ public class ConceptServiceImpl implements ConceptService{
             concept.setDateFinDeValidite(tryParseDateToLocalDate(conceptDTO.dateFinDeValidite()));
 
             return concept;
+        } catch (Exception e) {
+            log.error("Unexpected error while processing ConceptDTO id: {}", conceptDTO.id(), e);
+            throw e;
         }
+    }
 
 
     private void addNearByConcepts(ConceptDTO conceptDTO, Concept concept) {
-            concept.setConceptsSuivants(null);
-            concept.setConceptsPrecedents(null);
-            concept.setConceptsLies(null);
-            concept.setConceptsProches(null);
-            concept.setConceptsPlusGeneriques(null);
-            concept.setConceptsPlusSpecifiques(null);
-            concept.setConceptsReferences(null);
-            if (conceptDTO.nearbyConcepts() != null) {
-                conceptDTO.nearbyConcepts().forEach(nearbyConcept -> {
-                    switch (nearbyConcept.getTypeOfLink()) {
-                        case "isReplacedBy" -> concept.setConceptsSuivants(addToList(nearbyConcept, concept.getConceptsSuivants()));
-                        case "replaces"     -> concept.setConceptsPrecedents(addToList(nearbyConcept, concept.getConceptsPrecedents()));
-                        case "related"      -> concept.setConceptsLies(addToList(nearbyConcept, concept.getConceptsLies()));
-                        case "closeMatch"   -> concept.setConceptsProches(addToList(nearbyConcept, concept.getConceptsProches()));
-                        case "broader"      -> concept.setConceptsPlusGeneriques(addToList(nearbyConcept, concept.getConceptsPlusGeneriques()));
-                        case "narrower"     -> concept.setConceptsPlusSpecifiques(addToList(nearbyConcept, concept.getConceptsPlusSpecifiques()));
-                        case "references"   -> concept.setConceptsReferences(addToList(nearbyConcept, concept.getConceptsReferences()));
-                        case null, default  -> log.warn("typeOfLink unknown or null : {}", nearbyConcept.getTypeOfLink());
-                    }
-                });
-            }
+        concept.setConceptsSuivants(null);
+        concept.setConceptsPrecedents(null);
+        concept.setConceptsLies(null);
+        concept.setConceptsProches(null);
+        concept.setConceptsPlusGeneriques(null);
+        concept.setConceptsPlusSpecifiques(null);
+        concept.setConceptsReferences(null);
+        if (conceptDTO.nearbyConcepts() != null) {
+            conceptDTO.nearbyConcepts().forEach(nearbyConcept -> {
+                switch (nearbyConcept.getTypeOfLink()) {
+                    case "isReplacedBy" -> concept.setConceptsSuivants(addToList(nearbyConcept, concept.getConceptsSuivants()));
+                    case "replaces"     -> concept.setConceptsPrecedents(addToList(nearbyConcept, concept.getConceptsPrecedents()));
+                    case "related"      -> concept.setConceptsLies(addToList(nearbyConcept, concept.getConceptsLies()));
+                    case "closeMatch"   -> concept.setConceptsProches(addToList(nearbyConcept, concept.getConceptsProches()));
+                    case "broader"      -> concept.setConceptsPlusGeneriques(addToList(nearbyConcept, concept.getConceptsPlusGeneriques()));
+                    case "narrower"     -> concept.setConceptsPlusSpecifiques(addToList(nearbyConcept, concept.getConceptsPlusSpecifiques()));
+                    case "references"   -> concept.setConceptsReferences(addToList(nearbyConcept, concept.getConceptsReferences()));
+                    case null, default  -> log.warn("Unknown or null typeOfLink '{}' for nearby concept in DTO id: {}.",
+                                nearbyConcept.getTypeOfLink(), conceptDTO.id());
+                }
+            });
         }
+    }
 
         private List<NearbyConcept> addToList(NearbyConcept nearbyConcept, List<NearbyConcept> conceptsList) {
             ArrayList<NearbyConcept> result = conceptsList == null ? new ArrayList<>() : new ArrayList<>(conceptsList);
@@ -121,14 +127,18 @@ public class ConceptServiceImpl implements ConceptService{
 
 
         public ConceptForList convertConceptDTOToDefinition(ConceptDTO conceptDTO) {
-            ConceptForList concept = new ConceptForList();
-            concept.setId(conceptDTO.id());
-            concept.setUri(URI.create(conceptDTO.uri()));
-            concept.setIntitule(conceptDTO.intituleLg1());
+            try {
+                ConceptForList concept = new ConceptForList();
+                concept.setId(conceptDTO.id());
+                concept.setUri(URI.create(conceptDTO.uri()));
+                concept.setIntitule(conceptDTO.intituleLg1());
+                addNearByConcepts(conceptDTO, concept);
+                return concept;
+            } catch (Exception e) {
+                log.error("Unexpected error while processing ConceptDTO id: {} for list", conceptDTO.id(), e);
+                throw e;
+            }
 
-            addNearByConcepts(conceptDTO, concept);
-
-            return concept;
         }
 
 }

@@ -3,11 +3,13 @@ package fr.insee.rmes.magmafusion.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Slf4j
 public class RmesException extends Exception {
 
 	private static final String CODE = "code";
@@ -75,6 +77,8 @@ public class RmesException extends Exception {
 		try {
 			return MAPPER.writeValueAsString(det);
 		} catch (JsonProcessingException e) {
+			log.warn("Failed to serialize details map {} to JSON, returning '{}'. Error: {}",
+					det, detailsParam, e.getMessage());
 			return detailsParam;
 		}
 	}

@@ -1,8 +1,6 @@
-package fr.insee.rmes.magmafusion.api.testcontainers;
+package fr.insee.rmes.magmafusion.api.testcontainers.utils;
 
 import fr.insee.rmes.magmafusion.api.testcontainers.config.GraphDBTestContainerConfig;
-import fr.insee.rmes.magmafusion.api.testcontainers.utils.TestResourceLoader;
-import fr.insee.rmes.magmafusion.api.testcontainers.utils.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,12 +11,12 @@ import java.io.IOException;
 
 @SpringBootTest
 @TestPropertySource(properties = "spring.profiles.active=security.disabled")
-public abstract class BaseIntegrationTest {
+public abstract class TestsIntegration {
 
     @Autowired
     protected RestTestClient restTestClient;
 
-    protected final TestResourceLoader resourceLoader = new TestResourceLoader();
+    protected final TestsResourceLoader resourceLoader = new TestsResourceLoader();
     protected final StringUtils stringUtils = new StringUtils();
 
     @BeforeAll

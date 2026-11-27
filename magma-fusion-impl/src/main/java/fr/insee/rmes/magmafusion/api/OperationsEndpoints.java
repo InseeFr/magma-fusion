@@ -55,6 +55,9 @@ public class OperationsEndpoints implements OperationsApi {
                 .executeQuery()
                 .listResult(SeriesDTO.class)
                 .result();
+        if (dtos == null) {
+            return ResponseEntity.notFound().build();
+        }
         List<Serie> series = seriesOperationsService.convertSeriesDTOsToSeries(dtos);
         return ResponseEntity.ok(series);
     }

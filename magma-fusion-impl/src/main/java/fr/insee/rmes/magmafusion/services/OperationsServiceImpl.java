@@ -5,6 +5,7 @@ import fr.insee.rmes.magmafusion.model.*;
 import fr.insee.rmes.magmafusion.queries.parameters.DocumentRequestParametizer;
 import fr.insee.rmes.magmafusion.queries.parameters.OperationsDocumentsRequestParametizer;
 import fr.insee.rmes.magmafusion.utils.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static fr.insee.rmes.magmafusion.utils.LabelsUtils.*;
+import static fr.insee.rmes.magmafusion.utils.LocatingFieldsConverter.*;
 
+@Slf4j
 @Service
 public class OperationsServiceImpl implements OperationsService {
 
@@ -44,119 +46,127 @@ public class OperationsServiceImpl implements OperationsService {
     @Override
     public Serie convertSeriesDTOToSerieById(SeriesDTO dto) {
         Serie serieById = new Serie();
+        try {
+            serieById.setSeriesId(dto.seriesId());
+            serieById.setUri(dto.series());
+            serieById.setDateCreation(dto.created() != null ? dto.created() : null);
+            serieById.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
+            serieById.setStatutValidation(dto.validationState());
 
-        serieById.setSeriesId(dto.seriesId());
-        serieById.setUri(dto.series());
-        serieById.setDateCreation(dto.created() != null ? dto.created() : null);
-        serieById.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
-        serieById.setStatutValidation(dto.validationState());
-
-        serieById.setLabel(buildLocalisedLabels(
-                dto.seriesLabelLg1(),
-                dto.seriesLabelLg2(),
-                lg1,lg2));
-
-        serieById.setAltLabel(buildLocalisedLabels(
-                dto.seriesAltLabelLg1(),
-                dto.seriesAltLabelLg2(),
-                lg1,lg2));
-
-        serieById.setResume(buildLocalisedLabels(
-                dto.seriesAbstractLg1(),
-                dto.seriesAbstractLg2(),
-                lg1,lg2));
-
-        serieById.setNoteHistorique(buildLocalisedLabels(
-                dto.seriesHistoryNoteLg1(),
-                dto.seriesHistoryNoteLg2(),
-                lg1, lg2));
-
-        if (StringUtils.hasText(dto.type())) {
-            IdUriLabel type = new IdUriLabel();
-            type.setId(dto.typeID());
-            type.setUri(URI.create(dto.type()));
-            type.setLabel(buildLocalisedLabels(
-                    dto.typeLabelLg1(),
-                    dto.typeLabelLg2(),
+            serieById.setLabel(buildLocalisedLabels(
+                    dto.seriesLabelLg1(),
+                    dto.seriesLabelLg2(),
                     lg1,lg2));
-            serieById.setType(type);
-        }
 
-        if (StringUtils.hasText(dto.periodicity())) {
-            IdUriLabel frequence = new IdUriLabel();
-            frequence.setId(dto.periodicityId());
-            frequence.setUri(URI.create(dto.periodicity()));
-            frequence.setLabel(buildLocalisedLabels(
-                    dto.periodicityLabelLg1(),
-                    dto.periodicityLabelLg2(),
+            serieById.setAltLabel(buildLocalisedLabels(
+                    dto.seriesAltLabelLg1(),
+                    dto.seriesAltLabelLg2(),
                     lg1,lg2));
-            serieById.setFrequenceCollecte(frequence);
+
+            serieById.setResume(buildLocalisedLabels(
+                    dto.seriesAbstractLg1(),
+                    dto.seriesAbstractLg2(),
+                    lg1,lg2));
+
+            serieById.setNoteHistorique(buildLocalisedLabels(
+                    dto.seriesHistoryNoteLg1(),
+                    dto.seriesHistoryNoteLg2(),
+                    lg1, lg2));
+
+            if (StringUtils.hasText(dto.type())) {
+                IdUriLabel type = new IdUriLabel();
+                type.setId(dto.typeID());
+                type.setUri(URI.create(dto.type()));
+                type.setLabel(buildLocalisedLabels(
+                        dto.typeLabelLg1(),
+                        dto.typeLabelLg2(),
+                        lg1,lg2));
+                serieById.setType(type);
+            }
+
+            if (StringUtils.hasText(dto.periodicity())) {
+                IdUriLabel frequence = new IdUriLabel();
+                frequence.setId(dto.periodicityId());
+                frequence.setUri(URI.create(dto.periodicity()));
+                frequence.setLabel(buildLocalisedLabels(
+                        dto.periodicityLabelLg1(),
+                        dto.periodicityLabelLg2(),
+                        lg1,lg2));
+                serieById.setFrequenceCollecte(frequence);
+            }
+
+            if (StringUtils.hasText(dto.families())) {
+                serieById.setFamille(parseFamille(dto.families()));
+            }
+
+            if (StringUtils.hasText(dto.sims())) {
+                IdUri rapportQualite = new IdUri();
+                rapportQualite.setId(dto.simsId());
+                rapportQualite.setUri(URI.create(dto.sims()));
+                serieById.setRapportQualite(rapportQualite);
+            }
+
+        serieById.setSeriesPrecedentes(parseIdUriLabelList(dto.previousSeries()));
+        serieById.setSeriesSuivantes(parseIdUriLabelList(dto.nextSeries()));
+        serieById.setSeriesLiees(parseIdUriLabelList(dto.seeAlsoSeries()));
+        serieById.setOperations(parseIdUriLabelAltLabelMillesimeList(dto.operations()));
+        serieById.setIndicateurs(parseIdUriLabelList(dto.indicators()));
+        serieById.setProprietaires(parseIdUriLabelList(dto.creators()));
+        serieById.setOrganismesResponsables(parseIdUriLabelList(dto.publishers()));
+        serieById.setPartenaires(parseIdUriLabelList(dto.contributors()));
+        serieById.setServicesCollecteurs(parseIdUriLabelList(dto.dataCollectors()));
+
+            return serieById;
+        } catch (Exception e) {
+            log.error("Unexpected error while processing SeriesDTO id: {} ", dto.seriesId(), e);
+            throw  e;
         }
-
-        if (StringUtils.hasText(dto.families())) {
-            serieById.setFamille(parseFamille(dto.families()));
-        }
-
-        if (StringUtils.hasText(dto.sims())) {
-            IdUri rapportQualite = new IdUri();
-            rapportQualite.setId(dto.simsId());
-            rapportQualite.setUri(URI.create(dto.sims()));
-            serieById.setRapportQualite(rapportQualite);
-        }
-
-        serieById.setSeriesPrecedentes(parseRefList(dto.previousSeries()));
-        serieById.setSeriesSuivantes(parseRefList(dto.nextSeries()));
-        serieById.setSeriesLiees(parseRefList(dto.seeAlsoSeries()));
-        serieById.setOperations(parseRefList(dto.operations()));
-        serieById.setIndicateurs(parseRefList(dto.indicators()));
-        serieById.setProprietaires(parseRefList(dto.creators()));
-        serieById.setOrganismesResponsables(parseRefList(dto.publishers()));
-        serieById.setPartenaires(parseRefList(dto.contributors()));
-        serieById.setServicesCollecteurs(parseRefList(dto.dataCollectors()));
-
-        return serieById;
     }
 
     @Override
     public Operation convertOperationDTOToOperation(OperationDTO dto) {
         Operation operation = new Operation();
+        try {
+            operation.setId(dto.operationId());
+            operation.setUri(dto.operation());
+            operation.setMillesime(dto.temporal());
+            operation.setDateCreation(dto.created() != null ? dto.created() : null);
+            operation.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
+            operation.setStatutValidation(dto.validationState());
 
-        operation.setId(dto.operationId());
-        operation.setUri(dto.operation());
-        operation.setMillesime(dto.temporal());
-        operation.setDateCreation(dto.created() != null ? dto.created() : null);
-        operation.setDateMiseAJour(dto.modified() != null ? dto.modified() : null);
-        operation.setStatutValidation(dto.validationState());
-
-        operation.setLabel(buildLocalisedLabels(
-                dto.operationLabelLg1(),
-                dto.operationLabelLg2(),
-                lg1,lg2));
-
-        operation.setAltLabel(buildLocalisedLabels(
-                dto.operationAltLabelLg1(),
-                dto.operationAltLabelLg2(),
-                lg1,lg2));
-
-        if (StringUtils.hasText(dto.series())) {
-            SerieRef serie = new SerieRef();
-            serie.setId(dto.seriesId());
-            serie.setUri(dto.series());
-            serie.setLabel(buildLocalisedLabels(
-                    dto.seriesLabelLg1(),
-                    dto.seriesLabelLg2(),
+            operation.setLabel(buildLocalisedLabels(
+                    dto.operationLabelLg1(),
+                    dto.operationLabelLg2(),
                     lg1,lg2));
-            operation.setSerie(serie);
-        }
 
-        if (StringUtils.hasText(dto.simsId())) {
-            IdUri rapportQualite = new IdUri();
-            rapportQualite.setId(dto.simsId());
-            rapportQualite.setUri(URI.create(dto.sims()));
-            operation.setRapportQualite(rapportQualite);
-        }
+            operation.setAltLabel(buildLocalisedLabels(
+                    dto.operationAltLabelLg1(),
+                    dto.operationAltLabelLg2(),
+                    lg1,lg2));
 
-        return operation;
+            if (StringUtils.hasText(dto.series())) {
+                SerieRef serie = new SerieRef();
+                serie.setId(dto.seriesId());
+                serie.setUri(dto.series());
+                serie.setLabel(buildLocalisedLabels(
+                        dto.seriesLabelLg1(),
+                        dto.seriesLabelLg2(),
+                        lg1,lg2));
+                operation.setSerie(serie);
+            }
+
+            if (StringUtils.hasText(dto.simsId())) {
+                IdUri rapportQualite = new IdUri();
+                rapportQualite.setId(dto.simsId());
+                rapportQualite.setUri(URI.create(dto.sims()));
+                operation.setRapportQualite(rapportQualite);
+            }
+
+            return operation;
+        } catch (Exception e) {
+            log.error("Unexpected error while converting operation DTO id: {} to operation ", dto.operationId(), e);
+            throw e;
+        }
     }
 
     @Override
@@ -166,26 +176,32 @@ public class OperationsServiceImpl implements OperationsService {
 
     private Serie convertSeriesDTOToSeriesItem(SeriesDTO dto) {
         Serie serieById = new Serie();
-        serieById.setOperations(null);
-        serieById.setAltLabel(null);
-        serieById.setDateCreation(null);
-        serieById.setResume(null);
-        serieById.setNoteHistorique(null);
-        serieById.setSeriesPrecedentes(null);
-        serieById.setSeriesSuivantes(null);
-        serieById.setSeriesLiees(null);
-        serieById.setIndicateurs(null);
-        serieById.setProprietaires(null);
-        serieById.setOrganismesResponsables(null);
-        serieById.setPartenaires(null);
-        serieById.setServicesCollecteurs(null);
-        serieById.setSeriesId(dto.seriesId());
-        serieById.setUri(dto.series());
-        serieById.setLabel(buildLocalisedLabels(
-                dto.seriesLabelLg1(),
-                dto.seriesLabelLg2(),
-                lg1,lg2));
-        return serieById;
+        try {
+            serieById.setOperations(null);
+            serieById.setAltLabel(null);
+            serieById.setDateCreation(null);
+            serieById.setResume(null);
+            serieById.setNoteHistorique(null);
+            serieById.setSeriesPrecedentes(null);
+            serieById.setSeriesSuivantes(null);
+            serieById.setSeriesLiees(null);
+            serieById.setIndicateurs(null);
+            serieById.setProprietaires(null);
+            serieById.setOrganismesResponsables(null);
+            serieById.setPartenaires(null);
+            serieById.setServicesCollecteurs(null);
+            serieById.setSeriesId(dto.seriesId());
+            serieById.setUri(dto.series());
+            serieById.setLabel(buildLocalisedLabels(
+                    dto.seriesLabelLg1(),
+                    dto.seriesLabelLg2(),
+                    lg1,lg2));
+            return serieById;
+        } catch (Exception e){
+            log.error("Unexpected error while converting series DTO id: {} for list", dto.seriesId(), e);
+            throw  e;
+        }
+
     }
 
     private IdUriLabel parseFamille(String raw) {
@@ -204,100 +220,76 @@ public class OperationsServiceImpl implements OperationsService {
         return famille;
     }
 
-    private IdUriLabel parseSingleRef(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return null;
-        }
-        String[] parts = raw.split("\\$", -1);
-        IdUriLabel ref = new IdUriLabel();
-        ref.setId(parts.length > 0 ? parts[0] : null);
-        String uriStr = parts.length > 1 ? parts[1] : null;
-        ref.setUri(StringUtils.hasText(uriStr) ? URI.create(uriStr) : null);
-        ref.setLabel(buildLocalisedLabels(
-                parts.length > 2 ? parts[2] : null,
-                parts.length > 3 ? parts[3] : null,
-                this.lg1, this.lg2));
-        return ref;
-    }
-
-    private List<IdUriLabel> parseRefList(String raw) {
-        List<IdUriLabel> list = new ArrayList<>();
-        if (raw == null || raw.isBlank()) {
-            return list;
-        }
-        for (String item : raw.split("\\|")) {
-            IdUriLabel ref = parseSingleRef(item);
-            if (ref != null) {
-                list.add(ref);
-            }
-        }
-        return list;
-    }
 
     @Override
     public Indicateur convertIndicateurDTOToIndicateur(IndicateurDTO dto) {
         Indicateur indicateur = new Indicateur();
+        try {
+            indicateur.setRapportQualite(null);
+            indicateur.setSeriesContributrices(null);
+            indicateur.setSeriesLiees(null);
+            indicateur.setIndicateursLies(null);
+            indicateur.setDateCreation(null);
+            indicateur.setDateMiseAJour(null);
+            indicateur.setProprietaires(null);
+            indicateur.setOrganismesResponsables(null);
+            indicateur.setPartenaires(null);
+            indicateur.setId(dto.indicatorId());
+            indicateur.setUri(dto.indicator());
+            indicateur.setDateCreation(dto.created() != null ? dto.created().toString() : null);
+            indicateur.setDateMiseAJour(dto.modified() != null ? dto.modified().toString() : null);
+            indicateur.setStatuValidation(dto.validationState());
 
-        indicateur.setRapportQualite(null);
-        indicateur.setSeriesContributrices(null);
-        indicateur.setSeriesLiees(null);
-        indicateur.setIndicateursLies(null);
-        indicateur.setDateCreation(null);
-        indicateur.setDateMiseAJour(null);
-        indicateur.setProprietaires(null);
-        indicateur.setOrganismesResponsables(null);
-        indicateur.setPartenaires(null);
-        indicateur.setId(dto.indicatorId());
-        indicateur.setUri(dto.indicator());
-        indicateur.setDateCreation(dto.created() != null ? dto.created().toString() : null);
-        indicateur.setDateMiseAJour(dto.modified() != null ? dto.modified().toString() : null);
-        indicateur.setStatuValidation(dto.validationState());
-
-        indicateur.setLabel(buildLocalisedLabels(
-                dto.indicatorLabelLg1(),
-                dto.indicatorLabelLg2(),
-                lg1,lg2));
-
-        indicateur.setAltLabel(buildLocalisedLabels(
-                dto.indicatorAltLabelLg1(),
-                dto.indicatorAltLabelLg2(),
-                lg1,lg2));
-
-        indicateur.setResume(buildLocalisedLabels(
-                dto.indicatorAbstractLg1(),
-                dto.indicatorAbstractLg2(),
-                lg1,lg2));
-
-        indicateur.setNoteHistorique(buildLocalisedLabels(
-                dto.indicatorHistoryNoteLg1(),
-                dto.indicatorHistoryNoteLg2(),
-                lg1,lg2));
-
-        if (dto.periodicity() != null && !dto.periodicity().isBlank()) {
-            IdUriLabel frequence = new IdUriLabel(dto.periodicityId());
-            frequence.setUri(toUri(dto.periodicity()));
-            frequence.setLabel(buildLocalisedLabels(
-                    dto.periodicityLabelLg1(),
-                    dto.periodicityLabelLg2(),
+            indicateur.setLabel(buildLocalisedLabels(
+                    dto.indicatorLabelLg1(),
+                    dto.indicatorLabelLg2(),
                     lg1,lg2));
-            indicateur.setFrequenceCollecte(frequence);
+
+            indicateur.setAltLabel(buildLocalisedLabels(
+                    dto.indicatorAltLabelLg1(),
+                    dto.indicatorAltLabelLg2(),
+                    lg1,lg2));
+
+            indicateur.setResume(buildLocalisedLabels(
+                    dto.indicatorAbstractLg1(),
+                    dto.indicatorAbstractLg2(),
+                    lg1,lg2));
+
+            indicateur.setNoteHistorique(buildLocalisedLabels(
+                    dto.indicatorHistoryNoteLg1(),
+                    dto.indicatorHistoryNoteLg2(),
+                    lg1,lg2));
+
+            if (dto.periodicity() != null && !dto.periodicity().isBlank()) {
+                IdUriLabel frequence = new IdUriLabel(dto.periodicityId());
+                frequence.setUri(toUri(dto.periodicity()));
+                frequence.setLabel(buildLocalisedLabels(
+                        dto.periodicityLabelLg1(),
+                        dto.periodicityLabelLg2(),
+                        lg1,lg2));
+                indicateur.setFrequenceCollecte(frequence);
+            }
+
+            if (dto.simsId() != null && !dto.simsId().isBlank()) {
+                IdUri rapportQualite = new IdUri();
+                rapportQualite.setId(dto.simsId());
+                rapportQualite.setUri(URI.create(dto.sims()));
+                indicateur.setRapportQualite(rapportQualite);
+            }
+
+            indicateur.setSeriesContributrices(parseIdUriLabelList(dto.wasGeneratedBySeries()));
+            indicateur.setSeriesLiees(parseIdUriLabelList(dto.seeAlsoSeries()));
+            indicateur.setIndicateursLies(parseIdUriLabelList(dto.seeAlsoIndicators()));
+            indicateur.setProprietaires(parseIdUriLabelList(dto.creators()));
+            indicateur.setOrganismesResponsables(parseIdUriLabelList(dto.publishers()));
+            indicateur.setPartenaires(parseIdUriLabelList(dto.contributors()));
+
+            return indicateur;
+        } catch (Exception e) {
+            log.error("Unexpected error while converting indicateur DTO id: {} to indicateur", dto.indicatorId(), e);
+            throw e;
         }
 
-        if (dto.simsId() != null && !dto.simsId().isBlank()) {
-            IdUri rapportQualite = new IdUri();
-            rapportQualite.setId(dto.simsId());
-            rapportQualite.setUri(URI.create(dto.sims()));
-            indicateur.setRapportQualite(rapportQualite);
-        }
-
-        indicateur.setSeriesContributrices(parseIdUriLabelList(dto.wasGeneratedBySeries()));
-        indicateur.setSeriesLiees(parseIdUriLabelList(dto.seeAlsoSeries()));
-        indicateur.setIndicateursLies(parseIdUriLabelList(dto.seeAlsoIndicators()));
-        indicateur.setProprietaires(parseIdUriLabelList(dto.creators()));
-        indicateur.setOrganismesResponsables(parseIdUriLabelList(dto.publishers()));
-        indicateur.setPartenaires(parseIdUriLabelList(dto.contributors()));
-
-        return indicateur;
     }
 
     private List<IdUriLabel> parseIdUriLabelList(String raw) {
@@ -305,23 +297,103 @@ public class OperationsServiceImpl implements OperationsService {
         if (raw == null || raw.isBlank()) {
             return null;
         }
+
         for (String item : raw.split("\\|")) {
-            String[] parts = item.split("\\$", -1);
-            String id = parts.length > 0 ? parts[0] : null;
-            if (id == null || id.isBlank()) {
-                continue;
+            IdUriLabel ref = parseIdUriLabelItem(item);
+            if (ref != null) {
+                list.add(ref);
             }
-            IdUriLabel ref = new IdUriLabel(id);
-            if (parts.length > 1 && !parts[1].isBlank()) {
-                ref.setUri(toUri(parts[1]));
-            }
-            ref.setLabel(buildLocalisedLabels(
-                    parts.length > 2 ? parts[2] : null,
-                    parts.length > 3 ? parts[3] : null,
-                    lg1,lg2));
-            list.add(ref);
         }
         return list;
+    }
+
+    private IdUriLabel parseIdUriLabelItem(String item) {
+        String[] parts = item.split("\\$", -1);
+        String id = parts.length > 0 ? parts[0] : null;
+
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+
+        IdUriLabel ref = new IdUriLabel(id);
+
+        setUriIfPresentForIdUriLabel(ref, parts);
+        setLabelIfPresentForIdUriLabel(ref, parts);
+
+        return ref;
+    }
+
+    private void setUriIfPresentForIdUriLabel(IdUriLabel ref, String[] parts) {
+        if (parts.length > 1 && !parts[1].isBlank()) {
+            ref.setUri(toUri(parts[1]));
+        }
+    }
+
+    private void setLabelIfPresentForIdUriLabel(IdUriLabel ref, String[] parts) {
+        ref.setLabel(buildLocalisedLabels(
+                parts.length > 2 ? parts[2] : null,
+                parts.length > 3 ? parts[3] : null,
+                lg1, lg2));
+    }
+
+
+    private List<IdUriLabelAltLabelMillesime> parseIdUriLabelAltLabelMillesimeList(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+
+        List<IdUriLabelAltLabelMillesime> list = new ArrayList<>();
+        for (String item : raw.split("\\|")) {
+            IdUriLabelAltLabelMillesime ref = parseItem(item);
+            if (ref != null) {
+                list.add(ref);
+            }
+        }
+        return list;
+    }
+
+    private IdUriLabelAltLabelMillesime parseItem(String item) {
+        String[] parts = item.split("\\$", -1);
+        String id = parts.length > 0 ? parts[0] : null;
+
+        if (id == null || id.isBlank()) {
+            return null;
+        }
+
+        IdUriLabelAltLabelMillesime ref = new IdUriLabelAltLabelMillesime(id);
+
+        setUriIfPresentForIdUriLabelMillesime(ref, parts);
+        setLabelIfPresentForIdUriLabelMillesime(ref, parts);
+        setAltLabelIfPresentForIdUriLabelMillesime(ref, parts);
+        setMillesimeIfPresentForIdUriLabelMillesime(ref, parts);
+
+        return ref;
+    }
+
+    private void setUriIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        if (parts.length > 1 && !parts[1].isBlank()) {
+            ref.setUri(toUri(parts[1]));
+        }
+    }
+
+    private void setLabelIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        ref.setLabel(buildLocalisedLabels(
+                parts.length > 2 ? parts[2] : null,
+                parts.length > 3 ? parts[3] : null,
+                lg1, lg2));
+    }
+
+    private void setAltLabelIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        ref.setAltLabel(buildLocalisedLabels(
+                parts.length > 4 ? parts[4] : null,
+                parts.length > 5 ? parts[5] : null,
+                lg1, lg2));
+    }
+
+    private void setMillesimeIfPresentForIdUriLabelMillesime(IdUriLabelAltLabelMillesime ref, String[] parts) {
+        if (parts.length > 6 && !parts[6].isBlank()) {
+            ref.setMillesime(parts[6]);
+        }
     }
 
     private URI toUri(String uriString) {
@@ -331,6 +403,7 @@ public class OperationsServiceImpl implements OperationsService {
         try {
             return URI.create(uriString);
         } catch (IllegalArgumentException _) {
+            log.warn("Invalid URI string: '{}'", uriString);
             return null;
         }
     }
@@ -339,26 +412,42 @@ public class OperationsServiceImpl implements OperationsService {
     @Override
     public RapportQualite convertDTOToRapportQualite(RapportQualiteDTO rapportQualiteDTO) {
         RapportQualite rapportQualite = new RapportQualite();
-        rapportQualite.setId(rapportQualiteDTO.id());
-        rapportQualite.setUri(URI.create(rapportQualiteDTO.uri()));
-        List<LocalisedContenu> label = buildLocalisedLabels(
-                rapportQualiteDTO.labelLg1(),
-                rapportQualiteDTO.labelLg2(),
-                lg1,lg2);
-        rapportQualite.setLabel(label);
+        try {
+            rapportQualite.setId(rapportQualiteDTO.id());
+            rapportQualite.setUri(URI.create(rapportQualiteDTO.uri()));
+            List<LocalisedContenu> label = buildLocalisedLabels(
+                    rapportQualiteDTO.labelLg1(),
+                    rapportQualiteDTO.labelLg2(),
+                    lg1,lg2);
+            rapportQualite.setLabel(label);
 
-        rapportQualite.setRubriques(null);
+            rapportQualite.setRubriques(null);
 
-        if (rapportQualiteDTO.rubriqueDTOList() != null) {
-            for (RubriqueDTO rubDTO : rapportQualiteDTO.rubriqueDTOList()) {
-                Rubrique rubrique = convertRubrique(rubDTO, rapportQualite);
-                if (rubrique != null) {
-                    rapportQualite.addRubriquesItem(rubrique);
+            if (rapportQualiteDTO.rubriqueDTOList() != null) {
+                for (RubriqueDTO rubDTO : rapportQualiteDTO.rubriqueDTOList()) {
+                    addRubriqueToRapportQualite(rapportQualiteDTO, rubDTO, rapportQualite);
                 }
             }
+
+            return rapportQualite;
+        } catch (Exception e){
+            log.error("Unexpected error while converting rapport qualite DTO id: {} ", rapportQualiteDTO.id(), e);
+            throw e;
         }
 
-        return rapportQualite;
+    }
+
+    private void addRubriqueToRapportQualite(RapportQualiteDTO rapportQualiteDTO, RubriqueDTO rubDTO, RapportQualite rapportQualite) {
+        try {
+            Rubrique rubrique = convertRubrique(rubDTO, rapportQualite);
+            if (rubrique != null) {
+                rapportQualite.addRubriquesItem(rubrique);
+            }
+        } catch (Exception e) {
+            log.error("Failed to convert RubriqueDTO id: {} for rapport {}. Error : {}",
+                    rubDTO != null ? rubDTO.id() : "null",
+                    rapportQualiteDTO.id(), e.getMessage(), e);
+        }
     }
 
     private Rubrique convertRubrique(RubriqueDTO rubriqueDTO, RapportQualite rapportQualite) {
@@ -395,9 +484,9 @@ public class OperationsServiceImpl implements OperationsService {
                 rubrique.setOrganisme(createUriLabel(rubriqueDTO, rubriqueDTO.organisationUri()));
                 break;
             default:
+                log.warn("type of rubrique unknown or null : {}", rubriqueDTO.type());
                 break;
         }
-
         return rubrique;
     }
 
@@ -461,16 +550,23 @@ public class OperationsServiceImpl implements OperationsService {
     }
 
     private List<Document> findDocuments(String rapportQualiteId, String rubriqueDTOId, String lang) {
-        List<DocumentDTO> documentsDTO = this.requestProcessor.queryToFindDocuments()
-                .with(new OperationsDocumentsRequestParametizer(rapportQualiteId, rubriqueDTOId, lang))
-                .executeQuery()
-                .listResult(DocumentDTO.class)
-                .result();
-        List<Document> documents = new ArrayList<>();
-        for (DocumentDTO documentDTO : documentsDTO) {
-            documents.add(convertDocumentDTOToDocument(documentDTO));
+        try {
+            List<DocumentDTO> documentsDTO = this.requestProcessor.queryToFindDocuments()
+                    .with(new OperationsDocumentsRequestParametizer(rapportQualiteId, rubriqueDTOId, lang))
+                    .executeQuery()
+                    .listResult(DocumentDTO.class)
+                    .result();
+            List<Document> documents = new ArrayList<>();
+            for (DocumentDTO documentDTO : documentsDTO) {
+                documents.add(convertDocumentDTOToDocument(documentDTO));
+            }
+            return documents;
+        } catch (Exception e){
+            log.error("Failed to find documents for rubrique id {} rapport Qualite id {}. Error: {}",
+                    rubriqueDTOId, rapportQualiteId,
+                    e.getMessage(), e);
+            return new ArrayList<>();
         }
-        return documents;
     }
 
     @Override

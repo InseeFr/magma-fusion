@@ -31,12 +31,16 @@
         dcterms:created "2020-01-15"^^xsd:date ;
         dcterms:modified "2024-06-01"^^xsd:date ;
         insee:validationState "Publiée" ;
+        insee:dataCollector <http://bauhaus/organisations/insee/HIE1000000> ;
         dc:creator <http://bauhaus/organisations/idOrganisationProprietaireTest> ;
         dcterms:publisher <http://bauhaus/organisations/idOrganisationResponsableTest> ;
         dcterms:contributor <http://bauhaus/organisations/idOrganisationPartenaireTest> .
 
-
-
+   <http://bauhaus/organisations/insee/HIE1000000>
+        rdf:type org:Organization ;
+        dcterms:identifier "idServiceCollecteur1" ;
+        skos:prefLabel "Label ServiceCollecteur1 fr"@fr ;
+        skos:prefLabel "DataCollector1 Label en"@en .
 
    <http://bauhaus/operations/serie/idSeriePrecedenteTest>
         rdf:type insee:StatisticalOperationSeries ;
@@ -72,13 +76,17 @@
         rdf:type insee:StatisticalOperation ;
         dcterms:isPartOf <http://bauhaus/operations/serie/idSeriePrincipaleTest> ;
         skos:prefLabel "Label Opération 1 fr"@fr ;
-        skos:prefLabel "Operation 1 Label en"@en .
+        skos:prefLabel "Operation 1 Label en"@en ;
+        skos:altLabel "AltLabel Opération 1 fr"@fr ;
+        skos:altLabel "Operation 1 AltLabel en"@en ;
+        dcterms:temporal "2010" .
 
    <http://bauhaus/operations/operation/idOperation2SeriePrincipaleTest>
         rdf:type insee:StatisticalOperation ;
         dcterms:isPartOf <http://bauhaus/operations/serie/idSeriePrincipaleTest> ;
         skos:prefLabel "Label Opération 2 fr"@fr ;
         skos:prefLabel "Operation 2 Label en"@en .
+
 
    <http://bauhaus/organisations/idOrganisationProprietaireTest>
         rdf:type org:Organization ;
