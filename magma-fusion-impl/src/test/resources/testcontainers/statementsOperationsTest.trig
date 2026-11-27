@@ -214,7 +214,7 @@
         <http://id.insee.fr/qualite/simsv2fr/attribut/R.6.1> <http://id.insee.fr/codes/modeCollecte/T> .
 
     <http://bauhaus/qualite/rapport/9999/R.3.1/fr> rdf:type <http://purl.org/dc/dcmitype/Text> ;
-        dcterms:language <http://id.insee.fr/codes/langue/fr> ;
+        dcterms:language <http://bauhaus/codes/langue/fr> ;
         rdf:value "Texte methodologique test" ;
         insee:additionalMaterial _:docListFrR31 .
 
@@ -222,7 +222,7 @@
         rdf:rest rdf:nil .
 
     <http://bauhaus/qualite/rapport/9999/R.3.1/en> rdf:type <http://purl.org/dc/dcmitype/Text> ;
-        dcterms:language <http://id.insee.fr/codes/langue/en> ;
+        dcterms:language <http://bauhaus/codes/langue/en> ;
         rdf:value "Test methodological text" ;
         insee:additionalMaterial _:docListEnR31 .
 

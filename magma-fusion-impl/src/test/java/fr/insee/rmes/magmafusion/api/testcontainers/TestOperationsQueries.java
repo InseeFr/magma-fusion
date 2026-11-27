@@ -16,7 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 @AutoConfigureRestTestClient
 @Tag("integration")
 @TestPropertySource(properties = {
-        "fr.insee.rmes.magmafusion.gestion.baseURI=http://id.insee.fr/"
+        "fr.insee.rmes.magmafusion.gestion.baseURI=http://bauhaus/"
 })
 class TestOperationsQueries extends TestsIntegration {
 
@@ -201,7 +201,7 @@ class TestOperationsQueries extends TestsIntegration {
                     .expectBody()
                     .returnResult()
                     .getResponseBody();
-            String responseBody = bodyAsString(body);
+
             JSONAssert.assertEquals(
                     loadExpectedJson("rapportQualite-9999-expected.json"),
                     bodyAsString(body),
