@@ -15,9 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 @Tag("integration")
-@TestPropertySource(properties = {
-        "fr.insee.rmes.magmafusion.gestion.baseURI=http://bauhaus/"
-})
+
 class TestOperationsQueries extends TestsIntegration {
 
     @BeforeAll
