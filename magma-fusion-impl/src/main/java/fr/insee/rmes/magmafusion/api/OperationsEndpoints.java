@@ -1,6 +1,7 @@
 package fr.insee.rmes.magmafusion.api;
 
 import fr.insee.rmes.magmafusion.api.requestprocessor.RequestProcessor;
+import fr.insee.rmes.magmafusion.model.Document;
 import fr.insee.rmes.magmafusion.model.Indicateur;
 import fr.insee.rmes.magmafusion.model.Operation;
 import fr.insee.rmes.magmafusion.model.RapportQualite;
@@ -11,6 +12,7 @@ import fr.insee.rmes.magmafusion.queries.parameters.OperationRubriquesRequestPar
 import fr.insee.rmes.magmafusion.queries.parameters.SeriesOperationsRequestParametizer;
 import fr.insee.rmes.magmafusion.services.OperationsService;
 import fr.insee.rmes.magmafusion.utils.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +24,27 @@ public class OperationsEndpoints implements OperationsApi {
     private final RequestProcessor requestProcessor;
     private final OperationsService seriesOperationsService;
 
-    public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService) {
+    private final String documentsBaseUri;
+    private final String linksBaseUri;
+
+    public OperationsEndpoints(RequestProcessor requestProcessor, OperationsService seriesOperationsService,
+                               @Value("${fr.insee.rmes.magmafusion.gestion.baseURI:http://id.insee.fr/}") String baseUri,
+                               @Value("${fr.insee.rmes.magmafusion.documents.baseURI}") String documentsPath,
+                               @Value("${fr.insee.rmes.magmafusion.links.baseURI}") String linksPath) {
         this.requestProcessor = requestProcessor;
         this.seriesOperationsService = seriesOperationsService;
+        this.documentsBaseUri = baseUri + documentsPath + "/";
+        this.linksBaseUri = baseUri + linksPath + "/";
+    }
+
+    @Override
+    public ResponseEntity<Document> getDocumentById(String id) {
+        return EndpointsUtils.toResponseEntity(seriesOperationsService.findDocumentByUri(documentsBaseUri + id));
+    }
+
+    @Override
+    public ResponseEntity<Document> getLienById(String id) {
+        return EndpointsUtils.toResponseEntity(seriesOperationsService.findDocumentByUri(linksBaseUri + id));
     }
 
     @Override

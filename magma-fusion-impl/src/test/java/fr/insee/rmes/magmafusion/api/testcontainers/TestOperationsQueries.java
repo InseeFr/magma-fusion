@@ -232,4 +232,91 @@ class TestOperationsQueries extends TestsIntegration {
                     .expectStatus().isNotFound();
         }
     }
+
+    @Nested
+    @DisplayName("operations/documents/{id} et operations/liens/{id}")
+    class GetDocument {
+
+        @Test
+        void should_describe_a_document_with_every_field() throws Exception {
+            byte[] body = restTestClient.get()
+                    .uri("/operations/documents/{id}", "9101")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
+
+            JSONAssert.assertEquals(
+                    loadExpectedJson("document-9101-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
+        }
+
+        @Test
+        void should_describe_a_link_and_not_the_document_sharing_its_identifier() throws Exception {
+            byte[] body = restTestClient.get()
+                    .uri("/operations/liens/{id}", "9101")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
+
+            JSONAssert.assertEquals(
+                    loadExpectedJson("lien-9101-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
+        }
+
+        @Test
+        void should_omit_the_fields_that_are_not_stored() throws Exception {
+            byte[] body = restTestClient.get()
+                    .uri("/operations/documents/{id}", "9102")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
+
+            JSONAssert.assertEquals(
+                    loadExpectedJson("document-9102-expected.json"),
+                    bodyAsString(body),
+                    true
+            );
+        }
+
+        @Test
+        void should_be_of_type_other_when_cited_in_rubrics_of_several_concepts() throws Exception {
+            byte[] body = restTestClient.get()
+                    .uri("/operations/documents/{id}", "9103")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .returnResult()
+                    .getResponseBody();
+
+            JSONAssert.assertEquals("""
+                    {"type": "OTHER"}
+                    """, bodyAsString(body), false);
+        }
+
+        @Test
+        void should_return_404_for_an_unknown_document() {
+            restTestClient.get()
+                    .uri("/operations/documents/{id}", "404404")
+                    .exchange()
+                    .expectStatus().isNotFound();
+        }
+
+        @Test
+        void should_return_400_for_an_identifier_that_is_not_a_number() {
+            restTestClient.get()
+                    .uri("/operations/documents/{id}", "abc")
+                    .exchange()
+                    .expectStatus().isBadRequest();
+        }
+    }
 }

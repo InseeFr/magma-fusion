@@ -5,7 +5,16 @@
   "description": "Document associé à un contenu",
   "type": "object",
   "properties": {
+    "uri": {
+      "type": "string"
+    },
     "label": {
+      "type": "array",
+      "items": {
+        "$ref": "langue-contenu.schema.json"
+      }
+    },
+    "commentaire": {
       "type": "array",
       "items": {
         "$ref": "langue-contenu.schema.json"
@@ -16,6 +25,13 @@
     },
     "langue": {
       "type": "string"
+    },
+    "taille": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["COLLECTION_DOCUMENTS", "DOC_METHOD", "OTHER"]
     },
     "url": {
       "type": "string"

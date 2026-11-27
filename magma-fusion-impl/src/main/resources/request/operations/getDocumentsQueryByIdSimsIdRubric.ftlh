@@ -1,4 +1,4 @@
-SELECT DISTINCT ?url ?labelLg1 ?labelLg2 ?dateMiseAJour ?langue
+SELECT DISTINCT (?document AS ?uri) ?url ?labelLg1 ?labelLg2 ?commentLg1 ?commentLg2 ?dateMiseAJour ?langue ?taille
 FROM <http://rdf.insee.fr/graphes/qualite/rapport/${idSims}>
 FROM <http://rdf.insee.fr/graphes/qualite/documents>
 WHERE {
@@ -28,5 +28,8 @@ WHERE {
     OPTIONAL { ?document rdfs:label ?labelLg2 . FILTER(lang(?labelLg2) = '${LG2}') }
     OPTIONAL { ?document pav:lastRefreshedOn ?dateMiseAJour . }
     OPTIONAL { ?document dc:language ?langue . }
+    OPTIONAL { ?document rdfs:comment ?commentLg1 . FILTER(lang(?commentLg1) = '${LG1}') }
+    OPTIONAL { ?document rdfs:comment ?commentLg2 . FILTER(lang(?commentLg2) = '${LG2}') }
+    OPTIONAL { ?document dcterms:extent ?taille . }
 }
 ORDER BY ?position

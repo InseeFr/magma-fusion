@@ -170,6 +170,14 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         return new ExecutableQueryBuilder(DOCUMENTS, this, unmarshaller);
     }
 
+    public ExecutableQueryBuilder queryToFindDocument() {
+        return new ExecutableQueryBuilder(DOCUMENT, this, unmarshaller);
+    }
+
+    public ExecutableQueryBuilder queryToFindDocumentRubricConcepts() {
+        return new ExecutableQueryBuilder(DOCUMENT_RUBRIC_CONCEPTS, this, unmarshaller);
+    }
+
     // =========================================================
     // Inner records
     // =========================================================
@@ -229,6 +237,10 @@ public record RequestProcessor(QueryBuilder queryBuilder, QueryExecutor queryExe
         }
 
         public ExecutableQuery with(OperationsDocumentsRequestParametizer p) {
+            return new ExecutableQuery(requestProcessor.queryBuilder().build(p.toParameters(), queryPath), requestProcessor, unmarshaller);
+        }
+
+        public ExecutableQuery with(DocumentRequestParametizer p) {
             return new ExecutableQuery(requestProcessor.queryBuilder().build(p.toParameters(), queryPath), requestProcessor, unmarshaller);
         }
     }

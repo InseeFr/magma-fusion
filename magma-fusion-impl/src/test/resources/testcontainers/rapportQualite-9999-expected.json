@@ -46,13 +46,19 @@
           "langue": "fr",
           "documents": [
             {
+              "uri": "http://bauhaus/documents/docTestR31",
               "url": "https://www.test.fr/doc/note-methodo-test.pdf",
               "label": [
                 {"langue": "fr", "contenu": "Note methodologique test"},
                 {"langue": "en", "contenu": "Test methodological note"}
               ],
+              "commentaire": [
+                {"langue": "fr", "contenu": "Commentaire note methodologique test"}
+              ],
               "dateMiseAJour": "2025-03-01T00:00:00",
-              "langue": "fr"
+              "langue": "fr",
+              "taille": "2 ko",
+              "type": "OTHER"
             }
           ]
         },
@@ -61,13 +67,19 @@
           "langue": "en",
           "documents": [
             {
+              "uri": "http://bauhaus/documents/docTestR31",
               "url": "https://www.test.fr/doc/note-methodo-test.pdf",
               "label": [
                 {"langue": "fr", "contenu": "Note methodologique test"},
                 {"langue": "en", "contenu": "Test methodological note"}
               ],
+              "commentaire": [
+                {"langue": "fr", "contenu": "Commentaire note methodologique test"}
+              ],
               "dateMiseAJour": "2025-03-01T00:00:00",
-              "langue": "fr"
+              "langue": "fr",
+              "taille": "2 ko",
+              "type": "OTHER"
             }
           ]
         }
