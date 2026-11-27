@@ -291,7 +291,6 @@ public class OperationsServiceImpl implements OperationsService {
             return null;
         }
 
-        List<IdUriLabel> list = new ArrayList<>();
         for (String item : raw.split("\\|")) {
             IdUriLabel ref = parseIdUriLabelItem(item);
             if (ref != null) {
